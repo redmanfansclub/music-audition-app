@@ -4,18 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Music Audition APP — English Audition Master</title>
-    <!-- React & Tailwind CDN -->
     <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Canvas Confetti, jsPDF, & QR Code Generator -->
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
-    <!-- Supabase JS Client CDN -->
+    <script src="https://unpkg.com/qrcode@1.5.3/build/qrcode.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
         body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #f8fafc; }
@@ -29,7 +25,6 @@
     <script type="text/babel">
         const { useState, useMemo, useEffect } = React;
 
-        // Default Supabase Cloud Connection Credentials
         const DEFAULT_SUPABASE_PROJECT_ID = "bbdvflbykohleyctiinj";
         const DEFAULT_SUPABASE_URL = `https://${DEFAULT_SUPABASE_PROJECT_ID}.supabase.co`;
         const DEFAULT_SUPABASE_KEY = "sb_publishable_URQ87m7Tiq96RUHGtvX29Q_lYroaqM4";
@@ -43,15 +38,11 @@
         const getStoredScores = () => { try { return JSON.parse(localStorage.getItem('audition_app_scores') || '[]'); } catch (e) { return []; } };
         const saveStoredScores = (newList) => { try { localStorage.setItem('audition_app_scores', JSON.stringify(newList)); } catch (e) {} };
 
-        // ============================================================
-        // HELPERS DE URL — clave para que el enlace del alumno funcione
-        // ============================================================
         const getTaskCodeFromUrl = () => {
             try {
                 const params = new URLSearchParams(window.location.search);
                 const code = params.get('task');
                 if (code) return code;
-                // Compatibilidad con el esquema antiguo #task/...
                 const hash = window.location.hash || '';
                 if (hash.startsWith('#task/')) return hash.replace('#task/', '');
             } catch (e) {}
@@ -62,7 +53,7 @@
             const base = `${window.location.origin}${window.location.pathname}`;
             return `${base}?task=${encodeURIComponent(code)}`;
         };
-        
+
         const saveStudentSubmission = (record) => {
             try {
                 const list = getStoredScores();
@@ -93,9 +84,7 @@
             if (window.QRCode && typeof window.QRCode.toDataURL === 'function') {
                 try {
                     return await window.QRCode.toDataURL(text, { margin: 1, width: 200 });
-                } catch (e) {
-                    return null;
-                }
+                } catch (e) { return null; }
             }
             return null;
         };
@@ -177,16 +166,12 @@
         };
 
         const App = () => {
-            // ------------------------------------------------------------
-            // MODO ALUMNO PRIORITARIO: si hay ?task= en la URL, ignoramos
-            // cualquier sesión de profesor guardada y entramos directo.
-            // ------------------------------------------------------------
             const initialTaskCode = getTaskCodeFromUrl();
             const [view, setView] = useState(initialTaskCode ? 'student-test' : 'auth');
             const [session, setSession] = useState(null);
             const [loading, setLoading] = useState(true);
             const [dashboardTab, setDashboardTab] = useState('create');
-            
+
             const [supabaseUrl] = useState(DEFAULT_SUPABASE_URL);
             const [supabaseKey] = useState(DEFAULT_SUPABASE_KEY);
             const [supabaseClient, setSupabaseClient] = useState(null);
@@ -204,7 +189,7 @@
             const [youtubeUrl, setYoutubeUrl] = useState('');
             const [commentText, setCommentText] = useState('');
             const [taskHints, setTaskHints] = useState(Array(10).fill(''));
-            
+
             const [auditionsList, setAuditionsList] = useState([]);
             const [scoresList, setScoresList] = useState([]);
             const [searchTerm, setSearchTerm] = useState('');
@@ -216,16 +201,16 @@
             const [studentClass, setStudentClass] = useState('2º ESO A');
             const [studentEmail, setStudentEmail] = useState('');
             const [studentAnswers, setStudentAnswers] = useState({});
-            const [usedHints, setUsedHints] = useState({}); 
+            const [usedHints, setUsedHints] = useState({});
             const [finalScoreRecord, setFinalScoreRecord] = useState(null);
             const [examSubmitted, setExamSubmitted] = useState(false);
-            
+
             const [mcOptions, setMcOptions] = useState({});
             const [speakingIndex, setSpeakingIndex] = useState(null);
 
             const showToast = (message, type = 'info') => {
                 setToast({ message, type });
-                setTimeout(() => setToast(null), 4000);
+                setTimeout(() => setToast(null), 5000);
             };
 
             const copyToClipboard = (text) => {
@@ -273,9 +258,7 @@
             };
 
             // ------------------------------------------------------------
-            // CARGA DE TAREA DEL ALUMNO
-            // Prioridad: Supabase -> datos embebidos -> localStorage
-            // NUNCA cae al dashboard del profesor si hay ?task= en la URL.
+            // CARGA DE TAREA DEL ALUMNO — ahora busca por share_link
             // ------------------------------------------------------------
             const loadStudentTask = async (code) => {
                 if (!code) return;
@@ -285,15 +268,22 @@
                 if (supabaseUrl && supabaseKey && window.supabase) {
                     try {
                         const tempClient = window.supabase.createClient(supabaseUrl, supabaseKey);
-                        const { data, error } = await tempClient.from('auditions').select('*').eq('id', code).maybeSingle();
-                        if (data && !error) taskData = data;
+                        const { data, error } = await tempClient
+                            .from('auditions')
+                            .select('*')
+                            .eq('share_link', code)
+                            .maybeSingle();
+                        if (data && !error) {
+                            taskData = data;
+                        } else if (error) {
+                            console.error("Supabase fetch task error:", error);
+                        }
                     } catch (e) {
-                        console.error("Supabase fetch task error:", e);
+                        console.error("Supabase fetch task exception:", e);
                     }
                 }
 
                 if (!taskData) {
-                    // Intentar decodificar datos embebidos en el propio código
                     taskData = decodeTaskData(code);
                 }
 
@@ -309,7 +299,6 @@
                     setView('student-test');
                 } else {
                     showToast("Task link not found. Please ask your teacher for a new link.", "error");
-                    // Nos quedamos en student-test pero sin tarea -> mostramos aviso
                     setActiveTask(null);
                     setView('student-test');
                 }
@@ -325,22 +314,17 @@
                 checkSession();
             }, []);
 
-            // Cargar tarea del alumno SOLO una vez al arrancar, si hay ?task= o #task/
             useEffect(() => {
                 const code = getTaskCodeFromUrl();
                 if (code) {
-                    // Si venía del esquema antiguo #task/, reescribimos la URL a ?task= para estabilidad
                     if (window.location.hash && window.location.hash.startsWith('#task/')) {
-                        try {
-                            window.history.replaceState(null, '', buildStudentUrl(code));
-                        } catch (e) {}
+                        try { window.history.replaceState(null, '', buildStudentUrl(code)); } catch (e) {}
                     }
                     loadStudentTask(code);
                 }
                 // eslint-disable-next-line
             }, []);
 
-            // Redirigir al dashboard del profesor SOLO si NO hay tarea en la URL
             useEffect(() => {
                 const code = getTaskCodeFromUrl();
                 if (!code && session && (view === 'auth')) {
@@ -348,15 +332,12 @@
                 }
             }, [session, view]);
 
-            // Si NO hay tarea en la URL y el usuario navega atrás, gestionar # antiguo
             useEffect(() => {
                 const handleHashChange = () => {
                     const hash = window.location.hash || '';
                     if (hash.startsWith('#task/')) {
                         const code = hash.replace('#task/', '');
-                        try {
-                            window.history.replaceState(null, '', buildStudentUrl(code));
-                        } catch (e) {}
+                        try { window.history.replaceState(null, '', buildStudentUrl(code)); } catch (e) {}
                         loadStudentTask(code);
                     }
                 };
@@ -405,46 +386,66 @@
                 const newHints = [...taskHints]; newHints[idx] = value; setTaskHints(newHints);
             };
 
+            // ------------------------------------------------------------
+            // PUBLICAR TAREA — payload corregido para Supabase
+            // ------------------------------------------------------------
             const handlePublishTask = async () => {
                 if (uppercaseWords.length !== 10) { showToast("You must include exactly 10 UPPERCASE words in the commentary.", "error"); return; }
                 if (!videoId) { showToast("Please provide a valid YouTube video URL.", "error"); return; }
-                
+
                 setLoading(true);
                 const teacherEmail = session?.user?.email || 'teacher@school.edu';
                 const taskId = 'aud-' + Date.now();
+
+                // Payload SIN id ni teacher_id (son uuid en Supabase y los genera/muestra solo el servidor).
+                // is_exam_mode se envía explícitamente para cubrir la columna obligatoria.
                 const taskPayload = {
-                    id: taskId, 
-                    teacher_id: teacherEmail,
                     teacher_email: teacherEmail,
-                    title: title || 'Untitled Audition', 
-                    artist: artist || 'Unknown Artist', 
+                    title: title || 'Untitled Audition',
+                    artist: artist || 'Unknown Artist',
                     style: style,
-                    youtube_url: youtubeUrl, 
-                    comment: commentText, 
+                    youtube_url: youtubeUrl,
+                    comment: commentText,
                     uppercase_words: uppercaseWords,
-                    hints: taskHints.slice(0, 10), 
+                    hints: taskHints.slice(0, 10),
                     share_link: taskId,
+                    is_exam_mode: false,
                     created_at: new Date().toISOString()
                 };
 
-                const currentList = getStoredAuditions();
-                const updatedList = [taskPayload, ...currentList];
-                saveStoredAuditions(updatedList); 
-                setAuditionsList(updatedList.filter(a => (a.teacher_email || a.teacher_id) === teacherEmail));
-
+                // Guardar en Supabase PRIMERO (con reintento si 'hints' no existe como columna)
                 if (supabaseClient) {
                     try {
-                        const { error } = await supabaseClient.from('auditions').insert([taskPayload]);
-                        if (error) {
-                            console.error("Supabase insert error:", error);
-                            showToast("Saved locally. Supabase note: " + error.message, "info");
-                        } else {
-                            showToast("Task saved to Supabase Cloud!", "success");
+                        let insertError = null;
+                        const firstTry = await supabaseClient.from('auditions').insert([taskPayload]);
+                        insertError = firstTry.error;
+
+                        if (insertError && /hints/i.test(insertError.message || '')) {
+                            console.warn("Retrying without 'hints' column...");
+                            const { hints, ...payloadNoHints } = taskPayload;
+                            const retry = await supabaseClient.from('auditions').insert([payloadNoHints]);
+                            insertError = retry.error;
                         }
-                    } catch (e) { console.error(e); }
+
+                        if (insertError) {
+                            console.error("Supabase insert error:", insertError);
+                            showToast("❌ Supabase: " + (insertError.message || "insert failed"), "error");
+                        } else {
+                            showToast("✅ Task saved to Supabase Cloud!", "success");
+                        }
+                    } catch (e) {
+                        console.error("Supabase exception:", e);
+                        showToast("❌ Exception: " + (e.message || "unknown"), "error");
+                    }
                 }
 
-                // >>> ENLACE ESTABLE CON QUERY STRING <<<
+                // Guardar en local (con id para React keys y operaciones locales)
+                taskPayload.id = taskId;
+                const currentList = getStoredAuditions();
+                const updatedList = [taskPayload, ...currentList];
+                saveStoredAuditions(updatedList);
+                setAuditionsList(updatedList.filter(a => (a.teacher_email || a.teacher_id)?.toLowerCase() === teacherEmail.toLowerCase()));
+
                 const fullTaskUrl = buildStudentUrl(taskId);
                 setCreatedTaskModal({ title: taskPayload.title, fullUrl: fullTaskUrl, taskPayload: taskPayload });
                 setTitle(''); setArtist(''); setYoutubeUrl(''); setCommentText(''); setTaskHints(Array(10).fill(''));
@@ -457,7 +458,7 @@
 
                 const localAuds = getStoredAuditions().filter(a => (a.teacher_email || a.teacher_id)?.toLowerCase() === teacherEmail);
                 setAuditionsList(localAuds);
-                
+
                 const localScores = getStoredScores().filter(s => (s.teacher_email || s.taskDetails?.teacher_email)?.toLowerCase() === teacherEmail);
                 setScoresList(localScores);
 
@@ -468,16 +469,18 @@
                             .select('*')
                             .eq('teacher_email', teacherEmail)
                             .order('created_at', { ascending: false });
-                        
+
                         if (cloudAuds && !audErr) setAuditionsList(cloudAuds);
+                        else if (audErr) console.error("Fetch auditions error:", audErr);
 
                         const { data: cloudScores, error: scErr } = await supabaseClient
                             .from('student_submissions')
                             .select('*')
                             .eq('teacher_email', teacherEmail)
                             .order('created_at', { ascending: false });
-                        
+
                         if (cloudScores && !scErr) setScoresList(cloudScores);
+                        else if (scErr) console.error("Fetch submissions error:", scErr);
                     } catch (e) {
                         console.error("Fetch Supabase Cloud error:", e);
                     }
@@ -499,7 +502,7 @@
                         setConfirmModal(null);
                         const updated = auditionsList.filter(a => a.id !== id);
                         saveStoredAuditions(updated); setAuditionsList(updated);
-                        
+
                         if (supabaseClient) {
                             try { await supabaseClient.from('auditions').delete().eq('id', id); } catch (e) {}
                         }
@@ -528,6 +531,7 @@
                 e.preventDefault(); if (!lookupEmail.trim()) return;
                 setLoading(true);
                 let matched = null;
+                const taskUniqueId = activeTask?.share_link || activeTask?.id;
 
                 if (supabaseClient && activeTask) {
                     try {
@@ -535,7 +539,7 @@
                             .from('student_submissions')
                             .select('*')
                             .eq('student_email', lookupEmail.trim().toLowerCase())
-                            .eq('audition_id', activeTask.id)
+                            .eq('audition_id', taskUniqueId)
                             .order('created_at', { ascending: false })
                             .limit(1);
                         if (data && data.length > 0 && !error) matched = data[0];
@@ -544,7 +548,7 @@
 
                 if (!matched) {
                     const submissions = getStoredScores();
-                    matched = submissions.find(s => s.student_email?.toLowerCase() === lookupEmail.trim().toLowerCase() && s.audition_id === activeTask?.id);
+                    matched = submissions.find(s => s.student_email?.toLowerCase() === lookupEmail.trim().toLowerCase() && s.audition_id === taskUniqueId);
                 }
 
                 if (matched) {
@@ -581,6 +585,9 @@
 
             const handleStudentAnswerChange = (idx, value) => { setStudentAnswers(prev => ({ ...prev, [idx]: value })); };
 
+            // ------------------------------------------------------------
+            // EVALUACIÓN — usar share_link como audition_id para consistencia
+            // ------------------------------------------------------------
             const handleEvaluation = async () => {
                 if (!studentName.trim() || !studentEmail.trim()) { showToast("Please fill in your Full Name and School Email before submitting.", "error"); return; }
                 let totalScorePoints = 0;
@@ -599,23 +606,24 @@
 
                 const finalGrade = Math.max(0, Math.round(totalScorePoints * 10) / 10);
                 const teacherEmail = activeTask.teacher_email || activeTask.teacher_id || '';
+                const taskUniqueId = activeTask.share_link || activeTask.id;
 
                 const record = {
-                    id: 'score-' + Date.now(), 
-                    student_name: studentName, 
-                    student_class: studentClass, 
+                    id: 'score-' + Date.now(),
+                    student_name: studentName,
+                    student_class: studentClass,
                     student_email: studentEmail.toLowerCase().trim(),
                     teacher_email: teacherEmail,
-                    audition_id: activeTask.id, 
+                    audition_id: taskUniqueId,
                     auditions: { title: activeTask.title, artist: activeTask.artist },
-                    score: finalGrade, 
-                    taskDetails: activeTask, 
-                    details: { words: detailsWords }, 
+                    score: finalGrade,
+                    taskDetails: activeTask,
+                    details: { words: detailsWords },
                     created_at: new Date().toISOString()
                 };
 
                 const currentScores = getStoredScores();
-                saveStoredScores([record, ...currentScores]); 
+                saveStoredScores([record, ...currentScores]);
                 saveStudentSubmission(record);
 
                 if (supabaseClient) {
@@ -639,11 +647,11 @@
 
                 setFinalScoreRecord(record); setExamSubmitted(true); setView('results');
                 if ('speechSynthesis' in window) window.speechSynthesis.cancel();
-                if (finalGrade >= 5) { 
-                    playAudioFeedback('success', finalGrade); 
-                    if (finalGrade >= 8 && window.confetti) confetti({ particleCount: 120, spread: 80, origin: { y: 0.6 } }); 
-                } else { 
-                    playAudioFeedback('error', finalGrade); 
+                if (finalGrade >= 5) {
+                    playAudioFeedback('success', finalGrade);
+                    if (finalGrade >= 8 && window.confetti) confetti({ particleCount: 120, spread: 80, origin: { y: 0.6 } });
+                } else {
+                    playAudioFeedback('error', finalGrade);
                 }
             };
 
@@ -675,10 +683,10 @@
                 doc.setFillColor(243, 244, 256); doc.roundedRect(20, 58, 170, 22, 3, 3, 'F');
                 const pieceTitle = (record.taskDetails?.title || record.auditions?.title || 'Audition Piece').toUpperCase();
                 const composerArtist = record.taskDetails?.artist || record.auditions?.artist || 'Unknown Composer';
-                
+
                 doc.setFont("Helvetica", "bold"); doc.setFontSize(14); doc.setTextColor(30, 27, 75);
                 doc.text(`PIECE: ${pieceTitle}`, 105, 66, { align: 'center' });
-                
+
                 doc.setFont("Helvetica", "bold"); doc.setFontSize(11); doc.setTextColor(79, 70, 229);
                 doc.text(`ARTIST / COMPOSER: ${composerArtist.toUpperCase()}`, 105, 74, { align: 'center' });
 
@@ -689,7 +697,7 @@
 
                 doc.setFillColor(238, 242, 255); doc.setDrawColor(199, 210, 254); doc.setLineWidth(0.5);
                 doc.roundedRect(20, 99, 170, 26, 4, 4, 'FD');
-                
+
                 doc.setFont("Helvetica", "bold"); doc.setFontSize(12); doc.setTextColor(67, 56, 202);
                 doc.text(`EVALUATION: ${feedback.title}`, 105, 107, { align: 'center' });
 
@@ -722,12 +730,12 @@
 
                     if (w.correct) {
                         doc.setTextColor(16, 185, 129);
-                        doc.text(w.usedHint ? "✓ Correct (with hint)" : "✓ Correct", 105, startY + 3.8);
+                        doc.text(w.usedHint ? "Correct (with hint)" : "Correct", 105, startY + 3.8);
                         doc.setTextColor(71, 85, 105);
                         doc.text(w.original || '', 145, startY + 3.8);
                     } else {
                         doc.setTextColor(225, 29, 72);
-                        doc.text("✗ Incorrect", 105, startY + 3.8);
+                        doc.text("Incorrect", 105, startY + 3.8);
                         doc.setTextColor(148, 163, 184);
                         doc.text("---", 145, startY + 3.8);
                     }
@@ -741,7 +749,7 @@
                 });
 
                 doc.setFont("Helvetica", "bold"); doc.setFontSize(22); doc.setTextColor(99, 102, 241);
-                doc.text("♩  ♪  ♫  ♬   AUDIO MASTER AUDITION   ♬  ♫  ♪  ♩", 105, ornamentY + 7, { align: 'center' });
+                doc.text("AUDIO MASTER AUDITION", 105, ornamentY + 7, { align: 'center' });
 
                 doc.setFont("Helvetica", "normal"); doc.setFontSize(8); doc.setTextColor(148, 163, 184);
                 doc.text(`Issued on: ${new Date(record.created_at || Date.now()).toLocaleDateString()}`, 105, ornamentY + 22, { align: 'center' });
@@ -756,6 +764,9 @@
                 window.open(url, '_blank');
             };
 
+            // ------------------------------------------------------------
+            // PDF PARA IMPRIMIR — con recuadro de alumno arriba y QR abajo
+            // ------------------------------------------------------------
             const downloadAuditionTemplatePDF = async (audition) => {
                 const { jsPDF } = window.jspdf;
                 const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
@@ -763,26 +774,47 @@
                 doc.setFillColor(255, 255, 255); doc.rect(0, 0, 210, 297, 'F');
                 doc.setDrawColor(15, 23, 42); doc.setLineWidth(0.8); doc.rect(10, 10, 190, 277);
 
+                // Cabecera
                 doc.setFont("Helvetica", "bold"); doc.setFontSize(16); doc.setTextColor(15, 23, 42);
-                doc.text(audition.title.toUpperCase(), 105, 24, { align: 'center' });
-                doc.setFontSize(10); doc.setTextColor(71, 85, 105);
-                doc.text(`Artist / Composer: ${audition.artist} | Style: ${audition.style || 'Music Analysis'}`, 105, 31, { align: 'center' });
+                doc.text(audition.title.toUpperCase(), 105, 22, { align: 'center' });
+                doc.setFontSize(9); doc.setTextColor(71, 85, 105);
+                doc.text(`Artist / Composer: ${audition.artist} | Style: ${audition.style || 'Music Analysis'}`, 105, 28, { align: 'center' });
 
-                doc.setDrawColor(226, 232, 240); doc.line(20, 36, 190, 36);
+                doc.setDrawColor(226, 232, 240); doc.setLineWidth(0.5); doc.line(20, 33, 190, 33);
 
+                // NUEVO: Recuadro para Nombre y Apellidos / Grupo
+                doc.setFillColor(248, 250, 252);
+                doc.setDrawColor(199, 210, 254);
+                doc.setLineWidth(0.4);
+                doc.roundedRect(20, 37, 170, 13, 2, 2, 'FD');
+
+                doc.setFont("Helvetica", "bold");
+                doc.setFontSize(8.5);
+                doc.setTextColor(79, 70, 229);
+                doc.text("NAME & SURNAMES:", 24, 46);
+                doc.setDrawColor(148, 163, 184); doc.setLineWidth(0.3);
+                doc.line(58, 46.5, 158, 46.5);
+
+                doc.setFont("Helvetica", "bold"); doc.setFontSize(8.5); doc.setTextColor(79, 70, 229);
+                doc.text("GROUP:", 162, 46);
+                doc.line(175, 46.5, 187, 46.5);
+
+                doc.setDrawColor(226, 232, 240); doc.setLineWidth(0.5); doc.line(20, 53, 190, 53);
+
+                // Cuerpo del texto con huecos
                 let templateText = audition.comment;
                 let gapCounter = 0;
-                const wordsArray = (audition.uppercase_words || []).map(w => w.replace(/[^A-Za-zA-ZÁÉÍÓÚÑáéíóúñ]/g, '').toUpperCase());
+                const wordsArray = (audition.uppercase_words || []).map(w => w.replace(/[^A-Za-zÁÉÍÓÚÑáéíóúñ]/g, '').toUpperCase());
 
                 templateText = templateText.replace(/([A-ZÁÉÍÓÚÑ]{2,})/g, (match) => {
                     const idx = gapCounter++;
-                    const cleanWord = match.replace(/[^A-Za-zA-ZÁÉÍÓÚÑáéíóúñ]/g, '').toUpperCase();
+                    const cleanWord = match.replace(/[^A-Za-zÁÉÍÓÚÑáéíóúñ]/g, '').toUpperCase();
                     const len = cleanWord.length;
-                    
+
                     if ([0, 4, 6, 8].includes(idx)) {
-                        return cleanWord.charAt(0) + ' _'.repeat(len - 1);
+                        return cleanWord.charAt(0) + ' _'.repeat(Math.max(0, len - 1));
                     } else if ([1, 3, 5, 9].includes(idx)) {
-                        return '_ '.repeat(len > 2 ? len - 2 : 0) + cleanWord.slice(-2);
+                        return '_ '.repeat(Math.max(0, len - 2)) + cleanWord.slice(-2);
                     } else if ([2, 7].includes(idx)) {
                         const dist = wordsArray.filter(w => w !== cleanWord);
                         dist.sort(() => 0.5 - Math.random());
@@ -792,23 +824,32 @@
                     return match;
                 });
 
-                doc.setFont("Helvetica", "normal"); doc.setFontSize(9.5); doc.setTextColor(51, 65, 85);
+                doc.setFont("Helvetica", "normal"); doc.setFontSize(10); doc.setTextColor(51, 65, 85);
                 const splitText = doc.splitTextToSize(templateText, 170);
-                
-                let currentY = 44;
+
+                let currentY = 61;
                 splitText.forEach((line) => {
                     doc.text(line, 20, currentY);
-                    currentY += 5.5;
+                    currentY += 6;
                 });
 
+                // NUEVO: QR al pie de la página (posición fija)
                 if (audition.youtube_url) {
+                    const qrY = 240;
+                    doc.setDrawColor(199, 210, 254); doc.setLineWidth(0.5);
+                    doc.line(20, qrY - 6, 190, qrY - 6);
+
+                    doc.setFont("Helvetica", "bold"); doc.setFontSize(10); doc.setTextColor(79, 70, 229);
+                    doc.text("LISTEN TO THE AUDITION", 105, qrY, { align: 'center' });
+
                     const qrDataUri = await getQRBase64(audition.youtube_url);
                     if (qrDataUri) {
-                        const qrY = Math.max(currentY + 10, 220);
-                        doc.line(20, qrY - 5, 190, qrY - 5);
-                        doc.addImage(qrDataUri, 'PNG', 88, qrY, 34, 34);
-                        doc.setFont("Helvetica", "bold"); doc.setFontSize(8.5); doc.setTextColor(100, 116, 139);
-                        doc.text("Scan QR code to listen to the audition on YouTube", 105, qrY + 40, { align: 'center' });
+                        doc.addImage(qrDataUri, 'PNG', 88, qrY + 4, 34, 34);
+                        doc.setFont("Helvetica", "bold"); doc.setFontSize(8); doc.setTextColor(100, 116, 139);
+                        doc.text("Scan this QR code with your phone to open the video on YouTube", 105, qrY + 43, { align: 'center' });
+                    } else {
+                        doc.setFont("Helvetica", "normal"); doc.setFontSize(9); doc.setTextColor(79, 70, 229);
+                        doc.text(audition.youtube_url, 105, qrY + 8, { align: 'center' });
                     }
                 }
 
@@ -972,7 +1013,7 @@
                                                     </thead>
                                                     <tbody>
                                                         {auditionsList.map(aud => (
-                                                            <tr key={aud.id} className="border-b border-slate-100 hover:bg-slate-50/30 transition-colors">
+                                                            <tr key={aud.id || aud.share_link} className="border-b border-slate-100 hover:bg-slate-50/30 transition-colors">
                                                                 <td className="py-4 px-4 font-bold text-slate-950">{aud.title}</td><td className="py-4 px-4 text-slate-500">{aud.artist}</td>
                                                                 <td className="py-4 px-4 text-center"><button onClick={() => handleCopyLink(aud.share_link || aud.id, aud.id)} className="bg-indigo-50 hover:bg-indigo-100 text-indigo-700 font-bold px-3 py-1.5 rounded-lg text-xs flex items-center gap-1 mx-auto transition-all">{copiedId === aud.id ? <Icons.Check /> : <Icons.Link />} {copiedId === aud.id ? "Copied!" : "Copy Link"}</button></td>
                                                                 <td className="py-4 px-4 text-right space-x-1">
@@ -1091,17 +1132,17 @@
                                         {parsedParagraphs.map((paragraphTokens, pIndex) => {
                                             if (paragraphTokens.length === 0) return null;
                                             const paragraphSpeechText = paragraphTokens.map(t => t.type === 'gap' ? ' blank ' : t.content).join('');
-                                            
+
                                             return (
                                                 <div key={pIndex} className="relative group bg-slate-50 p-5 rounded-xl border pr-12">
                                                     <button onClick={() => toggleSpeech(paragraphSpeechText, pIndex)} title="Listen in English" className={`absolute top-4 right-4 p-2 rounded-full shadow-sm transition-all ${speakingIndex === pIndex ? 'bg-indigo-600 text-white animate-pulse' : 'bg-white text-indigo-600 border hover:bg-indigo-50'}`}>
                                                         {speakingIndex === pIndex ? <Icons.Stop /> : <Icons.Speaker />}
                                                     </button>
-                                                    
+
                                                     <p className="text-slate-800 leading-loose text-[15px]">
                                                         {paragraphTokens.map((token, tIndex) => {
                                                             if (token.type === 'text') return <span key={tIndex}>{token.content}</span>;
-                                                            
+
                                                             const gapIdx = token.gapIndex;
                                                             const hintText = activeTask.hints && activeTask.hints[gapIdx];
                                                             const cleanWord = token.word.replace(/[^A-Za-zA-ZÁÉÍÓÚÑáéíóúñ]/g, '').toUpperCase();
@@ -1112,8 +1153,8 @@
                                                                 return (
                                                                     <span key={tIndex} className="inline-block mx-1 align-bottom">
                                                                         <span className="relative inline-flex flex-col items-center">
-                                                                            <select 
-                                                                                value={studentAnswers[gapIdx] || ''} 
+                                                                            <select
+                                                                                value={studentAnswers[gapIdx] || ''}
                                                                                 onChange={e => handleStudentAnswerChange(gapIdx, e.target.value)}
                                                                                 className="w-36 px-2 py-1 text-center border-b-2 border-indigo-500 shadow-sm font-bold text-indigo-800 uppercase outline-none text-sm bg-white rounded-t cursor-pointer"
                                                                             >
@@ -1130,18 +1171,18 @@
                                                                 );
                                                             } else {
                                                                 let ph = `Gap ${gapIdx + 1}`;
-                                                                if ([0, 4, 6, 8].includes(gapIdx)) ph = cleanWord.charAt(0) + ' _'.repeat(len - 1);
-                                                                else if ([1, 3, 5, 9].includes(gapIdx)) ph = '_ '.repeat(len > 2 ? len - 2 : 0) + cleanWord.slice(-2);
+                                                                if ([0, 4, 6, 8].includes(gapIdx)) ph = cleanWord.charAt(0) + ' _'.repeat(Math.max(0, len - 1));
+                                                                else if ([1, 3, 5, 9].includes(gapIdx)) ph = '_ '.repeat(Math.max(0, len - 2)) + cleanWord.slice(-2);
 
                                                                 return (
                                                                     <span key={tIndex} className="inline-block mx-1 align-bottom">
                                                                         <span className="relative inline-flex flex-col items-center">
-                                                                            <input 
-                                                                                type="text" 
-                                                                                placeholder={ph} 
-                                                                                value={studentAnswers[gapIdx] || ''} 
-                                                                                onChange={e => handleStudentAnswerChange(gapIdx, e.target.value)} 
-                                                                                className="w-28 px-2 py-1 text-center border-b-2 border-indigo-500 shadow-sm font-bold text-indigo-800 uppercase outline-none text-sm bg-white rounded-t placeholder-slate-400" 
+                                                                            <input
+                                                                                type="text"
+                                                                                placeholder={ph}
+                                                                                value={studentAnswers[gapIdx] || ''}
+                                                                                onChange={e => handleStudentAnswerChange(gapIdx, e.target.value)}
+                                                                                className="w-28 px-2 py-1 text-center border-b-2 border-indigo-500 shadow-sm font-bold text-indigo-800 uppercase outline-none text-sm bg-white rounded-t placeholder-slate-400"
                                                                             />
                                                                             {hintText && (
                                                                                 <button onClick={() => setUsedHints({...usedHints, [gapIdx]: true})} className="mt-1 text-[10px] bg-amber-100 hover:bg-amber-200 text-amber-900 px-2 py-0.5 font-bold rounded-md transition-colors whitespace-nowrap flex items-center gap-1 shadow-sm">
