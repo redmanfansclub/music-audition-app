@@ -17,6 +17,19 @@
         body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #f8fafc; }
         .glass-panel { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); }
         select { -webkit-appearance: none; -moz-appearance: none; appearance: none; background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e"); background-repeat: no-repeat; background-position: right 0.5rem center; background-size: 1em; padding-right: 2rem !important; }
+        .dark body, body.dark { background-color: #0f172a; color: #e2e8f0; }
+        .dark .bg-white { background-color: #1e293b !important; }
+        .dark .bg-slate-50 { background-color: #334155 !important; }
+        .dark .bg-slate-100 { background-color: #334155 !important; }
+        .dark .text-slate-900 { color: #f1f5f9 !important; }
+        .dark .text-slate-800 { color: #e2e8f0 !important; }
+        .dark .text-slate-700 { color: #cbd5e1 !important; }
+        .dark .text-slate-600 { color: #cbd5e1 !important; }
+        .dark .text-slate-500 { color: #94a3b8 !important; }
+        .dark .border-slate-200 { border-color: #334155 !important; }
+        .dark .border-slate-100 { border-color: #334155 !important; }
+        .dark input, .dark textarea, .dark select { background-color: #334155 !important; color: #f1f5f9 !important; border-color: #475569 !important; }
+        .dark .bg-slate-900 { background-color: #020617 !important; }
     </style>
 </head>
 <body class="text-slate-900 selection:bg-indigo-100 selection:text-indigo-900 min-h-screen">
@@ -29,10 +42,7 @@
         const DEFAULT_SUPABASE_URL = `https://${DEFAULT_SUPABASE_PROJECT_ID}.supabase.co`;
         const DEFAULT_SUPABASE_KEY = "sb_publishable_URQ87m7Tiq96RUHGtvX29Q_lYroaqM4";
 
-        const decodeTaskData = (encoded) => {
-            try { return JSON.parse(decodeURIComponent(atob(encoded))); } catch (e) { return null; }
-        };
-
+        const decodeTaskData = (encoded) => { try { return JSON.parse(decodeURIComponent(atob(encoded))); } catch (e) { return null; } };
         const getStoredAuditions = () => { try { return JSON.parse(localStorage.getItem('audition_app_tasks') || '[]'); } catch (e) { return []; } };
         const saveStoredAuditions = (newList) => { try { localStorage.setItem('audition_app_tasks', JSON.stringify(newList)); } catch (e) {} };
         const getStoredScores = () => { try { return JSON.parse(localStorage.getItem('audition_app_scores') || '[]'); } catch (e) { return []; } };
@@ -74,17 +84,15 @@
 
         const getEnglishFeedback = (score) => {
             const num = Number(score);
-            if (num >= 9) return { title: "Outstanding Achievement!", text: "Exceptional listening comprehension and terminology precision. Excellent musical ear!" };
-            if (num >= 7) return { title: "Great Work!", text: "Solid understanding of the audition piece. Keep practicing your musical vocabulary!" };
+            if (num >= 9) return { title: "Outstanding Achievement", text: "Exceptional listening comprehension and terminology precision. Excellent musical ear!" };
+            if (num >= 7) return { title: "Great Work", text: "Solid understanding of the audition piece. Keep practicing your musical vocabulary!" };
             if (num >= 5) return { title: "Satisfactory Performance", text: "Good effort! Review the musical terms and re-listen to improve gap accuracy." };
             return { title: "Needs Revision", text: "Try re-listening carefully with focused attention on the key vocabulary words." };
         };
 
         const getQRBase64 = async (text) => {
             if (window.QRCode && typeof window.QRCode.toDataURL === 'function') {
-                try {
-                    return await window.QRCode.toDataURL(text, { margin: 1, width: 200 });
-                } catch (e) { return null; }
+                try { return await window.QRCode.toDataURL(text, { margin: 1, width: 200 }); } catch (e) { return null; }
             }
             return null;
         };
@@ -162,7 +170,9 @@
             Lightbulb: () => <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M9.663 17h4.673M12 3a7 7 0 00-7 7c0 2.38 1.19 4.485 3 5.74V17a1 1 0 001 1h6a1 1 0 001-1v-1.26c1.81-1.255 3-3.36 3-5.74a7 7 0 00-7-7z" /></svg>,
             Refresh: () => <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>,
             Camera: () => <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" /><circle cx="12" cy="13" r="3" /></svg>,
-            Database: () => <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4" /></svg>
+            Database: () => <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4" /></svg>,
+            Moon: () => <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" /></svg>,
+            Sun: () => <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" /></svg>
         };
 
         const App = () => {
@@ -172,6 +182,7 @@
             const [loading, setLoading] = useState(true);
             const [submitting, setSubmitting] = useState(false);
             const [dashboardTab, setDashboardTab] = useState('create');
+            const [darkMode, setDarkMode] = useState(() => localStorage.getItem('audition_dark_mode') === 'true');
 
             const [supabaseUrl] = useState(DEFAULT_SUPABASE_URL);
             const [supabaseKey] = useState(DEFAULT_SUPABASE_KEY);
@@ -194,6 +205,7 @@
             const [auditionsList, setAuditionsList] = useState([]);
             const [scoresList, setScoresList] = useState([]);
             const [searchTerm, setSearchTerm] = useState('');
+            const [searchTermHistory, setSearchTermHistory] = useState('');
             const [copiedId, setCopiedId] = useState(null);
             const [selectedScoreDetails, setSelectedScoreDetails] = useState(null);
 
@@ -205,9 +217,16 @@
             const [usedHints, setUsedHints] = useState({});
             const [finalScoreRecord, setFinalScoreRecord] = useState(null);
             const [examSubmitted, setExamSubmitted] = useState(false);
+            const [alreadySubmittedWarning, setAlreadySubmittedWarning] = useState(false);
 
             const [mcOptions, setMcOptions] = useState({});
             const [speakingIndex, setSpeakingIndex] = useState(null);
+
+            useEffect(() => {
+                if (darkMode) document.body.classList.add('dark');
+                else document.body.classList.remove('dark');
+                localStorage.setItem('audition_dark_mode', darkMode);
+            }, [darkMode]);
 
             const showToast = (message, type = 'info') => {
                 setToast({ message, type });
@@ -266,25 +285,13 @@
                 if (supabaseUrl && supabaseKey && window.supabase) {
                     try {
                         const tempClient = window.supabase.createClient(supabaseUrl, supabaseKey);
-                        const { data, error } = await tempClient
-                            .from('auditions')
-                            .select('*')
-                            .eq('share_link', code)
-                            .maybeSingle();
-                        if (data && !error) {
-                            taskData = data;
-                        } else if (error) {
-                            console.error("Supabase fetch task error:", error);
-                        }
-                    } catch (e) {
-                        console.error("Supabase fetch task exception:", e);
-                    }
+                        const { data, error } = await tempClient.from('auditions').select('*').eq('share_link', code).maybeSingle();
+                        if (data && !error) taskData = data;
+                        else if (error) console.error("Supabase fetch task error:", error);
+                    } catch (e) { console.error("Supabase fetch task exception:", e); }
                 }
 
-                if (!taskData) {
-                    taskData = decodeTaskData(code);
-                }
-
+                if (!taskData) taskData = decodeTaskData(code);
                 if (!taskData) {
                     const localAuditions = getStoredAuditions();
                     taskData = localAuditions.find(a => a.share_link === code || a.id === code);
@@ -304,12 +311,9 @@
             };
 
             useEffect(() => {
-                const checkSession = () => {
-                    const savedSession = localStorage.getItem('audition_app_teacher_session');
-                    if (savedSession) setSession(JSON.parse(savedSession));
-                    setLoading(false);
-                };
-                checkSession();
+                const savedSession = localStorage.getItem('audition_app_teacher_session');
+                if (savedSession) setSession(JSON.parse(savedSession));
+                setLoading(false);
             }, []);
 
             useEffect(() => {
@@ -320,33 +324,16 @@
                     }
                     loadStudentTask(code);
                 }
-                // eslint-disable-next-line
             }, []);
 
             useEffect(() => {
                 const code = getTaskCodeFromUrl();
-                if (!code && session && (view === 'auth')) {
-                    setView('dashboard');
-                }
+                if (!code && session && (view === 'auth')) setView('dashboard');
             }, [session, view]);
 
             useEffect(() => {
-                const handleHashChange = () => {
-                    const hash = window.location.hash || '';
-                    if (hash.startsWith('#task/')) {
-                        const code = hash.replace('#task/', '');
-                        try { window.history.replaceState(null, '', buildStudentUrl(code)); } catch (e) {}
-                        loadStudentTask(code);
-                    }
-                };
-                window.addEventListener('hashchange', handleHashChange);
-                return () => window.removeEventListener('hashchange', handleHashChange);
-                // eslint-disable-next-line
-            }, []);
-
-            useEffect(() => {
                 if (activeTask && activeTask.uppercase_words && view === 'student-test' && !examSubmitted) {
-                    const words = activeTask.uppercase_words.map(w => w.replace(/[^A-Za-zA-ZÁÉÍÓÚÑáéíóúñ]/g, '').toUpperCase());
+                    const words = activeTask.uppercase_words.map(w => w.replace(/[^A-Za-zÁÉÍÓÚÑáéíóúñ]/g, '').toUpperCase());
                     const newMcOptions = {};
                     [2, 7].forEach(idx => {
                         if (words[idx]) {
@@ -410,14 +397,11 @@
                         let insertError = null;
                         const firstTry = await supabaseClient.from('auditions').insert([taskPayload]);
                         insertError = firstTry.error;
-
                         if (insertError && /hints/i.test(insertError.message || '')) {
-                            console.warn("Retrying without 'hints' column...");
                             const { hints, ...payloadNoHints } = taskPayload;
                             const retry = await supabaseClient.from('auditions').insert([payloadNoHints]);
                             insertError = retry.error;
                         }
-
                         if (insertError) {
                             console.error("Supabase insert error:", insertError);
                             showToast("Supabase: " + (insertError.message || "insert failed"), "error");
@@ -448,32 +432,16 @@
 
                 const localAuds = getStoredAuditions().filter(a => (a.teacher_email || a.teacher_id)?.toLowerCase() === teacherEmail);
                 setAuditionsList(localAuds);
-
                 const localScores = getStoredScores().filter(s => (s.teacher_email || s.taskDetails?.teacher_email)?.toLowerCase() === teacherEmail);
                 setScoresList(localScores);
 
                 if (supabaseClient) {
                     try {
-                        const { data: cloudAuds, error: audErr } = await supabaseClient
-                            .from('auditions')
-                            .select('*')
-                            .eq('teacher_email', teacherEmail)
-                            .order('created_at', { ascending: false });
-
+                        const { data: cloudAuds, error: audErr } = await supabaseClient.from('auditions').select('*').eq('teacher_email', teacherEmail).order('created_at', { ascending: false });
                         if (cloudAuds && !audErr) setAuditionsList(cloudAuds);
-                        else if (audErr) console.error("Fetch auditions error:", audErr);
-
-                        const { data: cloudScores, error: scErr } = await supabaseClient
-                            .from('student_submissions')
-                            .select('*')
-                            .eq('teacher_email', teacherEmail)
-                            .order('created_at', { ascending: false });
-
+                        const { data: cloudScores, error: scErr } = await supabaseClient.from('student_submissions').select('*').eq('teacher_email', teacherEmail).order('created_at', { ascending: false });
                         if (cloudScores && !scErr) setScoresList(cloudScores);
-                        else if (scErr) console.error("Fetch submissions error:", scErr);
-                    } catch (e) {
-                        console.error("Fetch Supabase Cloud error:", e);
-                    }
+                    } catch (e) { console.error("Fetch Supabase Cloud error:", e); }
                 }
             };
 
@@ -485,16 +453,19 @@
                 setTimeout(() => setCopiedId(null), 2000);
             };
 
-            const handleDeleteAudition = async (id) => {
+            const handleDeleteAudition = async (id, shareLink) => {
                 setConfirmModal({
-                    title: "Delete Audition Task", message: "Are you sure you want to delete this audition task?",
+                    title: "Delete Audition Task",
+                    message: "Are you sure you want to delete this audition task? This will remove it from the cloud too.",
                     onConfirm: async () => {
                         setConfirmModal(null);
-                        const updated = auditionsList.filter(a => a.id !== id);
+                        const updated = auditionsList.filter(a => a.id !== id && a.share_link !== shareLink);
                         saveStoredAuditions(updated); setAuditionsList(updated);
-
                         if (supabaseClient) {
-                            try { await supabaseClient.from('auditions').delete().eq('id', id); } catch (e) {}
+                            try {
+                                if (shareLink) await supabaseClient.from('auditions').delete().eq('share_link', shareLink);
+                                else await supabaseClient.from('auditions').delete().eq('id', id);
+                            } catch (e) { console.error("Delete error:", e); }
                         }
                         showToast("Audition deleted.", "info");
                     }
@@ -503,14 +474,14 @@
 
             const handleDeleteScore = async (id) => {
                 setConfirmModal({
-                    title: "Delete Grade Record", message: "Are you sure you want to delete this student record?",
+                    title: "Delete Grade Record",
+                    message: "Are you sure you want to delete this student record? This will remove it from the cloud too.",
                     onConfirm: async () => {
                         setConfirmModal(null);
                         const updated = scoresList.filter(s => s.id !== id);
                         saveStoredScores(updated); setScoresList(updated);
-
                         if (supabaseClient) {
-                            try { await supabaseClient.from('student_submissions').delete().eq('id', id); } catch (e) {}
+                            try { await supabaseClient.from('student_submissions').delete().eq('id', id); } catch (e) { console.error(e); }
                         }
                         showToast("Record deleted.", "info");
                     }
@@ -522,25 +493,16 @@
                 setLoading(true);
                 let matched = null;
                 const taskUniqueId = activeTask?.share_link || activeTask?.id;
-
                 if (supabaseClient && activeTask) {
                     try {
-                        const { data, error } = await supabaseClient
-                            .from('student_submissions')
-                            .select('*')
-                            .eq('student_email', lookupEmail.trim().toLowerCase())
-                            .eq('audition_id', taskUniqueId)
-                            .order('created_at', { ascending: false })
-                            .limit(1);
+                        const { data, error } = await supabaseClient.from('student_submissions').select('*').eq('student_email', lookupEmail.trim().toLowerCase()).eq('audition_id', taskUniqueId).order('created_at', { ascending: false }).limit(1);
                         if (data && data.length > 0 && !error) matched = data[0];
                     } catch (e) {}
                 }
-
                 if (!matched) {
                     const submissions = getStoredScores();
                     matched = submissions.find(s => s.student_email?.toLowerCase() === lookupEmail.trim().toLowerCase() && s.audition_id === taskUniqueId);
                 }
-
                 if (matched) {
                     setFinalScoreRecord(matched); setExamSubmitted(true); setView('results'); setLookupModal(false);
                     showToast("Submission retrieved successfully!", "success");
@@ -550,10 +512,33 @@
 
             const filteredScores = useMemo(() => {
                 return scoresList.filter(s => {
-                    const searchLower = searchTerm.toLowerCase();
-                    return s.student_name?.toLowerCase().includes(searchLower) || s.auditions?.title?.toLowerCase().includes(searchLower);
+                    const q = searchTerm.toLowerCase().trim();
+                    if (!q) return true;
+                    return (s.student_name?.toLowerCase().includes(q) ||
+                            s.student_email?.toLowerCase().includes(q) ||
+                            s.student_class?.toLowerCase().includes(q) ||
+                            s.auditions?.title?.toLowerCase().includes(q) ||
+                            s.auditions?.artist?.toLowerCase().includes(q) ||
+                            String(s.score).includes(q));
                 });
             }, [scoresList, searchTerm]);
+
+            const filteredAuditions = useMemo(() => {
+                return auditionsList.filter(a => {
+                    const q = searchTermHistory.toLowerCase().trim();
+                    if (!q) return true;
+                    return (a.title?.toLowerCase().includes(q) ||
+                            a.artist?.toLowerCase().includes(q) ||
+                            a.share_link?.toLowerCase().includes(q));
+                });
+            }, [auditionsList, searchTermHistory]);
+
+            const stats = useMemo(() => {
+                if (filteredScores.length === 0) return null;
+                const avg = filteredScores.reduce((acc, s) => acc + Number(s.score || 0), 0) / filteredScores.length;
+                const best = filteredScores.reduce((acc, s) => Number(s.score) > Number(acc.score) ? s : acc, filteredScores[0]);
+                return { avg: avg.toFixed(2), count: filteredScores.length, bestName: best.student_name, bestScore: Number(best.score).toFixed(1) };
+            }, [filteredScores]);
 
             const parsedParagraphs = useMemo(() => {
                 if (!activeTask?.comment) return [];
@@ -575,6 +560,20 @@
 
             const handleStudentAnswerChange = (idx, value) => { setStudentAnswers(prev => ({ ...prev, [idx]: value })); };
 
+            const checkIfAlreadySubmitted = async (email) => {
+                if (!email.trim() || !activeTask) return false;
+                const taskUniqueId = activeTask.share_link || activeTask.id;
+                const cleanEmail = email.toLowerCase().trim();
+                if (supabaseClient) {
+                    try {
+                        const { data } = await supabaseClient.from('student_submissions').select('id').eq('student_email', cleanEmail).eq('audition_id', taskUniqueId).limit(1);
+                        if (data && data.length > 0) return true;
+                    } catch (e) {}
+                }
+                const local = getStoredScores();
+                return local.some(s => s.student_email?.toLowerCase() === cleanEmail && s.audition_id === taskUniqueId);
+            };
+
             const handleEvaluation = async () => {
                 if (submitting) return;
                 if (!studentName.trim() || !studentEmail.trim()) { showToast("Please fill in your Full Name and School Email before submitting.", "error"); return; }
@@ -583,7 +582,6 @@
                 try {
                     let totalScorePoints = 0;
                     const taskUppercaseWords = activeTask.comment.match(/[A-ZÁÉÍÓÚÑ]{2,}/g) || [];
-
                     const detailsWords = taskUppercaseWords.map((word, idx) => {
                         const cleanWord = word.replace(/[^A-Za-zÁÉÍÓÚÑáéíóúñ]/g, '').toUpperCase();
                         const studentAns = (studentAnswers[idx] || '').trim().toUpperCase();
@@ -620,12 +618,7 @@
 
                     if (supabaseClient) {
                         try {
-                            await supabaseClient
-                                .from('student_submissions')
-                                .delete()
-                                .eq('student_email', studentEmailClean)
-                                .eq('audition_id', taskUniqueId);
-
+                            await supabaseClient.from('student_submissions').delete().eq('student_email', studentEmailClean).eq('audition_id', taskUniqueId);
                             const { error } = await supabaseClient.from('student_submissions').insert([{
                                 id: record.id,
                                 student_name: record.student_name,
@@ -648,12 +641,8 @@
                     if (finalGrade >= 5) {
                         playAudioFeedback('success', finalGrade);
                         if (finalGrade >= 8 && window.confetti) confetti({ particleCount: 120, spread: 80, origin: { y: 0.6 } });
-                    } else {
-                        playAudioFeedback('error', finalGrade);
-                    }
-                } finally {
-                    setSubmitting(false);
-                }
+                    } else { playAudioFeedback('error', finalGrade); }
+                } finally { setSubmitting(false); }
             };
 
             const generatePDF = (record) => {
@@ -661,63 +650,52 @@
                 const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
                 const feedback = getEnglishFeedback(record.score);
 
-                // Fondo y bordes
                 doc.setFillColor(250, 252, 255); doc.rect(0, 0, 210, 297, 'F');
                 doc.setDrawColor(79, 70, 229); doc.setLineWidth(1.4); doc.rect(8, 8, 194, 281);
                 doc.setDrawColor(199, 210, 254); doc.setLineWidth(0.6); doc.rect(12, 12, 186, 273);
 
-                // Cabecera
                 doc.setFont("Helvetica", "bold"); doc.setFontSize(22); doc.setTextColor(67, 56, 202);
                 doc.text("DIPLOMA OF ACCOMPLISHMENT", 105, 25, { align: 'center' });
 
-                doc.setFont("Helvetica", "bold"); doc.setFontSize(10); doc.setTextColor(99, 102, 241);
-                doc.text("ENGLISH BILINGUAL MUSIC AUDITION MASTER", 105, 32, { align: 'center' });
+                doc.setFont("Helvetica", "bold"); doc.setFontSize(9); doc.setTextColor(99, 102, 241);
+                doc.text("ENGLISH BILINGUAL MUSIC AUDITION MASTER", 105, 31, { align: 'center' });
 
-                doc.setDrawColor(224, 231, 255); doc.setLineWidth(0.8); doc.line(30, 36, 180, 36);
-
-                // Alumno
-                doc.setFont("Helvetica", "normal"); doc.setFontSize(10); doc.setTextColor(100, 116, 139);
-                doc.text("This certificate of listening assessment is proudly presented to:", 105, 43, { align: 'center' });
-
-                doc.setFont("Helvetica", "bold"); doc.setFontSize(20); doc.setTextColor(15, 23, 42);
-                const nameStr = (record.student_name || record.name || 'STUDENT').toUpperCase();
-                const classStr = record.student_class ? ` (${record.student_class})` : '';
-                doc.text(`${nameStr}${classStr}`, 105, 52, { align: 'center' });
-
-                // Título de la obra en grande
-                doc.setFillColor(243, 244, 256); doc.roundedRect(20, 58, 170, 26, 3, 3, 'F');
-                const pieceTitle = (record.taskDetails?.title || record.auditions?.title || 'Audition Piece').toUpperCase();
-                const composerArtist = record.taskDetails?.artist || record.auditions?.artist || 'Unknown Composer';
-
-                doc.setFont("Helvetica", "bold"); doc.setFontSize(18); doc.setTextColor(30, 27, 75);
-                doc.text(pieceTitle, 105, 70, { align: 'center', maxWidth: 160 });
+                doc.setDrawColor(224, 231, 255); doc.setLineWidth(0.8); doc.line(30, 34, 180, 34);
 
                 doc.setFont("Helvetica", "normal"); doc.setFontSize(9); doc.setTextColor(100, 116, 139);
-                doc.text(`by ${composerArtist}`, 105, 78, { align: 'center' });
+                doc.text("This certificate is proudly presented to:", 105, 41, { align: 'center' });
 
-                // Nota grande
+                doc.setFont("Helvetica", "bold"); doc.setFontSize(14); doc.setTextColor(15, 23, 42);
+                const nameStr = (record.student_name || 'STUDENT').toUpperCase();
+                const classStr = record.student_class ? ` (${record.student_class})` : '';
+                doc.text(`${nameStr}${classStr}`, 105, 49, { align: 'center' });
+
+                doc.setFillColor(243, 244, 256); doc.roundedRect(20, 55, 170, 26, 3, 3, 'F');
+                const pieceTitle = (record.taskDetails?.title || record.auditions?.title || 'Audition Piece').toUpperCase();
+                const composerArtist = record.taskDetails?.artist || record.auditions?.artist || 'Unknown Composer';
+                doc.setFont("Helvetica", "bold"); doc.setFontSize(20); doc.setTextColor(30, 27, 75);
+                doc.text(pieceTitle, 105, 68, { align: 'center', maxWidth: 160 });
+                doc.setFont("Helvetica", "normal"); doc.setFontSize(10); doc.setTextColor(100, 116, 139);
+                doc.text(`by ${composerArtist}`, 105, 76, { align: 'center' });
+
                 doc.setFont("Helvetica", "bold"); doc.setFontSize(38); doc.setTextColor(79, 70, 229);
-                doc.text(`${Number(record.score).toFixed(1)}`, 96, 96, { align: 'right' });
+                doc.text(`${Number(record.score).toFixed(1)}`, 96, 94, { align: 'right' });
                 doc.setFontSize(16); doc.setTextColor(148, 163, 184);
-                doc.text(`/ 10`, 99, 96, { align: 'left' });
+                doc.text(`/ 10`, 99, 94, { align: 'left' });
 
-                // Evaluación
                 doc.setFillColor(238, 242, 255); doc.setDrawColor(199, 210, 254); doc.setLineWidth(0.5);
-                doc.roundedRect(20, 103, 170, 24, 4, 4, 'FD');
-
+                doc.roundedRect(20, 102, 170, 24, 4, 4, 'FD');
                 doc.setFont("Helvetica", "bold"); doc.setFontSize(12); doc.setTextColor(67, 56, 202);
-                doc.text(`EVALUATION: ${feedback.title}`, 105, 111, { align: 'center' });
-
+                doc.text(`EVALUATION: ${feedback.title}`, 105, 110, { align: 'center' });
                 doc.setFont("Helvetica", "italic"); doc.setFontSize(9.5); doc.setTextColor(30, 41, 59);
                 const splitFeedback = doc.splitTextToSize(`"${feedback.text}"`, 160);
-                doc.text(splitFeedback, 105, 119, { align: 'center' });
+                doc.text(splitFeedback, 105, 118, { align: 'center' });
 
-                // Detalle de respuestas
                 doc.setFont("Helvetica", "bold"); doc.setFontSize(10); doc.setTextColor(15, 23, 42);
-                doc.text("DETAILED ANSWER BREAKDOWN", 20, 138);
+                doc.text("DETAILED ANSWER BREAKDOWN", 20, 136);
 
                 const words = record.details?.words || [];
-                let startY = 142;
+                let startY = 140;
 
                 doc.setFillColor(226, 232, 240);
                 doc.rect(20, startY, 170, 5.5, 'F');
@@ -731,14 +709,12 @@
                 words.forEach((w, idx) => {
                     doc.setFont("Helvetica", "normal"); doc.setFontSize(8);
                     if (idx % 2 === 0) { doc.setFillColor(248, 250, 252); doc.rect(20, startY, 170, 5.2, 'F'); }
-
                     doc.setTextColor(30, 41, 59);
                     doc.text(`Gap ${idx + 1}`, 23, startY + 3.8);
                     doc.text(w.answer ? String(w.answer).substring(0, 24) : '(empty)', 45, startY + 3.8);
-
                     if (w.correct) {
                         doc.setTextColor(16, 185, 129);
-                        doc.text(w.usedHint ? "Correct (with hint)" : "Correct", 105, startY + 3.8);
+                        doc.text(w.usedHint ? "Correct (hint)" : "Correct", 105, startY + 3.8);
                         doc.setTextColor(71, 85, 105);
                         doc.text(w.original || '', 145, startY + 3.8);
                     } else {
@@ -750,37 +726,34 @@
                     startY += 5.2;
                 });
 
-                // Adorno musical
-                const ornY = 230;
+                // Adorno musical limpio (líneas + texto)
+                const ornY = 232;
                 doc.setDrawColor(199, 210, 254); doc.setLineWidth(0.4);
                 doc.line(30, ornY, 180, ornY);
                 doc.line(30, ornY + 1.2, 180, ornY + 1.2);
                 doc.line(30, ornY + 2.4, 180, ornY + 2.4);
-                doc.line(30, ornY + 3.6, 180, ornY + 3.6);
-                doc.line(30, ornY + 4.8, 180, ornY + 4.8);
-
-                doc.setFont("Helvetica", "bold"); doc.setFontSize(20); doc.setTextColor(99, 102, 241);
-                doc.text("♩  ♪  ♫  ♬", 105, ornY + 10, { align: 'center' });
 
                 doc.setFont("Helvetica", "bold"); doc.setFontSize(11); doc.setTextColor(67, 56, 202);
-                doc.text("AUDIO MASTER AUDITION", 105, ornY + 18, { align: 'center' });
+                doc.text("AUDIO MASTER AUDITION", 105, ornY + 9, { align: 'center' });
 
                 doc.setDrawColor(199, 210, 254); doc.setLineWidth(0.4);
-                doc.line(30, ornY + 20, 180, ornY + 20);
-                doc.line(30, ornY + 21.2, 180, ornY + 21.2);
-                doc.line(30, ornY + 22.4, 180, ornY + 22.4);
+                doc.line(30, ornY + 12, 180, ornY + 12);
+                doc.line(30, ornY + 13.2, 180, ornY + 13.2);
+                doc.line(30, ornY + 14.4, 180, ornY + 14.4);
+
+                doc.setFont("Helvetica", "italic"); doc.setFontSize(8); doc.setTextColor(100, 116, 139);
+                doc.text('"Music is the universal language of mankind."', 105, ornY + 21, { align: 'center' });
 
                 doc.setFont("Helvetica", "normal"); doc.setFontSize(8); doc.setTextColor(148, 163, 184);
-                doc.text(`Issued on: ${new Date(record.created_at || Date.now()).toLocaleDateString()}`, 105, ornY + 30, { align: 'center' });
+                doc.text(`Issued on: ${new Date(record.created_at || Date.now()).toLocaleDateString()}`, 105, ornY + 28, { align: 'center' });
 
                 doc.setDrawColor(148, 163, 184); doc.setLineWidth(0.5);
-                doc.line(75, ornY + 38, 135, ornY + 38);
+                doc.line(75, ornY + 36, 135, ornY + 36);
                 doc.setFont("Helvetica", "bold"); doc.setFontSize(8.5); doc.setTextColor(15, 23, 42);
-                doc.text("Bilingual Music Department Teacher Signature", 105, ornY + 42, { align: 'center' });
+                doc.text("Bilingual Music Department Teacher Signature", 105, ornY + 40, { align: 'center' });
 
                 const blob = doc.output('blob');
-                const url = window.URL.createObjectURL(blob);
-                window.open(url, '_blank');
+                window.open(window.URL.createObjectURL(blob), '_blank');
             };
 
             const downloadAuditionTemplatePDF = async (audition) => {
@@ -791,47 +764,37 @@
                 doc.setDrawColor(15, 23, 42); doc.setLineWidth(0.8); doc.rect(10, 10, 190, 277);
 
                 // Cabecera
-                doc.setFont("Helvetica", "bold"); doc.setFontSize(15); doc.setTextColor(15, 23, 42);
+                doc.setFont("Helvetica", "bold"); doc.setFontSize(14); doc.setTextColor(15, 23, 42);
                 doc.text(audition.title.toUpperCase(), 105, 20, { align: 'center', maxWidth: 170 });
-                doc.setFont("Helvetica", "normal"); doc.setFontSize(8.5); doc.setTextColor(71, 85, 105);
+                doc.setFont("Helvetica", "normal"); doc.setFontSize(8); doc.setTextColor(71, 85, 105);
                 doc.text(`Artist / Composer: ${audition.artist}`, 105, 26, { align: 'center' });
 
                 doc.setDrawColor(226, 232, 240); doc.setLineWidth(0.5); doc.line(20, 30, 190, 30);
 
-                // Recuadro del alumno
-                doc.setFillColor(248, 250, 252);
-                doc.setDrawColor(199, 210, 254);
-                doc.setLineWidth(0.4);
-                doc.roundedRect(20, 34, 170, 12, 2, 2, 'FD');
-
-                doc.setFont("Helvetica", "bold");
-                doc.setFontSize(8);
-                doc.setTextColor(79, 70, 229);
-                doc.text("NAME & SURNAMES:", 24, 42);
+                // Recuadro alumno
+                doc.setFillColor(248, 250, 252); doc.setDrawColor(199, 210, 254); doc.setLineWidth(0.4);
+                doc.roundedRect(20, 34, 170, 11, 2, 2, 'FD');
+                doc.setFont("Helvetica", "bold"); doc.setFontSize(7.5); doc.setTextColor(79, 70, 229);
+                doc.text("NAME & SURNAMES:", 24, 41);
                 doc.setDrawColor(148, 163, 184); doc.setLineWidth(0.3);
-                doc.line(58, 42.5, 158, 42.5);
+                doc.line(55, 41.5, 155, 41.5);
+                doc.setFont("Helvetica", "bold"); doc.setFontSize(7.5); doc.setTextColor(79, 70, 229);
+                doc.text("GROUP:", 159, 41);
+                doc.line(172, 41.5, 187, 41.5);
 
-                doc.setFont("Helvetica", "bold"); doc.setFontSize(8); doc.setTextColor(79, 70, 229);
-                doc.text("GROUP:", 162, 42);
-                doc.line(175, 42.5, 187, 42.5);
+                doc.setDrawColor(226, 232, 240); doc.setLineWidth(0.5); doc.line(20, 48, 190, 48);
 
-                doc.setDrawColor(226, 232, 240); doc.setLineWidth(0.5); doc.line(20, 49, 190, 49);
-
-                // Cuerpo del texto
+                // Cuerpo
                 let templateText = audition.comment;
                 let gapCounter = 0;
                 const wordsArray = (audition.uppercase_words || []).map(w => w.replace(/[^A-Za-zÁÉÍÓÚÑáéíóúñ]/g, '').toUpperCase());
-
                 templateText = templateText.replace(/([A-ZÁÉÍÓÚÑ]{2,})/g, (match) => {
                     const idx = gapCounter++;
                     const cleanWord = match.replace(/[^A-Za-zÁÉÍÓÚÑáéíóúñ]/g, '').toUpperCase();
                     const len = cleanWord.length;
-
-                    if ([0, 4, 6, 8].includes(idx)) {
-                        return cleanWord.charAt(0) + ' _'.repeat(Math.max(0, len - 1));
-                    } else if ([1, 3, 5, 9].includes(idx)) {
-                        return '_ '.repeat(Math.max(0, len - 2)) + cleanWord.slice(-2);
-                    } else if ([2, 7].includes(idx)) {
+                    if ([0, 4, 6, 8].includes(idx)) return cleanWord.charAt(0) + ' _'.repeat(Math.max(0, len - 1));
+                    else if ([1, 3, 5, 9].includes(idx)) return '_ '.repeat(Math.max(0, len - 2)) + cleanWord.slice(-2);
+                    else if ([2, 7].includes(idx)) {
                         const dist = wordsArray.filter(w => w !== cleanWord);
                         dist.sort(() => 0.5 - Math.random());
                         const opts = [cleanWord, dist[0], dist[1]].filter(Boolean).sort(() => 0.5 - Math.random());
@@ -840,47 +803,38 @@
                     return match;
                 });
 
-                doc.setFont("Helvetica", "normal"); doc.setFontSize(9); doc.setTextColor(51, 65, 85);
-                const splitText = doc.splitTextToSize(templateText, 170);
-
-                let currentY = 57;
-                const maxY = 215;
+                doc.setFont("Helvetica", "normal"); doc.setFontSize(8); doc.setTextColor(51, 65, 85);
+                const splitText = doc.splitTextToSize(templateText, 172);
+                let currentY = 55;
+                const maxY = 255;
                 splitText.forEach((line) => {
                     if (currentY <= maxY) {
                         doc.text(line, 20, currentY);
-                        currentY += 5.2;
+                        currentY += 4.2;
                     }
                 });
 
-                // QR al pie
-                const qrY = 232;
-                doc.setDrawColor(199, 210, 254); doc.setLineWidth(0.5);
-                doc.line(20, qrY - 6, 190, qrY - 6);
-
-                doc.setFont("Helvetica", "bold"); doc.setFontSize(10); doc.setTextColor(79, 70, 229);
-                doc.text("LISTEN TO THE AUDITION", 105, qrY, { align: 'center' });
-
+                // QR abajo izquierda
                 if (audition.youtube_url) {
                     const qrDataUri = await getQRBase64(audition.youtube_url);
                     if (qrDataUri) {
-                        doc.addImage(qrDataUri, 'PNG', 88, qrY + 4, 34, 34);
-                        doc.setFont("Helvetica", "bold"); doc.setFontSize(8); doc.setTextColor(100, 116, 139);
-                        doc.text("Scan this QR code with your phone to open the video on YouTube", 105, qrY + 43, { align: 'center' });
-                    } else {
-                        doc.setFont("Helvetica", "normal"); doc.setFontSize(9); doc.setTextColor(79, 70, 229);
-                        doc.text(audition.youtube_url, 105, qrY + 8, { align: 'center' });
+                        doc.addImage(qrDataUri, 'PNG', 20, 260, 25, 25);
+                        doc.setFont("Helvetica", "bold"); doc.setFontSize(7.5); doc.setTextColor(79, 70, 229);
+                        doc.text("LISTEN TO THE AUDITION", 50, 268);
+                        doc.setFont("Helvetica", "normal"); doc.setFontSize(7); doc.setTextColor(100, 116, 139);
+                        doc.text("Scan the QR code with your phone", 50, 273);
+                        doc.text("to open the video on YouTube", 50, 277);
                     }
                 }
 
                 const blob = doc.output('blob');
-                const url = window.URL.createObjectURL(blob);
-                window.open(url, '_blank');
+                window.open(window.URL.createObjectURL(blob), '_blank');
             };
 
             return (
                 <div className="min-h-screen pb-12">
                     {toast && (
-                        <div className={`fixed bottom-6 right-6 z-50 px-5 py-3.5 rounded-xl shadow-2xl text-sm font-bold text-white flex items-center gap-2 transition-all transform translate-y-0 ${toast.type === 'error' ? 'bg-rose-600' : toast.type === 'success' ? 'bg-emerald-600' : 'bg-indigo-600'}`}>
+                        <div className={`fixed bottom-6 right-6 z-50 px-5 py-3.5 rounded-xl shadow-2xl text-sm font-bold text-white flex items-center gap-2 ${toast.type === 'error' ? 'bg-rose-600' : toast.type === 'success' ? 'bg-emerald-600' : 'bg-indigo-600'}`}>
                             <span>{toast.message}</span>
                         </div>
                     )}
@@ -920,7 +874,7 @@
                                 <div className="w-16 h-16 bg-emerald-50 rounded-full flex items-center justify-center mx-auto text-3xl">🎉</div>
                                 <div><h3 className="text-2xl font-black text-slate-900">Task Published!</h3><p className="text-sm text-slate-500 mt-1">The audition <strong>"{createdTaskModal.title}"</strong> is ready to share with students.</p></div>
                                 <div className="bg-slate-50 border border-slate-200 p-4 rounded-2xl text-left space-y-2">
-                                    <label className="text-xs font-bold text-slate-400 uppercase tracking-wider block">Direct Persistent Link for Students:</label>
+                                    <label className="text-xs font-bold text-slate-400 uppercase tracking-wider block">Direct Link for Students:</label>
                                     <div className="flex gap-2">
                                         <input type="text" readOnly value={createdTaskModal.fullUrl} className="w-full bg-white border rounded-xl px-3 py-2 text-xs font-mono text-slate-700 outline-none select-all" />
                                         <button onClick={() => { copyToClipboard(createdTaskModal.fullUrl); showToast("Link copied!", "success"); }} className="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-xl text-xs font-bold flex items-center gap-1 shrink-0"><Icons.Copy /> Copy</button>
@@ -938,6 +892,7 @@
                         <div className="max-w-5xl mx-auto px-4 py-4 flex justify-between items-center">
                             <h1 className="text-xl font-extrabold text-indigo-600 tracking-tight flex items-center gap-2">🎵 Music Audition <span className="font-medium text-slate-400">| Bilingual Master</span></h1>
                             <div className="flex items-center gap-3">
+                                <button onClick={() => setDarkMode(!darkMode)} className="text-xs font-bold p-2 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-lg" title="Toggle dark mode">{darkMode ? <Icons.Sun /> : <Icons.Moon />}</button>
                                 {session && view !== 'student-test' && view !== 'results' && (
                                     <div className="text-xs font-bold px-3 py-1.5 bg-emerald-50 text-emerald-700 rounded-lg flex items-center gap-1.5">
                                         <Icons.Database /> Supabase Cloud Active
@@ -952,7 +907,6 @@
                         </div>
                     </header>
 
-                    {}
                     <main className="max-w-5xl mx-auto px-4 mt-8">
                         {view === 'auth' && !session && (
                             <div className="max-w-md mx-auto bg-white p-8 rounded-2xl shadow-sm border border-slate-200 mt-12">
@@ -989,14 +943,14 @@
                                                 <label className="block text-xs font-bold uppercase text-slate-500">Analytical Commentary (10 UPPERCASE Words)</label>
                                                 <a href="https://gemini.google.com/gem/1EBt8JcNCxB9qcap8AkVP2G26z_TVbgc7?usp=sharing" target="_blank" rel="noopener noreferrer" className="bg-gradient-to-r from-indigo-500 to-purple-500 text-white px-3 py-1.5 rounded-xl text-xs font-bold flex items-center gap-1.5 hover:shadow-lg transition-all"><Icons.Sparkles /> Generate with Gemini</a>
                                             </div>
-                                            <textarea rows={5} value={commentText} onChange={e => setCommentText(e.target.value)} className="w-full p-4 bg-slate-50 border rounded-xl outline-none font-sans text-sm focus:border-indigo-500" placeholder="Write or paste your English musical commentary and include exactly 10 words in UPPERCASE that will turn into fill-in-the-blank gaps..." />
+                                            <textarea rows={5} value={commentText} onChange={e => setCommentText(e.target.value)} className="w-full p-4 bg-slate-50 border rounded-xl outline-none font-sans text-sm focus:border-indigo-500" placeholder="Write or paste your English musical commentary with 10 UPPERCASE words..." />
                                             <div className="mt-3 flex justify-between items-center text-sm font-bold">
                                                 <span className="text-slate-500 text-xs">UPPERCASE Words Counter:</span>
                                                 <span className={`px-2.5 py-0.5 rounded-full text-xs font-extrabold ${uppercaseWords.length === 10 ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-800'}`}>{uppercaseWords.length} / 10 required</span>
                                             </div>
                                             {uppercaseWords.length === 10 && (
                                                 <div className="mt-6 pt-6 border-t border-slate-200">
-                                                    <h3 className="text-sm font-bold text-slate-800 mb-3 flex items-center gap-2"><Icons.Lightbulb /> Configure Hints (Hint used = 0.5 pts on correct answer)</h3>
+                                                    <h3 className="text-sm font-bold text-slate-800 mb-3 flex items-center gap-2"><Icons.Lightbulb /> Configure Hints (Hint used = 0.5 pts)</h3>
                                                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 max-h-60 overflow-y-auto pr-1">
                                                         {uppercaseWords.map((word, idx) => (
                                                             <div key={idx} className="bg-slate-50 p-2.5 rounded-xl border">
@@ -1007,13 +961,13 @@
                                                     </div>
                                                 </div>
                                             )}
-                                            <button onClick={handlePublishTask} disabled={loading} className={`w-full mt-6 py-3.5 rounded-xl font-bold text-white transition-all shadow-md ${uppercaseWords.length === 10 && videoId ? 'bg-slate-900 hover:bg-slate-800 shadow-slate-200' : 'bg-slate-300 cursor-not-allowed'}`}>Publish Audition Task & Save Cloud Link</button>
+                                            <button onClick={handlePublishTask} disabled={loading} className={`w-full mt-6 py-3.5 rounded-xl font-bold text-white transition-all shadow-md ${uppercaseWords.length === 10 && videoId ? 'bg-slate-900 hover:bg-slate-800' : 'bg-slate-300 cursor-not-allowed'}`}>Publish Audition Task & Save Cloud Link</button>
                                         </div>
                                         <div className="lg:col-span-5">
-                                            <div className="sticky top-24 bg-slate-900 rounded-2xl overflow-hidden shadow-xl aspect-video flex flex-col items-center justify-center relative group">
+                                            <div className="sticky top-24 bg-slate-900 rounded-2xl overflow-hidden shadow-xl aspect-video flex flex-col items-center justify-center relative">
                                                 {videoId ? (
-                                                    <><iframe className="w-full h-full" src={`https://www.youtube.com/embed/${videoId}?rel=0&enablejsapi=1`} title="Audition YouTube Player" frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerPolicy="no-referrer-when-downgrade" allowFullScreen></iframe><a href={`https://www.youtube.com/watch?v=${videoId}`} target="_blank" rel="noopener noreferrer" className="absolute bottom-2 right-2 bg-black/70 hover:bg-black text-white text-[10px] font-bold px-2.5 py-1 rounded-lg backdrop-blur-sm flex items-center gap-1 transition-all z-10"><Icons.External /> Open in YouTube</a></>
-                                                ) : (<div className="text-center p-4"><span className="text-slate-500 font-bold text-xs block mb-1">Video Preview</span><span className="text-slate-600 text-[11px]">Enter a valid YouTube URL to display the video preview</span></div>)}
+                                                    <><iframe className="w-full h-full" src={`https://www.youtube.com/embed/${videoId}?rel=0&enablejsapi=1`} title="Preview" frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerPolicy="no-referrer-when-downgrade" allowFullScreen></iframe><a href={`https://www.youtube.com/watch?v=${videoId}`} target="_blank" rel="noopener noreferrer" className="absolute bottom-2 right-2 bg-black/70 hover:bg-black text-white text-[10px] font-bold px-2.5 py-1 rounded-lg backdrop-blur-sm flex items-center gap-1 z-10"><Icons.External /> Open in YouTube</a></>
+                                                ) : (<div className="text-center p-4"><span className="text-slate-500 font-bold text-xs block mb-1">Video Preview</span><span className="text-slate-600 text-[11px]">Enter a valid YouTube URL</span></div>)}
                                             </div>
                                         </div>
                                     </div>
@@ -1021,8 +975,11 @@
 
                                 {dashboardTab === 'history' && (
                                     <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
-                                        <h2 className="text-xl font-bold text-slate-900 mb-6">Your Published Audition Tasks</h2>
-                                        {auditionsList.length === 0 ? ( <p className="text-slate-400 text-center py-10">No tasks created yet for this teacher account.</p> ) : (
+                                        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
+                                            <h2 className="text-xl font-bold text-slate-900">Your Published Audition Tasks</h2>
+                                            <div className="relative w-full sm:w-72"><span className="absolute left-3 top-2.5 text-slate-400"><Icons.Search /></span><input type="text" placeholder="Search by title, artist or link..." value={searchTermHistory} onChange={e => setSearchTermHistory(e.target.value)} className="w-full pl-9 pr-4 py-2 border rounded-xl text-sm bg-slate-50 outline-none focus:ring-1 focus:ring-indigo-500" /></div>
+                                        </div>
+                                        {filteredAuditions.length === 0 ? ( <p className="text-slate-400 text-center py-10">No tasks match your search.</p> ) : (
                                             <div className="overflow-x-auto">
                                                 <table className="w-full text-left text-sm border-collapse">
                                                     <thead>
@@ -1031,14 +988,14 @@
                                                         </tr>
                                                     </thead>
                                                     <tbody>
-                                                        {auditionsList.map(aud => (
+                                                        {filteredAuditions.map(aud => (
                                                             <tr key={aud.id || aud.share_link} className="border-b border-slate-100 hover:bg-slate-50/30 transition-colors">
                                                                 <td className="py-4 px-4 font-bold text-slate-950">{aud.title}</td><td className="py-4 px-4 text-slate-500">{aud.artist}</td>
                                                                 <td className="py-4 px-4 text-center"><button onClick={() => handleCopyLink(aud.share_link || aud.id, aud.id)} className="bg-indigo-50 hover:bg-indigo-100 text-indigo-700 font-bold px-3 py-1.5 rounded-lg text-xs flex items-center gap-1 mx-auto transition-all">{copiedId === aud.id ? <Icons.Check /> : <Icons.Link />} {copiedId === aud.id ? "Copied!" : "Copy Link"}</button></td>
                                                                 <td className="py-4 px-4 text-right space-x-1">
                                                                     <a href={buildStudentUrl(aud.share_link || aud.id)} target="_blank" title="Preview Student Exam" className="inline-block p-2 hover:bg-slate-100 rounded-lg text-slate-500 transition-colors"><Icons.External /></a>
-                                                                    <button onClick={() => downloadAuditionTemplatePDF(aud)} title="Download Printable Template PDF with QR" className="p-2 hover:bg-indigo-50 rounded-lg text-indigo-600 transition-colors"><Icons.Download /></button>
-                                                                    <button onClick={() => handleDeleteAudition(aud.id)} title="Delete Task" className="p-2 hover:bg-rose-50 rounded-lg text-rose-600 transition-colors"><Icons.Trash /></button>
+                                                                    <button onClick={() => downloadAuditionTemplatePDF(aud)} title="Download PDF template" className="p-2 hover:bg-indigo-50 rounded-lg text-indigo-600 transition-colors"><Icons.Download /></button>
+                                                                    <button onClick={() => handleDeleteAudition(aud.id, aud.share_link)} title="Delete Task" className="p-2 hover:bg-rose-50 rounded-lg text-rose-600 transition-colors"><Icons.Trash /></button>
                                                                 </td>
                                                             </tr>
                                                         ))}
@@ -1051,11 +1008,28 @@
 
                                 {dashboardTab === 'scores' && (
                                     <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+                                        {stats && (
+                                            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
+                                                <div className="bg-gradient-to-br from-indigo-500 to-purple-500 text-white p-4 rounded-2xl shadow">
+                                                    <p className="text-[10px] font-bold uppercase tracking-wider opacity-80">Class Average</p>
+                                                    <p className="text-3xl font-black mt-1">{stats.avg} <span className="text-sm opacity-70">/ 10</span></p>
+                                                </div>
+                                                <div className="bg-gradient-to-br from-emerald-500 to-teal-500 text-white p-4 rounded-2xl shadow">
+                                                    <p className="text-[10px] font-bold uppercase tracking-wider opacity-80">Total Submissions</p>
+                                                    <p className="text-3xl font-black mt-1">{stats.count}</p>
+                                                </div>
+                                                <div className="bg-gradient-to-br from-amber-500 to-orange-500 text-white p-4 rounded-2xl shadow">
+                                                    <p className="text-[10px] font-bold uppercase tracking-wider opacity-80">Top Student</p>
+                                                    <p className="text-base font-black mt-1 truncate">{stats.bestName}</p>
+                                                    <p className="text-xs opacity-90">{stats.bestScore} / 10</p>
+                                                </div>
+                                            </div>
+                                        )}
                                         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
                                             <h2 className="text-xl font-bold text-slate-900">Your Students' Grades & Submissions</h2>
-                                            <div className="relative w-full sm:w-72"><span className="absolute left-3 top-2.5 text-slate-400"><Icons.Search /></span><input type="text" placeholder="Search student or title..." value={searchTerm} onChange={e => setSearchTerm(e.target.value)} className="w-full pl-9 pr-4 py-2 border rounded-xl text-sm bg-slate-50 outline-none focus:ring-1 focus:ring-indigo-500" /></div>
+                                            <div className="relative w-full sm:w-72"><span className="absolute left-3 top-2.5 text-slate-400"><Icons.Search /></span><input type="text" placeholder="Search name, class, email, score..." value={searchTerm} onChange={e => setSearchTerm(e.target.value)} className="w-full pl-9 pr-4 py-2 border rounded-xl text-sm bg-slate-50 outline-none focus:ring-1 focus:ring-indigo-500" /></div>
                                         </div>
-                                        {filteredScores.length === 0 ? ( <p className="text-slate-400 text-center py-10">No student submissions recorded for your tasks yet.</p> ) : (
+                                        {filteredScores.length === 0 ? ( <p className="text-slate-400 text-center py-10">No student submissions match your search.</p> ) : (
                                             <div className="overflow-x-auto">
                                                 <table className="w-full text-left text-sm border-collapse">
                                                     <thead>
@@ -1093,12 +1067,12 @@
                                     <div className="space-y-1.5 max-h-56 overflow-y-auto pr-1">
                                         {selectedScoreDetails.details?.words?.map((w, i) => (
                                             <div key={i} className={`flex justify-between p-2.5 rounded-xl border text-xs font-semibold ${w.correct ? 'bg-emerald-50/50 border-emerald-100 text-emerald-800' : 'bg-rose-50/50 border-rose-100 text-rose-800'}`}>
-                                                <span>Gap {i + 1}: {w.correct ? (w.usedHint ? "✓ Correct with hint (0.5 pt)" : "✓ Correct (1.0 pt)") : "✗ Incorrect"}</span>
+                                                <span>Gap {i + 1}: {w.correct ? (w.usedHint ? "Correct with hint (0.5 pt)" : "Correct (1.0 pt)") : "Incorrect"}</span>
                                                 <span className="font-mono">{w.correct ? w.original : (w.answer || '(empty)')}</span>
                                             </div>
                                         ))}
                                     </div>
-                                    <div className="flex justify-end pt-4 gap-2"><button onClick={() => setSelectedScoreDetails(null)} className="bg-slate-100 hover:bg-slate-200 text-slate-600 px-4 py-2 rounded-xl text-sm font-bold transition-all">Close</button></div>
+                                    <div className="flex justify-end pt-4"><button onClick={() => setSelectedScoreDetails(null)} className="bg-slate-100 hover:bg-slate-200 text-slate-600 px-4 py-2 rounded-xl text-sm font-bold transition-all">Close</button></div>
                                 </div>
                             </div>
                         )}
@@ -1116,7 +1090,7 @@
                             <div className="max-w-3xl mx-auto space-y-6">
                                 <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
                                     <div><h2 className="text-lg font-bold text-slate-900">Student Identification</h2><p className="text-xs text-slate-500">Please enter your details before taking the audition exam.</p></div>
-                                    <button onClick={() => setLookupModal(true)} className="bg-slate-100 hover:bg-slate-200 text-indigo-700 text-xs font-bold px-3 py-2 rounded-xl transition-all flex items-center gap-1.5"><Icons.Eye /> Already completed? Check your Diploma / Status</button>
+                                    <button onClick={() => setLookupModal(true)} className="bg-slate-100 hover:bg-slate-200 text-indigo-700 text-xs font-bold px-3 py-2 rounded-xl transition-all flex items-center gap-1.5"><Icons.Eye /> Already completed? Check your Diploma</button>
                                 </div>
 
                                 <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 grid grid-cols-1 md:grid-cols-3 gap-4 items-end">
@@ -1128,8 +1102,14 @@
                                             <option value="3º ESO A">3º ESO A</option><option value="3º ESO B">3º ESO B</option><option value="3º ESO C">3º ESO C</option>
                                         </select>
                                     </div>
-                                    <div><label className="block text-[10px] font-bold text-slate-500 uppercase mb-1">School Email</label><input type="email" placeholder="@alu.murciaeduca.es" value={studentEmail} onChange={e => setStudentEmail(e.target.value)} className="w-full px-3 py-2 bg-slate-50 border rounded-lg text-sm outline-none focus:border-indigo-500" /></div>
+                                    <div><label className="block text-[10px] font-bold text-slate-500 uppercase mb-1">School Email</label><input type="email" placeholder="@alu.murciaeduca.es" value={studentEmail} onChange={e => setStudentEmail(e.target.value)} onBlur={async () => { const already = await checkIfAlreadySubmitted(studentEmail); setAlreadySubmittedWarning(already); }} className="w-full px-3 py-2 bg-slate-50 border rounded-lg text-sm outline-none focus:border-indigo-500" /></div>
                                 </div>
+
+                                {alreadySubmittedWarning && (
+                                    <div className="bg-amber-50 border border-amber-200 p-4 rounded-2xl text-sm text-amber-900">
+                                        <strong>⚠️ Note:</strong> It looks like you already submitted this task with this email. If you submit again, your previous score will be replaced.
+                                    </div>
+                                )}
 
                                 <div className="bg-white p-6 md:p-8 rounded-2xl shadow-md border border-slate-200">
                                     <div className="mb-6 pb-6 border-b flex flex-col md:flex-row gap-6 items-center">
@@ -1137,11 +1117,7 @@
                                         <div className="w-full md:w-72 shrink-0 rounded-xl overflow-hidden border bg-slate-900 aspect-video relative flex flex-col items-center justify-center">
                                             {(() => {
                                                 const studentVideoId = extractYouTubeId(activeTask.youtube_url);
-                                                if (studentVideoId) {
-                                                    return (
-                                                        <><iframe className="w-full h-full" src={`https://www.youtube.com/embed/${studentVideoId}?rel=0&enablejsapi=1`} title="Student Audition Video" frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerPolicy="no-referrer-when-downgrade" allowFullScreen></iframe><a href={`https://www.youtube.com/watch?v=${studentVideoId}`} target="_blank" rel="noopener noreferrer" className="absolute bottom-1.5 right-1.5 bg-black/70 hover:bg-black text-white text-[10px] font-bold px-2 py-0.5 rounded-md backdrop-blur-sm flex items-center gap-1 transition-all z-10"><Icons.External /> Open in YouTube</a></>
-                                                    );
-                                                }
+                                                if (studentVideoId) return (<><iframe className="w-full h-full" src={`https://www.youtube.com/embed/${studentVideoId}?rel=0&enablejsapi=1`} title="Student Audition Video" frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowFullScreen></iframe><a href={`https://www.youtube.com/watch?v=${studentVideoId}`} target="_blank" rel="noopener noreferrer" className="absolute bottom-1.5 right-1.5 bg-black/70 hover:bg-black text-white text-[10px] font-bold px-2 py-0.5 rounded-md backdrop-blur-sm flex items-center gap-1 z-10"><Icons.External /> Open in YouTube</a></>);
                                                 return (<div className="w-full h-full flex flex-col items-center justify-center text-xs text-slate-500 font-bold p-2 text-center"><span>Video Not Available</span></div>);
                                             })()}
                                         </div>
@@ -1151,40 +1127,28 @@
                                         {parsedParagraphs.map((paragraphTokens, pIndex) => {
                                             if (paragraphTokens.length === 0) return null;
                                             const paragraphSpeechText = paragraphTokens.map(t => t.type === 'gap' ? ' blank ' : t.content).join('');
-
                                             return (
                                                 <div key={pIndex} className="relative group bg-slate-50 p-5 rounded-xl border pr-12">
                                                     <button onClick={() => toggleSpeech(paragraphSpeechText, pIndex)} title="Listen in English" className={`absolute top-4 right-4 p-2 rounded-full shadow-sm transition-all ${speakingIndex === pIndex ? 'bg-indigo-600 text-white animate-pulse' : 'bg-white text-indigo-600 border hover:bg-indigo-50'}`}>
                                                         {speakingIndex === pIndex ? <Icons.Stop /> : <Icons.Speaker />}
                                                     </button>
-
                                                     <p className="text-slate-800 leading-loose text-[15px]">
                                                         {paragraphTokens.map((token, tIndex) => {
                                                             if (token.type === 'text') return <span key={tIndex}>{token.content}</span>;
-
                                                             const gapIdx = token.gapIndex;
                                                             const hintText = activeTask.hints && activeTask.hints[gapIdx];
-                                                            const cleanWord = token.word.replace(/[^A-Za-zA-ZÁÉÍÓÚÑáéíóúñ]/g, '').toUpperCase();
+                                                            const cleanWord = token.word.replace(/[^A-Za-zÁÉÍÓÚÑáéíóúñ]/g, '').toUpperCase();
                                                             const len = cleanWord.length;
-
                                                             if ([2, 7].includes(gapIdx)) {
                                                                 const options = mcOptions[gapIdx] || [];
                                                                 return (
                                                                     <span key={tIndex} className="inline-block mx-1 align-bottom">
                                                                         <span className="relative inline-flex flex-col items-center">
-                                                                            <select
-                                                                                value={studentAnswers[gapIdx] || ''}
-                                                                                onChange={e => handleStudentAnswerChange(gapIdx, e.target.value)}
-                                                                                className="w-36 px-2 py-1 text-center border-b-2 border-indigo-500 shadow-sm font-bold text-indigo-800 uppercase outline-none text-sm bg-white rounded-t cursor-pointer"
-                                                                            >
+                                                                            <select value={studentAnswers[gapIdx] || ''} onChange={e => handleStudentAnswerChange(gapIdx, e.target.value)} className="w-36 px-2 py-1 text-center border-b-2 border-indigo-500 shadow-sm font-bold text-indigo-800 uppercase outline-none text-sm bg-white rounded-t cursor-pointer">
                                                                                 <option value="" disabled>Select...</option>
                                                                                 {options.map((opt, i) => <option key={i} value={opt}>{opt}</option>)}
                                                                             </select>
-                                                                            {hintText && (
-                                                                                <button onClick={() => setUsedHints({...usedHints, [gapIdx]: true})} className="mt-1 text-[10px] bg-amber-100 hover:bg-amber-200 text-amber-900 px-2 py-0.5 font-bold rounded-md transition-colors whitespace-nowrap flex items-center gap-1 shadow-sm">
-                                                                                    <Icons.Lightbulb />{usedHints[gapIdx] ? `Hint: ${hintText}` : "💡 Hint (-0.5 pt)"}
-                                                                                </button>
-                                                                            )}
+                                                                            {hintText && (<button onClick={() => setUsedHints({...usedHints, [gapIdx]: true})} className="mt-1 text-[10px] bg-amber-100 hover:bg-amber-200 text-amber-900 px-2 py-0.5 font-bold rounded-md whitespace-nowrap flex items-center gap-1 shadow-sm"><Icons.Lightbulb />{usedHints[gapIdx] ? `Hint: ${hintText}` : "Hint (-0.5 pt)"}</button>)}
                                                                         </span>
                                                                     </span>
                                                                 );
@@ -1192,22 +1156,11 @@
                                                                 let ph = `Gap ${gapIdx + 1}`;
                                                                 if ([0, 4, 6, 8].includes(gapIdx)) ph = cleanWord.charAt(0) + ' _'.repeat(Math.max(0, len - 1));
                                                                 else if ([1, 3, 5, 9].includes(gapIdx)) ph = '_ '.repeat(Math.max(0, len - 2)) + cleanWord.slice(-2);
-
                                                                 return (
                                                                     <span key={tIndex} className="inline-block mx-1 align-bottom">
                                                                         <span className="relative inline-flex flex-col items-center">
-                                                                            <input
-                                                                                type="text"
-                                                                                placeholder={ph}
-                                                                                value={studentAnswers[gapIdx] || ''}
-                                                                                onChange={e => handleStudentAnswerChange(gapIdx, e.target.value)}
-                                                                                className="w-28 px-2 py-1 text-center border-b-2 border-indigo-500 shadow-sm font-bold text-indigo-800 uppercase outline-none text-sm bg-white rounded-t placeholder-slate-400"
-                                                                            />
-                                                                            {hintText && (
-                                                                                <button onClick={() => setUsedHints({...usedHints, [gapIdx]: true})} className="mt-1 text-[10px] bg-amber-100 hover:bg-amber-200 text-amber-900 px-2 py-0.5 font-bold rounded-md transition-colors whitespace-nowrap flex items-center gap-1 shadow-sm">
-                                                                                    <Icons.Lightbulb />{usedHints[gapIdx] ? `Hint: ${hintText}` : "💡 Hint (-0.5 pt)"}
-                                                                                </button>
-                                                                            )}
+                                                                            <input type="text" placeholder={ph} value={studentAnswers[gapIdx] || ''} onChange={e => handleStudentAnswerChange(gapIdx, e.target.value)} className="w-28 px-2 py-1 text-center border-b-2 border-indigo-500 shadow-sm font-bold text-indigo-800 uppercase outline-none text-sm bg-white rounded-t placeholder-slate-400" />
+                                                                            {hintText && (<button onClick={() => setUsedHints({...usedHints, [gapIdx]: true})} className="mt-1 text-[10px] bg-amber-100 hover:bg-amber-200 text-amber-900 px-2 py-0.5 font-bold rounded-md whitespace-nowrap flex items-center gap-1 shadow-sm"><Icons.Lightbulb />{usedHints[gapIdx] ? `Hint: ${hintText}` : "Hint (-0.5 pt)"}</button>)}
                                                                         </span>
                                                                     </span>
                                                                 );
@@ -1227,7 +1180,6 @@
                             <div className="max-w-2xl mx-auto bg-white p-8 md:p-10 rounded-3xl shadow-xl border text-center relative overflow-hidden">
                                 {(() => {
                                     const feedback = getEnglishFeedback(finalScoreRecord.score);
-
                                     return (
                                         <div className="relative z-10 space-y-6">
                                             <div>
@@ -1235,42 +1187,36 @@
                                                 <h2 className="text-3xl font-extrabold text-slate-900 mb-1">Assessment Submitted</h2>
                                                 <p className="text-xs text-slate-400">{finalScoreRecord.student_name} ({finalScoreRecord.student_class})</p>
                                             </div>
-
                                             <div className="bg-white border-2 border-indigo-50 px-8 py-6 rounded-3xl inline-block mx-auto shadow-sm">
                                                 <span className="block text-[11px] font-bold text-slate-400 uppercase tracking-widest mb-2">FINAL SCORE</span>
                                                 <span className="text-7xl font-black text-indigo-600 tracking-tighter">{Number(finalScoreRecord.score).toFixed(1)} <span className="text-3xl text-slate-300 font-medium">/ 10</span></span>
                                             </div>
-
                                             <div className="bg-gradient-to-br from-indigo-50 to-slate-50 border border-indigo-100 p-6 rounded-2xl text-left shadow-sm">
                                                 <span className="text-[10px] font-extrabold uppercase tracking-wider text-indigo-500 block mb-1">Pedagogy Evaluation</span>
                                                 <h4 className="text-lg font-bold text-indigo-950 mb-1">{feedback.title}</h4>
                                                 <p className="text-slate-600 text-sm leading-relaxed">{feedback.text}</p>
                                             </div>
-
                                             <div className="bg-amber-50 border border-amber-200 p-4 rounded-2xl text-left space-y-2">
-                                                <h4 className="font-bold text-amber-900 text-xs flex items-center gap-1.5 uppercase tracking-wide"><Icons.Camera /> Take a Screenshot for Google Classroom</h4>
-                                                <p className="text-amber-800 text-xs leading-relaxed">Please take a screenshot of this window and attach it to your Google Classroom assignment as proof of completion.</p>
+                                                <h4 className="font-bold text-amber-900 text-xs flex items-center gap-1.5 uppercase tracking-wide"><Icons.Camera /> Submit to Google Classroom</h4>
+                                                <p className="text-amber-800 text-xs leading-relaxed">Please attach <strong>a screenshot of this screen</strong> and <strong>the downloaded PDF diploma</strong> to your Google Classroom assignment as proof of completion.</p>
                                             </div>
-
                                             <div className="text-left bg-slate-50 p-6 rounded-2xl border space-y-4">
                                                 <h4 className="font-bold text-slate-800 text-sm">Gap Results Summary</h4>
                                                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                                                     {finalScoreRecord.details.words.map((item, idx) => (
                                                         <div key={idx} className={`p-3 rounded-xl border flex justify-between items-center text-xs font-semibold ${item.correct ? 'bg-emerald-50/60 border-emerald-200 text-emerald-800' : 'bg-rose-50/60 border-rose-200 text-rose-800'}`}>
-                                                            <span>Gap {idx + 1}: {item.correct ? (item.usedHint ? "✓ Correct (with hint)" : "✓ Correct") : "✗ Incorrect"}</span>
+                                                            <span>Gap {idx + 1}: {item.correct ? (item.usedHint ? "Correct (with hint)" : "Correct") : "Incorrect"}</span>
                                                             <span className="font-mono bg-white px-2 py-1 rounded shadow-sm border text-slate-700">{item.correct ? item.original : `${item.answer || '(empty)'}`}</span>
                                                         </div>
                                                     ))}
                                                 </div>
                                             </div>
-
                                             <div className="space-y-3 pt-2">
                                                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                                                    <button onClick={() => generatePDF(finalScoreRecord)} className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3.5 rounded-xl text-sm flex items-center justify-center gap-2 shadow-md shadow-indigo-100 transition-all"><Icons.Download /> Download Diploma PDF</button>
-                                                    <a href="https://classroom.google.com" target="_blank" className="w-full bg-white border font-bold py-3.5 rounded-xl text-sm flex items-center justify-center gap-2 text-slate-700 shadow-sm hover:bg-slate-50 transition-all"><Icons.External /> Open Google Classroom</a>
+                                                    <button onClick={() => generatePDF(finalScoreRecord)} className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3.5 rounded-xl text-sm flex items-center justify-center gap-2 shadow-md"><Icons.Download /> Download Diploma PDF</button>
+                                                    <a href="https://classroom.google.com" target="_blank" className="w-full bg-white border font-bold py-3.5 rounded-xl text-sm flex items-center justify-center gap-2 text-slate-700 shadow-sm hover:bg-slate-50"><Icons.External /> Open Google Classroom</a>
                                                 </div>
                                             </div>
-
                                             <div className="pt-2 border-t flex justify-between items-center text-xs text-slate-400">
                                                 <button onClick={fetchHistoryAndScores} className="hover:text-slate-600 flex items-center gap-1"><Icons.Refresh /> Check Status Update</button>
                                                 <button onClick={() => { setExamSubmitted(false); setView('student-test'); }} className="hover:text-slate-600">Back to Task View</button>
