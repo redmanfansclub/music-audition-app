@@ -10,7 +10,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <script src="https://unpkg.com/qrcode@1.5.3/build/qrcode.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.4/build/qrcode.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
@@ -74,10 +74,10 @@
 
         const getEnglishFeedback = (score) => {
             const num = Number(score);
-            if (num >= 9) return { title: "Outstanding Achievement! 🌟", text: "Exceptional listening comprehension and terminology precision. Excellent musical ear!" };
-            if (num >= 7) return { title: "Great Work! 👍", text: "Solid understanding of the audition piece. Keep practicing your musical vocabulary!" };
-            if (num >= 5) return { title: "Satisfactory Performance 🎵", text: "Good effort! Review the musical terms and re-listen to improve gap accuracy." };
-            return { title: "Needs Revision 📚", text: "Try re-listening carefully with focused attention on the key vocabulary words." };
+            if (num >= 9) return { title: "Outstanding Achievement!", text: "Exceptional listening comprehension and terminology precision. Excellent musical ear!" };
+            if (num >= 7) return { title: "Great Work!", text: "Solid understanding of the audition piece. Keep practicing your musical vocabulary!" };
+            if (num >= 5) return { title: "Satisfactory Performance", text: "Good effort! Review the musical terms and re-listen to improve gap accuracy." };
+            return { title: "Needs Revision", text: "Try re-listening carefully with focused attention on the key vocabulary words." };
         };
 
         const getQRBase64 = async (text) => {
@@ -170,6 +170,7 @@
             const [view, setView] = useState(initialTaskCode ? 'student-test' : 'auth');
             const [session, setSession] = useState(null);
             const [loading, setLoading] = useState(true);
+            const [submitting, setSubmitting] = useState(false);
             const [dashboardTab, setDashboardTab] = useState('create');
 
             const [supabaseUrl] = useState(DEFAULT_SUPABASE_URL);
@@ -257,9 +258,6 @@
                 }
             };
 
-            // ------------------------------------------------------------
-            // CARGA DE TAREA DEL ALUMNO — ahora busca por share_link
-            // ------------------------------------------------------------
             const loadStudentTask = async (code) => {
                 if (!code) return;
                 setLoading(true);
@@ -386,9 +384,6 @@
                 const newHints = [...taskHints]; newHints[idx] = value; setTaskHints(newHints);
             };
 
-            // ------------------------------------------------------------
-            // PUBLICAR TAREA — payload corregido para Supabase
-            // ------------------------------------------------------------
             const handlePublishTask = async () => {
                 if (uppercaseWords.length !== 10) { showToast("You must include exactly 10 UPPERCASE words in the commentary.", "error"); return; }
                 if (!videoId) { showToast("Please provide a valid YouTube video URL.", "error"); return; }
@@ -396,9 +391,6 @@
                 setLoading(true);
                 const teacherEmail = session?.user?.email || 'teacher@school.edu';
                 const taskId = 'aud-' + Date.now();
-
-                // Payload SIN id ni teacher_id (son uuid en Supabase y los genera/muestra solo el servidor).
-                // is_exam_mode se envía explícitamente para cubrir la columna obligatoria.
                 const taskPayload = {
                     teacher_email: teacherEmail,
                     title: title || 'Untitled Audition',
@@ -413,7 +405,6 @@
                     created_at: new Date().toISOString()
                 };
 
-                // Guardar en Supabase PRIMERO (con reintento si 'hints' no existe como columna)
                 if (supabaseClient) {
                     try {
                         let insertError = null;
@@ -429,17 +420,16 @@
 
                         if (insertError) {
                             console.error("Supabase insert error:", insertError);
-                            showToast("❌ Supabase: " + (insertError.message || "insert failed"), "error");
+                            showToast("Supabase: " + (insertError.message || "insert failed"), "error");
                         } else {
-                            showToast("✅ Task saved to Supabase Cloud!", "success");
+                            showToast("Task saved to Supabase Cloud!", "success");
                         }
                     } catch (e) {
                         console.error("Supabase exception:", e);
-                        showToast("❌ Exception: " + (e.message || "unknown"), "error");
+                        showToast("Exception: " + (e.message || "unknown"), "error");
                     }
                 }
 
-                // Guardar en local (con id para React keys y operaciones locales)
                 taskPayload.id = taskId;
                 const currentList = getStoredAuditions();
                 const updatedList = [taskPayload, ...currentList];
@@ -585,73 +575,84 @@
 
             const handleStudentAnswerChange = (idx, value) => { setStudentAnswers(prev => ({ ...prev, [idx]: value })); };
 
-            // ------------------------------------------------------------
-            // EVALUACIÓN — usar share_link como audition_id para consistencia
-            // ------------------------------------------------------------
             const handleEvaluation = async () => {
+                if (submitting) return;
                 if (!studentName.trim() || !studentEmail.trim()) { showToast("Please fill in your Full Name and School Email before submitting.", "error"); return; }
-                let totalScorePoints = 0;
-                const taskUppercaseWords = activeTask.comment.match(/[A-ZÁÉÍÓÚÑ]{2,}/g) || [];
+                setSubmitting(true);
 
-                const detailsWords = taskUppercaseWords.map((word, idx) => {
-                    const cleanWord = word.replace(/[^A-Za-zA-ZÁÉÍÓÚÑáéíóúñ]/g, '').toUpperCase();
-                    const studentAns = (studentAnswers[idx] || '').trim().toUpperCase();
-                    const isCorrect = studentAns === cleanWord;
-                    const usedHint = !!usedHints[idx];
-                    let earnedPoints = 0;
-                    if (isCorrect) earnedPoints = usedHint ? 0.5 : 1.0;
-                    totalScorePoints += earnedPoints;
-                    return { original: cleanWord, answer: studentAnswers[idx] || '', correct: isCorrect, usedHint: usedHint, points: earnedPoints };
-                });
+                try {
+                    let totalScorePoints = 0;
+                    const taskUppercaseWords = activeTask.comment.match(/[A-ZÁÉÍÓÚÑ]{2,}/g) || [];
 
-                const finalGrade = Math.max(0, Math.round(totalScorePoints * 10) / 10);
-                const teacherEmail = activeTask.teacher_email || activeTask.teacher_id || '';
-                const taskUniqueId = activeTask.share_link || activeTask.id;
+                    const detailsWords = taskUppercaseWords.map((word, idx) => {
+                        const cleanWord = word.replace(/[^A-Za-zÁÉÍÓÚÑáéíóúñ]/g, '').toUpperCase();
+                        const studentAns = (studentAnswers[idx] || '').trim().toUpperCase();
+                        const isCorrect = studentAns === cleanWord;
+                        const usedHint = !!usedHints[idx];
+                        let earnedPoints = 0;
+                        if (isCorrect) earnedPoints = usedHint ? 0.5 : 1.0;
+                        totalScorePoints += earnedPoints;
+                        return { original: cleanWord, answer: studentAnswers[idx] || '', correct: isCorrect, usedHint: usedHint, points: earnedPoints };
+                    });
 
-                const record = {
-                    id: 'score-' + Date.now(),
-                    student_name: studentName,
-                    student_class: studentClass,
-                    student_email: studentEmail.toLowerCase().trim(),
-                    teacher_email: teacherEmail,
-                    audition_id: taskUniqueId,
-                    auditions: { title: activeTask.title, artist: activeTask.artist },
-                    score: finalGrade,
-                    taskDetails: activeTask,
-                    details: { words: detailsWords },
-                    created_at: new Date().toISOString()
-                };
+                    const finalGrade = Math.max(0, Math.round(totalScorePoints * 10) / 10);
+                    const teacherEmail = activeTask.teacher_email || activeTask.teacher_id || '';
+                    const taskUniqueId = activeTask.share_link || activeTask.id;
+                    const studentEmailClean = studentEmail.toLowerCase().trim();
 
-                const currentScores = getStoredScores();
-                saveStoredScores([record, ...currentScores]);
-                saveStudentSubmission(record);
+                    const record = {
+                        id: 'score-' + Date.now() + '-' + Math.random().toString(36).slice(2, 8),
+                        student_name: studentName,
+                        student_class: studentClass,
+                        student_email: studentEmailClean,
+                        teacher_email: teacherEmail,
+                        audition_id: taskUniqueId,
+                        auditions: { title: activeTask.title, artist: activeTask.artist },
+                        score: finalGrade,
+                        taskDetails: activeTask,
+                        details: { words: detailsWords },
+                        created_at: new Date().toISOString()
+                    };
 
-                if (supabaseClient) {
-                    try {
-                        const { error } = await supabaseClient.from('student_submissions').insert([{
-                            id: record.id,
-                            student_name: record.student_name,
-                            student_class: record.student_class,
-                            student_email: record.student_email,
-                            teacher_email: record.teacher_email,
-                            audition_id: record.audition_id,
-                            auditions: record.auditions,
-                            score: record.score,
-                            details: record.details,
-                            created_at: record.created_at
-                        }]);
-                        if (error) console.error("Supabase grade submission error:", error);
-                        else showToast("Grade saved successfully!", "success");
-                    } catch (e) { console.error(e); }
-                }
+                    const currentScores = getStoredScores();
+                    saveStoredScores([record, ...currentScores]);
+                    saveStudentSubmission(record);
 
-                setFinalScoreRecord(record); setExamSubmitted(true); setView('results');
-                if ('speechSynthesis' in window) window.speechSynthesis.cancel();
-                if (finalGrade >= 5) {
-                    playAudioFeedback('success', finalGrade);
-                    if (finalGrade >= 8 && window.confetti) confetti({ particleCount: 120, spread: 80, origin: { y: 0.6 } });
-                } else {
-                    playAudioFeedback('error', finalGrade);
+                    if (supabaseClient) {
+                        try {
+                            await supabaseClient
+                                .from('student_submissions')
+                                .delete()
+                                .eq('student_email', studentEmailClean)
+                                .eq('audition_id', taskUniqueId);
+
+                            const { error } = await supabaseClient.from('student_submissions').insert([{
+                                id: record.id,
+                                student_name: record.student_name,
+                                student_class: record.student_class,
+                                student_email: record.student_email,
+                                teacher_email: record.teacher_email,
+                                audition_id: record.audition_id,
+                                auditions: record.auditions,
+                                score: record.score,
+                                details: record.details,
+                                created_at: record.created_at
+                            }]);
+                            if (error) console.error("Supabase grade submission error:", error);
+                            else showToast("Grade saved successfully!", "success");
+                        } catch (e) { console.error(e); }
+                    }
+
+                    setFinalScoreRecord(record); setExamSubmitted(true); setView('results');
+                    if ('speechSynthesis' in window) window.speechSynthesis.cancel();
+                    if (finalGrade >= 5) {
+                        playAudioFeedback('success', finalGrade);
+                        if (finalGrade >= 8 && window.confetti) confetti({ particleCount: 120, spread: 80, origin: { y: 0.6 } });
+                    } else {
+                        playAudioFeedback('error', finalGrade);
+                    }
+                } finally {
+                    setSubmitting(false);
                 }
             };
 
@@ -660,10 +661,12 @@
                 const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
                 const feedback = getEnglishFeedback(record.score);
 
+                // Fondo y bordes
                 doc.setFillColor(250, 252, 255); doc.rect(0, 0, 210, 297, 'F');
                 doc.setDrawColor(79, 70, 229); doc.setLineWidth(1.4); doc.rect(8, 8, 194, 281);
                 doc.setDrawColor(199, 210, 254); doc.setLineWidth(0.6); doc.rect(12, 12, 186, 273);
 
+                // Cabecera
                 doc.setFont("Helvetica", "bold"); doc.setFontSize(22); doc.setTextColor(67, 56, 202);
                 doc.text("DIPLOMA OF ACCOMPLISHMENT", 105, 25, { align: 'center' });
 
@@ -672,6 +675,7 @@
 
                 doc.setDrawColor(224, 231, 255); doc.setLineWidth(0.8); doc.line(30, 36, 180, 36);
 
+                // Alumno
                 doc.setFont("Helvetica", "normal"); doc.setFontSize(10); doc.setTextColor(100, 116, 139);
                 doc.text("This certificate of listening assessment is proudly presented to:", 105, 43, { align: 'center' });
 
@@ -680,36 +684,40 @@
                 const classStr = record.student_class ? ` (${record.student_class})` : '';
                 doc.text(`${nameStr}${classStr}`, 105, 52, { align: 'center' });
 
-                doc.setFillColor(243, 244, 256); doc.roundedRect(20, 58, 170, 22, 3, 3, 'F');
+                // Título de la obra en grande
+                doc.setFillColor(243, 244, 256); doc.roundedRect(20, 58, 170, 26, 3, 3, 'F');
                 const pieceTitle = (record.taskDetails?.title || record.auditions?.title || 'Audition Piece').toUpperCase();
                 const composerArtist = record.taskDetails?.artist || record.auditions?.artist || 'Unknown Composer';
 
-                doc.setFont("Helvetica", "bold"); doc.setFontSize(14); doc.setTextColor(30, 27, 75);
-                doc.text(`PIECE: ${pieceTitle}`, 105, 66, { align: 'center' });
+                doc.setFont("Helvetica", "bold"); doc.setFontSize(18); doc.setTextColor(30, 27, 75);
+                doc.text(pieceTitle, 105, 70, { align: 'center', maxWidth: 160 });
 
-                doc.setFont("Helvetica", "bold"); doc.setFontSize(11); doc.setTextColor(79, 70, 229);
-                doc.text(`ARTIST / COMPOSER: ${composerArtist.toUpperCase()}`, 105, 74, { align: 'center' });
+                doc.setFont("Helvetica", "normal"); doc.setFontSize(9); doc.setTextColor(100, 116, 139);
+                doc.text(`by ${composerArtist}`, 105, 78, { align: 'center' });
 
-                doc.setFont("Helvetica", "bold"); doc.setFontSize(36); doc.setTextColor(79, 70, 229);
-                doc.text(`${Number(record.score).toFixed(1)}`, 96, 92, { align: 'right' });
+                // Nota grande
+                doc.setFont("Helvetica", "bold"); doc.setFontSize(38); doc.setTextColor(79, 70, 229);
+                doc.text(`${Number(record.score).toFixed(1)}`, 96, 96, { align: 'right' });
                 doc.setFontSize(16); doc.setTextColor(148, 163, 184);
-                doc.text(`/ 10`, 99, 92, { align: 'left' });
+                doc.text(`/ 10`, 99, 96, { align: 'left' });
 
+                // Evaluación
                 doc.setFillColor(238, 242, 255); doc.setDrawColor(199, 210, 254); doc.setLineWidth(0.5);
-                doc.roundedRect(20, 99, 170, 26, 4, 4, 'FD');
+                doc.roundedRect(20, 103, 170, 24, 4, 4, 'FD');
 
                 doc.setFont("Helvetica", "bold"); doc.setFontSize(12); doc.setTextColor(67, 56, 202);
-                doc.text(`EVALUATION: ${feedback.title}`, 105, 107, { align: 'center' });
+                doc.text(`EVALUATION: ${feedback.title}`, 105, 111, { align: 'center' });
 
                 doc.setFont("Helvetica", "italic"); doc.setFontSize(9.5); doc.setTextColor(30, 41, 59);
                 const splitFeedback = doc.splitTextToSize(`"${feedback.text}"`, 160);
-                doc.text(splitFeedback, 105, 114, { align: 'center' });
+                doc.text(splitFeedback, 105, 119, { align: 'center' });
 
+                // Detalle de respuestas
                 doc.setFont("Helvetica", "bold"); doc.setFontSize(10); doc.setTextColor(15, 23, 42);
-                doc.text("DETAILED ANSWER BREAKDOWN", 20, 133);
+                doc.text("DETAILED ANSWER BREAKDOWN", 20, 138);
 
                 const words = record.details?.words || [];
-                let startY = 137;
+                let startY = 142;
 
                 doc.setFillColor(226, 232, 240);
                 doc.rect(20, startY, 170, 5.5, 'F');
@@ -742,31 +750,39 @@
                     startY += 5.2;
                 });
 
-                const ornamentY = 222;
+                // Adorno musical
+                const ornY = 230;
                 doc.setDrawColor(199, 210, 254); doc.setLineWidth(0.4);
-                [0, 2.5, 5, 7.5, 10].forEach(offset => {
-                    doc.line(30, ornamentY + offset, 180, ornamentY + offset);
-                });
+                doc.line(30, ornY, 180, ornY);
+                doc.line(30, ornY + 1.2, 180, ornY + 1.2);
+                doc.line(30, ornY + 2.4, 180, ornY + 2.4);
+                doc.line(30, ornY + 3.6, 180, ornY + 3.6);
+                doc.line(30, ornY + 4.8, 180, ornY + 4.8);
 
-                doc.setFont("Helvetica", "bold"); doc.setFontSize(22); doc.setTextColor(99, 102, 241);
-                doc.text("AUDIO MASTER AUDITION", 105, ornamentY + 7, { align: 'center' });
+                doc.setFont("Helvetica", "bold"); doc.setFontSize(20); doc.setTextColor(99, 102, 241);
+                doc.text("♩  ♪  ♫  ♬", 105, ornY + 10, { align: 'center' });
+
+                doc.setFont("Helvetica", "bold"); doc.setFontSize(11); doc.setTextColor(67, 56, 202);
+                doc.text("AUDIO MASTER AUDITION", 105, ornY + 18, { align: 'center' });
+
+                doc.setDrawColor(199, 210, 254); doc.setLineWidth(0.4);
+                doc.line(30, ornY + 20, 180, ornY + 20);
+                doc.line(30, ornY + 21.2, 180, ornY + 21.2);
+                doc.line(30, ornY + 22.4, 180, ornY + 22.4);
 
                 doc.setFont("Helvetica", "normal"); doc.setFontSize(8); doc.setTextColor(148, 163, 184);
-                doc.text(`Issued on: ${new Date(record.created_at || Date.now()).toLocaleDateString()}`, 105, ornamentY + 22, { align: 'center' });
+                doc.text(`Issued on: ${new Date(record.created_at || Date.now()).toLocaleDateString()}`, 105, ornY + 30, { align: 'center' });
 
                 doc.setDrawColor(148, 163, 184); doc.setLineWidth(0.5);
-                doc.line(75, ornamentY + 32, 135, ornamentY + 32);
+                doc.line(75, ornY + 38, 135, ornY + 38);
                 doc.setFont("Helvetica", "bold"); doc.setFontSize(8.5); doc.setTextColor(15, 23, 42);
-                doc.text("Bilingual Music Department Teacher Signature", 105, ornamentY + 37, { align: 'center' });
+                doc.text("Bilingual Music Department Teacher Signature", 105, ornY + 42, { align: 'center' });
 
                 const blob = doc.output('blob');
                 const url = window.URL.createObjectURL(blob);
                 window.open(url, '_blank');
             };
 
-            // ------------------------------------------------------------
-            // PDF PARA IMPRIMIR — con recuadro de alumno arriba y QR abajo
-            // ------------------------------------------------------------
             const downloadAuditionTemplatePDF = async (audition) => {
                 const { jsPDF } = window.jspdf;
                 const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
@@ -775,33 +791,33 @@
                 doc.setDrawColor(15, 23, 42); doc.setLineWidth(0.8); doc.rect(10, 10, 190, 277);
 
                 // Cabecera
-                doc.setFont("Helvetica", "bold"); doc.setFontSize(16); doc.setTextColor(15, 23, 42);
-                doc.text(audition.title.toUpperCase(), 105, 22, { align: 'center' });
-                doc.setFontSize(9); doc.setTextColor(71, 85, 105);
-                doc.text(`Artist / Composer: ${audition.artist} | Style: ${audition.style || 'Music Analysis'}`, 105, 28, { align: 'center' });
+                doc.setFont("Helvetica", "bold"); doc.setFontSize(15); doc.setTextColor(15, 23, 42);
+                doc.text(audition.title.toUpperCase(), 105, 20, { align: 'center', maxWidth: 170 });
+                doc.setFont("Helvetica", "normal"); doc.setFontSize(8.5); doc.setTextColor(71, 85, 105);
+                doc.text(`Artist / Composer: ${audition.artist}`, 105, 26, { align: 'center' });
 
-                doc.setDrawColor(226, 232, 240); doc.setLineWidth(0.5); doc.line(20, 33, 190, 33);
+                doc.setDrawColor(226, 232, 240); doc.setLineWidth(0.5); doc.line(20, 30, 190, 30);
 
-                // NUEVO: Recuadro para Nombre y Apellidos / Grupo
+                // Recuadro del alumno
                 doc.setFillColor(248, 250, 252);
                 doc.setDrawColor(199, 210, 254);
                 doc.setLineWidth(0.4);
-                doc.roundedRect(20, 37, 170, 13, 2, 2, 'FD');
+                doc.roundedRect(20, 34, 170, 12, 2, 2, 'FD');
 
                 doc.setFont("Helvetica", "bold");
-                doc.setFontSize(8.5);
+                doc.setFontSize(8);
                 doc.setTextColor(79, 70, 229);
-                doc.text("NAME & SURNAMES:", 24, 46);
+                doc.text("NAME & SURNAMES:", 24, 42);
                 doc.setDrawColor(148, 163, 184); doc.setLineWidth(0.3);
-                doc.line(58, 46.5, 158, 46.5);
+                doc.line(58, 42.5, 158, 42.5);
 
-                doc.setFont("Helvetica", "bold"); doc.setFontSize(8.5); doc.setTextColor(79, 70, 229);
-                doc.text("GROUP:", 162, 46);
-                doc.line(175, 46.5, 187, 46.5);
+                doc.setFont("Helvetica", "bold"); doc.setFontSize(8); doc.setTextColor(79, 70, 229);
+                doc.text("GROUP:", 162, 42);
+                doc.line(175, 42.5, 187, 42.5);
 
-                doc.setDrawColor(226, 232, 240); doc.setLineWidth(0.5); doc.line(20, 53, 190, 53);
+                doc.setDrawColor(226, 232, 240); doc.setLineWidth(0.5); doc.line(20, 49, 190, 49);
 
-                // Cuerpo del texto con huecos
+                // Cuerpo del texto
                 let templateText = audition.comment;
                 let gapCounter = 0;
                 const wordsArray = (audition.uppercase_words || []).map(w => w.replace(/[^A-Za-zÁÉÍÓÚÑáéíóúñ]/g, '').toUpperCase());
@@ -824,24 +840,27 @@
                     return match;
                 });
 
-                doc.setFont("Helvetica", "normal"); doc.setFontSize(10); doc.setTextColor(51, 65, 85);
+                doc.setFont("Helvetica", "normal"); doc.setFontSize(9); doc.setTextColor(51, 65, 85);
                 const splitText = doc.splitTextToSize(templateText, 170);
 
-                let currentY = 61;
+                let currentY = 57;
+                const maxY = 215;
                 splitText.forEach((line) => {
-                    doc.text(line, 20, currentY);
-                    currentY += 6;
+                    if (currentY <= maxY) {
+                        doc.text(line, 20, currentY);
+                        currentY += 5.2;
+                    }
                 });
 
-                // NUEVO: QR al pie de la página (posición fija)
+                // QR al pie
+                const qrY = 232;
+                doc.setDrawColor(199, 210, 254); doc.setLineWidth(0.5);
+                doc.line(20, qrY - 6, 190, qrY - 6);
+
+                doc.setFont("Helvetica", "bold"); doc.setFontSize(10); doc.setTextColor(79, 70, 229);
+                doc.text("LISTEN TO THE AUDITION", 105, qrY, { align: 'center' });
+
                 if (audition.youtube_url) {
-                    const qrY = 240;
-                    doc.setDrawColor(199, 210, 254); doc.setLineWidth(0.5);
-                    doc.line(20, qrY - 6, 190, qrY - 6);
-
-                    doc.setFont("Helvetica", "bold"); doc.setFontSize(10); doc.setTextColor(79, 70, 229);
-                    doc.text("LISTEN TO THE AUDITION", 105, qrY, { align: 'center' });
-
                     const qrDataUri = await getQRBase64(audition.youtube_url);
                     if (qrDataUri) {
                         doc.addImage(qrDataUri, 'PNG', 88, qrY + 4, 34, 34);
@@ -1199,7 +1218,7 @@
                                             );
                                         })}
                                     </div>
-                                    <button onClick={handleEvaluation} disabled={!studentName || !studentEmail} className={`w-full mt-10 font-bold py-4 rounded-xl shadow-md text-base transition-all ${studentName && studentEmail ? 'bg-indigo-600 text-white hover:bg-indigo-700' : 'bg-slate-100 text-slate-400 cursor-not-allowed'}`}>Submit Audition Assessment</button>
+                                    <button onClick={handleEvaluation} disabled={!studentName || !studentEmail || submitting} className={`w-full mt-10 font-bold py-4 rounded-xl shadow-md text-base transition-all ${(studentName && studentEmail && !submitting) ? 'bg-indigo-600 text-white hover:bg-indigo-700' : 'bg-slate-300 text-slate-500 cursor-not-allowed'}`}>{submitting ? 'Submitting...' : 'Submit Audition Assessment'}</button>
                                 </div>
                             </div>
                         )}
