@@ -10,26 +10,34 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.4/build/qrcode.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
         body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #f8fafc; }
         .glass-panel { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); }
         select { -webkit-appearance: none; -moz-appearance: none; appearance: none; background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e"); background-repeat: no-repeat; background-position: right 0.5rem center; background-size: 1em; padding-right: 2rem !important; }
-        .dark body, body.dark { background-color: #0f172a; color: #e2e8f0; }
-        .dark .bg-white { background-color: #1e293b !important; }
-        .dark .bg-slate-50 { background-color: #334155 !important; }
-        .dark .bg-slate-100 { background-color: #334155 !important; }
-        .dark .text-slate-900 { color: #f1f5f9 !important; }
-        .dark .text-slate-800 { color: #e2e8f0 !important; }
-        .dark .text-slate-700 { color: #cbd5e1 !important; }
-        .dark .text-slate-600 { color: #cbd5e1 !important; }
-        .dark .text-slate-500 { color: #94a3b8 !important; }
-        .dark .border-slate-200 { border-color: #334155 !important; }
-        .dark .border-slate-100 { border-color: #334155 !important; }
-        .dark input, .dark textarea, .dark select { background-color: #334155 !important; color: #f1f5f9 !important; border-color: #475569 !important; }
-        .dark .bg-slate-900 { background-color: #020617 !important; }
+        body.dark { background-color: #0f172a; color: #e2e8f0; }
+        body.dark .bg-white { background-color: #1e293b !important; }
+        body.dark .bg-slate-50 { background-color: #334155 !important; }
+        body.dark .bg-slate-100 { background-color: #334155 !important; }
+        body.dark .bg-slate-50\/50 { background-color: #334155 !important; }
+        body.dark .bg-slate-50\/30 { background-color: #334155 !important; }
+        body.dark .bg-slate-50\/60 { background-color: #334155 !important; }
+        body.dark .text-slate-900 { color: #f1f5f9 !important; }
+        body.dark .text-slate-950 { color: #f8fafc !important; }
+        body.dark .text-slate-800 { color: #e2e8f0 !important; }
+        body.dark .text-slate-700 { color: #cbd5e1 !important; }
+        body.dark .text-slate-600 { color: #cbd5e1 !important; }
+        body.dark .text-slate-500 { color: #94a3b8 !important; }
+        body.dark .text-slate-400 { color: #94a3b8 !important; }
+        body.dark .border-slate-200 { border-color: #334155 !important; }
+        body.dark .border-slate-100 { border-color: #334155 !important; }
+        body.dark .border-slate-200\/50 { border-color: #334155 !important; }
+        body.dark .border-b { border-color: #334155 !important; }
+        body.dark input, body.dark textarea, body.dark select { background-color: #334155 !important; color: #f1f5f9 !important; border-color: #475569 !important; }
+        body.dark .bg-slate-900 { background-color: #020617 !important; }
+        body.dark .hover\:bg-slate-50\/30:hover { background-color: #334155 !important; }
+        body.dark .hover\:bg-slate-100:hover { background-color: #475569 !important; }
     </style>
 </head>
 <body class="text-slate-900 selection:bg-indigo-100 selection:text-indigo-900 min-h-screen">
@@ -41,12 +49,23 @@
         const DEFAULT_SUPABASE_PROJECT_ID = "bbdvflbykohleyctiinj";
         const DEFAULT_SUPABASE_URL = `https://${DEFAULT_SUPABASE_PROJECT_ID}.supabase.co`;
         const DEFAULT_SUPABASE_KEY = "sb_publishable_URQ87m7Tiq96RUHGtvX29Q_lYroaqM4";
+        const SUPABASE_DASHBOARD_URL = `https://supabase.com/dashboard/project/${DEFAULT_SUPABASE_PROJECT_ID}/editor`;
 
         const decodeTaskData = (encoded) => { try { return JSON.parse(decodeURIComponent(atob(encoded))); } catch (e) { return null; } };
         const getStoredAuditions = () => { try { return JSON.parse(localStorage.getItem('audition_app_tasks') || '[]'); } catch (e) { return []; } };
         const saveStoredAuditions = (newList) => { try { localStorage.setItem('audition_app_tasks', JSON.stringify(newList)); } catch (e) {} };
         const getStoredScores = () => { try { return JSON.parse(localStorage.getItem('audition_app_scores') || '[]'); } catch (e) { return []; } };
         const saveStoredScores = (newList) => { try { localStorage.setItem('audition_app_scores', JSON.stringify(newList)); } catch (e) {} };
+
+        const normalizeSearch = (str) => {
+            if (!str) return '';
+            return String(str)
+                .toLowerCase()
+                .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+                .replace(/[º°ª]/g, '')
+                .replace(/\s+/g, '')
+                .trim();
+        };
 
         const getTaskCodeFromUrl = () => {
             try {
@@ -91,10 +110,22 @@
         };
 
         const getQRBase64 = async (text) => {
-            if (window.QRCode && typeof window.QRCode.toDataURL === 'function') {
-                try { return await window.QRCode.toDataURL(text, { margin: 1, width: 200 }); } catch (e) { return null; }
+            if (!text) return null;
+            try {
+                const url = `https://api.qrserver.com/v1/create-qr-code/?size=300x300&margin=5&data=${encodeURIComponent(text)}`;
+                const response = await fetch(url);
+                if (!response.ok) return null;
+                const blob = await response.blob();
+                return new Promise((resolve) => {
+                    const reader = new FileReader();
+                    reader.onloadend = () => resolve(reader.result);
+                    reader.onerror = () => resolve(null);
+                    reader.readAsDataURL(blob);
+                });
+            } catch (e) {
+                console.error("QR generation error:", e);
+                return null;
             }
-            return null;
         };
 
         const playAudioFeedback = (type, score = 10) => {
@@ -104,14 +135,8 @@
                 const ctx = new AudioContext();
                 const now = ctx.currentTime;
                 const numScore = Number(score);
-
                 if (type === 'success' && numScore >= 8) {
-                    const notes = [
-                        { f: 523.25, t: 0.0, d: 0.15 }, { f: 659.25, t: 0.12, d: 0.15 },
-                        { f: 783.99, t: 0.24, d: 0.15 }, { f: 1046.50, t: 0.36, d: 0.30 },
-                        { f: 783.99, t: 0.60, d: 0.15 }, { f: 1046.50, t: 0.72, d: 0.18 },
-                        { f: 1318.51, t: 0.90, d: 0.22 }, { f: 1567.98, t: 1.12, d: 0.50 }
-                    ];
+                    const notes = [{ f: 523.25, t: 0.0, d: 0.15 }, { f: 659.25, t: 0.12, d: 0.15 }, { f: 783.99, t: 0.24, d: 0.15 }, { f: 1046.50, t: 0.36, d: 0.30 }, { f: 783.99, t: 0.60, d: 0.15 }, { f: 1046.50, t: 0.72, d: 0.18 }, { f: 1318.51, t: 0.90, d: 0.22 }, { f: 1567.98, t: 1.12, d: 0.50 }];
                     notes.forEach((note) => {
                         const osc = ctx.createOscillator(); const gain = ctx.createGain();
                         osc.type = 'triangle'; osc.frequency.setValueAtTime(note.f, now + note.t);
@@ -121,12 +146,7 @@
                         osc.start(now + note.t); osc.stop(now + note.t + note.d);
                     });
                 } else if (type === 'success' && numScore >= 5) {
-                    const arpeggio = [
-                        { f: 392.00, t: 0.00, d: 0.20 }, { f: 493.88, t: 0.15, d: 0.20 },
-                        { f: 587.33, t: 0.30, d: 0.20 }, { f: 493.88, t: 0.45, d: 0.20 },
-                        { f: 392.00, t: 0.60, d: 0.20 }, { f: 493.88, t: 0.75, d: 0.20 },
-                        { f: 587.33, t: 0.90, d: 0.20 }, { f: 392.00, t: 1.10, d: 0.45 }
-                    ];
+                    const arpeggio = [{ f: 392.00, t: 0.00, d: 0.20 }, { f: 493.88, t: 0.15, d: 0.20 }, { f: 587.33, t: 0.30, d: 0.20 }, { f: 493.88, t: 0.45, d: 0.20 }, { f: 392.00, t: 0.60, d: 0.20 }, { f: 493.88, t: 0.75, d: 0.20 }, { f: 587.33, t: 0.90, d: 0.20 }, { f: 392.00, t: 1.10, d: 0.45 }];
                     arpeggio.forEach((note) => {
                         const osc = ctx.createOscillator(); const gain = ctx.createGain();
                         osc.type = 'sine'; osc.frequency.setValueAtTime(note.f, now + note.t);
@@ -136,12 +156,7 @@
                         osc.start(now + note.t); osc.stop(now + note.t + note.d);
                     });
                 } else {
-                    const suspenseSequence = [
-                        { f: 246.94, t: 0.00, d: 0.30 }, { f: 233.08, t: 0.28, d: 0.30 },
-                        { f: 220.00, t: 0.56, d: 0.45 }, { f: 110.00, t: 1.05, d: 0.35 },
-                        { f: 233.08, t: 1.45, d: 0.35 }, { f: 220.00, t: 1.78, d: 0.35 },
-                        { f: 207.65, t: 2.11, d: 0.60 }
-                    ];
+                    const suspenseSequence = [{ f: 246.94, t: 0.00, d: 0.30 }, { f: 233.08, t: 0.28, d: 0.30 }, { f: 220.00, t: 0.56, d: 0.45 }, { f: 110.00, t: 1.05, d: 0.35 }, { f: 233.08, t: 1.45, d: 0.35 }, { f: 220.00, t: 1.78, d: 0.35 }, { f: 207.65, t: 2.11, d: 0.60 }];
                     suspenseSequence.forEach((note) => {
                         const osc = ctx.createOscillator(); const gain = ctx.createGain();
                         osc.type = 'sawtooth'; osc.frequency.setValueAtTime(note.f, now + note.t);
@@ -171,6 +186,7 @@
             Refresh: () => <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>,
             Camera: () => <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" /><circle cx="12" cy="13" r="3" /></svg>,
             Database: () => <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4" /></svg>,
+            Cloud: () => <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 10-9.78 2.096A4.001 4.001 0 003 15z" /></svg>,
             Moon: () => <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" /></svg>,
             Sun: () => <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" /></svg>
         };
@@ -191,6 +207,8 @@
             const [authEmail, setAuthEmail] = useState('');
             const [toast, setToast] = useState(null);
             const [confirmModal, setConfirmModal] = useState(null);
+            const [deleteAllModal, setDeleteAllModal] = useState(null);
+            const [deleteAllConfirmText, setDeleteAllConfirmText] = useState('');
             const [createdTaskModal, setCreatedTaskModal] = useState(null);
             const [lookupModal, setLookupModal] = useState(false);
             const [lookupEmail, setLookupEmail] = useState('');
@@ -256,10 +274,8 @@
 
             const toggleSpeech = (text, index) => {
                 if ('speechSynthesis' in window) {
-                    if (speakingIndex === index) {
-                        window.speechSynthesis.cancel();
-                        setSpeakingIndex(null);
-                    } else {
+                    if (speakingIndex === index) { window.speechSynthesis.cancel(); setSpeakingIndex(null); }
+                    else {
                         window.speechSynthesis.cancel();
                         const cleanText = text.replace(/[A-ZÁÉÍÓÚÑ]{2,}/g, (m) => m.toLowerCase());
                         const utterance = new SpeechSynthesisUtterance(cleanText);
@@ -272,16 +288,13 @@
                         setSpeakingIndex(index);
                         window.speechSynthesis.speak(utterance);
                     }
-                } else {
-                    showToast("Speech synthesis is not available in your browser.", "error");
-                }
+                } else showToast("Speech synthesis not available.", "error");
             };
 
             const loadStudentTask = async (code) => {
                 if (!code) return;
                 setLoading(true);
                 let taskData = null;
-
                 if (supabaseUrl && supabaseKey && window.supabase) {
                     try {
                         const tempClient = window.supabase.createClient(supabaseUrl, supabaseKey);
@@ -290,23 +303,13 @@
                         else if (error) console.error("Supabase fetch task error:", error);
                     } catch (e) { console.error("Supabase fetch task exception:", e); }
                 }
-
                 if (!taskData) taskData = decodeTaskData(code);
                 if (!taskData) {
                     const localAuditions = getStoredAuditions();
                     taskData = localAuditions.find(a => a.share_link === code || a.id === code);
                 }
-
-                if (taskData) {
-                    setActiveTask(taskData);
-                    setExamSubmitted(false);
-                    setFinalScoreRecord(null);
-                    setView('student-test');
-                } else {
-                    showToast("Task link not found. Please ask your teacher for a new link.", "error");
-                    setActiveTask(null);
-                    setView('student-test');
-                }
+                if (taskData) { setActiveTask(taskData); setExamSubmitted(false); setFinalScoreRecord(null); setView('student-test'); }
+                else { showToast("Task link not found. Please ask your teacher for a new link.", "error"); setActiveTask(null); setView('student-test'); }
                 setLoading(false);
             };
 
@@ -353,8 +356,7 @@
                 const normalizedEmail = (authEmail || 'teacher@school.edu').toLowerCase().trim();
                 const userSession = { user: { id: normalizedEmail, email: normalizedEmail } };
                 localStorage.setItem('audition_app_teacher_session', JSON.stringify(userSession));
-                setSession(userSession);
-                setView('dashboard');
+                setSession(userSession); setView('dashboard');
                 showToast(`Signed in as ${normalizedEmail}`, "success");
             };
 
@@ -374,7 +376,6 @@
             const handlePublishTask = async () => {
                 if (uppercaseWords.length !== 10) { showToast("You must include exactly 10 UPPERCASE words in the commentary.", "error"); return; }
                 if (!videoId) { showToast("Please provide a valid YouTube video URL.", "error"); return; }
-
                 setLoading(true);
                 const teacherEmail = session?.user?.email || 'teacher@school.edu';
                 const taskId = 'aud-' + Date.now();
@@ -391,7 +392,6 @@
                     is_exam_mode: false,
                     created_at: new Date().toISOString()
                 };
-
                 if (supabaseClient) {
                     try {
                         let insertError = null;
@@ -402,24 +402,15 @@
                             const retry = await supabaseClient.from('auditions').insert([payloadNoHints]);
                             insertError = retry.error;
                         }
-                        if (insertError) {
-                            console.error("Supabase insert error:", insertError);
-                            showToast("Supabase: " + (insertError.message || "insert failed"), "error");
-                        } else {
-                            showToast("Task saved to Supabase Cloud!", "success");
-                        }
-                    } catch (e) {
-                        console.error("Supabase exception:", e);
-                        showToast("Exception: " + (e.message || "unknown"), "error");
-                    }
+                        if (insertError) { console.error("Supabase insert error:", insertError); showToast("Supabase: " + (insertError.message || "insert failed"), "error"); }
+                        else showToast("Task saved to Supabase Cloud!", "success");
+                    } catch (e) { console.error("Supabase exception:", e); showToast("Exception: " + (e.message || "unknown"), "error"); }
                 }
-
                 taskPayload.id = taskId;
                 const currentList = getStoredAuditions();
                 const updatedList = [taskPayload, ...currentList];
                 saveStoredAuditions(updatedList);
                 setAuditionsList(updatedList.filter(a => (a.teacher_email || a.teacher_id)?.toLowerCase() === teacherEmail.toLowerCase()));
-
                 const fullTaskUrl = buildStudentUrl(taskId);
                 setCreatedTaskModal({ title: taskPayload.title, fullUrl: fullTaskUrl, taskPayload: taskPayload });
                 setTitle(''); setArtist(''); setYoutubeUrl(''); setCommentText(''); setTaskHints(Array(10).fill(''));
@@ -429,12 +420,10 @@
             const fetchHistoryAndScores = async () => {
                 if (!session?.user?.email) return;
                 const teacherEmail = session.user.email.toLowerCase().trim();
-
                 const localAuds = getStoredAuditions().filter(a => (a.teacher_email || a.teacher_id)?.toLowerCase() === teacherEmail);
                 setAuditionsList(localAuds);
                 const localScores = getStoredScores().filter(s => (s.teacher_email || s.taskDetails?.teacher_email)?.toLowerCase() === teacherEmail);
                 setScoresList(localScores);
-
                 if (supabaseClient) {
                     try {
                         const { data: cloudAuds, error: audErr } = await supabaseClient.from('auditions').select('*').eq('teacher_email', teacherEmail).order('created_at', { ascending: false });
@@ -488,6 +477,44 @@
                 });
             };
 
+            const handleDeleteAllTasks = () => {
+                setDeleteAllConfirmText('');
+                setDeleteAllModal({
+                    title: "DELETE ALL TASKS",
+                    message: "This will permanently delete ALL your audition tasks from local storage AND from Supabase. This CANNOT be undone.",
+                    danger: true,
+                    onConfirm: async () => {
+                        setDeleteAllModal(null);
+                        saveStoredAuditions([]);
+                        setAuditionsList([]);
+                        const teacherEmail = session?.user?.email?.toLowerCase().trim();
+                        if (supabaseClient && teacherEmail) {
+                            try { await supabaseClient.from('auditions').delete().eq('teacher_email', teacherEmail); } catch (e) { console.error(e); }
+                        }
+                        showToast("All tasks deleted.", "info");
+                    }
+                });
+            };
+
+            const handleDeleteAllScores = () => {
+                setDeleteAllConfirmText('');
+                setDeleteAllModal({
+                    title: "DELETE ALL STUDENT RECORDS",
+                    message: "This will permanently delete ALL student submissions from local storage AND from Supabase. This CANNOT be undone. Use this at the end of the school year.",
+                    danger: true,
+                    onConfirm: async () => {
+                        setDeleteAllModal(null);
+                        saveStoredScores([]);
+                        setScoresList([]);
+                        const teacherEmail = session?.user?.email?.toLowerCase().trim();
+                        if (supabaseClient && teacherEmail) {
+                            try { await supabaseClient.from('student_submissions').delete().eq('teacher_email', teacherEmail); } catch (e) { console.error(e); }
+                        }
+                        showToast("All student records deleted.", "info");
+                    }
+                });
+            };
+
             const handleStudentLookup = async (e) => {
                 e.preventDefault(); if (!lookupEmail.trim()) return;
                 setLoading(true);
@@ -506,30 +533,36 @@
                 if (matched) {
                     setFinalScoreRecord(matched); setExamSubmitted(true); setView('results'); setLookupModal(false);
                     showToast("Submission retrieved successfully!", "success");
-                } else { showToast("No submission found for this email on this task.", "error"); }
+                } else showToast("No submission found for this email on this task.", "error");
                 setLoading(false);
             };
 
             const filteredScores = useMemo(() => {
                 return scoresList.filter(s => {
-                    const q = searchTerm.toLowerCase().trim();
+                    const q = normalizeSearch(searchTerm);
                     if (!q) return true;
-                    return (s.student_name?.toLowerCase().includes(q) ||
-                            s.student_email?.toLowerCase().includes(q) ||
-                            s.student_class?.toLowerCase().includes(q) ||
-                            s.auditions?.title?.toLowerCase().includes(q) ||
-                            s.auditions?.artist?.toLowerCase().includes(q) ||
-                            String(s.score).includes(q));
+                    const fields = [
+                        normalizeSearch(s.student_name),
+                        normalizeSearch(s.student_email),
+                        normalizeSearch(s.student_class),
+                        normalizeSearch(s.auditions?.title),
+                        normalizeSearch(s.auditions?.artist),
+                        String(s.score)
+                    ];
+                    return fields.some(f => f.includes(q));
                 });
             }, [scoresList, searchTerm]);
 
             const filteredAuditions = useMemo(() => {
                 return auditionsList.filter(a => {
-                    const q = searchTermHistory.toLowerCase().trim();
+                    const q = normalizeSearch(searchTermHistory);
                     if (!q) return true;
-                    return (a.title?.toLowerCase().includes(q) ||
-                            a.artist?.toLowerCase().includes(q) ||
-                            a.share_link?.toLowerCase().includes(q));
+                    const fields = [
+                        normalizeSearch(a.title),
+                        normalizeSearch(a.artist),
+                        normalizeSearch(a.share_link)
+                    ];
+                    return fields.some(f => f.includes(q));
                 });
             }, [auditionsList, searchTermHistory]);
 
@@ -576,9 +609,8 @@
 
             const handleEvaluation = async () => {
                 if (submitting) return;
-                if (!studentName.trim() || !studentEmail.trim()) { showToast("Please fill in your Full Name and School Email before submitting.", "error"); return; }
+                if (!studentName.trim() || !studentEmail.trim()) { showToast("Please fill in your Full Name and School Email.", "error"); return; }
                 setSubmitting(true);
-
                 try {
                     let totalScorePoints = 0;
                     const taskUppercaseWords = activeTask.comment.match(/[A-ZÁÉÍÓÚÑ]{2,}/g) || [];
@@ -592,56 +624,40 @@
                         totalScorePoints += earnedPoints;
                         return { original: cleanWord, answer: studentAnswers[idx] || '', correct: isCorrect, usedHint: usedHint, points: earnedPoints };
                     });
-
                     const finalGrade = Math.max(0, Math.round(totalScorePoints * 10) / 10);
                     const teacherEmail = activeTask.teacher_email || activeTask.teacher_id || '';
                     const taskUniqueId = activeTask.share_link || activeTask.id;
                     const studentEmailClean = studentEmail.toLowerCase().trim();
-
                     const record = {
                         id: 'score-' + Date.now() + '-' + Math.random().toString(36).slice(2, 8),
-                        student_name: studentName,
-                        student_class: studentClass,
-                        student_email: studentEmailClean,
-                        teacher_email: teacherEmail,
-                        audition_id: taskUniqueId,
+                        student_name: studentName, student_class: studentClass, student_email: studentEmailClean,
+                        teacher_email: teacherEmail, audition_id: taskUniqueId,
                         auditions: { title: activeTask.title, artist: activeTask.artist },
-                        score: finalGrade,
-                        taskDetails: activeTask,
-                        details: { words: detailsWords },
-                        created_at: new Date().toISOString()
+                        score: finalGrade, taskDetails: activeTask,
+                        details: { words: detailsWords }, created_at: new Date().toISOString()
                     };
-
                     const currentScores = getStoredScores();
                     saveStoredScores([record, ...currentScores]);
                     saveStudentSubmission(record);
-
                     if (supabaseClient) {
                         try {
                             await supabaseClient.from('student_submissions').delete().eq('student_email', studentEmailClean).eq('audition_id', taskUniqueId);
                             const { error } = await supabaseClient.from('student_submissions').insert([{
-                                id: record.id,
-                                student_name: record.student_name,
-                                student_class: record.student_class,
-                                student_email: record.student_email,
-                                teacher_email: record.teacher_email,
-                                audition_id: record.audition_id,
-                                auditions: record.auditions,
-                                score: record.score,
-                                details: record.details,
-                                created_at: record.created_at
+                                id: record.id, student_name: record.student_name, student_class: record.student_class,
+                                student_email: record.student_email, teacher_email: record.teacher_email,
+                                audition_id: record.audition_id, auditions: record.auditions,
+                                score: record.score, details: record.details, created_at: record.created_at
                             }]);
                             if (error) console.error("Supabase grade submission error:", error);
                             else showToast("Grade saved successfully!", "success");
                         } catch (e) { console.error(e); }
                     }
-
                     setFinalScoreRecord(record); setExamSubmitted(true); setView('results');
                     if ('speechSynthesis' in window) window.speechSynthesis.cancel();
                     if (finalGrade >= 5) {
                         playAudioFeedback('success', finalGrade);
                         if (finalGrade >= 8 && window.confetti) confetti({ particleCount: 120, spread: 80, origin: { y: 0.6 } });
-                    } else { playAudioFeedback('error', finalGrade); }
+                    } else playAudioFeedback('error', finalGrade);
                 } finally { setSubmitting(false); }
             };
 
@@ -649,27 +665,20 @@
                 const { jsPDF } = window.jspdf;
                 const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
                 const feedback = getEnglishFeedback(record.score);
-
                 doc.setFillColor(250, 252, 255); doc.rect(0, 0, 210, 297, 'F');
                 doc.setDrawColor(79, 70, 229); doc.setLineWidth(1.4); doc.rect(8, 8, 194, 281);
                 doc.setDrawColor(199, 210, 254); doc.setLineWidth(0.6); doc.rect(12, 12, 186, 273);
-
                 doc.setFont("Helvetica", "bold"); doc.setFontSize(22); doc.setTextColor(67, 56, 202);
                 doc.text("DIPLOMA OF ACCOMPLISHMENT", 105, 25, { align: 'center' });
-
                 doc.setFont("Helvetica", "bold"); doc.setFontSize(9); doc.setTextColor(99, 102, 241);
                 doc.text("ENGLISH BILINGUAL MUSIC AUDITION MASTER", 105, 31, { align: 'center' });
-
                 doc.setDrawColor(224, 231, 255); doc.setLineWidth(0.8); doc.line(30, 34, 180, 34);
-
                 doc.setFont("Helvetica", "normal"); doc.setFontSize(9); doc.setTextColor(100, 116, 139);
                 doc.text("This certificate is proudly presented to:", 105, 41, { align: 'center' });
-
                 doc.setFont("Helvetica", "bold"); doc.setFontSize(14); doc.setTextColor(15, 23, 42);
                 const nameStr = (record.student_name || 'STUDENT').toUpperCase();
                 const classStr = record.student_class ? ` (${record.student_class})` : '';
                 doc.text(`${nameStr}${classStr}`, 105, 49, { align: 'center' });
-
                 doc.setFillColor(243, 244, 256); doc.roundedRect(20, 55, 170, 26, 3, 3, 'F');
                 const pieceTitle = (record.taskDetails?.title || record.auditions?.title || 'Audition Piece').toUpperCase();
                 const composerArtist = record.taskDetails?.artist || record.auditions?.artist || 'Unknown Composer';
@@ -677,12 +686,10 @@
                 doc.text(pieceTitle, 105, 68, { align: 'center', maxWidth: 160 });
                 doc.setFont("Helvetica", "normal"); doc.setFontSize(10); doc.setTextColor(100, 116, 139);
                 doc.text(`by ${composerArtist}`, 105, 76, { align: 'center' });
-
                 doc.setFont("Helvetica", "bold"); doc.setFontSize(38); doc.setTextColor(79, 70, 229);
                 doc.text(`${Number(record.score).toFixed(1)}`, 96, 94, { align: 'right' });
                 doc.setFontSize(16); doc.setTextColor(148, 163, 184);
                 doc.text(`/ 10`, 99, 94, { align: 'left' });
-
                 doc.setFillColor(238, 242, 255); doc.setDrawColor(199, 210, 254); doc.setLineWidth(0.5);
                 doc.roundedRect(20, 102, 170, 24, 4, 4, 'FD');
                 doc.setFont("Helvetica", "bold"); doc.setFontSize(12); doc.setTextColor(67, 56, 202);
@@ -690,22 +697,17 @@
                 doc.setFont("Helvetica", "italic"); doc.setFontSize(9.5); doc.setTextColor(30, 41, 59);
                 const splitFeedback = doc.splitTextToSize(`"${feedback.text}"`, 160);
                 doc.text(splitFeedback, 105, 118, { align: 'center' });
-
                 doc.setFont("Helvetica", "bold"); doc.setFontSize(10); doc.setTextColor(15, 23, 42);
                 doc.text("DETAILED ANSWER BREAKDOWN", 20, 136);
-
                 const words = record.details?.words || [];
                 let startY = 140;
-
-                doc.setFillColor(226, 232, 240);
-                doc.rect(20, startY, 170, 5.5, 'F');
+                doc.setFillColor(226, 232, 240); doc.rect(20, startY, 170, 5.5, 'F');
                 doc.setFont("Helvetica", "bold"); doc.setFontSize(8); doc.setTextColor(51, 65, 85);
                 doc.text("GAP #", 23, startY + 4);
                 doc.text("STUDENT ANSWER", 45, startY + 4);
                 doc.text("RESULT", 105, startY + 4);
                 doc.text("TARGET WORD (KEY)", 145, startY + 4);
                 startY += 5.5;
-
                 words.forEach((w, idx) => {
                     doc.setFont("Helvetica", "normal"); doc.setFontSize(8);
                     if (idx % 2 === 0) { doc.setFillColor(248, 250, 252); doc.rect(20, startY, 170, 5.2, 'F'); }
@@ -725,33 +727,25 @@
                     }
                     startY += 5.2;
                 });
-
-                // Adorno musical limpio (líneas + texto)
                 const ornY = 232;
                 doc.setDrawColor(199, 210, 254); doc.setLineWidth(0.4);
                 doc.line(30, ornY, 180, ornY);
                 doc.line(30, ornY + 1.2, 180, ornY + 1.2);
                 doc.line(30, ornY + 2.4, 180, ornY + 2.4);
-
                 doc.setFont("Helvetica", "bold"); doc.setFontSize(11); doc.setTextColor(67, 56, 202);
                 doc.text("AUDIO MASTER AUDITION", 105, ornY + 9, { align: 'center' });
-
                 doc.setDrawColor(199, 210, 254); doc.setLineWidth(0.4);
                 doc.line(30, ornY + 12, 180, ornY + 12);
                 doc.line(30, ornY + 13.2, 180, ornY + 13.2);
                 doc.line(30, ornY + 14.4, 180, ornY + 14.4);
-
                 doc.setFont("Helvetica", "italic"); doc.setFontSize(8); doc.setTextColor(100, 116, 139);
                 doc.text('"Music is the universal language of mankind."', 105, ornY + 21, { align: 'center' });
-
                 doc.setFont("Helvetica", "normal"); doc.setFontSize(8); doc.setTextColor(148, 163, 184);
                 doc.text(`Issued on: ${new Date(record.created_at || Date.now()).toLocaleDateString()}`, 105, ornY + 28, { align: 'center' });
-
                 doc.setDrawColor(148, 163, 184); doc.setLineWidth(0.5);
                 doc.line(75, ornY + 36, 135, ornY + 36);
                 doc.setFont("Helvetica", "bold"); doc.setFontSize(8.5); doc.setTextColor(15, 23, 42);
                 doc.text("Bilingual Music Department Teacher Signature", 105, ornY + 40, { align: 'center' });
-
                 const blob = doc.output('blob');
                 window.open(window.URL.createObjectURL(blob), '_blank');
             };
@@ -759,19 +753,13 @@
             const downloadAuditionTemplatePDF = async (audition) => {
                 const { jsPDF } = window.jspdf;
                 const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
-
                 doc.setFillColor(255, 255, 255); doc.rect(0, 0, 210, 297, 'F');
                 doc.setDrawColor(15, 23, 42); doc.setLineWidth(0.8); doc.rect(10, 10, 190, 277);
-
-                // Cabecera
                 doc.setFont("Helvetica", "bold"); doc.setFontSize(14); doc.setTextColor(15, 23, 42);
                 doc.text(audition.title.toUpperCase(), 105, 20, { align: 'center', maxWidth: 170 });
                 doc.setFont("Helvetica", "normal"); doc.setFontSize(8); doc.setTextColor(71, 85, 105);
                 doc.text(`Artist / Composer: ${audition.artist}`, 105, 26, { align: 'center' });
-
                 doc.setDrawColor(226, 232, 240); doc.setLineWidth(0.5); doc.line(20, 30, 190, 30);
-
-                // Recuadro alumno
                 doc.setFillColor(248, 250, 252); doc.setDrawColor(199, 210, 254); doc.setLineWidth(0.4);
                 doc.roundedRect(20, 34, 170, 11, 2, 2, 'FD');
                 doc.setFont("Helvetica", "bold"); doc.setFontSize(7.5); doc.setTextColor(79, 70, 229);
@@ -781,10 +769,7 @@
                 doc.setFont("Helvetica", "bold"); doc.setFontSize(7.5); doc.setTextColor(79, 70, 229);
                 doc.text("GROUP:", 159, 41);
                 doc.line(172, 41.5, 187, 41.5);
-
                 doc.setDrawColor(226, 232, 240); doc.setLineWidth(0.5); doc.line(20, 48, 190, 48);
-
-                // Cuerpo
                 let templateText = audition.comment;
                 let gapCounter = 0;
                 const wordsArray = (audition.uppercase_words || []).map(w => w.replace(/[^A-Za-zÁÉÍÓÚÑáéíóúñ]/g, '').toUpperCase());
@@ -802,31 +787,38 @@
                     }
                     return match;
                 });
-
                 doc.setFont("Helvetica", "normal"); doc.setFontSize(8); doc.setTextColor(51, 65, 85);
                 const splitText = doc.splitTextToSize(templateText, 172);
                 let currentY = 55;
-                const maxY = 255;
+                const maxY = 250;
                 splitText.forEach((line) => {
-                    if (currentY <= maxY) {
-                        doc.text(line, 20, currentY);
-                        currentY += 4.2;
-                    }
+                    if (currentY <= maxY) { doc.text(line, 20, currentY); currentY += 4.2; }
                 });
-
-                // QR abajo izquierda
                 if (audition.youtube_url) {
-                    const qrDataUri = await getQRBase64(audition.youtube_url);
-                    if (qrDataUri) {
-                        doc.addImage(qrDataUri, 'PNG', 20, 260, 25, 25);
-                        doc.setFont("Helvetica", "bold"); doc.setFontSize(7.5); doc.setTextColor(79, 70, 229);
-                        doc.text("LISTEN TO THE AUDITION", 50, 268);
-                        doc.setFont("Helvetica", "normal"); doc.setFontSize(7); doc.setTextColor(100, 116, 139);
-                        doc.text("Scan the QR code with your phone", 50, 273);
-                        doc.text("to open the video on YouTube", 50, 277);
+                    try {
+                        const qrDataUri = await getQRBase64(audition.youtube_url);
+                        if (qrDataUri) {
+                            doc.addImage(qrDataUri, 'PNG', 20, 258, 28, 28);
+                            doc.setFont("Helvetica", "bold"); doc.setFontSize(8); doc.setTextColor(79, 70, 229);
+                            doc.text("LISTEN TO THE AUDITION", 52, 266);
+                            doc.setFont("Helvetica", "normal"); doc.setFontSize(7); doc.setTextColor(100, 116, 139);
+                            doc.text("Scan the QR code with your phone to open the video on YouTube.", 52, 271);
+                            doc.setTextColor(79, 70, 229);
+                            doc.textWithLink(audition.youtube_url, 52, 276, { url: audition.youtube_url });
+                        } else {
+                            doc.setFont("Helvetica", "bold"); doc.setFontSize(9); doc.setTextColor(79, 70, 229);
+                            doc.text("LISTEN TO THE AUDITION", 105, 265, { align: 'center' });
+                            doc.setFont("Helvetica", "normal"); doc.setFontSize(8); doc.setTextColor(100, 116, 139);
+                            doc.textWithLink(audition.youtube_url, 105, 271, { align: 'center', url: audition.youtube_url });
+                        }
+                    } catch (e) {
+                        console.error("QR error:", e);
+                        doc.setFont("Helvetica", "bold"); doc.setFontSize(9); doc.setTextColor(79, 70, 229);
+                        doc.text("LISTEN TO THE AUDITION", 105, 265, { align: 'center' });
+                        doc.setFont("Helvetica", "normal"); doc.setFontSize(8); doc.setTextColor(100, 116, 139);
+                        doc.textWithLink(audition.youtube_url, 105, 271, { align: 'center', url: audition.youtube_url });
                     }
                 }
-
                 const blob = doc.output('blob');
                 window.open(window.URL.createObjectURL(blob), '_blank');
             };
@@ -852,11 +844,40 @@
                         </div>
                     )}
 
+                    {deleteAllModal && (
+                        <div className="fixed inset-0 bg-rose-900/60 backdrop-blur-md z-50 flex items-center justify-center p-4">
+                            <div className="bg-white rounded-2xl p-6 max-w-md w-full shadow-2xl border-2 border-rose-300">
+                                <div className="flex items-center gap-3 mb-4">
+                                    <div className="w-12 h-12 bg-rose-100 rounded-full flex items-center justify-center text-rose-600 text-2xl">⚠️</div>
+                                    <h3 className="text-xl font-black text-rose-700">{deleteAllModal.title}</h3>
+                                </div>
+                                <p className="text-sm text-slate-700 mb-4">{deleteAllModal.message}</p>
+                                <p className="text-xs font-bold text-rose-600 mb-2">Type DELETE below to confirm:</p>
+                                <input
+                                    type="text"
+                                    value={deleteAllConfirmText}
+                                    onChange={e => setDeleteAllConfirmText(e.target.value)}
+                                    placeholder="DELETE"
+                                    className="w-full px-4 py-2.5 border-2 border-rose-300 rounded-xl text-sm outline-none focus:border-rose-600 font-bold uppercase"
+                                    autoFocus
+                                />
+                                <div className="flex justify-end gap-2 mt-6">
+                                    <button onClick={() => setDeleteAllModal(null)} className="px-4 py-2 rounded-xl text-sm font-bold text-slate-600 bg-slate-100 hover:bg-slate-200">Cancel</button>
+                                    <button
+                                        onClick={deleteAllModal.onConfirm}
+                                        disabled={deleteAllConfirmText.trim().toUpperCase() !== 'DELETE'}
+                                        className={`px-4 py-2 rounded-xl text-sm font-bold text-white transition-all ${deleteAllConfirmText.trim().toUpperCase() === 'DELETE' ? 'bg-rose-600 hover:bg-rose-700' : 'bg-rose-300 cursor-not-allowed'}`}
+                                    >Delete All Permanently</button>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+
                     {lookupModal && (
                         <div className="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
                             <div className="bg-white rounded-2xl p-6 max-w-md w-full shadow-2xl border border-slate-100 space-y-4">
                                 <h3 className="text-lg font-bold text-slate-900">Retrieve Submitted Certificate</h3>
-                                <p className="text-xs text-slate-500">Enter your school email to access your score and certificate for this task.</p>
+                                <p className="text-xs text-slate-500">Enter your school email to access your score and certificate.</p>
                                 <form onSubmit={handleStudentLookup} className="space-y-4">
                                     <input type="email" required placeholder="your.email@alu.murciaeduca.es" value={lookupEmail} onChange={e => setLookupEmail(e.target.value)} className="w-full px-4 py-2.5 border rounded-xl text-sm outline-none focus:ring-2 focus:ring-indigo-500" />
                                     <div className="flex justify-end gap-2">
@@ -872,7 +893,7 @@
                         <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-md z-50 flex items-center justify-center p-4">
                             <div className="bg-white rounded-3xl p-8 max-w-lg w-full shadow-2xl border border-indigo-100 space-y-6 text-center">
                                 <div className="w-16 h-16 bg-emerald-50 rounded-full flex items-center justify-center mx-auto text-3xl">🎉</div>
-                                <div><h3 className="text-2xl font-black text-slate-900">Task Published!</h3><p className="text-sm text-slate-500 mt-1">The audition <strong>"{createdTaskModal.title}"</strong> is ready to share with students.</p></div>
+                                <div><h3 className="text-2xl font-black text-slate-900">Task Published!</h3><p className="text-sm text-slate-500 mt-1">The audition <strong>"{createdTaskModal.title}"</strong> is ready to share.</p></div>
                                 <div className="bg-slate-50 border border-slate-200 p-4 rounded-2xl text-left space-y-2">
                                     <label className="text-xs font-bold text-slate-400 uppercase tracking-wider block">Direct Link for Students:</label>
                                     <div className="flex gap-2">
@@ -890,17 +911,17 @@
 
                     <header className="bg-white border-b border-slate-200 sticky top-0 z-40">
                         <div className="max-w-5xl mx-auto px-4 py-4 flex justify-between items-center">
-                            <h1 className="text-xl font-extrabold text-indigo-600 tracking-tight flex items-center gap-2">🎵 Music Audition <span className="font-medium text-slate-400">| Bilingual Master</span></h1>
-                            <div className="flex items-center gap-3">
+                            <h1 className="text-xl font-extrabold text-indigo-600 tracking-tight flex items-center gap-2">🎵 Music Audition <span className="font-medium text-slate-400 hidden sm:inline">| Bilingual Master</span></h1>
+                            <div className="flex items-center gap-2">
+                                {session && view !== 'student-test' && view !== 'results' && (
+                                    <a href={SUPABASE_DASHBOARD_URL} target="_blank" rel="noopener noreferrer" className="text-xs font-bold px-3 py-1.5 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 rounded-lg flex items-center gap-1.5" title="Open Supabase Dashboard">
+                                        <Icons.Cloud /> Supabase
+                                    </a>
+                                )}
                                 <button onClick={() => setDarkMode(!darkMode)} className="text-xs font-bold p-2 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-lg" title="Toggle dark mode">{darkMode ? <Icons.Sun /> : <Icons.Moon />}</button>
                                 {session && view !== 'student-test' && view !== 'results' && (
-                                    <div className="text-xs font-bold px-3 py-1.5 bg-emerald-50 text-emerald-700 rounded-lg flex items-center gap-1.5">
-                                        <Icons.Database /> Supabase Cloud Active
-                                    </div>
-                                )}
-                                {session && view !== 'student-test' && view !== 'results' && (
                                     <button onClick={handleLogout} className="text-xs font-bold text-slate-500 hover:text-slate-800 flex items-center gap-1">
-                                        <Icons.LogOut /> Sign Out ({session.user.email})
+                                        <Icons.LogOut /> <span className="hidden sm:inline">Sign Out</span>
                                     </button>
                                 )}
                             </div>
@@ -911,7 +932,7 @@
                         {view === 'auth' && !session && (
                             <div className="max-w-md mx-auto bg-white p-8 rounded-2xl shadow-sm border border-slate-200 mt-12">
                                 <h2 className="text-2xl font-bold text-slate-900 mb-2 text-center">Teacher Login</h2>
-                                <p className="text-xs text-slate-500 text-center mb-6">Enter your email address to access your private audition tasks and student scores.</p>
+                                <p className="text-xs text-slate-500 text-center mb-6">Enter your email address to access your private audition tasks.</p>
                                 <form onSubmit={handleTeacherAuth} className="space-y-4">
                                     <div><label className="block text-xs font-bold uppercase text-slate-500 mb-1">Teacher Email</label><input type="email" required placeholder="teacher@school.edu" value={authEmail} onChange={e => setAuthEmail(e.target.value)} className="w-full px-4 py-2.5 border rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none" /></div>
                                     <button type="submit" className="w-full mt-4 py-3 rounded-xl font-bold text-white bg-indigo-600 hover:bg-indigo-700 transition-all shadow-md shadow-indigo-100">Enter Teacher Dashboard</button>
@@ -966,7 +987,7 @@
                                         <div className="lg:col-span-5">
                                             <div className="sticky top-24 bg-slate-900 rounded-2xl overflow-hidden shadow-xl aspect-video flex flex-col items-center justify-center relative">
                                                 {videoId ? (
-                                                    <><iframe className="w-full h-full" src={`https://www.youtube.com/embed/${videoId}?rel=0&enablejsapi=1`} title="Preview" frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerPolicy="no-referrer-when-downgrade" allowFullScreen></iframe><a href={`https://www.youtube.com/watch?v=${videoId}`} target="_blank" rel="noopener noreferrer" className="absolute bottom-2 right-2 bg-black/70 hover:bg-black text-white text-[10px] font-bold px-2.5 py-1 rounded-lg backdrop-blur-sm flex items-center gap-1 z-10"><Icons.External /> Open in YouTube</a></>
+                                                    <><iframe className="w-full h-full" src={`https://www.youtube.com/embed/${videoId}?rel=0&enablejsapi=1`} title="Preview" frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowFullScreen></iframe><a href={`https://www.youtube.com/watch?v=${videoId}`} target="_blank" rel="noopener noreferrer" className="absolute bottom-2 right-2 bg-black/70 hover:bg-black text-white text-[10px] font-bold px-2.5 py-1 rounded-lg backdrop-blur-sm flex items-center gap-1 z-10"><Icons.External /> Open in YouTube</a></>
                                                 ) : (<div className="text-center p-4"><span className="text-slate-500 font-bold text-xs block mb-1">Video Preview</span><span className="text-slate-600 text-[11px]">Enter a valid YouTube URL</span></div>)}
                                             </div>
                                         </div>
@@ -977,7 +998,14 @@
                                     <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
                                         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
                                             <h2 className="text-xl font-bold text-slate-900">Your Published Audition Tasks</h2>
-                                            <div className="relative w-full sm:w-72"><span className="absolute left-3 top-2.5 text-slate-400"><Icons.Search /></span><input type="text" placeholder="Search by title, artist or link..." value={searchTermHistory} onChange={e => setSearchTermHistory(e.target.value)} className="w-full pl-9 pr-4 py-2 border rounded-xl text-sm bg-slate-50 outline-none focus:ring-1 focus:ring-indigo-500" /></div>
+                                            <div className="flex gap-2 w-full sm:w-auto">
+                                                <div className="relative flex-1 sm:w-72"><span className="absolute left-3 top-2.5 text-slate-400"><Icons.Search /></span><input type="text" placeholder="Search by title, artist or link..." value={searchTermHistory} onChange={e => setSearchTermHistory(e.target.value)} className="w-full pl-9 pr-4 py-2 border rounded-xl text-sm bg-slate-50 outline-none focus:ring-1 focus:ring-indigo-500" /></div>
+                                                {auditionsList.length > 0 && (
+                                                    <button onClick={handleDeleteAllTasks} className="px-3 py-2 bg-rose-600 hover:bg-rose-700 text-white rounded-xl text-xs font-bold flex items-center gap-1 whitespace-nowrap" title="Delete ALL tasks">
+                                                        <Icons.Trash /> <span className="hidden sm:inline">Delete ALL</span>
+                                                    </button>
+                                                )}
+                                            </div>
                                         </div>
                                         {filteredAuditions.length === 0 ? ( <p className="text-slate-400 text-center py-10">No tasks match your search.</p> ) : (
                                             <div className="overflow-x-auto">
@@ -993,7 +1021,7 @@
                                                                 <td className="py-4 px-4 font-bold text-slate-950">{aud.title}</td><td className="py-4 px-4 text-slate-500">{aud.artist}</td>
                                                                 <td className="py-4 px-4 text-center"><button onClick={() => handleCopyLink(aud.share_link || aud.id, aud.id)} className="bg-indigo-50 hover:bg-indigo-100 text-indigo-700 font-bold px-3 py-1.5 rounded-lg text-xs flex items-center gap-1 mx-auto transition-all">{copiedId === aud.id ? <Icons.Check /> : <Icons.Link />} {copiedId === aud.id ? "Copied!" : "Copy Link"}</button></td>
                                                                 <td className="py-4 px-4 text-right space-x-1">
-                                                                    <a href={buildStudentUrl(aud.share_link || aud.id)} target="_blank" title="Preview Student Exam" className="inline-block p-2 hover:bg-slate-100 rounded-lg text-slate-500 transition-colors"><Icons.External /></a>
+                                                                    <a href={buildStudentUrl(aud.share_link || aud.id)} target="_blank" title="Preview" className="inline-block p-2 hover:bg-slate-100 rounded-lg text-slate-500 transition-colors"><Icons.External /></a>
                                                                     <button onClick={() => downloadAuditionTemplatePDF(aud)} title="Download PDF template" className="p-2 hover:bg-indigo-50 rounded-lg text-indigo-600 transition-colors"><Icons.Download /></button>
                                                                     <button onClick={() => handleDeleteAudition(aud.id, aud.share_link)} title="Delete Task" className="p-2 hover:bg-rose-50 rounded-lg text-rose-600 transition-colors"><Icons.Trash /></button>
                                                                 </td>
@@ -1027,7 +1055,14 @@
                                         )}
                                         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
                                             <h2 className="text-xl font-bold text-slate-900">Your Students' Grades & Submissions</h2>
-                                            <div className="relative w-full sm:w-72"><span className="absolute left-3 top-2.5 text-slate-400"><Icons.Search /></span><input type="text" placeholder="Search name, class, email, score..." value={searchTerm} onChange={e => setSearchTerm(e.target.value)} className="w-full pl-9 pr-4 py-2 border rounded-xl text-sm bg-slate-50 outline-none focus:ring-1 focus:ring-indigo-500" /></div>
+                                            <div className="flex gap-2 w-full sm:w-auto">
+                                                <div className="relative flex-1 sm:w-72"><span className="absolute left-3 top-2.5 text-slate-400"><Icons.Search /></span><input type="text" placeholder="Search name, class, email, score..." value={searchTerm} onChange={e => setSearchTerm(e.target.value)} className="w-full pl-9 pr-4 py-2 border rounded-xl text-sm bg-slate-50 outline-none focus:ring-1 focus:ring-indigo-500" /></div>
+                                                {scoresList.length > 0 && (
+                                                    <button onClick={handleDeleteAllScores} className="px-3 py-2 bg-rose-600 hover:bg-rose-700 text-white rounded-xl text-xs font-bold flex items-center gap-1 whitespace-nowrap" title="Delete ALL student records">
+                                                        <Icons.Trash /> <span className="hidden sm:inline">Delete ALL</span>
+                                                    </button>
+                                                )}
+                                            </div>
                                         </div>
                                         {filteredScores.length === 0 ? ( <p className="text-slate-400 text-center py-10">No student submissions match your search.</p> ) : (
                                             <div className="overflow-x-auto">
@@ -1042,9 +1077,9 @@
                                                                 <td className="py-3.5 px-4 font-mono text-xs">{s.student_class}</td><td className="py-3.5 px-4 text-slate-600 font-medium">{s.auditions?.title}</td>
                                                                 <td className="py-3.5 px-4 text-center"><span className={`inline-block font-extrabold text-xs px-2.5 py-1 rounded-full ${Number(s.score) >= 8 ? 'bg-emerald-50 text-emerald-700' : Number(s.score) >= 5 ? 'bg-amber-50 text-amber-700' : 'bg-rose-50 text-rose-700'}`}>{Number(s.score).toFixed(1)}/10</span></td>
                                                                 <td className="py-3.5 px-4 text-right space-x-1">
-                                                                    <button onClick={() => setSelectedScoreDetails(s)} title="View Answer Breakdown" className="p-2 hover:bg-slate-100 rounded-lg text-slate-500 transition-colors"><Icons.Eye /></button>
-                                                                    <button onClick={() => generatePDF(s)} title="Download Diploma PDF" className="p-2 hover:bg-indigo-50 rounded-lg text-indigo-600 transition-colors"><Icons.Download /></button>
-                                                                    <button onClick={() => handleDeleteScore(s.id)} title="Delete Record" className="p-2 hover:bg-rose-50 rounded-lg text-rose-600 transition-colors"><Icons.Trash /></button>
+                                                                    <button onClick={() => setSelectedScoreDetails(s)} title="View" className="p-2 hover:bg-slate-100 rounded-lg text-slate-500 transition-colors"><Icons.Eye /></button>
+                                                                    <button onClick={() => generatePDF(s)} title="Diploma PDF" className="p-2 hover:bg-indigo-50 rounded-lg text-indigo-600 transition-colors"><Icons.Download /></button>
+                                                                    <button onClick={() => handleDeleteScore(s.id)} title="Delete" className="p-2 hover:bg-rose-50 rounded-lg text-rose-600 transition-colors"><Icons.Trash /></button>
                                                                 </td>
                                                             </tr>
                                                         ))}
@@ -1081,7 +1116,7 @@
                             <div className="max-w-md mx-auto bg-white p-8 rounded-2xl shadow-sm border border-rose-200 mt-12 text-center space-y-4">
                                 <div className="text-5xl">🔍</div>
                                 <h2 className="text-xl font-bold text-slate-900">Task Not Found</h2>
-                                <p className="text-sm text-slate-500">We couldn't find the audition task associated with this link. Please ask your teacher to share a new link with you.</p>
+                                <p className="text-sm text-slate-500">We couldn't find the audition task associated with this link.</p>
                                 <button onClick={() => { window.location.href = window.location.origin + window.location.pathname; }} className="bg-indigo-600 hover:bg-indigo-700 text-white font-bold px-5 py-2.5 rounded-xl text-sm">Go to Home</button>
                             </div>
                         )}
@@ -1090,9 +1125,8 @@
                             <div className="max-w-3xl mx-auto space-y-6">
                                 <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
                                     <div><h2 className="text-lg font-bold text-slate-900">Student Identification</h2><p className="text-xs text-slate-500">Please enter your details before taking the audition exam.</p></div>
-                                    <button onClick={() => setLookupModal(true)} className="bg-slate-100 hover:bg-slate-200 text-indigo-700 text-xs font-bold px-3 py-2 rounded-xl transition-all flex items-center gap-1.5"><Icons.Eye /> Already completed? Check your Diploma</button>
+                                    <button onClick={() => setLookupModal(true)} className="bg-slate-100 hover:bg-slate-200 text-indigo-700 text-xs font-bold px-3 py-2 rounded-xl transition-all flex items-center gap-1.5"><Icons.Eye /> Already completed?</button>
                                 </div>
-
                                 <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 grid grid-cols-1 md:grid-cols-3 gap-4 items-end">
                                     <div><label className="block text-[10px] font-bold text-slate-500 uppercase mb-1">Full Name</label><input type="text" placeholder="e.g. Alex Morgan" value={studentName} onChange={e => setStudentName(e.target.value)} className="w-full px-3 py-2 bg-slate-50 border rounded-lg text-sm outline-none focus:border-indigo-500" /></div>
                                     <div>
@@ -1104,25 +1138,22 @@
                                     </div>
                                     <div><label className="block text-[10px] font-bold text-slate-500 uppercase mb-1">School Email</label><input type="email" placeholder="@alu.murciaeduca.es" value={studentEmail} onChange={e => setStudentEmail(e.target.value)} onBlur={async () => { const already = await checkIfAlreadySubmitted(studentEmail); setAlreadySubmittedWarning(already); }} className="w-full px-3 py-2 bg-slate-50 border rounded-lg text-sm outline-none focus:border-indigo-500" /></div>
                                 </div>
-
                                 {alreadySubmittedWarning && (
                                     <div className="bg-amber-50 border border-amber-200 p-4 rounded-2xl text-sm text-amber-900">
-                                        <strong>⚠️ Note:</strong> It looks like you already submitted this task with this email. If you submit again, your previous score will be replaced.
+                                        <strong>⚠️ Note:</strong> You already submitted this task with this email. If you submit again, your previous score will be replaced.
                                     </div>
                                 )}
-
                                 <div className="bg-white p-6 md:p-8 rounded-2xl shadow-md border border-slate-200">
                                     <div className="mb-6 pb-6 border-b flex flex-col md:flex-row gap-6 items-center">
                                         <div className="flex-1"><h2 className="text-2xl font-extrabold text-slate-900">{activeTask.title}</h2><p className="text-indigo-600 font-medium">{activeTask.artist}</p></div>
                                         <div className="w-full md:w-72 shrink-0 rounded-xl overflow-hidden border bg-slate-900 aspect-video relative flex flex-col items-center justify-center">
                                             {(() => {
                                                 const studentVideoId = extractYouTubeId(activeTask.youtube_url);
-                                                if (studentVideoId) return (<><iframe className="w-full h-full" src={`https://www.youtube.com/embed/${studentVideoId}?rel=0&enablejsapi=1`} title="Student Audition Video" frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowFullScreen></iframe><a href={`https://www.youtube.com/watch?v=${studentVideoId}`} target="_blank" rel="noopener noreferrer" className="absolute bottom-1.5 right-1.5 bg-black/70 hover:bg-black text-white text-[10px] font-bold px-2 py-0.5 rounded-md backdrop-blur-sm flex items-center gap-1 z-10"><Icons.External /> Open in YouTube</a></>);
+                                                if (studentVideoId) return (<><iframe className="w-full h-full" src={`https://www.youtube.com/embed/${studentVideoId}?rel=0&enablejsapi=1`} title="Student Video" frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowFullScreen></iframe><a href={`https://www.youtube.com/watch?v=${studentVideoId}`} target="_blank" rel="noopener noreferrer" className="absolute bottom-1.5 right-1.5 bg-black/70 hover:bg-black text-white text-[10px] font-bold px-2 py-0.5 rounded-md backdrop-blur-sm flex items-center gap-1 z-10"><Icons.External /> YouTube</a></>);
                                                 return (<div className="w-full h-full flex flex-col items-center justify-center text-xs text-slate-500 font-bold p-2 text-center"><span>Video Not Available</span></div>);
                                             })()}
                                         </div>
                                     </div>
-
                                     <div className="space-y-6">
                                         {parsedParagraphs.map((paragraphTokens, pIndex) => {
                                             if (paragraphTokens.length === 0) return null;
