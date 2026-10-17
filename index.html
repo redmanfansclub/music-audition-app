@@ -787,12 +787,12 @@
                     }
                     return match;
                 });
-                doc.setFont("Helvetica", "normal"); doc.setFontSize(8); doc.setTextColor(51, 65, 85);
+                doc.setFont("Helvetica", "normal"); doc.setFontSize(9.5); doc.setTextColor(51, 65, 85);
                 const splitText = doc.splitTextToSize(templateText, 172);
                 let currentY = 55;
                 const maxY = 250;
                 splitText.forEach((line) => {
-                    if (currentY <= maxY) { doc.text(line, 20, currentY); currentY += 4.2; }
+                    if (currentY <= maxY) { doc.text(line, 20, currentY); currentY += 5.0; }
                 });
                 if (audition.youtube_url) {
                     try {
