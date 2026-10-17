@@ -16,6 +16,7 @@
         body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #f8fafc; }
         .glass-panel { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); }
         select { -webkit-appearance: none; -moz-appearance: none; appearance: none; background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e"); background-repeat: no-repeat; background-position: right 0.5rem center; background-size: 1em; padding-right: 2rem !important; }
+        
         body.dark { background-color: #0f172a; color: #e2e8f0; }
         body.dark .bg-white { background-color: #1e293b !important; }
         body.dark .bg-slate-50 { background-color: #334155 !important; }
@@ -38,6 +39,14 @@
         body.dark .bg-slate-900 { background-color: #020617 !important; }
         body.dark .hover\:bg-slate-50\/30:hover { background-color: #334155 !important; }
         body.dark .hover\:bg-slate-100:hover { background-color: #475569 !important; }
+
+        /* Protección anti-copia */
+        .anti-copy-zone {
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
     </style>
 </head>
 <body class="text-slate-900 selection:bg-indigo-100 selection:text-indigo-900 min-h-screen">
@@ -199,6 +208,7 @@
             const [submitting, setSubmitting] = useState(false);
             const [dashboardTab, setDashboardTab] = useState('create');
             const [darkMode, setDarkMode] = useState(() => localStorage.getItem('audition_dark_mode') === 'true');
+            const [showAwayWarning, setShowAwayWarning] = useState(false);
 
             const [supabaseUrl] = useState(DEFAULT_SUPABASE_URL);
             const [supabaseKey] = useState(DEFAULT_SUPABASE_KEY);
@@ -239,6 +249,37 @@
 
             const [mcOptions, setMcOptions] = useState({});
             const [speakingIndex, setSpeakingIndex] = useState(null);
+
+            // SISTEMA ANTI-COPIA Y AVISO DE PESTAÑA
+            useEffect(() => {
+                if (view !== 'student-test' || examSubmitted) return;
+
+                const handleCopy = (e) => {
+                    e.preventDefault();
+                    showToast("⚠️ Text protection enabled. Use a dictionary or your Classroom notes to find the answers.", "error");
+                };
+                
+                const handleContextMenu = (e) => {
+                    e.preventDefault();
+                    showToast("⚠️ Right-click disabled. The text is protected.", "error");
+                };
+
+                const handleVisibilityChange = () => {
+                    if (document.hidden && view === 'student-test' && !examSubmitted && activeTask) {
+                        setShowAwayWarning(true);
+                    }
+                };
+
+                document.addEventListener('copy', handleCopy);
+                document.addEventListener('contextmenu', handleContextMenu);
+                document.addEventListener("visibilitychange", handleVisibilityChange);
+
+                return () => {
+                    document.removeEventListener('copy', handleCopy);
+                    document.removeEventListener('contextmenu', handleContextMenu);
+                    document.removeEventListener("visibilitychange", handleVisibilityChange);
+                };
+            }, [view, examSubmitted, activeTask]);
 
             useEffect(() => {
                 if (darkMode) document.body.classList.add('dark');
@@ -787,12 +828,12 @@
                     }
                     return match;
                 });
-                doc.setFont("Helvetica", "normal"); doc.setFontSize(9.5); doc.setTextColor(51, 65, 85);
+                doc.setFont("Helvetica", "normal"); doc.setFontSize(10); doc.setTextColor(51, 65, 85);
                 const splitText = doc.splitTextToSize(templateText, 172);
                 let currentY = 55;
                 const maxY = 250;
                 splitText.forEach((line) => {
-                    if (currentY <= maxY) { doc.text(line, 20, currentY); currentY += 5.0; }
+                    if (currentY <= maxY) { doc.text(line, 20, currentY); currentY += 5.2; }
                 });
                 if (audition.youtube_url) {
                     try {
@@ -1000,6 +1041,21 @@
                                             <h2 className="text-xl font-bold text-slate-900">Your Published Audition Tasks</h2>
                                             <div className="flex gap-2 w-full sm:w-auto">
                                                 <div className="relative flex-1 sm:w-72"><span className="absolute left-3 top-2.5 text-slate-400"><Icons.Search /></span><input type="text" placeholder="Search by title, artist or link..." value={searchTermHistory} onChange={e => setSearchTermHistory(e.target.value)} className="w-full pl-9 pr-4 py-2 border rounded-xl text-sm bg-slate-50 outline-none focus:ring-1 focus:ring-indigo-500" /></div>
+                                                
+                                                {/* Backup Button */}
+                                                <button onClick={() => {
+                                                    const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(auditionsList));
+                                                    const downloadAnchorNode = document.createElement('a');
+                                                    downloadAnchorNode.setAttribute("href", dataStr);
+                                                    downloadAnchorNode.setAttribute("download", "backup_audiciones.json");
+                                                    document.body.appendChild(downloadAnchorNode);
+                                                    downloadAnchorNode.click();
+                                                    downloadAnchorNode.remove();
+                                                    showToast("Backup descargado", "success");
+                                                }} className="px-3 py-2 bg-indigo-100 hover:bg-indigo-200 text-indigo-700 rounded-xl text-xs font-bold flex items-center gap-1 whitespace-nowrap">
+                                                    <Icons.Download /> <span className="hidden sm:inline">Backup</span>
+                                                </button>
+
                                                 {auditionsList.length > 0 && (
                                                     <button onClick={handleDeleteAllTasks} className="px-3 py-2 bg-rose-600 hover:bg-rose-700 text-white rounded-xl text-xs font-bold flex items-center gap-1 whitespace-nowrap" title="Delete ALL tasks">
                                                         <Icons.Trash /> <span className="hidden sm:inline">Delete ALL</span>
@@ -1154,12 +1210,16 @@
                                             })()}
                                         </div>
                                     </div>
-                                    <div className="space-y-6">
+                                    
+                                    {/* ZONA PROTEGIDA ANTI-COPIA */}
+                                    <div className="space-y-6 anti-copy-zone relative">
+                                        <div className="absolute inset-0 z-0" title="Text protected"></div>
+                                        
                                         {parsedParagraphs.map((paragraphTokens, pIndex) => {
                                             if (paragraphTokens.length === 0) return null;
                                             const paragraphSpeechText = paragraphTokens.map(t => t.type === 'gap' ? ' blank ' : t.content).join('');
                                             return (
-                                                <div key={pIndex} className="relative group bg-slate-50 p-5 rounded-xl border pr-12">
+                                                <div key={pIndex} className="relative group bg-slate-50 p-5 rounded-xl border pr-12 z-10">
                                                     <button onClick={() => toggleSpeech(paragraphSpeechText, pIndex)} title="Listen in English" className={`absolute top-4 right-4 p-2 rounded-full shadow-sm transition-all ${speakingIndex === pIndex ? 'bg-indigo-600 text-white animate-pulse' : 'bg-white text-indigo-600 border hover:bg-indigo-50'}`}>
                                                         {speakingIndex === pIndex ? <Icons.Stop /> : <Icons.Speaker />}
                                                     </button>
@@ -1190,7 +1250,7 @@
                                                                 return (
                                                                     <span key={tIndex} className="inline-block mx-1 align-bottom">
                                                                         <span className="relative inline-flex flex-col items-center">
-                                                                            <input type="text" placeholder={ph} value={studentAnswers[gapIdx] || ''} onChange={e => handleStudentAnswerChange(gapIdx, e.target.value)} className="w-28 px-2 py-1 text-center border-b-2 border-indigo-500 shadow-sm font-bold text-indigo-800 uppercase outline-none text-sm bg-white rounded-t placeholder-slate-400" />
+                                                                            <input type="text" placeholder={ph} value={studentAnswers[gapIdx] || ''} onChange={e => handleStudentAnswerChange(gapIdx, e.target.value)} className="px-2 py-1 text-center border-b-2 border-indigo-500 shadow-sm font-bold text-indigo-800 uppercase outline-none text-sm bg-white rounded-t placeholder-slate-400" style={{ width: `${Math.max(7, (studentAnswers[gapIdx] || '').length + 2)}ch` }} />
                                                                             {hintText && (<button onClick={() => setUsedHints({...usedHints, [gapIdx]: true})} className="mt-1 text-[10px] bg-amber-100 hover:bg-amber-200 text-amber-900 px-2 py-0.5 font-bold rounded-md whitespace-nowrap flex items-center gap-1 shadow-sm"><Icons.Lightbulb />{usedHints[gapIdx] ? `Hint: ${hintText}` : "Hint (-0.5 pt)"}</button>)}
                                                                         </span>
                                                                     </span>
@@ -1203,6 +1263,20 @@
                                         })}
                                     </div>
                                     <button onClick={handleEvaluation} disabled={!studentName || !studentEmail || submitting} className={`w-full mt-10 font-bold py-4 rounded-xl shadow-md text-base transition-all ${(studentName && studentEmail && !submitting) ? 'bg-indigo-600 text-white hover:bg-indigo-700' : 'bg-slate-300 text-slate-500 cursor-not-allowed'}`}>{submitting ? 'Submitting...' : 'Submit Audition Assessment'}</button>
+                                </div>
+                            </div>
+                        )}
+
+                        {/* AVISO DE ABANDONO DE PESTAÑA */}
+                        {showAwayWarning && (
+                            <div className="fixed inset-0 bg-rose-900/80 backdrop-blur-md z-50 flex items-center justify-center p-4">
+                                <div className="bg-white rounded-2xl p-8 max-w-lg w-full shadow-2xl border-4 border-rose-500 text-center space-y-4">
+                                    <div className="text-5xl">⚠️</div>
+                                    <h3 className="text-2xl font-black text-rose-700">Focus Alert!</h3>
+                                    <p className="text-slate-700 font-medium">We have detected that you left the task. Remember this is for your own learning.</p>
+                                    <p className="text-slate-600 text-sm">You are welcome to review previous auditions in Classroom or use a dictionary (WordReference or DeepL) to look up vocabulary.</p>
+                                    <p className="text-rose-700 font-bold bg-rose-50 p-3 rounded-xl text-sm">However, you must not use AI tools to find the answers. This won't help you learn and will only harm your own progress.</p>
+                                    <button onClick={() => setShowAwayWarning(false)} className="w-full bg-slate-900 hover:bg-slate-800 text-white font-bold py-3.5 rounded-xl text-sm mt-4">Return to the task</button>
                                 </div>
                             </div>
                         )}
