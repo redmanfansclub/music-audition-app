@@ -204,7 +204,8 @@
 
         const App = () => {
             const initialTaskCode = getTaskCodeFromUrl();
-            const [view, setView] = useState(initialTaskCode ? 'student-test' : 'auth');
+            const recoveryHashPresent = typeof window !== 'undefined' && /type=recovery|access_token=/.test(window.location.hash || '');
+            const [view, setView] = useState(initialTaskCode ? 'student-test' : (recoveryHashPresent ? 'reset-password' : 'auth'));
             const [session, setSession] = useState(null);
             const [loading, setLoading] = useState(true);
             const [submitting, setSubmitting] = useState(false);
@@ -218,6 +219,8 @@
 
             const [authEmail, setAuthEmail] = useState('');
             const [authPassword, setAuthPassword] = useState('');
+            const [recoveryPassword, setRecoveryPassword] = useState('');
+            const [recoveryPasswordConfirm, setRecoveryPasswordConfirm] = useState('');
             const [authMode, setAuthMode] = useState('signin');
             const [toast, setToast] = useState(null);
             const [confirmModal, setConfirmModal] = useState(null);
@@ -366,7 +369,7 @@
 
             useEffect(() => {
                 const code = getTaskCodeFromUrl();
-                if (!code && session && (view === 'auth')) setView('dashboard');
+                if (!code && session && view === 'auth') setView('dashboard');
             }, [session, view]);
 
             useEffect(() => {
@@ -376,7 +379,14 @@
             useEffect(() => {
                 if (!supabaseClient) return;
                 supabaseClient.auth.getSession().then(({ data }) => { if (data?.session) setSession(data.session); });
-                const { data: sub } = supabaseClient.auth.onAuthStateChange((_ev, sess) => setSession(sess));
+                const { data: sub } = supabaseClient.auth.onAuthStateChange((event, sess) => {
+                    setSession(sess);
+                    if (event === 'PASSWORD_RECOVERY') {
+                        setRecoveryPassword('');
+                        setRecoveryPasswordConfirm('');
+                        setView('reset-password');
+                    }
+                });
                 return () => sub.subscription.unsubscribe();
             }, [supabaseClient]);
 
@@ -427,6 +437,40 @@
                 } finally {
                     setLoading(false);
                 }
+            };
+
+            const handlePasswordRecoveryRequest = async () => {
+                const normalizedEmail = authEmail.trim().toLowerCase();
+                if (!supabaseClient) { showToast('Cloud connection is unavailable. Please reload and try again.', 'error'); return; }
+                if (!normalizedEmail) { showToast('Enter your teacher email first.', 'error'); return; }
+                setLoading(true);
+                try {
+                    const redirectTo = `${window.location.origin}${window.location.pathname}`;
+                    const { error } = await supabaseClient.auth.resetPasswordForEmail(normalizedEmail, { redirectTo });
+                    if (error) throw error;
+                    showToast('Password recovery email sent. Open the newest email to continue.', 'success');
+                } catch (error) {
+                    showToast(error?.message || 'Could not send the recovery email.', 'error');
+                } finally { setLoading(false); }
+            };
+
+            const handleSetNewPassword = async (e) => {
+                e.preventDefault();
+                if (!supabaseClient) { showToast('Cloud connection is unavailable. Please reload and try again.', 'error'); return; }
+                if (!session) { showToast('The recovery session is missing. Request a new recovery email.', 'error'); setView('auth'); return; }
+                if (recoveryPassword.length < 10) { showToast('Choose a password with at least 10 characters.', 'error'); return; }
+                if (recoveryPassword !== recoveryPasswordConfirm) { showToast('The passwords do not match.', 'error'); return; }
+                setLoading(true);
+                try {
+                    const { error } = await supabaseClient.auth.updateUser({ password: recoveryPassword });
+                    if (error) throw error;
+                    setRecoveryPassword(''); setRecoveryPasswordConfirm(''); setAuthPassword('');
+                    try { window.history.replaceState(null, '', `${window.location.origin}${window.location.pathname}`); } catch (e) {}
+                    setView('dashboard');
+                    showToast('Password updated successfully. You can now sign out and sign in with the new password.', 'success');
+                } catch (error) {
+                    showToast(error?.message || 'Could not update the password.', 'error');
+                } finally { setLoading(false); }
             };
 
             const handleLogout = async () => {
@@ -975,6 +1019,19 @@
                     </header>
 
                     <main className="max-w-5xl mx-auto px-4 mt-8">
+                        {view === 'reset-password' && (
+                            <div className="max-w-md mx-auto bg-white p-8 rounded-2xl shadow-sm border border-slate-200 mt-12">
+                                <h2 className="text-2xl font-bold text-slate-900 mb-2 text-center">Set a New Password</h2>
+                                <p className="text-xs text-slate-500 text-center mb-6">Enter a new password for your teacher account. Use at least 10 characters.</p>
+                                <form onSubmit={handleSetNewPassword} className="space-y-4">
+                                    <div><label className="block text-xs font-bold uppercase text-slate-500 mb-1">New password</label><input type="password" autoComplete="new-password" required minLength={10} value={recoveryPassword} onChange={e => setRecoveryPassword(e.target.value)} className="w-full px-4 py-2.5 border rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none" placeholder="At least 10 characters" /></div>
+                                    <div><label className="block text-xs font-bold uppercase text-slate-500 mb-1">Confirm new password</label><input type="password" autoComplete="new-password" required minLength={10} value={recoveryPasswordConfirm} onChange={e => setRecoveryPasswordConfirm(e.target.value)} className="w-full px-4 py-2.5 border rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none" placeholder="Repeat the new password" /></div>
+                                    <button type="submit" disabled={loading} className="w-full py-3 rounded-xl font-bold text-white bg-indigo-600 hover:bg-indigo-700 disabled:opacity-60 transition-all shadow-md shadow-indigo-100">{loading ? 'Saving…' : 'Save New Password'}</button>
+                                </form>
+                                {!session && <p className="mt-4 text-xs text-amber-700">The recovery session has not loaded. If this message remains, request a new recovery email.</p>}
+                            </div>
+                        )}
+
                         {view === 'auth' && !session && (
                             <div className="max-w-md mx-auto bg-white p-8 rounded-2xl shadow-sm border border-slate-200 mt-12">
                                 <h2 className="text-2xl font-bold text-slate-900 mb-2 text-center">{authMode === 'signup' ? 'Create Teacher Account' : 'Teacher Login'}</h2>
@@ -985,6 +1042,7 @@
                                     <button type="submit" disabled={loading} className="w-full mt-4 py-3 rounded-xl font-bold text-white bg-indigo-600 hover:bg-indigo-700 disabled:opacity-60 transition-all shadow-md shadow-indigo-100">{loading ? 'Please wait…' : authMode === 'signup' ? 'Create Account' : 'Sign In'}</button>
                                 </form>
                                 <button type="button" onClick={() => { setAuthMode(authMode === 'signup' ? 'signin' : 'signup'); setAuthPassword(''); }} className="w-full mt-3 py-2 text-sm font-semibold text-indigo-700 hover:text-indigo-900">{authMode === 'signup' ? 'Already have an account? Sign in' : 'First time here? Create an account'}</button>
+                                {authMode === 'signin' && <button type="button" disabled={loading} onClick={handlePasswordRecoveryRequest} className="w-full py-2 text-sm font-semibold text-slate-500 hover:text-indigo-700 disabled:opacity-60">Forgot password? Send recovery email</button>}
                             </div>
                         )}
 
