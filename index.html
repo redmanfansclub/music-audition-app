@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Music Audition APP — Combined Secure Build</title>
+    <title>Music Audition | Bilingual Master — by Manuel Esteve (IES Infanta Elena)</title>
     <script src="https://unpkg.com/react@18.3.1/umd/react.production.min.js" crossorigin></script>
     <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.production.min.js" crossorigin></script>
     <script src="https://unpkg.com/@babel/standalone@7.24.7/babel.min.js"></script>
@@ -112,10 +112,32 @@
 
         const getEnglishFeedback = (score) => {
             const num = Number(score);
-            if (num >= 9) return { title: "Outstanding Achievement", text: "Exceptional listening comprehension and terminology precision. Excellent musical ear!" };
-            if (num >= 7) return { title: "Great Work", text: "Solid understanding of the audition piece. Keep practicing your musical vocabulary!" };
-            if (num >= 5) return { title: "Satisfactory Performance", text: "Good effort! Review the musical terms and re-listen to improve gap accuracy." };
-            return { title: "Needs Revision", text: "Try re-listening carefully with focused attention on the key vocabulary words." };
+            if (num >= 9) return { title: "Outstanding Achievement", text: "Outstanding work! You have shown an excellent understanding of the musical vocabulary in this audition. Your effort and attention to detail have paid off. Keep up the fantastic work!" };
+            if (num >= 7) return { title: "Good Work", text: "Well done! You have achieved a good result and demonstrated a solid understanding of most of the content. With a little more effort and attention to detail, you can reach an excellent level. Keep it up!" };
+            if (num >= 5) return { title: "Satisfactory Performance", text: "You have passed, but you can do much better. Your understanding is still basic, and you need to work harder to improve your knowledge and accuracy. Do not settle for the minimum!" };
+            if (num >= 3) return { title: "Poor Result", text: "This result is disappointing and not good enough. You have made too many mistakes and need to take your learning much more seriously. I expect a clear improvement in your next audition." };
+            return { title: "Very Poor Result", text: "This result is unacceptable. You have shown very little understanding of the content assessed. I am seriously disappointed and expect much more effort, preparation and commitment from you." };
+        };
+
+        const standardStudentClasses = ['2º ESO A', '2º ESO B', '2º ESO C', '3º ESO A', '3º ESO B', '3º ESO C'];
+        const classSearchMatch = (studentClass, query) => {
+            const raw = String(studentClass || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[º°ª.]/g, '').replace(/\s+/g, '');
+            const q = String(query || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[º°ª.]/g, '').replace(/\s+/g, '');
+            if (!q) return false;
+            const match = raw.match(/^(\d+)(?:eso|curso|bachillerato|bach)?([a-z]*)/);
+            if (!match) return raw.includes(q);
+            const level = match[1];
+            const group = match[2] || '';
+            if (/^[1-3]$/.test(q)) return level === q;
+            if (/^[a-z]$/.test(q)) return group.includes(q);
+            const parsed = q.match(/^(\d+)(?:eso|curso|bachillerato|bach)?([a-z]*)$/);
+            if (parsed) {
+                if (level !== parsed[1]) return false;
+                const requestedGroups = parsed[2] || '';
+                if (!requestedGroups) return true;
+                return requestedGroups.split('').some(letter => group.includes(letter));
+            }
+            return raw.includes(q);
         };
 
         const getQRBase64 = async (text) => {
@@ -154,8 +176,8 @@
                         osc.connect(gain); gain.connect(ctx.destination);
                         osc.start(now + note.t); osc.stop(now + note.t + note.d);
                     });
-                } else if (type === 'success' && numScore >= 5) {
-                    const arpeggio = [{ f: 392.00, t: 0.00, d: 0.20 }, { f: 493.88, t: 0.15, d: 0.20 }, { f: 587.33, t: 0.30, d: 0.20 }, { f: 493.88, t: 0.45, d: 0.20 }, { f: 392.00, t: 0.60, d: 0.20 }, { f: 493.88, t: 0.75, d: 0.20 }, { f: 587.33, t: 0.90, d: 0.20 }, { f: 392.00, t: 1.10, d: 0.45 }];
+                } else if (type === 'success' && numScore >= 7) {
+                    const arpeggio = [{ f: 392.00, t: 0.00, d: 0.22 }, { f: 493.88, t: 0.17, d: 0.22 }, { f: 587.33, t: 0.34, d: 0.22 }, { f: 659.25, t: 0.51, d: 0.25 }, { f: 587.33, t: 0.74, d: 0.22 }, { f: 493.88, t: 0.91, d: 0.22 }, { f: 587.33, t: 1.08, d: 0.22 }, { f: 783.99, t: 1.25, d: 0.50 }];
                     arpeggio.forEach((note) => {
                         const osc = ctx.createOscillator(); const gain = ctx.createGain();
                         osc.type = 'sine'; osc.frequency.setValueAtTime(note.f, now + note.t);
@@ -164,6 +186,9 @@
                         osc.connect(gain); gain.connect(ctx.destination);
                         osc.start(now + note.t); osc.stop(now + note.t + note.d);
                     });
+                } else if (type === 'success' && numScore >= 5) {
+                    const gentle = [{f:523.25,t:0,d:0.18},{f:659.25,t:0.2,d:0.2},{f:587.33,t:0.43,d:0.22},{f:659.25,t:0.68,d:0.38}];
+                    gentle.forEach(note => { const osc=ctx.createOscillator(); const gain=ctx.createGain(); osc.type='sine'; osc.frequency.setValueAtTime(note.f,now+note.t); gain.gain.setValueAtTime(0.10,now+note.t); gain.gain.exponentialRampToValueAtTime(0.001,now+note.t+note.d); osc.connect(gain); gain.connect(ctx.destination); osc.start(now+note.t); osc.stop(now+note.t+note.d); });
                 } else {
                     const suspenseSequence = [{ f: 246.94, t: 0.00, d: 0.30 }, { f: 233.08, t: 0.28, d: 0.30 }, { f: 220.00, t: 0.56, d: 0.45 }, { f: 110.00, t: 1.05, d: 0.35 }, { f: 233.08, t: 1.45, d: 0.35 }, { f: 220.00, t: 1.78, d: 0.35 }, { f: 207.65, t: 2.11, d: 0.60 }];
                     suspenseSequence.forEach((note) => {
@@ -200,6 +225,25 @@
             Sun: () => <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" /></svg>
         };
 
+        const MUSIC_THEMES = {
+            classical: { id:'classical', label:'Classical & Orchestral', genres:'Classical, Baroque, Romantic, opera and symphonic music', icon:'♬', colors:{ primary:'#192747', accent:'#B69A5B', paper:'#F3EBDD', soft:'#E8E0D0', text:'#192747' }, pdf:{ primary:[25,39,71], accent:[182,154,91], paper:[243,235,221], soft:[232,224,208] }, font:'Georgia, "Times New Roman", serif' },
+            jazz: { id:'jazz', label:'Jazz & Blues', genres:'Jazz, blues, swing, bossa nova, soul, Motown, funk, gospel and R&B', icon:'♫', colors:{ primary:'#542D42', accent:'#D49A48', paper:'#FBF3E8', soft:'#F1E1D2', text:'#542D42' }, pdf:{ primary:[84,45,66], accent:[212,154,72], paper:[251,243,232], soft:[241,225,210] }, font:'Trebuchet MS, Arial, sans-serif' },
+            rock: { id:'rock', label:'Rock & Metal', genres:'Rock and roll, classic rock, hard rock, heavy metal, punk, grunge, alternative rock and indie rock', icon:'⚡', colors:{ primary:'#181818', accent:'#C52D35', paper:'#F3F3F3', soft:'#E4E4E4', text:'#181818' }, pdf:{ primary:[24,24,24], accent:[197,45,53], paper:[243,243,243], soft:[228,228,228] }, font:'Trebuchet MS, Arial, sans-serif' },
+            pop: { id:'pop', label:'Pop & Electronic', genres:'Pop, disco, electronic, techno, house, hip-hop, rap, trap, reggae, reggaeton and K-pop', icon:'♫', colors:{ primary:'#30205E', accent:'#42D6D0', paper:'#F5F2FF', soft:'#E8E1FF', text:'#30205E' }, pdf:{ primary:[48,32,94], accent:[66,214,208], paper:[245,242,255], soft:[232,225,255] }, font:'Arial, Helvetica, sans-serif' },
+            folk: { id:'folk', label:'Folk & World Music', genres:'Flamenco, country, Celtic music, folk, Latin music, traditional Spanish music, folk dances and world music', icon:'♧', colors:{ primary:'#435640', accent:'#B47A50', paper:'#F0E4CE', soft:'#E5D5B9', text:'#435640' }, pdf:{ primary:[67,86,64], accent:[180,122,80], paper:[240,228,206], soft:[229,213,185] }, font:'Palatino Linotype, Palatino, Georgia, serif' },
+            film: { id:'film', label:'Film, TV & Game Music', genres:'Film scores, TV soundtracks, video game music, musicals, animation soundtracks and cinematic themes', icon:'✦', colors:{ primary:'#222B48', accent:'#9A83C6', paper:'#F0EDF7', soft:'#E0D9ED', text:'#222B48' }, pdf:{ primary:[34,43,72], accent:[154,131,198], paper:[240,237,247], soft:[224,217,237] }, font:'Arial, Helvetica, sans-serif' }
+        };
+        const getMusicTheme = (value) => {
+            if (value && MUSIC_THEMES[value]) return MUSIC_THEMES[value];
+            const legacy = String(value || '').toLowerCase();
+            if (legacy.includes('jazz') || legacy.includes('blues') || legacy.includes('soul')) return MUSIC_THEMES.jazz;
+            if (legacy.includes('rock') || legacy.includes('metal')) return MUSIC_THEMES.rock;
+            if (legacy.includes('folk') || legacy.includes('flamenco') || legacy.includes('country')) return MUSIC_THEMES.folk;
+            if (legacy.includes('film') || legacy.includes('soundtrack') || legacy.includes('cinema')) return MUSIC_THEMES.film;
+            if (legacy.includes('pop') || legacy.includes('electronic') || legacy.includes('reggae') || legacy.includes('rap')) return MUSIC_THEMES.pop;
+            return MUSIC_THEMES.classical;
+        };
+
         const hydrateRecord = (r, task) => ({ ...r, taskDetails: { ...task, comment: r.full_comment, uppercase_words: (r.details?.words || []).map(w => w.original) } });
 
         const App = () => {
@@ -232,7 +276,7 @@
 
             const [title, setTitle] = useState('');
             const [artist, setArtist] = useState('');
-            const [style, setStyle] = useState('Classical');
+            const [style, setStyle] = useState('classical');
             const [youtubeUrl, setYoutubeUrl] = useState('');
             const [commentText, setCommentText] = useState('');
             const [taskHints, setTaskHints] = useState(Array(10).fill(''));
@@ -482,6 +526,7 @@
 
             const videoId = useMemo(() => extractYouTubeId(youtubeUrl), [youtubeUrl]);
             const uppercaseWords = useMemo(() => commentText.match(/[A-ZÁÉÍÓÚÑ]{2,}/g) || [], [commentText]);
+            const activeMusicTheme = getMusicTheme(activeTask?.style || 'classical');
 
             const handleHintChange = (idx, value) => {
                 const newHints = [...taskHints]; newHints[idx] = value; setTaskHints(newHints);
@@ -536,7 +581,7 @@
                 setAuditionsList(updatedList.filter(a => (a.teacher_email || a.teacher_id)?.toLowerCase() === teacherEmail));
                 const fullTaskUrl = buildStudentUrl(taskId);
                 setCreatedTaskModal({ title: taskPayload.title, fullUrl: fullTaskUrl, taskPayload: taskPayload });
-                setTitle(''); setArtist(''); setYoutubeUrl(''); setCommentText(''); setTaskHints(Array(10).fill(''));
+                setTitle(''); setArtist(''); setStyle('classical'); setYoutubeUrl(''); setCommentText(''); setTaskHints(Array(10).fill(''));
                 showToast("Audition saved to Supabase Cloud.", "success");
                 setLoading(false);
             };
@@ -657,8 +702,20 @@
 
             const filteredScores = useMemo(() => {
                 return scoresList.filter(s => {
-                    const q = normalizeSearch(searchTerm);
+                    const qRaw = String(searchTerm || '').trim();
+                    const q = normalizeSearch(qRaw);
                     if (!q) return true;
+
+                    // A lone 1, 2 or 3 prioritises the course; a lone 4 is a score search.
+                    if (/^[1-3]$/.test(q)) return classSearchMatch(s.student_class, q);
+                    if (q === '4') return String(s.score ?? '').includes(q);
+                    // A lone group letter searches that group across all course levels.
+                    if (/^[a-d]$/.test(q)) return classSearchMatch(s.student_class, q);
+                    // Explicit course/group queries such as 2A, 2 ESO A, 4ESO, 4curso or 4ABC.
+                    if (/^\d+(?:eso|curso|bachillerato|bach)?[a-z]*$/.test(q)) {
+                        return classSearchMatch(s.student_class, q);
+                    }
+
                     const fields = [
                         normalizeSearch(s.student_name),
                         normalizeSearch(s.student_email),
@@ -753,89 +810,133 @@
 
             const generatePDF = (record) => {
                 const { jsPDF } = window.jspdf;
-                const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
-                const feedback = getEnglishFeedback(record.score);
-                doc.setFillColor(250, 252, 255); doc.rect(0, 0, 210, 297, 'F');
-                doc.setDrawColor(79, 70, 229); doc.setLineWidth(1.4); doc.rect(8, 8, 194, 281);
-                doc.setDrawColor(199, 210, 254); doc.setLineWidth(0.6); doc.rect(12, 12, 186, 273);
-                doc.setFont("Helvetica", "bold"); doc.setFontSize(22); doc.setTextColor(67, 56, 202);
-                doc.text("DIPLOMA OF ACCOMPLISHMENT", 105, 25, { align: 'center' });
-                doc.setFont("Helvetica", "bold"); doc.setFontSize(9); doc.setTextColor(99, 102, 241);
-                doc.text("ENGLISH BILINGUAL MUSIC AUDITION MASTER", 105, 31, { align: 'center' });
-                doc.setDrawColor(224, 231, 255); doc.setLineWidth(0.8); doc.line(30, 34, 180, 34);
-                doc.setFont("Helvetica", "normal"); doc.setFontSize(9); doc.setTextColor(100, 116, 139);
-                doc.text("This certificate is proudly presented to:", 105, 41, { align: 'center' });
-                doc.setFont("Helvetica", "bold"); doc.setFontSize(14); doc.setTextColor(15, 23, 42);
+                // Landscape A4 diploma: spacious two-column composition.
+                const doc = new jsPDF({ orientation: 'landscape', unit: 'mm', format: 'a4' });
+                const words = record.details?.words || [];
+                const pieceTitle = (record.taskDetails?.title || record.auditions?.title || 'Audition Piece').toUpperCase();
+                const composerArtist = record.taskDetails?.artist || record.auditions?.artist || 'Unknown Artist';
                 const nameStr = (record.student_name || 'STUDENT').toUpperCase();
                 const classStr = record.student_class ? ` (${record.student_class})` : '';
-                doc.text(`${nameStr}${classStr}`, 105, 49, { align: 'center' });
-                doc.setFillColor(243, 244, 256); doc.roundedRect(20, 55, 170, 26, 3, 3, 'F');
-                const pieceTitle = (record.taskDetails?.title || record.auditions?.title || 'Audition Piece').toUpperCase();
-                const composerArtist = record.taskDetails?.artist || record.auditions?.artist || 'Unknown Composer';
-                doc.setFont("Helvetica", "bold"); doc.setFontSize(20); doc.setTextColor(30, 27, 75);
-                doc.text(pieceTitle, 105, 68, { align: 'center', maxWidth: 160 });
-                doc.setFont("Helvetica", "normal"); doc.setFontSize(10); doc.setTextColor(100, 116, 139);
-                doc.text(`by ${composerArtist}`, 105, 76, { align: 'center' });
-                doc.setFont("Helvetica", "bold"); doc.setFontSize(38); doc.setTextColor(79, 70, 229);
-                doc.text(`${Number(record.score).toFixed(1)}`, 96, 94, { align: 'right' });
-                doc.setFontSize(16); doc.setTextColor(148, 163, 184);
-                doc.text(`/ 10`, 99, 94, { align: 'left' });
-                doc.setFillColor(238, 242, 255); doc.setDrawColor(199, 210, 254); doc.setLineWidth(0.5);
-                doc.roundedRect(20, 102, 170, 24, 4, 4, 'FD');
-                doc.setFont("Helvetica", "bold"); doc.setFontSize(12); doc.setTextColor(67, 56, 202);
-                doc.text(`EVALUATION: ${feedback.title}`, 105, 110, { align: 'center' });
-                doc.setFont("Helvetica", "italic"); doc.setFontSize(9.5); doc.setTextColor(30, 41, 59);
-                const splitFeedback = doc.splitTextToSize(`"${feedback.text}"`, 160);
-                doc.text(splitFeedback, 105, 118, { align: 'center' });
-                doc.setFont("Helvetica", "bold"); doc.setFontSize(10); doc.setTextColor(15, 23, 42);
-                doc.text("DETAILED ANSWER BREAKDOWN", 20, 136);
-                const words = record.details?.words || [];
-                let startY = 140;
-                doc.setFillColor(226, 232, 240); doc.rect(20, startY, 170, 5.5, 'F');
-                doc.setFont("Helvetica", "bold"); doc.setFontSize(8); doc.setTextColor(51, 65, 85);
-                doc.text("GAP #", 23, startY + 4);
-                doc.text("STUDENT ANSWER", 45, startY + 4);
-                doc.text("RESULT", 105, startY + 4);
-                doc.text("TARGET WORD (KEY)", 145, startY + 4);
-                startY += 5.5;
-                words.forEach((w, idx) => {
-                    doc.setFont("Helvetica", "normal"); doc.setFontSize(8);
-                    if (idx % 2 === 0) { doc.setFillColor(248, 250, 252); doc.rect(20, startY, 170, 5.2, 'F'); }
-                    doc.setTextColor(30, 41, 59);
-                    doc.text(`Gap ${idx + 1}`, 23, startY + 3.8);
-                    doc.text(w.answer ? String(w.answer).substring(0, 24) : '(empty)', 45, startY + 3.8);
-                    if (w.correct) {
-                        doc.setTextColor(16, 185, 129);
-                        doc.text(w.usedHint ? "Correct (hint)" : "Correct", 105, startY + 3.8);
-                        doc.setTextColor(71, 85, 105);
-                        doc.text(w.original || '', 145, startY + 3.8);
-                    } else {
-                        doc.setTextColor(225, 29, 72);
-                        doc.text("Incorrect", 105, startY + 3.8);
-                        doc.setTextColor(148, 163, 184);
-                        doc.text("---", 145, startY + 3.8);
-                    }
-                    startY += 5.2;
+                const score = Number(record.score || 0);
+                const issued = new Date(record.created_at || Date.now()).toLocaleDateString();
+                const theme = getMusicTheme(record.taskDetails?.style || record.auditions?.style || 'classical');
+                const pc = theme.pdf;
+                const pdfFont = theme.id === 'classical' || theme.id === 'folk' ? 'Times' : 'Helvetica';
+
+                // Paper, double frame and clean corner ornaments. No unsupported music glyphs.
+                doc.setFillColor(...pc.paper); doc.rect(0, 0, 297, 210, 'F');
+                doc.setDrawColor(...pc.primary); doc.setLineWidth(1.4); doc.rect(5, 5, 287, 200);
+                doc.setDrawColor(...pc.accent); doc.setLineWidth(0.55); doc.rect(9, 9, 279, 192);
+                doc.setDrawColor(...pc.accent); doc.setLineWidth(0.7);
+                [[14,14,1,1],[283,14,-1,1],[14,196,1,-1],[283,196,-1,-1]].forEach(([x,y,dx,dy]) => {
+                    doc.line(x, y, x + 12*dx, y); doc.line(x, y, x, y + 12*dy); doc.circle(x + 4*dx, y + 4*dy, 1.2, 'S');
                 });
-                const ornY = 232;
-                doc.setDrawColor(199, 210, 254); doc.setLineWidth(0.4);
-                doc.line(30, ornY, 180, ornY);
-                doc.line(30, ornY + 1.2, 180, ornY + 1.2);
-                doc.line(30, ornY + 2.4, 180, ornY + 2.4);
-                doc.setFont("Helvetica", "bold"); doc.setFontSize(11); doc.setTextColor(67, 56, 202);
-                doc.text("AUDIO MASTER AUDITION", 105, ornY + 9, { align: 'center' });
-                doc.setDrawColor(199, 210, 254); doc.setLineWidth(0.4);
-                doc.line(30, ornY + 12, 180, ornY + 12);
-                doc.line(30, ornY + 13.2, 180, ornY + 13.2);
-                doc.line(30, ornY + 14.4, 180, ornY + 14.4);
-                doc.setFont("Helvetica", "italic"); doc.setFontSize(8); doc.setTextColor(100, 116, 139);
-                doc.text('"Music is the universal language of mankind."', 105, ornY + 21, { align: 'center' });
-                doc.setFont("Helvetica", "normal"); doc.setFontSize(8); doc.setTextColor(148, 163, 184);
-                doc.text(`Issued on: ${new Date(record.created_at || Date.now()).toLocaleDateString()}`, 105, ornY + 28, { align: 'center' });
-                doc.setDrawColor(148, 163, 184); doc.setLineWidth(0.5);
-                doc.line(75, ornY + 36, 135, ornY + 36);
-                doc.setFont("Helvetica", "bold"); doc.setFontSize(8.5); doc.setTextColor(15, 23, 42);
-                doc.text("Bilingual Music Department Teacher Signature", 105, ornY + 40, { align: 'center' });
+
+                // LEFT: certificate identity and feedback.
+                doc.setTextColor(...pc.primary); doc.setFont(pdfFont, 'bold'); doc.setFontSize(27);
+                doc.text('MUSIC AUDITION', 88, 31, { align: 'center' });
+                doc.setFont('Helvetica', 'normal'); doc.setFontSize(5.8); doc.setTextColor(115, 115, 115);
+                doc.text('by Manuel Esteve (IES Infanta Elena)', 148, 14, { align: 'right' });
+                doc.setTextColor(...pc.accent); doc.setFont('Helvetica', 'bold'); doc.setFontSize(10);
+                doc.text(theme.label.toUpperCase(), 88, 40, { align: 'center' });
+                doc.setDrawColor(...pc.accent); doc.setLineWidth(0.8); doc.line(27, 45, 149, 45);
+                doc.setFont('Helvetica', 'normal'); doc.setFontSize(10); doc.setTextColor(71, 85, 105);
+                doc.text('This certificate is awarded to', 88, 56, { align: 'center' });
+                doc.setFont(pdfFont, 'bold'); doc.setFontSize(nameStr.length > 27 ? 16 : 21); doc.setTextColor(...pc.primary);
+                doc.text(nameStr, 88, 70, { align: 'center', maxWidth: 137 });
+                if (classStr) { doc.setFont('Helvetica', 'normal'); doc.setFontSize(9); doc.setTextColor(100, 116, 139); doc.text(classStr.trim(), 88, 77, { align: 'center' }); }
+                doc.setDrawColor(...pc.accent); doc.setLineWidth(0.5); doc.line(38, 83, 138, 83);
+                doc.setFont('Helvetica', 'normal'); doc.setFontSize(10); doc.setTextColor(71, 85, 105);
+                doc.text('for completing the listening audition', 88, 92, { align: 'center' });
+                doc.setFont(pdfFont, 'bold'); doc.setFontSize(pieceTitle.length > 30 ? 14 : 18); doc.setTextColor(...pc.primary);
+                doc.text(doc.splitTextToSize(pieceTitle, 137), 88, 103, { align: 'center' });
+                doc.setFont('Helvetica', 'normal'); doc.setFontSize(10); doc.setTextColor(100, 116, 139);
+                doc.text(`Artist: ${composerArtist}`, 88, 114, { align: 'center', maxWidth: 137 });
+
+                // Feedback panel: title in the theme colour, explanatory text in a softer mid-tone.
+                doc.setFillColor(239, 244, 250); doc.setDrawColor(199, 210, 254); doc.setLineWidth(0.35);
+                doc.roundedRect(20, 125, 136, 43, 4, 4, 'FD');
+                const feedback = getEnglishFeedback(score);
+                doc.setFont('Helvetica', 'bold'); doc.setFontSize(8); doc.setTextColor(...pc.primary);
+                doc.text("TEACHER'S FEEDBACK", 27, 133);
+                doc.setFont(pdfFont, 'bold'); doc.setFontSize(16); doc.setTextColor(...pc.primary);
+                doc.text(feedback.title + (score >= 5 ? '!' : ''), 27, 142);
+                doc.setFont('Helvetica', 'normal'); doc.setFontSize(9); doc.setTextColor(91, 105, 125);
+                const feedbackLines = doc.splitTextToSize(feedback.text, 121);
+                doc.text(feedbackLines.slice(0, 3), 27, 149, { lineHeightFactor: 1.25 });
+
+                // High-contrast call-to-action: the instruction itself is white and prominent.
+                doc.setFillColor(...pc.primary); doc.roundedRect(20, 173, 136, 17, 3, 3, 'F');
+                doc.setFont('Helvetica', 'bold'); doc.setFontSize(7); doc.setTextColor(255, 255, 255);
+                doc.text('NEXT STEP', 88, 178, { align: 'center' });
+                doc.setFont('Helvetica', 'bold'); doc.setFontSize(8.2); doc.setTextColor(255, 255, 255);
+                doc.text('Download this diploma PDF and upload it to Google Classroom.', 88, 185, { align: 'center', maxWidth: 128 });
+
+                // RIGHT: grade and vocabulary list.
+                doc.setFillColor(...pc.primary); doc.roundedRect(180, 18, 91, 37, 4, 4, 'F');
+                doc.setDrawColor(...pc.accent); doc.setLineWidth(0.9); doc.roundedRect(182, 20, 87, 33, 3, 3, 'S');
+                doc.setFont('Helvetica', 'bold'); doc.setFontSize(9); doc.setTextColor(226, 232, 240);
+                doc.text('FINAL GRADE', 225.5, 29, { align: 'center' });
+                doc.setFontSize(25); doc.setTextColor(255, 255, 255);
+                doc.text(`${score.toFixed(1)} / 10`, 225.5, 45, { align: 'center' });
+
+                doc.setFont('Helvetica', 'bold'); doc.setFontSize(10); doc.setTextColor(...pc.primary);
+                doc.text('AUDITION VOCABULARY', 225.5, 66, { align: 'center' });
+                doc.setDrawColor(...pc.accent); doc.setLineWidth(0.4); doc.line(169, 71, 282, 71);
+                doc.setDrawColor(...pc.accent); doc.setLineWidth(0.3); doc.line(225.5, 76, 225.5, 137);
+                const colX = [176, 235]; const rowHeight = 11; const startY = 82;
+                words.slice(0, 10).forEach((item, idx) => {
+                    const col = idx < 5 ? 0 : 1; const row = idx % 5;
+                    doc.setFont('Helvetica', 'normal'); doc.setFontSize(9.5);
+                    doc.setTextColor(item.correct ? 21 : 210, item.correct ? 128 : 35, item.correct ? 61 : 35);
+                    const word = String(item.original || `WORD ${idx + 1}`).toUpperCase();
+                    doc.text(`${String(idx + 1).padStart(2, '0')}. ${word}`, colX[col], startY + row * rowHeight, { maxWidth: 47 });
+                });
+                // Genre-specific vector illustration: lightweight, crisp and embedded in the PDF.
+                doc.setDrawColor(...pc.accent); doc.setFillColor(...pc.accent); doc.setLineWidth(0.65);
+                if (theme.id === 'rock') {
+                    // Lightning bolts, guitar body and the iconic rock hand silhouette.
+                    [[180,148],[207,153],[255,146]].forEach(([x,y]) => { doc.line(x,y,x+5,y-9); doc.line(x+5,y-9,x+2,y-9); doc.line(x+2,y-9,x+8,y-20); });
+                    doc.ellipse(225,153,5,7,'S'); doc.ellipse(230,150,4,5,'S'); doc.line(228,146,238,137); doc.line(238,137,238,151); doc.line(232,151,232,161);
+                    // Rock-hand gesture, stylised as angular strokes.
+                    doc.line(264,160,262,151); doc.line(262,151,260,139); doc.line(260,139,262,137); doc.line(262,137,266,148); doc.line(266,148,267,132); doc.line(267,132,270,132); doc.line(270,132,271,148); doc.line(271,148,275,139); doc.line(275,139,278,141); doc.line(278,141,275,154); doc.line(275,154,270,161); doc.line(270,161,264,160);
+                } else if (theme.id === 'pop') {
+                    // Neon-style sound waves, stars and a compact synthesiser.
+                    for (let i=0;i<4;i++) { doc.setLineWidth(0.45+i*0.12); doc.ellipse(224,151,10+i*5,4+i*2,'S'); }
+                    [[181,147],[199,158],[253,145],[271,157]].forEach(([x,y])=>{ doc.line(x-2,y,x+2,y); doc.line(x,y-2,x,y+2); doc.line(x-1.5,y-1.5,x+1.5,y+1.5); doc.line(x-1.5,y+1.5,x+1.5,y-1.5); });
+                    doc.rect(240,153,34,10,'S'); for(let x=243;x<271;x+=4) doc.line(x,155,x,158);
+                } else if (theme.id === 'jazz') {
+                    // Saxophone-like curved silhouette and a vinyl record.
+                    doc.circle(260,151,9,'S'); doc.circle(260,151,5,'S'); doc.circle(260,151,1.5,'F');
+                    doc.setLineWidth(1.4); doc.line(187,142,187,158); doc.line(187,142,193,139); doc.line(193,139,196,145); doc.line(196,145,196,157); doc.line(196,157,202,160); doc.line(202,160,202,164); doc.line(202,164,195,164); doc.line(195,164,191,158);
+                    doc.setLineWidth(0.45); [145,150,155].forEach(y=>doc.line(207,y,238,y));
+                } else if (theme.id === 'folk') {
+                    // Mountain ridge, winding path, pine trees and acoustic-guitar outline.
+                    doc.line(174,160,190,148); doc.line(190,148,201,157); doc.line(201,157,216,144); doc.line(216,144,231,159); doc.line(231,159,244,150); doc.line(244,150,259,160);
+                    [[181,157],[188,159],[236,158],[246,157]].forEach(([x,y])=>{doc.line(x,y-6,x-3,y-2);doc.line(x,y-6,x+3,y-2);doc.line(x-3,y-2,x+3,y-2);doc.line(x,y-2,x,y+1);});
+                    doc.ellipse(270,153,4,6,'S'); doc.ellipse(270,160,3,4,'S'); doc.line(270,149,270,136); doc.line(270,136,278,132); doc.line(268,153,272,153);
+                } else if (theme.id === 'film') {
+                    // Film reel, cinematic stars and sweeping soundtrack lines.
+                    doc.circle(190,153,10,'S'); [[186,149],[194,149],[186,157],[194,157]].forEach(([x,y])=>doc.circle(x,y,2,'S'));
+                    doc.line(200,153,212,153); doc.line(212,153,219,148); doc.line(219,148,225,155); doc.line(225,155,233,151); doc.line(233,151,241,158); doc.line(241,158,250,152); doc.line(250,152,260,157);
+                    [[245,143],[262,145],[275,150]].forEach(([x,y])=>{doc.line(x-2,y,x+2,y);doc.line(x,y-2,x,y+2);doc.line(x-1.5,y-1.5,x+1.5,y+1.5);doc.line(x-1.5,y+1.5,x+1.5,y-1.5);});
+                } else {
+                    // Classical: flowing staff, notes, piano keys and a subtle Baroque flourish.
+                    for (let i=0;i<5;i++) doc.line(171,145+i*3,282,145+i*3);
+                    [[181,154],[194,148],[207,157],[220,150],[234,155],[247,148],[261,154],[274,150]].forEach(([x,y],idx)=>{doc.ellipse(x,y,1.7,1.05,'F');doc.line(x+1.2,y,x+1.2,y-(idx%2?8:10));});
+                    doc.rect(238,158,38,6,'S'); for(let x=243;x<275;x+=4) doc.line(x,158,x,164);
+                    doc.line(177,163,184,159); doc.line(184,159,188,163); doc.line(188,163,195,157);
+                }
+                // Small, clean footer details.
+                doc.setFont('Helvetica', 'italic'); doc.setFontSize(10); doc.setTextColor(...pc.primary);
+                doc.text('“Music is the universal language of mankind.”', 227, 171, { align: 'center', maxWidth: 108 });
+                doc.setFont('Helvetica', 'normal'); doc.setFontSize(8); doc.setTextColor(100, 116, 139);
+                doc.text('Henry W. Longfellow', 227, 177, { align: 'center' });
+                doc.setDrawColor(...pc.accent); doc.setLineWidth(0.4); doc.line(174, 182, 280, 182);
+                doc.setFontSize(8); doc.text(`Issued on: ${issued}`, 177, 190);
+                doc.setFont('Helvetica', 'bold'); doc.setTextColor(...pc.primary);
+                doc.text('Bilingual Music Department Teacher', 277, 190, { align: 'right' });
+
                 const blob = doc.output('blob');
                 window.open(window.URL.createObjectURL(blob), '_blank');
             };
@@ -1001,7 +1102,7 @@
 
                     <header className="bg-white border-b border-slate-200 sticky top-0 z-40">
                         <div className="max-w-5xl mx-auto px-4 py-4 flex justify-between items-center">
-                            <h1 className="text-xl font-extrabold text-indigo-600 tracking-tight flex items-center gap-2">🎵 Music Audition <span className="font-medium text-slate-400 hidden sm:inline">| Bilingual Master</span></h1>
+                            <div className="flex flex-col"><h1 className="text-xl font-extrabold text-indigo-600 tracking-tight flex items-center gap-2">🎵 Music Audition <span className="font-medium text-slate-400 hidden sm:inline">| Bilingual Master</span></h1><span className="text-[8px] text-slate-400 ml-7 -mt-0.5 tracking-wide">by Manuel Esteve (IES Infanta Elena)</span></div>
                             <div className="flex items-center gap-2">
                                 {session && view !== 'student-test' && view !== 'results' && (
                                     <a href={SUPABASE_DASHBOARD_URL} target="_blank" rel="noopener noreferrer" className="text-xs font-bold px-3 py-1.5 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 rounded-lg flex items-center gap-1.5" title="Open Supabase Dashboard">
@@ -1018,7 +1119,7 @@
                         </div>
                     </header>
 
-                    <main className="max-w-5xl mx-auto px-4 mt-8">
+                    <main className="max-w-6xl mx-auto px-4 mt-8">
                         {view === 'reset-password' && (
                             <div className="max-w-md mx-auto bg-white p-8 rounded-2xl shadow-sm border border-slate-200 mt-12">
                                 <h2 className="text-2xl font-bold text-slate-900 mb-2 text-center">Set a New Password</h2>
@@ -1095,6 +1196,26 @@
                                                 {videoId ? (
                                                     <><iframe className="w-full h-full" src={`https://www.youtube.com/embed/${videoId}?rel=0&enablejsapi=1`} title="Preview" frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowFullScreen></iframe><a href={`https://www.youtube.com/watch?v=${videoId}`} target="_blank" rel="noopener noreferrer" className="absolute bottom-2 right-2 bg-black/70 hover:bg-black text-white text-[10px] font-bold px-2.5 py-1 rounded-lg backdrop-blur-sm flex items-center gap-1 z-10"><Icons.External /> Open in YouTube</a></>
                                                 ) : (<div className="text-center p-4"><span className="text-slate-500 font-bold text-xs block mb-1">Video Preview</span><span className="text-slate-600 text-[11px]">Enter a valid YouTube URL</span></div>)}
+                                            </div>
+                                            <div className="mt-5 bg-white p-4 md:p-5 rounded-2xl shadow-sm border border-slate-200">
+                                                <div className="mb-4">
+                                                <label className="block text-xs font-bold uppercase text-slate-500 mb-2">Visual Theme</label>
+                                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                                                    {Object.values(MUSIC_THEMES).map(theme => (
+                                                        <button key={theme.id} type="button" onClick={() => setStyle(theme.id)} aria-pressed={style === theme.id}
+                                                            className={`text-left p-2.5 rounded-xl border-2 transition-all ${style === theme.id ? 'ring-2 ring-offset-1' : 'hover:border-slate-300'}`}
+                                                            style={{ backgroundColor: style === theme.id ? theme.colors.paper : '#FFFFFF', borderColor: style === theme.id ? theme.colors.accent : '#E2E8F0', '--tw-ring-color': theme.colors.accent }}>
+                                                            <div className="flex items-center gap-2 mb-1">
+                                                                <span className="w-9 h-9 rounded-lg flex items-center justify-center text-lg shrink-0" style={{backgroundColor:theme.colors.primary,color:theme.colors.accent}}>{theme.icon}</span>
+                                                                <span className="text-xs font-extrabold" style={{color:theme.colors.primary}}>{theme.label}</span>
+                                                                {style === theme.id && <span className="ml-auto text-[10px] font-black uppercase tracking-wide" style={{color:theme.colors.primary}}>Selected</span>}
+                                                            </div>
+                                                            <span className="block text-[10px] leading-snug text-slate-500">{theme.genres}</span>
+                                                        </button>
+                                                    ))}
+                                                </div>
+                                                <p className="text-[11px] text-slate-400 mt-2">This theme changes the student audition page and diploma. The teacher dashboard stays indigo.</p>
+                                            </div>
                                             </div>
                                         </div>
                                     </div>
@@ -1252,10 +1373,11 @@
                                     <div><label className="block text-[10px] font-bold text-slate-500 uppercase mb-1">Full Name</label><input type="text" placeholder="e.g. Alex Morgan" value={studentName} onChange={e => setStudentName(e.target.value)} className="w-full px-3 py-2 bg-slate-50 border rounded-lg text-sm outline-none focus:border-indigo-500" /></div>
                                     <div>
                                         <label className="block text-[10px] font-bold text-slate-500 uppercase mb-1">Group / Class</label>
-                                        <select value={studentClass} onChange={e => setStudentClass(e.target.value)} className="w-full px-3 py-2 bg-slate-50 border rounded-lg text-sm outline-none focus:border-indigo-500 font-medium">
-                                            <option value="2º ESO A">2º ESO A</option><option value="2º ESO B">2º ESO B</option><option value="2º ESO C">2º ESO C</option>
-                                            <option value="3º ESO A">3º ESO A</option><option value="3º ESO B">3º ESO B</option><option value="3º ESO C">3º ESO C</option>
+                                        <select value={standardStudentClasses.includes(studentClass) ? studentClass : '__custom__'} onChange={e => setStudentClass(e.target.value === '__custom__' ? '' : e.target.value)} className="w-full px-3 py-2 bg-slate-50 border rounded-lg text-sm outline-none focus:border-indigo-500 font-medium">
+                                            {standardStudentClasses.map(group => <option key={group} value={group}>{group}</option>)}
+                                            <option value="__custom__">Other course or group…</option>
                                         </select>
+                                        {!standardStudentClasses.includes(studentClass) && <input type="text" value={studentClass} onChange={e => setStudentClass(e.target.value)} placeholder="e.g. 4º ESO A, 1º Bachillerato" className="w-full mt-2 px-3 py-2 bg-slate-50 border rounded-lg text-sm outline-none focus:border-indigo-500" required aria-label="Custom course or group" />}
                                     </div>
                                     <div><label className="block text-[10px] font-bold text-slate-500 uppercase mb-1">School Email</label><input type="email" placeholder="@alu.murciaeduca.es" value={studentEmail} onChange={e => setStudentEmail(e.target.value)} onBlur={async () => { const already = await checkIfAlreadySubmitted(studentEmail); setAlreadySubmittedWarning(already); }} className="w-full px-3 py-2 bg-slate-50 border rounded-lg text-sm outline-none focus:border-indigo-500" /></div>
                                 </div>
@@ -1264,13 +1386,13 @@
                                         <strong>⚠️ Note:</strong> You already submitted this task with this email. If you submit again, your previous score will be replaced.
                                     </div>
                                 )}
-                                <div className="bg-white p-6 md:p-8 rounded-2xl shadow-md border border-slate-200">
-                                    <div className="mb-6 pb-6 border-b flex flex-col md:flex-row gap-6 items-center">
-                                        <div className="flex-1"><h2 className="text-2xl font-extrabold text-slate-900">{activeTask.title}</h2><p className="text-indigo-600 font-medium">{activeTask.artist}</p></div>
-                                        <div className="w-full md:w-72 shrink-0 rounded-xl overflow-hidden border bg-slate-900 aspect-video relative flex flex-col items-center justify-center">
+                                <div className="p-6 md:p-8 rounded-2xl shadow-md border" style={{backgroundColor:activeMusicTheme.colors.paper,borderColor:activeMusicTheme.colors.soft,fontFamily:activeMusicTheme.font}}>
+                                    <div className="mb-6 pb-6 border-b flex flex-col md:flex-row gap-6 items-center" style={{borderColor:activeMusicTheme.colors.soft}}>
+                                        <div className="flex-1"><div className="text-[10px] font-extrabold uppercase tracking-[0.18em] mb-2" style={{color:activeMusicTheme.colors.accent}}>{activeMusicTheme.icon} {activeMusicTheme.label}</div><h2 className="text-2xl font-extrabold" style={{color:activeMusicTheme.colors.primary}}>{activeTask.title}</h2><p className="font-medium" style={{color:activeMusicTheme.colors.primary,opacity:0.8}}>{activeTask.artist}</p></div>
+                                        <div className="w-full md:w-80 shrink-0 rounded-xl overflow-hidden border bg-slate-900 aspect-video relative flex flex-col items-center justify-center">
                                             {(() => {
                                                 const studentVideoId = extractYouTubeId(activeTask.youtube_url);
-                                                if (studentVideoId) return (<><iframe className="w-full h-full" src={`https://www.youtube.com/embed/${studentVideoId}?rel=0&enablejsapi=1`} title="Student Video" frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowFullScreen></iframe><a href={`https://www.youtube.com/watch?v=${studentVideoId}`} target="_blank" rel="noopener noreferrer" className="absolute bottom-1.5 right-1.5 bg-black/70 hover:bg-black text-white text-[10px] font-bold px-2 py-0.5 rounded-md backdrop-blur-sm flex items-center gap-1 z-10"><Icons.External /> YouTube</a></>);
+                                                if (studentVideoId) return (<><iframe className="w-full h-full" src={`https://www.youtube-nocookie.com/embed/${studentVideoId}?rel=0`} title="Student Video" frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowFullScreen></iframe><a href={`https://www.youtube.com/watch?v=${studentVideoId}`} target="_blank" rel="noopener noreferrer" className="absolute bottom-1.5 right-1.5 bg-black/70 hover:bg-black text-white text-[10px] font-bold px-2 py-0.5 rounded-md backdrop-blur-sm flex items-center gap-1 z-10"><Icons.External /> YouTube</a></>);
                                                 return (<div className="w-full h-full flex flex-col items-center justify-center text-xs text-slate-500 font-bold p-2 text-center"><span>Video Not Available</span></div>);
                                             })()}
                                         </div>
@@ -1293,14 +1415,21 @@
                                                             if (token.type === 'text') return <span key={tIndex}>{token.content}</span>;
                                                             const gapIdx = token.gapIndex;
                                                             const hintText = activeTask.hints && activeTask.hints[gapIdx];
-                                                            const clue = (activeTask.gap_clues || [])[gapIdx] || { len: 5, first: '', last2: '' };
-                                                            const len = clue.len;
+                                                            // Use only the safe clue metadata returned by the public Supabase RPC.
+                                                            // The visible token may intentionally be masked (e.g. XXXXXXX).
+                                                            const safeClues = Array.isArray(activeTask.gap_clues) ? activeTask.gap_clues : [];
+                                                            let clue = safeClues[gapIdx];
+                                                            if (!clue || !Number.isInteger(Number(clue.len)) || Number(clue.len) < 1) {
+                                                                const maskedToken = String(token.word || '').replace(/[^A-ZÁÉÍÓÚÑ]/gi, '').toUpperCase();
+                                                                clue = { len: maskedToken.length || 5, first: '', last2: '' };
+                                                            }
+                                                            const len = Number(clue.len);
                                                             if ([2, 7].includes(gapIdx)) {
                                                                 const options = mcOptions[gapIdx] || [];
                                                                 return (
                                                                     <span key={tIndex} className="inline-block mx-1 align-bottom">
                                                                         <span className="relative inline-flex flex-col items-center">
-                                                                            <select value={studentAnswers[gapIdx] || ''} onChange={e => handleStudentAnswerChange(gapIdx, e.target.value)} className="w-36 px-2 py-1 text-center border-b-2 border-indigo-500 shadow-sm font-bold text-indigo-800 uppercase outline-none text-sm bg-white rounded-t cursor-pointer">
+                                                                            <select value={studentAnswers[gapIdx] || ''} onChange={e => handleStudentAnswerChange(gapIdx, e.target.value)} className="px-2 py-1 text-center border-b-2 border-indigo-500 shadow-md font-bold text-indigo-800 uppercase outline-none text-sm bg-white rounded-t cursor-pointer transition-shadow focus:shadow-lg" style={{width: `${Math.max(12, ...options.map(opt => String(opt || '').length * 1.35 + 4))}ch`, maxWidth: 'min(88vw, 42ch)', boxSizing: 'border-box', fontFamily: 'Arial, Helvetica, sans-serif', fontWeight: 600, letterSpacing: '0.01em'}}>
                                                                                 <option value="" disabled>Select...</option>
                                                                                 {options.map((opt, i) => <option key={i} value={opt}>{opt}</option>)}
                                                                             </select>
@@ -1309,14 +1438,22 @@
                                                                     </span>
                                                                 );
                                                             } else {
-                                                                let ph = `Gap ${gapIdx + 1}`;
-                                                                if ([0, 4, 6, 8].includes(gapIdx)) ph = clue.first + ' _'.repeat(Math.max(0, len - 1));
-                                                                else if ([1, 3, 5, 9].includes(gapIdx)) ph = '_ '.repeat(Math.max(0, len - 2)) + clue.last2;
+                                                                // Render separated character positions so the clue remains legible.
+                                                                // The answer itself remains protected; only safeClues supplies visible letters.
+                                                                let clueDisplay = `Gap ${gapIdx + 1}`;
+                                                                if ([0, 4, 6, 8].includes(gapIdx)) {
+                                                                    clueDisplay = [clue.first || '', ...Array(Math.max(0, len - 1)).fill('_')].join(' ');
+                                                                } else if ([1, 3, 5, 9].includes(gapIdx)) {
+                                                                    clueDisplay = [...Array(Math.max(0, len - 2)).fill('_'), ...(String(clue.last2 || '').split(''))].join(' ');
+                                                                }
+                                                                const answerLength = String(studentAnswers[gapIdx] || '').length;
+                                                                // Generous width: approx. two character units per target letter + side padding.
+                                                                const fieldWidthCh = Math.max(8, len * 2 + 2, answerLength * 1.8 + 2, clueDisplay.length * 0.9 + 2);
                                                                 return (
-                                                                    <span key={tIndex} className="inline-block mx-1 align-bottom">
-                                                                        <span className="relative inline-flex flex-col items-center">
-                                                                            <input type="text" placeholder={ph} value={studentAnswers[gapIdx] || ''} onChange={e => handleStudentAnswerChange(gapIdx, e.target.value)} className="px-2 py-1 text-center border-b-2 border-indigo-500 shadow-sm font-bold text-indigo-800 uppercase outline-none text-sm bg-white rounded-t placeholder-slate-400" style={{ width: `${Math.max(7, (studentAnswers[gapIdx] || '').length + 2)}ch` }} />
-                                                                            {hintText && (<button onClick={() => setUsedHints({...usedHints, [gapIdx]: true})} className="mt-1 text-[10px] bg-amber-100 hover:bg-amber-200 text-amber-900 px-2 py-0.5 font-bold rounded-md whitespace-nowrap flex items-center gap-1 shadow-sm"><Icons.Lightbulb />{usedHints[gapIdx] ? `Hint: ${hintText}` : "Hint (-0.5 pt)"}</button>)}
+                                                                    <span key={tIndex} className="inline-block mx-1 align-bottom max-w-full">
+                                                                        <span className="relative inline-flex max-w-full flex-col items-center align-bottom">
+                                                                            <input type="text" aria-label={`Answer for gap ${gapIdx + 1}`} placeholder={clueDisplay} value={studentAnswers[gapIdx] || ''} onChange={e => handleStudentAnswerChange(gapIdx, e.target.value)} size={Math.max(8, len * 2, answerLength * 2)} className="px-3 py-1.5 text-center border-b-2 border-indigo-500 shadow-md font-semibold text-indigo-800 uppercase outline-none text-sm bg-white rounded-t placeholder-slate-500 transition-shadow focus:shadow-lg" style={{ width: `${fieldWidthCh}ch`, maxWidth: 'min(88vw, 42ch)', boxSizing: 'border-box', letterSpacing: '0.04em', fontFamily: 'Arial, Helvetica, sans-serif', fontWeight: 600 }} />
+                                                                            {hintText && (<button onClick={() => setUsedHints({...usedHints, [gapIdx]: true})} className="mt-1 text-[10px] bg-amber-100 hover:bg-amber-200 text-amber-900 px-2 py-0.5 font-semibold rounded-md whitespace-nowrap flex items-center gap-1 shadow-sm"><Icons.Lightbulb />{usedHints[gapIdx] ? `Hint: ${hintText}` : "Hint (-0.5 pt)"}</button>)}
                                                                         </span>
                                                                     </span>
                                                                 );
@@ -1347,36 +1484,32 @@
                         )}
 
                         {view === 'results' && finalScoreRecord && (
-                            <div className="max-w-2xl mx-auto bg-white p-8 md:p-10 rounded-3xl shadow-xl border text-center relative overflow-hidden">
+                            <div className="max-w-2xl mx-auto p-8 md:p-10 rounded-3xl shadow-xl border text-center relative overflow-hidden" style={{backgroundColor:getMusicTheme(finalScoreRecord.taskDetails?.style || finalScoreRecord.auditions?.style || 'classical').colors.paper, borderColor:getMusicTheme(finalScoreRecord.taskDetails?.style || finalScoreRecord.auditions?.style || 'classical').colors.accent}}>
                                 {(() => {
                                     const feedback = getEnglishFeedback(finalScoreRecord.score);
                                     return (
                                         <div className="relative z-10 space-y-6">
                                             <div>
-                                                <div className="w-20 h-20 bg-indigo-50 rounded-full flex items-center justify-center mx-auto mb-4 border-4 border-white shadow-sm"><span className="text-4xl">🎓</span></div>
-                                                <h2 className="text-3xl font-extrabold text-slate-900 mb-1">Assessment Submitted</h2>
+                                                <div className="w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-4 border-4 border-white shadow-sm" style={{backgroundColor:getMusicTheme(finalScoreRecord.taskDetails?.style || finalScoreRecord.auditions?.style || 'classical').colors.soft,color:getMusicTheme(finalScoreRecord.taskDetails?.style || finalScoreRecord.auditions?.style || 'classical').colors.primary}}><span className="text-4xl">{getMusicTheme(finalScoreRecord.taskDetails?.style || finalScoreRecord.auditions?.style || 'classical').icon}</span></div>
+                                                <h2 className="text-3xl font-bold mb-1" style={{color:getMusicTheme(finalScoreRecord.taskDetails?.style || finalScoreRecord.auditions?.style || 'classical').colors.primary,fontFamily:getMusicTheme(finalScoreRecord.taskDetails?.style || finalScoreRecord.auditions?.style || 'classical').font}}>Assessment Submitted</h2>
                                                 <p className="text-xs text-slate-400">{finalScoreRecord.student_name} ({finalScoreRecord.student_class})</p>
                                             </div>
-                                            <div className="bg-white border-2 border-indigo-50 px-8 py-6 rounded-3xl inline-block mx-auto shadow-sm">
+                                            <div className="border-2 px-8 py-6 rounded-3xl inline-block mx-auto shadow-sm" style={{backgroundColor:getMusicTheme(finalScoreRecord.taskDetails?.style || finalScoreRecord.auditions?.style || 'classical').colors.primary,borderColor:getMusicTheme(finalScoreRecord.taskDetails?.style || finalScoreRecord.auditions?.style || 'classical').colors.accent}}>
                                                 <span className="block text-[11px] font-bold text-slate-400 uppercase tracking-widest mb-2">FINAL SCORE</span>
-                                                <span className="text-7xl font-black text-indigo-600 tracking-tighter">{Number(finalScoreRecord.score).toFixed(1)} <span className="text-3xl text-slate-300 font-medium">/ 10</span></span>
+                                                <span className="text-7xl font-black tracking-tighter" style={{color:'#FFFFFF'}}>{Number(finalScoreRecord.score).toFixed(1)} <span className="text-3xl text-white/70 font-medium">/ 10</span></span>
                                             </div>
-                                            <div className="bg-gradient-to-br from-indigo-50 to-slate-50 border border-indigo-100 p-6 rounded-2xl text-left shadow-sm">
-                                                <span className="text-[10px] font-extrabold uppercase tracking-wider text-indigo-500 block mb-1">Pedagogy Evaluation</span>
-                                                <h4 className="text-lg font-bold text-indigo-950 mb-1">{feedback.title}</h4>
+                                            <div className="border p-6 rounded-2xl text-left shadow-sm" style={{backgroundColor:getMusicTheme(finalScoreRecord.taskDetails?.style || finalScoreRecord.auditions?.style || 'classical').colors.soft,borderColor:getMusicTheme(finalScoreRecord.taskDetails?.style || finalScoreRecord.auditions?.style || 'classical').colors.accent}}>
+                                                <span className="text-[10px] font-bold uppercase tracking-wider block mb-1" style={{color:getMusicTheme(finalScoreRecord.taskDetails?.style || finalScoreRecord.auditions?.style || 'classical').colors.primary}}>Pedagogy Evaluation</span>
+                                                <h4 className="text-lg font-semibold mb-1" style={{color:getMusicTheme(finalScoreRecord.taskDetails?.style || finalScoreRecord.auditions?.style || 'classical').colors.primary,fontFamily:getMusicTheme(finalScoreRecord.taskDetails?.style || finalScoreRecord.auditions?.style || 'classical').font}}>{feedback.title}</h4>
                                                 <p className="text-slate-600 text-sm leading-relaxed">{feedback.text}</p>
                                             </div>
-                                            <div className="bg-amber-50 border border-amber-200 p-4 rounded-2xl text-left space-y-2">
-                                                <h4 className="font-bold text-amber-900 text-xs flex items-center gap-1.5 uppercase tracking-wide"><Icons.Camera /> Submit to Google Classroom</h4>
-                                                <p className="text-amber-800 text-xs leading-relaxed">Please attach <strong>a screenshot of this screen</strong> and <strong>the downloaded PDF diploma</strong> to your Google Classroom assignment as proof of completion.</p>
-                                            </div>
-                                            <div className="text-left bg-slate-50 p-6 rounded-2xl border space-y-4">
-                                                <h4 className="font-bold text-slate-800 text-sm">Gap Results Summary</h4>
-                                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                                                    {finalScoreRecord.details.words.map((item, idx) => (
-                                                        <div key={idx} className={`p-3 rounded-xl border flex justify-between items-center text-xs font-semibold ${item.correct ? 'bg-emerald-50/60 border-emerald-200 text-emerald-800' : 'bg-rose-50/60 border-rose-200 text-rose-800'}`}>
-                                                            <span>Gap {idx + 1}: {item.correct ? (item.usedHint ? "Correct (with hint)" : "Correct") : "Incorrect"}</span>
-                                                            <span className="font-mono bg-white px-2 py-1 rounded shadow-sm border text-slate-700">{item.correct ? item.original : `${item.answer || '(empty)'}`}</span>
+                                            <div className="text-left p-5 rounded-2xl border space-y-3" style={{backgroundColor:getMusicTheme(finalScoreRecord.taskDetails?.style || finalScoreRecord.auditions?.style || 'classical').colors.soft,borderColor:getMusicTheme(finalScoreRecord.taskDetails?.style || finalScoreRecord.auditions?.style || 'classical').colors.accent}}>
+                                                <h4 className="font-bold text-slate-800 text-sm">Your Vocabulary Results</h4>
+                                                <p className="text-xs text-slate-500">Green words were correct. Red words need more practice. Correct answers are not displayed.</p>
+                                                <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+                                                    {(finalScoreRecord.details?.words || []).map((item, idx) => (
+                                                        <div key={idx} className={`px-3 py-2 rounded-lg border text-xs font-semibold ${item.correct ? 'bg-emerald-50 border-emerald-200 text-emerald-800' : 'bg-rose-50 border-rose-200 text-rose-800'}`}>
+                                                            <span className="opacity-60 mr-1">{String(idx + 1).padStart(2, '0')}.</span>{String(item.original || `Word ${idx + 1}`).toUpperCase()}
                                                         </div>
                                                     ))}
                                                 </div>
@@ -1384,8 +1517,12 @@
                                             <div className="space-y-3 pt-2">
                                                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                                                     <button onClick={() => generatePDF(finalScoreRecord)} className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3.5 rounded-xl text-sm flex items-center justify-center gap-2 shadow-md"><Icons.Download /> Download Diploma PDF</button>
-                                                    <a href="https://classroom.google.com" target="_blank" className="w-full bg-white border font-bold py-3.5 rounded-xl text-sm flex items-center justify-center gap-2 text-slate-700 shadow-sm hover:bg-slate-50"><Icons.External /> Open Google Classroom</a>
+                                                    <a href="https://classroom.google.com" target="_blank" rel="noopener noreferrer" className="w-full bg-white border font-bold py-3.5 rounded-xl text-sm flex items-center justify-center gap-2 text-slate-700 shadow-sm hover:bg-slate-50"><Icons.External /> Open Google Classroom</a>
                                                 </div>
+                                            </div>
+                                            <div className="p-4 rounded-2xl text-left space-y-2 shadow-md border-2" style={{backgroundColor:getMusicTheme(finalScoreRecord.taskDetails?.style || finalScoreRecord.auditions?.style || 'classical').colors.primary,borderColor:getMusicTheme(finalScoreRecord.taskDetails?.style || finalScoreRecord.auditions?.style || 'classical').colors.accent,color:'#FFFFFF'}}>
+                                                <h4 className="font-extrabold text-xs flex items-center gap-1.5 uppercase tracking-wide text-white"><Icons.Camera /> Important: Submit your work</h4>
+                                                <p className="text-white text-xs leading-relaxed">Before leaving this page, take a screenshot of your results, download your diploma as a PDF, and upload both files to your Google Classroom assignment.</p>
                                             </div>
                                             <div className="pt-2 border-t flex justify-between items-center text-xs text-slate-400">
                                                 <button onClick={fetchHistoryAndScores} className="hover:text-slate-600 flex items-center gap-1"><Icons.Refresh /> Check Status Update</button>
