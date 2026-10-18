@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Music Audition APP — English Audition Master</title>
-    <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
-    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
-    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Music Audition APP — Combined Secure Build</title>
+    <script src="https://unpkg.com/react@18.3.1/umd/react.production.min.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.production.min.js" crossorigin></script>
+    <script src="https://unpkg.com/@babel/standalone@7.24.7/babel.min.js"></script>
+    <script src="https://cdn.tailwindcss.com/3.4.17"></script>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
         body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #f8fafc; }
@@ -200,6 +200,8 @@
             Sun: () => <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" /></svg>
         };
 
+        const hydrateRecord = (r, task) => ({ ...r, taskDetails: { ...task, comment: r.full_comment, uppercase_words: (r.details?.words || []).map(w => w.original) } });
+
         const App = () => {
             const initialTaskCode = getTaskCodeFromUrl();
             const [view, setView] = useState(initialTaskCode ? 'student-test' : 'auth');
@@ -215,6 +217,8 @@
             const [supabaseClient, setSupabaseClient] = useState(null);
 
             const [authEmail, setAuthEmail] = useState('');
+            const [authPassword, setAuthPassword] = useState('');
+            const [authMode, setAuthMode] = useState('signin');
             const [toast, setToast] = useState(null);
             const [confirmModal, setConfirmModal] = useState(null);
             const [deleteAllModal, setDeleteAllModal] = useState(null);
@@ -336,27 +340,17 @@
                 if (!code) return;
                 setLoading(true);
                 let taskData = null;
-                if (supabaseUrl && supabaseKey && window.supabase) {
-                    try {
-                        const tempClient = window.supabase.createClient(supabaseUrl, supabaseKey);
-                        const { data, error } = await tempClient.from('auditions').select('*').eq('share_link', code).maybeSingle();
-                        if (data && !error) taskData = data;
-                        else if (error) console.error("Supabase fetch task error:", error);
-                    } catch (e) { console.error("Supabase fetch task exception:", e); }
-                }
-                if (!taskData) taskData = decodeTaskData(code);
-                if (!taskData) {
-                    const localAuditions = getStoredAuditions();
-                    taskData = localAuditions.find(a => a.share_link === code || a.id === code);
-                }
+                try {
+                    const c = window.supabase.createClient(supabaseUrl, supabaseKey, { auth: { persistSession: false } });
+                    const { data, error } = await c.rpc('get_audition_public', { p_code: code });
+                    if (error) console.error(error); else taskData = data;
+                } catch (e) { console.error(e); }
                 if (taskData) { setActiveTask(taskData); setExamSubmitted(false); setFinalScoreRecord(null); setView('student-test'); }
                 else { showToast("Task link not found. Please ask your teacher for a new link.", "error"); setActiveTask(null); setView('student-test'); }
                 setLoading(false);
             };
 
             useEffect(() => {
-                const savedSession = localStorage.getItem('audition_app_teacher_session');
-                if (savedSession) setSession(JSON.parse(savedSession));
                 setLoading(false);
             }, []);
 
@@ -376,36 +370,71 @@
             }, [session, view]);
 
             useEffect(() => {
-                if (activeTask && activeTask.uppercase_words && view === 'student-test' && !examSubmitted) {
-                    const words = activeTask.uppercase_words.map(w => w.replace(/[^A-Za-zÁÉÍÓÚÑáéíóúñ]/g, '').toUpperCase());
-                    const newMcOptions = {};
-                    [2, 7].forEach(idx => {
-                        if (words[idx]) {
-                            const correct = words[idx];
-                            const distractors = words.filter((w, i) => i !== idx);
-                            distractors.sort(() => 0.5 - Math.random());
-                            const options = [correct, distractors[0], distractors[1]].filter(Boolean).sort(() => 0.5 - Math.random());
-                            newMcOptions[idx] = options;
-                        }
-                    });
-                    setMcOptions(newMcOptions);
-                }
+                if (activeTask && activeTask.mc_options && view === 'student-test' && !examSubmitted) setMcOptions(activeTask.mc_options);
             }, [activeTask, view, examSubmitted]);
 
-            const handleTeacherAuth = (e) => {
+            useEffect(() => {
+                if (!supabaseClient) return;
+                supabaseClient.auth.getSession().then(({ data }) => { if (data?.session) setSession(data.session); });
+                const { data: sub } = supabaseClient.auth.onAuthStateChange((_ev, sess) => setSession(sess));
+                return () => sub.subscription.unsubscribe();
+            }, [supabaseClient]);
+
+            const handleTeacherAuth = async (e) => {
                 e.preventDefault();
-                const normalizedEmail = (authEmail || 'teacher@school.edu').toLowerCase().trim();
-                const userSession = { user: { id: normalizedEmail, email: normalizedEmail } };
-                localStorage.setItem('audition_app_teacher_session', JSON.stringify(userSession));
-                setSession(userSession); setView('dashboard');
-                showToast(`Signed in as ${normalizedEmail}`, "success");
+                const normalizedEmail = authEmail.trim().toLowerCase();
+                if (!supabaseClient) {
+                    showToast("Cloud connection is unavailable. Please reload and try again.", "error");
+                    return;
+                }
+                if (!normalizedEmail || !authPassword) {
+                    showToast("Enter your email and password.", "error");
+                    return;
+                }
+                if (authMode === 'signup' && authPassword.length < 10) {
+                    showToast("Choose a password with at least 10 characters.", "error");
+                    return;
+                }
+                setLoading(true);
+                try {
+                    if (authMode === 'signup') {
+                        const { data, error } = await supabaseClient.auth.signUp({
+                            email: normalizedEmail,
+                            password: authPassword
+                        });
+                        if (error) throw error;
+                        if (data.session) {
+                            setSession(data.session);
+                            setView('dashboard');
+                            showToast("Teacher account created successfully.", "success");
+                        } else {
+                            showToast("Account created. Check your email to confirm it, then sign in.", "success");
+                            setAuthMode('signin');
+                        }
+                    } else {
+                        const { data, error } = await supabaseClient.auth.signInWithPassword({
+                            email: normalizedEmail,
+                            password: authPassword
+                        });
+                        if (error) throw error;
+                        setSession(data.session);
+                        setView('dashboard');
+                        showToast("Signed in successfully.", "success");
+                    }
+                } catch (error) {
+                    console.error("Teacher authentication error:", error);
+                    showToast(error?.message || "Authentication failed. Check your email and password.", "error");
+                } finally {
+                    setLoading(false);
+                }
             };
 
-            const handleLogout = () => {
-                localStorage.removeItem('audition_app_teacher_session');
+            const handleLogout = async () => {
+                try { await supabaseClient.auth.signOut(); } catch (e) {}
                 setSession(null); setView('auth');
                 showToast("Signed out.", "info");
             };
+
 
             const videoId = useMemo(() => extractYouTubeId(youtubeUrl), [youtubeUrl]);
             const uppercaseWords = useMemo(() => commentText.match(/[A-ZÁÉÍÓÚÑ]{2,}/g) || [], [commentText]);
@@ -417,9 +446,11 @@
             const handlePublishTask = async () => {
                 if (uppercaseWords.length !== 10) { showToast("You must include exactly 10 UPPERCASE words in the commentary.", "error"); return; }
                 if (!videoId) { showToast("Please provide a valid YouTube video URL.", "error"); return; }
+                const teacherEmail = session?.user?.email?.toLowerCase().trim();
+                if (!teacherEmail) { showToast("Please sign in before publishing.", "error"); setView('auth'); return; }
+                if (!supabaseClient) { showToast("No connection to Supabase. The task has not been published.", "error"); return; }
                 setLoading(true);
-                const teacherEmail = session?.user?.email || 'teacher@school.edu';
-                const taskId = 'aud-' + Date.now();
+                const taskId = 'aud-' + crypto.randomUUID().replace(/-/g, '').slice(0, 16);
                 const taskPayload = {
                     teacher_email: teacherEmail,
                     title: title || 'Untitled Audition',
@@ -433,28 +464,36 @@
                     is_exam_mode: false,
                     created_at: new Date().toISOString()
                 };
-                if (supabaseClient) {
-                    try {
-                        let insertError = null;
-                        const firstTry = await supabaseClient.from('auditions').insert([taskPayload]);
-                        insertError = firstTry.error;
-                        if (insertError && /hints/i.test(insertError.message || '')) {
-                            const { hints, ...payloadNoHints } = taskPayload;
-                            const retry = await supabaseClient.from('auditions').insert([payloadNoHints]);
-                            insertError = retry.error;
-                        }
-                        if (insertError) { console.error("Supabase insert error:", insertError); showToast("Supabase: " + (insertError.message || "insert failed"), "error"); }
-                        else showToast("Task saved to Supabase Cloud!", "success");
-                    } catch (e) { console.error("Supabase exception:", e); showToast("Exception: " + (e.message || "unknown"), "error"); }
+                try {
+                    let insertError = null;
+                    const firstTry = await supabaseClient.from('auditions').insert([taskPayload]);
+                    insertError = firstTry.error;
+                    if (insertError && /hints/i.test(insertError.message || '')) {
+                        const { hints, ...payloadNoHints } = taskPayload;
+                        const retry = await supabaseClient.from('auditions').insert([payloadNoHints]);
+                        insertError = retry.error;
+                    }
+                    if (insertError) {
+                        console.error("Supabase insert error:", insertError);
+                        showToast("The audition could not be saved to the cloud: " + (insertError.message || "unknown error"), "error");
+                        setLoading(false);
+                        return;
+                    }
+                } catch (e) {
+                    console.error("Supabase publish exception:", e);
+                    showToast("The audition could not be saved. No student link was created.", "error");
+                    setLoading(false);
+                    return;
                 }
                 taskPayload.id = taskId;
                 const currentList = getStoredAuditions();
                 const updatedList = [taskPayload, ...currentList];
                 saveStoredAuditions(updatedList);
-                setAuditionsList(updatedList.filter(a => (a.teacher_email || a.teacher_id)?.toLowerCase() === teacherEmail.toLowerCase()));
+                setAuditionsList(updatedList.filter(a => (a.teacher_email || a.teacher_id)?.toLowerCase() === teacherEmail));
                 const fullTaskUrl = buildStudentUrl(taskId);
                 setCreatedTaskModal({ title: taskPayload.title, fullUrl: fullTaskUrl, taskPayload: taskPayload });
                 setTitle(''); setArtist(''); setYoutubeUrl(''); setCommentText(''); setTaskHints(Array(10).fill(''));
+                showToast("Audition saved to Supabase Cloud.", "success");
                 setLoading(false);
             };
 
@@ -560,23 +599,17 @@
                 e.preventDefault(); if (!lookupEmail.trim()) return;
                 setLoading(true);
                 let matched = null;
-                const taskUniqueId = activeTask?.share_link || activeTask?.id;
-                if (supabaseClient && activeTask) {
-                    try {
-                        const { data, error } = await supabaseClient.from('student_submissions').select('*').eq('student_email', lookupEmail.trim().toLowerCase()).eq('audition_id', taskUniqueId).order('created_at', { ascending: false }).limit(1);
-                        if (data && data.length > 0 && !error) matched = data[0];
-                    } catch (e) {}
-                }
-                if (!matched) {
-                    const submissions = getStoredScores();
-                    matched = submissions.find(s => s.student_email?.toLowerCase() === lookupEmail.trim().toLowerCase() && s.audition_id === taskUniqueId);
-                }
+                try {
+                    const { data } = await supabaseClient.rpc('lookup_submission', { p_code: activeTask?.share_link, p_email: lookupEmail.trim().toLowerCase() });
+                    if (data) matched = hydrateRecord(data, activeTask);
+                } catch (err) { console.error(err); }
                 if (matched) {
                     setFinalScoreRecord(matched); setExamSubmitted(true); setView('results'); setLookupModal(false);
                     showToast("Submission retrieved successfully!", "success");
                 } else showToast("No submission found for this email on this task.", "error");
                 setLoading(false);
             };
+
 
             const filteredScores = useMemo(() => {
                 return scoresList.filter(s => {
@@ -650,49 +683,20 @@
 
             const handleEvaluation = async () => {
                 if (submitting) return;
+                if (!supabaseClient) { showToast('The server is unavailable. Your answers have not been submitted.', 'error'); return; }
                 if (!studentName.trim() || !studentEmail.trim()) { showToast("Please fill in your Full Name and School Email.", "error"); return; }
                 setSubmitting(true);
                 try {
-                    let totalScorePoints = 0;
-                    const taskUppercaseWords = activeTask.comment.match(/[A-ZÁÉÍÓÚÑ]{2,}/g) || [];
-                    const detailsWords = taskUppercaseWords.map((word, idx) => {
-                        const cleanWord = word.replace(/[^A-Za-zÁÉÍÓÚÑáéíóúñ]/g, '').toUpperCase();
-                        const studentAns = (studentAnswers[idx] || '').trim().toUpperCase();
-                        const isCorrect = studentAns === cleanWord;
-                        const usedHint = !!usedHints[idx];
-                        let earnedPoints = 0;
-                        if (isCorrect) earnedPoints = usedHint ? 0.5 : 1.0;
-                        totalScorePoints += earnedPoints;
-                        return { original: cleanWord, answer: studentAnswers[idx] || '', correct: isCorrect, usedHint: usedHint, points: earnedPoints };
+                    const { data, error } = await supabaseClient.rpc('submit_audition', {
+                        p_code: activeTask.share_link, p_name: studentName.trim(), p_class: studentClass,
+                        p_email: studentEmail.trim().toLowerCase(), p_answers: studentAnswers, p_hints: usedHints
                     });
-                    const finalGrade = Math.max(0, Math.round(totalScorePoints * 10) / 10);
-                    const teacherEmail = activeTask.teacher_email || activeTask.teacher_id || '';
-                    const taskUniqueId = activeTask.share_link || activeTask.id;
-                    const studentEmailClean = studentEmail.toLowerCase().trim();
-                    const record = {
-                        id: 'score-' + Date.now() + '-' + Math.random().toString(36).slice(2, 8),
-                        student_name: studentName, student_class: studentClass, student_email: studentEmailClean,
-                        teacher_email: teacherEmail, audition_id: taskUniqueId,
-                        auditions: { title: activeTask.title, artist: activeTask.artist },
-                        score: finalGrade, taskDetails: activeTask,
-                        details: { words: detailsWords }, created_at: new Date().toISOString()
-                    };
-                    const currentScores = getStoredScores();
-                    saveStoredScores([record, ...currentScores]);
-                    saveStudentSubmission(record);
-                    if (supabaseClient) {
-                        try {
-                            await supabaseClient.from('student_submissions').delete().eq('student_email', studentEmailClean).eq('audition_id', taskUniqueId);
-                            const { error } = await supabaseClient.from('student_submissions').insert([{
-                                id: record.id, student_name: record.student_name, student_class: record.student_class,
-                                student_email: record.student_email, teacher_email: record.teacher_email,
-                                audition_id: record.audition_id, auditions: record.auditions,
-                                score: record.score, details: record.details, created_at: record.created_at
-                            }]);
-                            if (error) console.error("Supabase grade submission error:", error);
-                            else showToast("Grade saved successfully!", "success");
-                        } catch (e) { console.error(e); }
+                    if (error) {
+                        showToast(/already_submitted/.test(error.message) ? "You have already submitted this task. Use 'view my result'." : "Could not save your grade: " + error.message, "error");
+                        return;
                     }
+                    const record = hydrateRecord(data, activeTask);
+                    const finalGrade = Number(record.score);
                     setFinalScoreRecord(record); setExamSubmitted(true); setView('results');
                     if ('speechSynthesis' in window) window.speechSynthesis.cancel();
                     if (finalGrade >= 5) {
@@ -701,6 +705,7 @@
                     } else playAudioFeedback('error', finalGrade);
                 } finally { setSubmitting(false); }
             };
+
 
             const generatePDF = (record) => {
                 const { jsPDF } = window.jspdf;
@@ -972,12 +977,14 @@
                     <main className="max-w-5xl mx-auto px-4 mt-8">
                         {view === 'auth' && !session && (
                             <div className="max-w-md mx-auto bg-white p-8 rounded-2xl shadow-sm border border-slate-200 mt-12">
-                                <h2 className="text-2xl font-bold text-slate-900 mb-2 text-center">Teacher Login</h2>
-                                <p className="text-xs text-slate-500 text-center mb-6">Enter your email address to access your private audition tasks.</p>
+                                <h2 className="text-2xl font-bold text-slate-900 mb-2 text-center">{authMode === 'signup' ? 'Create Teacher Account' : 'Teacher Login'}</h2>
+                                <p className="text-xs text-slate-500 text-center mb-6">{authMode === 'signup' ? 'Create your account with your email and a password of at least 10 characters.' : 'Sign in with the email and password you registered.'}</p>
                                 <form onSubmit={handleTeacherAuth} className="space-y-4">
-                                    <div><label className="block text-xs font-bold uppercase text-slate-500 mb-1">Teacher Email</label><input type="email" required placeholder="teacher@school.edu" value={authEmail} onChange={e => setAuthEmail(e.target.value)} className="w-full px-4 py-2.5 border rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none" /></div>
-                                    <button type="submit" className="w-full mt-4 py-3 rounded-xl font-bold text-white bg-indigo-600 hover:bg-indigo-700 transition-all shadow-md shadow-indigo-100">Enter Teacher Dashboard</button>
+                                    <div><label className="block text-xs font-bold uppercase text-slate-500 mb-1">Teacher Email</label><input type="email" autoComplete="email" required placeholder="teacher@murciaeduca.es" value={authEmail} onChange={e => setAuthEmail(e.target.value)} className="w-full px-4 py-2.5 border rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none" /></div>
+                                    <div><label className="block text-xs font-bold uppercase text-slate-500 mb-1">Password</label><input type="password" autoComplete={authMode === 'signup' ? 'new-password' : 'current-password'} required minLength={authMode === 'signup' ? 10 : 1} placeholder={authMode === 'signup' ? 'At least 10 characters' : 'Your password'} value={authPassword} onChange={e => setAuthPassword(e.target.value)} className="w-full px-4 py-2.5 border rounded-xl text-sm focus:ring-2 focus:ring-indigo-500 outline-none" />{authMode === 'signup' && <p className="text-[11px] text-slate-400 mt-1">You may need to confirm your email before signing in.</p>}</div>
+                                    <button type="submit" disabled={loading} className="w-full mt-4 py-3 rounded-xl font-bold text-white bg-indigo-600 hover:bg-indigo-700 disabled:opacity-60 transition-all shadow-md shadow-indigo-100">{loading ? 'Please wait…' : authMode === 'signup' ? 'Create Account' : 'Sign In'}</button>
                                 </form>
+                                <button type="button" onClick={() => { setAuthMode(authMode === 'signup' ? 'signin' : 'signup'); setAuthPassword(''); }} className="w-full mt-3 py-2 text-sm font-semibold text-indigo-700 hover:text-indigo-900">{authMode === 'signup' ? 'Already have an account? Sign in' : 'First time here? Create an account'}</button>
                             </div>
                         )}
 
@@ -1228,8 +1235,8 @@
                                                             if (token.type === 'text') return <span key={tIndex}>{token.content}</span>;
                                                             const gapIdx = token.gapIndex;
                                                             const hintText = activeTask.hints && activeTask.hints[gapIdx];
-                                                            const cleanWord = token.word.replace(/[^A-Za-zÁÉÍÓÚÑáéíóúñ]/g, '').toUpperCase();
-                                                            const len = cleanWord.length;
+                                                            const clue = (activeTask.gap_clues || [])[gapIdx] || { len: 5, first: '', last2: '' };
+                                                            const len = clue.len;
                                                             if ([2, 7].includes(gapIdx)) {
                                                                 const options = mcOptions[gapIdx] || [];
                                                                 return (
@@ -1245,8 +1252,8 @@
                                                                 );
                                                             } else {
                                                                 let ph = `Gap ${gapIdx + 1}`;
-                                                                if ([0, 4, 6, 8].includes(gapIdx)) ph = cleanWord.charAt(0) + ' _'.repeat(Math.max(0, len - 1));
-                                                                else if ([1, 3, 5, 9].includes(gapIdx)) ph = '_ '.repeat(Math.max(0, len - 2)) + cleanWord.slice(-2);
+                                                                if ([0, 4, 6, 8].includes(gapIdx)) ph = clue.first + ' _'.repeat(Math.max(0, len - 1));
+                                                                else if ([1, 3, 5, 9].includes(gapIdx)) ph = '_ '.repeat(Math.max(0, len - 2)) + clue.last2;
                                                                 return (
                                                                     <span key={tIndex} className="inline-block mx-1 align-bottom">
                                                                         <span className="relative inline-flex flex-col items-center">
