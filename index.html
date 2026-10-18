@@ -853,8 +853,8 @@
                 doc.setFont('Helvetica', 'normal'); doc.setFontSize(10); doc.setTextColor(100, 116, 139);
                 doc.text(`Artist: ${composerArtist}`, 88, 114, { align: 'center', maxWidth: 137 });
 
-                // Feedback panel: title in the theme colour, explanatory text in a softer mid-tone.
-                doc.setFillColor(239, 244, 250); doc.setDrawColor(199, 210, 254); doc.setLineWidth(0.35);
+                // Feedback panel now follows the selected musical theme.
+                doc.setFillColor(...pc.soft); doc.setDrawColor(...pc.accent); doc.setLineWidth(0.45);
                 doc.roundedRect(20, 125, 136, 43, 4, 4, 'FD');
                 const feedback = getEnglishFeedback(score);
                 doc.setFont('Helvetica', 'bold'); doc.setFontSize(8); doc.setTextColor(...pc.primary);
@@ -865,12 +865,17 @@
                 const feedbackLines = doc.splitTextToSize(feedback.text, 121);
                 doc.text(feedbackLines.slice(0, 3), 27, 149, { lineHeightFactor: 1.25 });
 
-                // High-contrast call-to-action: the instruction itself is white and prominent.
+                // High-contrast Classroom instruction: white lettering on a strong theme-colour panel.
                 doc.setFillColor(...pc.primary); doc.roundedRect(20, 173, 136, 17, 3, 3, 'F');
-                doc.setFont('Helvetica', 'bold'); doc.setFontSize(7); doc.setTextColor(255, 255, 255);
-                doc.text('NEXT STEP', 88, 178, { align: 'center' });
-                doc.setFont('Helvetica', 'bold'); doc.setFontSize(8.2); doc.setTextColor(255, 255, 255);
-                doc.text('Download this diploma PDF and upload it to Google Classroom.', 88, 185, { align: 'center', maxWidth: 128 });
+                doc.setDrawColor(...pc.accent); doc.setLineWidth(0.45); doc.roundedRect(21.2, 174.2, 133.6, 14.6, 2.2, 2.2, 'S');
+                // Small cloud/upload pictogram at the left, echoing the reference diploma.
+                doc.setDrawColor(255,255,255); doc.setLineWidth(0.8);
+                doc.circle(29,180.2,2.4,'S'); doc.circle(32,178.8,3.1,'S'); doc.circle(35,180.5,2.2,'S');
+                doc.line(27,182,37,182); doc.line(32,178,32,184); doc.line(30.3,179.8,32,178); doc.line(32,178,33.7,179.8);
+                doc.setFont('Helvetica', 'bold'); doc.setFontSize(6.4); doc.setTextColor(255, 255, 255);
+                doc.text('NEXT STEP', 43, 178.5);
+                doc.setFont('Helvetica', 'bold'); doc.setFontSize(7.1); doc.setTextColor(255, 255, 255);
+                doc.text('Download this diploma PDF and upload it to Google Classroom.', 43, 184.2, { maxWidth: 107 });
 
                 // RIGHT: grade and vocabulary list.
                 doc.setFillColor(...pc.primary); doc.roundedRect(180, 18, 91, 37, 4, 4, 'F');
@@ -892,43 +897,69 @@
                     const word = String(item.original || `WORD ${idx + 1}`).toUpperCase();
                     doc.text(`${String(idx + 1).padStart(2, '0')}. ${word}`, colX[col], startY + row * rowHeight, { maxWidth: 47 });
                 });
-                // Genre-specific vector illustration: lightweight, crisp and embedded in the PDF.
-                doc.setDrawColor(...pc.accent); doc.setFillColor(...pc.accent); doc.setLineWidth(0.65);
+                // Themed decorative artwork: layered linework, framing flourishes and recognisable motifs.
+                // All artwork is drawn as vector shapes so it stays sharp in the exported PDF.
+                doc.setDrawColor(...pc.accent); doc.setFillColor(...pc.accent); doc.setLineWidth(0.55);
+                // Decorative swashes behind the illustration create depth without obscuring the words.
+                doc.setLineWidth(0.35);
+                doc.line(172,164,181,159); doc.line(181,159,190,162); doc.line(190,162,199,157);
+                doc.line(249,162,258,157); doc.line(258,157,267,161); doc.line(267,161,281,155);
+                doc.setLineWidth(0.65);
+                const star = (x,y,r) => { doc.line(x-r,y,x+r,y); doc.line(x,y-r,x,y+r); doc.line(x-r*.65,y-r*.65,x+r*.65,y+r*.65); doc.line(x-r*.65,y+r*.65,x+r*.65,y-r*.65); };
+                const pine = (x,y,h) => { doc.line(x,y-h,x-h*.34,y-h*.48); doc.line(x,y-h,x+h*.34,y-h*.48); doc.line(x-h*.34,y-h*.48,x+h*.34,y-h*.48); doc.line(x,y-h*.48,x-h*.27,y-h*.15); doc.line(x,y-h*.48,x+h*.27,y-h*.15); doc.line(x-h*.27,y-h*.15,x+h*.27,y-h*.15); doc.line(x,y-h*.15,x,y); };
                 if (theme.id === 'rock') {
-                    // Lightning bolts, guitar body and the iconic rock hand silhouette.
-                    [[180,148],[207,153],[255,146]].forEach(([x,y]) => { doc.line(x,y,x+5,y-9); doc.line(x+5,y-9,x+2,y-9); doc.line(x+2,y-9,x+8,y-20); });
-                    doc.ellipse(225,153,5,7,'S'); doc.ellipse(230,150,4,5,'S'); doc.line(228,146,238,137); doc.line(238,137,238,151); doc.line(232,151,232,161);
-                    // Rock-hand gesture, stylised as angular strokes.
-                    doc.line(264,160,262,151); doc.line(262,151,260,139); doc.line(260,139,262,137); doc.line(262,137,266,148); doc.line(266,148,267,132); doc.line(267,132,270,132); doc.line(270,132,271,148); doc.line(271,148,275,139); doc.line(275,139,278,141); doc.line(278,141,275,154); doc.line(275,154,270,161); doc.line(270,161,264,160);
+                    // Electric bolts, guitar, amp details and a clear rock-horns silhouette.
+                    [[180,153,9],[205,158,7],[249,151,10]].forEach(([x,y,h])=>{doc.setLineWidth(1.2);doc.line(x,y,x+4,y-h*.55);doc.line(x+4,y-h*.55,x+1.5,y-h*.55);doc.line(x+1.5,y-h*.55,x+7,y-h);doc.setLineWidth(.55);});
+                    doc.ellipse(222,154,5,6.5,'S'); doc.ellipse(228,157,4,5,'S'); doc.line(225,149,235,139); doc.line(235,139,235,157); doc.line(231,157,231,163); doc.line(235,157,239,160);
+                    // stylised hand: wrist, palm, raised index and little finger
+                    doc.line(263,162,262,153);doc.line(262,153,259,141);doc.line(259,141,261,139);doc.line(261,139,266,150);doc.line(266,150,266,133);doc.line(266,133,269,132);doc.line(269,132,271,150);doc.line(271,150,275,140);doc.line(275,140,278,142);doc.line(278,142,275,155);doc.line(275,155,270,162);doc.line(270,162,263,162);
+                    doc.rect(240,158,12,7,'S'); for(let x=242;x<251;x+=3)doc.circle(x,161,0.55,'S');
+                    star(193,146,2);star(244,142,1.8);
                 } else if (theme.id === 'pop') {
-                    // Neon-style sound waves, stars and a compact synthesiser.
-                    for (let i=0;i<4;i++) { doc.setLineWidth(0.45+i*0.12); doc.ellipse(224,151,10+i*5,4+i*2,'S'); }
-                    [[181,147],[199,158],[253,145],[271,157]].forEach(([x,y])=>{ doc.line(x-2,y,x+2,y); doc.line(x,y-2,x,y+2); doc.line(x-1.5,y-1.5,x+1.5,y+1.5); doc.line(x-1.5,y+1.5,x+1.5,y-1.5); });
-                    doc.rect(240,153,34,10,'S'); for(let x=243;x<271;x+=4) doc.line(x,155,x,158);
+                    // Neon sound waves, stars, equaliser bars and synthesiser keys.
+                    for(let i=0;i<4;i++){doc.setLineWidth(.35+i*.12);doc.ellipse(224,151,12+i*5,5+i*2,'S');}
+                    [[180,147],[195,158],[252,145],[274,155],[241,164]].forEach(([x,y])=>star(x,y,1.7));
+                    doc.setLineWidth(.6);doc.roundedRect(235,153,39,11,1.5,1.5,'S');
+                    for(let x=238;x<271;x+=4)doc.line(x,155,x,159);
+                    [4,7,10,6,9,5,8].forEach((h,i)=>doc.rect(180+i*5,160-h,2.2,h,'S'));
+                    doc.line(176,164,210,164);doc.line(242,166,280,166);
                 } else if (theme.id === 'jazz') {
-                    // Saxophone-like curved silhouette and a vinyl record.
-                    doc.circle(260,151,9,'S'); doc.circle(260,151,5,'S'); doc.circle(260,151,1.5,'F');
-                    doc.setLineWidth(1.4); doc.line(187,142,187,158); doc.line(187,142,193,139); doc.line(193,139,196,145); doc.line(196,145,196,157); doc.line(196,157,202,160); doc.line(202,160,202,164); doc.line(202,164,195,164); doc.line(195,164,191,158);
-                    doc.setLineWidth(0.45); [145,150,155].forEach(y=>doc.line(207,y,238,y));
+                    // Saxophone, vinyl record, piano-key accents and flowing swing lines.
+                    doc.circle(263,151,9,'S');doc.circle(263,151,5.6,'S');doc.circle(263,151,1.5,'F');
+                    doc.setLineWidth(1.2);doc.line(188,141,188,155);doc.line(188,141,194,138);doc.line(194,138,198,145);doc.line(198,145,198,157);doc.line(198,157,204,160);doc.line(204,160,204,164);doc.line(204,164,196,164);doc.line(196,164,192,158);
+                    doc.setLineWidth(.45);[145,149,153,157].forEach(y=>doc.line(209,y,239,y));
+                    doc.rect(226,158,25,6,'S');for(let x=230;x<249;x+=4)doc.line(x,158,x,164);
+                    star(181,146,1.7);star(247,145,1.5);
                 } else if (theme.id === 'folk') {
-                    // Mountain ridge, winding path, pine trees and acoustic-guitar outline.
-                    doc.line(174,160,190,148); doc.line(190,148,201,157); doc.line(201,157,216,144); doc.line(216,144,231,159); doc.line(231,159,244,150); doc.line(244,150,259,160);
-                    [[181,157],[188,159],[236,158],[246,157]].forEach(([x,y])=>{doc.line(x,y-6,x-3,y-2);doc.line(x,y-6,x+3,y-2);doc.line(x-3,y-2,x+3,y-2);doc.line(x,y-2,x,y+1);});
-                    doc.ellipse(270,153,4,6,'S'); doc.ellipse(270,160,3,4,'S'); doc.line(270,149,270,136); doc.line(270,136,278,132); doc.line(268,153,272,153);
+                    // Layered mountains, pine forest, winding trail and an acoustic guitar.
+                    doc.setLineWidth(.8);doc.line(171,159,185,149);doc.line(185,149,193,155);doc.line(193,155,208,141);doc.line(208,141,223,157);doc.line(223,157,235,147);doc.line(235,147,250,159);doc.line(250,159,261,151);doc.line(261,151,281,161);
+                    doc.line(201,157,208,149);doc.line(208,149,214,156);doc.line(214,156,219,152);
+                    [[178,160,7],[185,160,9],[238,160,8],[247,161,10],[256,160,7]].forEach(([x,y,h])=>pine(x,y,h));
+                    doc.setLineWidth(1);doc.ellipse(269,153,4.5,6,'S');doc.ellipse(270,160,3.2,4.2,'S');doc.line(269,147,269,136);doc.line(269,136,278,132);doc.line(269,150,273,153);doc.line(268,154,272,154);doc.line(270,157,273,158);
+                    // Winding path through the landscape
+                    doc.setLineWidth(1.2);doc.line(220,162,228,160);doc.line(228,160,233,163);doc.line(233,163,241,161);doc.setLineWidth(.45);doc.line(222,164,230,162);doc.line(230,162,235,165);doc.line(235,165,242,163);
+                    star(196,143,1.4);
                 } else if (theme.id === 'film') {
-                    // Film reel, cinematic stars and sweeping soundtrack lines.
-                    doc.circle(190,153,10,'S'); [[186,149],[194,149],[186,157],[194,157]].forEach(([x,y])=>doc.circle(x,y,2,'S'));
-                    doc.line(200,153,212,153); doc.line(212,153,219,148); doc.line(219,148,225,155); doc.line(225,155,233,151); doc.line(233,151,241,158); doc.line(241,158,250,152); doc.line(250,152,260,157);
-                    [[245,143],[262,145],[275,150]].forEach(([x,y])=>{doc.line(x-2,y,x+2,y);doc.line(x,y-2,x,y+2);doc.line(x-1.5,y-1.5,x+1.5,y+1.5);doc.line(x-1.5,y+1.5,x+1.5,y-1.5);});
+                    // Film reel, film strip, skyline and cinematic starbursts.
+                    doc.circle(185,152,10,'S');doc.circle(185,152,2,'S');[[181,148],[189,148],[181,156],[189,156]].forEach(([x,y])=>doc.circle(x,y,1.6,'S'));
+                    doc.setLineWidth(1);doc.line(195,152,207,152);doc.line(207,152,215,147);doc.line(215,147,223,155);doc.line(223,155,232,150);doc.line(232,150,242,158);doc.line(242,158,251,151);doc.line(251,151,261,157);
+                    doc.setLineWidth(.6);doc.rect(202,160,37,6,'S');doc.line(206,160,206,166);doc.line(235,160,235,166);for(let x=210;x<232;x+=5){doc.rect(x,161,2,4,'S');}
+                    [[247,143],[263,145],[277,150],[224,141]].forEach(([x,y])=>star(x,y,1.6));
+                    // distant skyline silhouettes
+                    [[246,158,4],[252,156,7],[258,159,5],[276,158,8],[281,160,5]].forEach(([x,y,h])=>doc.rect(x,y-h,3,h,'S'));
                 } else {
-                    // Classical: flowing staff, notes, piano keys and a subtle Baroque flourish.
-                    for (let i=0;i<5;i++) doc.line(171,145+i*3,282,145+i*3);
-                    [[181,154],[194,148],[207,157],[220,150],[234,155],[247,148],[261,154],[274,150]].forEach(([x,y],idx)=>{doc.ellipse(x,y,1.7,1.05,'F');doc.line(x+1.2,y,x+1.2,y-(idx%2?8:10));});
-                    doc.rect(238,158,38,6,'S'); for(let x=243;x<275;x+=4) doc.line(x,158,x,164);
-                    doc.line(177,163,184,159); doc.line(184,159,188,163); doc.line(188,163,195,157);
+                    // Classical: flowing staff, notes, piano keyboard and ornate Baroque scrolls.
+                    for(let i=0;i<5;i++)doc.line(171,145+i*2.7,282,145+i*2.7);
+                    [[179,154],[191,148],[204,157],[217,150],[230,155],[243,148],[256,154],[270,150]].forEach(([x,y],idx)=>{doc.ellipse(x,y,1.7,1.05,'F');doc.line(x+1.2,y,x+1.2,y-(idx%2?8:10));});
+                    doc.roundedRect(236,159,42,6,0.6,0.6,'S');for(let x=241;x<275;x+=4)doc.line(x,159,x,165);
+                    // Baroque scroll ornament at both ends
+                    doc.line(174,163,180,159);doc.line(180,159,185,163);doc.line(185,163,190,157);doc.circle(175,161,2,'S');
+                    doc.line(277,143,281,139);doc.circle(279,141,2,'S');star(198,142,1.3);
                 }
+                // Extra small ornamental curls in the lower corners of the illustration area.
+                doc.setLineWidth(.45); doc.circle(174,169,1.8,'S'); doc.line(175,169,179,166); doc.circle(281,169,1.8,'S'); doc.line(280,169,276,166);
                 // Small, clean footer details.
-                doc.setFont('Helvetica', 'italic'); doc.setFontSize(10); doc.setTextColor(...pc.primary);
+                doc.setFont('Helvetica', 'italic'); doc.setFontSize(10); doc.setTextColor(...pc.accent);
                 doc.text('“Music is the universal language of mankind.”', 227, 171, { align: 'center', maxWidth: 108 });
                 doc.setFont('Helvetica', 'normal'); doc.setFontSize(8); doc.setTextColor(100, 116, 139);
                 doc.text('Henry W. Longfellow', 227, 177, { align: 'center' });
