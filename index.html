@@ -46,6 +46,51 @@
         body.dark .hover\:bg-slate-50\/30:hover { background-color: #334155 !important; }
         body.dark .hover\:bg-slate-100:hover { background-color: #475569 !important; }
 
+
+        /* ===== MODO CLARO: grises suaves en varios tonos, menos blanco ===== */
+        body:not(.dark) { background-color: #E6EAF0; }
+        body:not(.dark) .bg-white { background-color: #F6F7F9; }
+        body:not(.dark) .glass-panel { background: rgba(246, 247, 249, 0.95); }
+        body:not(.dark) .bg-slate-50, body:not(.dark) .bg-slate-50\/50 { background-color: #EDF0F4; }
+        body:not(.dark) .bg-slate-100 { background-color: #E3E7ED; }
+        body:not(.dark) .border-slate-200 { border-color: #D5DBE3; }
+        body:not(.dark) .border-slate-100 { border-color: #DFE4EA; }
+        body:not(.dark) input, body:not(.dark) textarea, body:not(.dark) select { background-color: #EEF1F5; border-color: #D2D9E2; }
+        body:not(.dark) input:focus, body:not(.dark) textarea:focus, body:not(.dark) select:focus { background-color: #F9FAFB; }
+        body:not(.dark) .theme-card:not([aria-pressed="true"]) { background-color: #F2F4F7 !important; border-color: #D8DEE6 !important; }
+        button:disabled.bg-slate-300 { color: #64748B !important; }
+
+        /* ===== MODO OSCURO: todos los textos legibles ===== */
+        body.dark { background-color: #0F172A; }
+        body.dark .bg-slate-50, body.dark .bg-slate-100 { background-color: #273449 !important; }
+        body.dark .text-slate-500, body.dark .text-slate-400 { color: #A3B1C6 !important; }
+        body.dark .hover\:bg-slate-200:hover { background-color: #475569 !important; }
+        body.dark .border-slate-300 { border-color: #475569 !important; }
+        body.dark .bg-slate-300 { background-color: #334155 !important; }
+        body.dark button:disabled.bg-slate-300 { color: #94A3B8 !important; }
+        /* color de la app */
+        body.dark .text-indigo-600, body.dark .text-indigo-700, body.dark .text-indigo-800, body.dark .text-indigo-900,
+        body.dark .hover\:text-indigo-700:hover, body.dark .hover\:text-indigo-900:hover { color: #A5B4FC !important; }
+        body.dark .bg-indigo-50, body.dark .bg-indigo-100 { background-color: rgba(79, 70, 229, 0.22) !important; }
+        body.dark .hover\:bg-indigo-50:hover, body.dark .hover\:bg-indigo-100:hover, body.dark .hover\:bg-indigo-200:hover { background-color: rgba(79, 70, 229, 0.34) !important; }
+        body.dark .border-indigo-100, body.dark .border-indigo-200 { border-color: rgba(79, 70, 229, 0.55) !important; }
+        /* avisos y estados */
+        body.dark .bg-amber-50, body.dark .bg-amber-100 { background-color: rgba(245, 158, 11, 0.14) !important; }
+        body.dark .hover\:bg-amber-200:hover { background-color: rgba(245, 158, 11, 0.28) !important; }
+        body.dark .text-amber-700, body.dark .text-amber-800, body.dark .text-amber-900 { color: #FCD34D !important; }
+        body.dark .border-amber-200 { border-color: rgba(245, 158, 11, 0.4) !important; }
+        body.dark .bg-rose-50, body.dark .bg-rose-100, body.dark .bg-rose-50\/50 { background-color: rgba(244, 63, 94, 0.14) !important; }
+        body.dark .hover\:bg-rose-50:hover { background-color: rgba(244, 63, 94, 0.24) !important; }
+        body.dark .text-rose-600, body.dark .text-rose-700, body.dark .text-rose-800 { color: #FDA4AF !important; }
+        body.dark .border-rose-100, body.dark .border-rose-200, body.dark .border-rose-300 { border-color: rgba(244, 63, 94, 0.4) !important; }
+        body.dark .bg-emerald-50, body.dark .bg-emerald-100, body.dark .bg-emerald-50\/50 { background-color: rgba(16, 185, 129, 0.14) !important; }
+        body.dark .hover\:bg-emerald-100:hover { background-color: rgba(16, 185, 129, 0.26) !important; }
+        body.dark .text-emerald-700, body.dark .text-emerald-800 { color: #6EE7B7 !important; }
+        body.dark .border-emerald-100, body.dark .border-emerald-200 { border-color: rgba(16, 185, 129, 0.4) !important; }
+        /* tarjetas de tema: se quedan claras (muestran los colores del tema), pero sin deslumbrar y con texto legible */
+        body.dark .theme-card:not([aria-pressed="true"]) { background-color: #E2E8F0 !important; border-color: #475569 !important; }
+        body.dark .theme-card .text-slate-500 { color: #475569 !important; }
+
         /* Protección anti-copia */
         .proj-gap { display:inline-flex; align-items:baseline; gap:.35em; padding:0 .3em; border-bottom:3px solid currentColor; font-family: Arial, Helvetica, sans-serif; font-weight:700; letter-spacing:.06em; white-space:nowrap; }
         .proj-num { font-size:.6em; font-weight:800; opacity:.65; letter-spacing:0; }
@@ -1471,7 +1516,7 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
                                                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                                                     {Object.values(MUSIC_THEMES).map(theme => (
                                                         <button key={theme.id} type="button" onClick={() => setStyle(theme.id)} aria-pressed={style === theme.id}
-                                                            className={`text-left p-2.5 rounded-xl border-2 transition-all ${style === theme.id ? 'ring-2 ring-offset-1' : 'hover:border-slate-300'}`}
+                                                            className={`theme-card text-left p-2.5 rounded-xl border-2 transition-all ${style === theme.id ? 'ring-2 ring-offset-1' : 'hover:border-slate-300'}`}
                                                             style={{ backgroundColor: style === theme.id ? theme.colors.paper : '#FFFFFF', borderColor: style === theme.id ? theme.colors.accent : '#E2E8F0', '--tw-ring-color': theme.colors.accent }}>
                                                             <div className="flex items-center gap-2 mb-1">
                                                                 <span className="w-9 h-9 rounded-lg flex items-center justify-center text-lg shrink-0" style={{backgroundColor:theme.colors.primary,color:theme.colors.accent}}>{theme.icon}</span>
