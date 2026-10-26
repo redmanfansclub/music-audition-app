@@ -1025,6 +1025,7 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
                 if (submitting) return;
                 if (!supabaseClient) { showToast('The server is unavailable. Your answers have not been submitted.', 'error'); return; }
                 if (!studentName.trim() || !studentEmail.trim()) { showToast("Please fill in your Full Name and School Email.", "error"); return; }
+                if (!/@(alu\.)?murciaeduca\.es$/i.test(studentEmail.trim())) { showToast("You must use your school email, the one ending in @alu.murciaeduca.es.", "error"); return; }
                 setSubmitting(true);
                 try {
                     const { data, error } = await supabaseClient.rpc('submit_audition', {
@@ -1032,7 +1033,7 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
                         p_email: studentEmail.trim().toLowerCase(), p_answers: studentAnswers, p_hints: usedHints
                     });
                     if (error) {
-                        showToast(/already_submitted/.test(error.message) ? "You have already submitted this task. Use 'view my result'." : "Could not save your grade: " + error.message, "error");
+                        showToast(/already_submitted/.test(error.message) ? "You have already submitted this task. Use 'view my result'." : /invalid_email/.test(error.message) ? "You must use your school email, the one ending in @alu.murciaeduca.es." : "Could not save your grade: " + error.message, "error");
                         return;
                     }
                     const record = hydrateRecord(data, activeTask);
