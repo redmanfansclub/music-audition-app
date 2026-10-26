@@ -470,6 +470,332 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
 
         const hydrateRecord = (r, task) => ({ ...r, taskDetails: { ...task, comment: r.full_comment || task.comment, uppercase_words: (r.details?.words || []).map(w => w.original).filter(Boolean) } });
 
+        // ---------- PANEL DE CALIFICACIONES Y ESTADÍSTICAS ----------
+        const GRADES_TEXT = {
+            es: {
+                title: 'Calificaciones del alumnado', search: 'Buscar nombre, grupo (2A, 3B…), correo o nota...',
+                allGroups: 'Todos los grupos', allCourses: 'Todos los cursos', allAuditions: 'Todas las audiciones', allBands: 'Todas las notas',
+                bands: { fail: 'Suspensos (< 5)', pass: 'Aprobados (5 - 6,9)', good: 'Notables (7 - 8,9)', top: 'Sobresalientes (9 - 10)' },
+                from: 'Desde', to: 'Hasta', reset: 'Quitar filtros', exportCsv: 'Exportar a Excel', hideNames: 'Ocultar nombres', showNames: 'Mostrar nombres',
+                showStats: 'Ver estadísticas', hideStats: 'Ocultar estadísticas', deleteAll: 'Borrar todo', deleteAllTitle: 'Borrar TODOS los resultados',
+                avg: 'Nota media', count: 'Entregas', passRate: 'Aprobados', excellent: 'Sobresalientes', tens: 'Dieces', hints: 'Con pistas',
+                league: 'Liga de grupos', champion: 'Campeón', lantern: 'Farolillo rojo', honour: 'Cuadro de honor',
+                king: 'Rey o reina del 10', kingSub: (n) => `${n} ${n === 1 ? 'diez' : 'dieces'}`, bestAvg: 'Mejor media', bestAvgSub: (a, n) => `${a} de media en ${n} entregas`,
+                most: 'Más constante', mostSub: (n) => `${n} entregas`, push: 'Necesita un empujón', pushSub: (a) => `${a} de media`,
+                auditions: 'Audiciones', easiest: 'La más fácil', hardest: 'La más difícil', styles: 'Estilos musicales',
+                words: 'Palabras más falladas', wordsSub: 'Vocabulario para repasar en clase', distribution: 'Distribución de notas', evolution: 'Evolución mes a mes',
+                students: 'alumnos', subs: 'entregas', noData: 'Sin datos suficientes', empty: 'Todavía no hay entregas. Aparecerán aquí cuando el alumnado haga la tarea en el ordenador.',
+                noMatch: 'Ningún resultado coincide con los filtros.', cols: ['Alumno/a', 'Grupo', 'Audición', 'Nota', 'Fecha', 'Acciones'],
+                view: 'Ver detalle', del: 'Eliminar', noEmail: 'Sin correo', anon: 'Alumno/a', profile: 'Ficha del alumno', close: 'Cerrar', best: 'Mejor nota',
+                csvHead: ['Alumno/a', 'Grupo', 'Correo', 'Audición', 'Artista', 'Nota', 'Fecha'], csvSep: ';', fileName: 'calificaciones', locale: 'es-ES'
+            },
+            en: {
+                title: "Your Students' Grades & Submissions", search: 'Search name, group (2A, 3B…), email or score...',
+                allGroups: 'All groups', allCourses: 'All years', allAuditions: 'All auditions', allBands: 'All marks',
+                bands: { fail: 'Fail (< 5)', pass: 'Pass (5 - 6.9)', good: 'Good (7 - 8.9)', top: 'Excellent (9 - 10)' },
+                from: 'From', to: 'To', reset: 'Clear filters', exportCsv: 'Export to Excel', hideNames: 'Hide names', showNames: 'Show names',
+                showStats: 'Show statistics', hideStats: 'Hide statistics', deleteAll: 'Delete ALL', deleteAllTitle: 'Delete ALL student records',
+                avg: 'Class average', count: 'Submissions', passRate: 'Passed', excellent: 'Excellent', tens: 'Perfect 10s', hints: 'Used hints',
+                league: 'Group league', champion: 'Champion', lantern: 'Bottom of the table', honour: 'Hall of fame',
+                king: 'King or queen of 10', kingSub: (n) => `${n} perfect ${n === 1 ? 'score' : 'scores'}`, bestAvg: 'Best average', bestAvgSub: (a, n) => `${a} average over ${n} submissions`,
+                most: 'Most consistent', mostSub: (n) => `${n} submissions`, push: 'Needs a little push', pushSub: (a) => `${a} average`,
+                auditions: 'Auditions', easiest: 'Easiest', hardest: 'Hardest', styles: 'Musical styles',
+                words: 'Most missed words', wordsSub: 'Vocabulary to review in class', distribution: 'Mark distribution', evolution: 'Month by month',
+                students: 'students', subs: 'submissions', noData: 'Not enough data', empty: 'No submissions yet. They will appear here when students do the task on a computer.',
+                noMatch: 'No records match the filters.', cols: ['Student', 'Group', 'Audition', 'Score', 'Date', 'Actions'],
+                view: 'View', del: 'Delete', noEmail: 'No email', anon: 'Student', profile: 'Student profile', close: 'Close', best: 'Best mark',
+                csvHead: ['Student', 'Group', 'Email', 'Audition', 'Artist', 'Score', 'Date'], csvSep: ',', fileName: 'grades', locale: 'en-GB'
+            }
+        };
+
+        const gradeMatchesSearch = (s, qRaw) => {
+            const q = normalizeSearch(String(qRaw || '').trim());
+            if (!q) return true;
+            if (/^[1-3]$/.test(q)) return classSearchMatch(s.student_class, q);
+            if (q === '4') return String(s.score ?? '').includes(q);
+            if (/^[a-d]$/.test(q)) return classSearchMatch(s.student_class, q);
+            if (/^\d+(?:eso|curso|bachillerato|bach)?[a-z]*$/.test(q)) return classSearchMatch(s.student_class, q);
+            return [s.student_name, s.student_email, s.student_class, s.auditions?.title, s.auditions?.artist]
+                .map(normalizeSearch).concat([String(s.score), String(s.score).replace('.', ',')]).some(f => f.includes(q));
+        };
+
+        const groupBy = (arr, keyFn) => arr.reduce((m, x) => { const k = keyFn(x); if (k == null || k === '') return m; (m[k] = m[k] || []).push(x); return m; }, {});
+        const avgOf = (arr) => arr.length ? arr.reduce((a, s) => a + Number(s.score || 0), 0) / arr.length : 0;
+        const courseOf = (cls) => String(cls || '').trim().replace(/\s+[A-Za-zÑñ]{1,2}$/, '') || String(cls || '');
+        const studentKey = (s) => String(s.student_email || s.student_name || '').trim().toLowerCase();
+
+        const StatBar = ({ label, value, max = 10, text, color = 'bg-indigo-500', badge }) => (
+            <div className="flex items-center gap-2 text-xs">
+                <span className="w-24 sm:w-32 shrink-0 truncate font-semibold text-slate-700" title={label}>{badge} {label}</span>
+                <div className="flex-1 h-3 rounded-full bg-slate-100 overflow-hidden"><div className={`h-full rounded-full ${color}`} style={{ width: `${Math.max(2, Math.min(100, (value / max) * 100))}%` }}></div></div>
+                <span className="w-16 text-right font-bold text-slate-700 shrink-0">{text}</span>
+            </div>
+        );
+
+        const StatCard = ({ title, children, sub }) => (
+            <div className="bg-slate-50 border border-slate-200 rounded-2xl p-4">
+                <h3 className="text-sm font-bold text-slate-900">{title}</h3>
+                {sub && <p className="text-[11px] text-slate-500 mb-1">{sub}</p>}
+                <div className="mt-3 space-y-2">{children}</div>
+            </div>
+        );
+
+        const GradesDashboard = ({ scores, auditions, lang, onView, onDelete, onDeleteAll }) => {
+            const T = GRADES_TEXT[lang];
+            const fmt = (n) => { const v = Number(n || 0).toFixed(1); return lang === 'es' ? v.replace('.', ',') : v; };
+            const fmt2 = (n) => { const v = Number(n || 0).toFixed(2); return lang === 'es' ? v.replace('.', ',') : v; };
+            const [q, setQ] = React.useState('');
+            const [fGroup, setFGroup] = React.useState('');
+            const [fCourse, setFCourse] = React.useState('');
+            const [fAud, setFAud] = React.useState('');
+            const [fBand, setFBand] = React.useState('');
+            const [fFrom, setFFrom] = React.useState('');
+            const [fTo, setFTo] = React.useState('');
+            const [sort, setSort] = React.useState({ key: 'date', dir: -1 });
+            const [hide, setHide] = React.useState(false);
+            const [showStats, setShowStats] = React.useState(true);
+            const [profile, setProfile] = React.useState(null);
+
+            const styleByCode = React.useMemo(() => Object.fromEntries((auditions || []).map(a => [a.share_link || a.id, a.style])), [auditions]);
+            const anonMap = React.useMemo(() => {
+                const keys = [...new Set(scores.map(studentKey))].sort();
+                return Object.fromEntries(keys.map((k, i) => [k, `${T.anon} ${i + 1}`]));
+            }, [scores, T]);
+            const nameOf = (s) => hide ? anonMap[studentKey(s)] : s.student_name;
+
+            const groups = React.useMemo(() => [...new Set(scores.map(s => s.student_class).filter(Boolean))].sort(), [scores]);
+            const courses = React.useMemo(() => [...new Set(scores.map(s => courseOf(s.student_class)).filter(Boolean))].sort(), [scores]);
+            const auds = React.useMemo(() => {
+                const m = {}; scores.forEach(s => { if (s.audition_id) m[s.audition_id] = s.auditions?.title || s.audition_id; });
+                return Object.entries(m).sort((a, b) => a[1].localeCompare(b[1]));
+            }, [scores]);
+
+            const filtered = React.useMemo(() => scores.filter(s => {
+                const sc = Number(s.score || 0);
+                const d = String(s.created_at || '').slice(0, 10);
+                if (!gradeMatchesSearch(s, q)) return false;
+                if (fGroup && s.student_class !== fGroup) return false;
+                if (fCourse && courseOf(s.student_class) !== fCourse) return false;
+                if (fAud && s.audition_id !== fAud) return false;
+                if (fBand === 'fail' && !(sc < 5)) return false;
+                if (fBand === 'pass' && !(sc >= 5 && sc < 7)) return false;
+                if (fBand === 'good' && !(sc >= 7 && sc < 9)) return false;
+                if (fBand === 'top' && !(sc >= 9)) return false;
+                if (fFrom && d < fFrom) return false;
+                if (fTo && d > fTo) return false;
+                return true;
+            }), [scores, q, fGroup, fCourse, fAud, fBand, fFrom, fTo]);
+
+            const sorted = React.useMemo(() => {
+                const get = {
+                    name: s => normalizeSearch(s.student_name), group: s => normalizeSearch(s.student_class), audition: s => normalizeSearch(s.auditions?.title),
+                    score: s => Number(s.score || 0), date: s => String(s.created_at || '')
+                }[sort.key];
+                return [...filtered].sort((a, b) => { const x = get(a), y = get(b); return (x < y ? -1 : x > y ? 1 : 0) * sort.dir; });
+            }, [filtered, sort]);
+
+            const st = React.useMemo(() => {
+                if (!filtered.length) return null;
+                const n = filtered.length;
+                const res = {
+                    avg: avgOf(filtered), n,
+                    pass: Math.round(filtered.filter(s => Number(s.score) >= 5).length / n * 100),
+                    top: filtered.filter(s => Number(s.score) >= 9).length,
+                    tens: filtered.filter(s => Number(s.score) >= 10).length,
+                    hints: Math.round(filtered.filter(s => (s.details?.words || []).some(w => w.usedHint)).length / n * 100)
+                };
+                res.league = Object.entries(groupBy(filtered, s => s.student_class)).map(([g, arr]) => ({ g, avg: avgOf(arr), n: arr.length })).sort((a, b) => b.avg - a.avg);
+                const studs = Object.values(groupBy(filtered, studentKey)).map(arr => ({
+                    s: arr[0], n: arr.length, avg: avgOf(arr), tens: arr.filter(x => Number(x.score) >= 10).length
+                }));
+                const byTens = [...studs].sort((a, b) => b.tens - a.tens || b.avg - a.avg)[0];
+                res.king = byTens && byTens.tens > 0 ? byTens : null;
+                const pool = studs.some(x => x.n >= 2) ? studs.filter(x => x.n >= 2) : studs;
+                res.bestAvg = [...pool].sort((a, b) => b.avg - a.avg || b.n - a.n)[0];
+                res.most = [...studs].sort((a, b) => b.n - a.n || b.avg - a.avg)[0];
+                res.push = studs.length > 1 ? [...studs].sort((a, b) => a.avg - b.avg || b.n - a.n)[0] : null;
+                const audStats = Object.entries(groupBy(filtered, s => s.audition_id)).map(([id, arr]) => ({ title: arr[0].auditions?.title || id, avg: avgOf(arr), n: arr.length })).sort((a, b) => b.avg - a.avg);
+                res.auds = audStats;
+                res.styles = Object.entries(groupBy(filtered, s => styleByCode[s.audition_id] || s.taskDetails?.style || 'classical'))
+                    .map(([k, arr]) => ({ theme: getMusicTheme(k), avg: avgOf(arr), n: arr.length })).sort((a, b) => b.avg - a.avg);
+                const wordMap = {};
+                filtered.forEach(s => (s.details?.words || []).forEach(w => {
+                    const k = String(w.original || '').trim().toUpperCase(); if (!k) return;
+                    const e = (wordMap[k] = wordMap[k] || { w: k, tries: 0, fails: 0 }); e.tries++; if (!w.correct) e.fails++;
+                }));
+                res.words = Object.values(wordMap).filter(e => e.fails > 0).map(e => ({ ...e, rate: e.fails / e.tries }))
+                    .sort((a, b) => b.rate - a.rate || b.fails - a.fails).slice(0, 10);
+                res.dist = Array.from({ length: 11 }, (_, i) => filtered.filter(s => Math.min(10, Math.floor(Number(s.score || 0))) === i).length);
+                res.months = Object.entries(groupBy(filtered, s => String(s.created_at || '').slice(0, 7))).map(([m, arr]) => ({ m, avg: avgOf(arr), n: arr.length })).sort((a, b) => a.m.localeCompare(b.m));
+                return res;
+            }, [filtered, styleByCode]);
+
+            const resetFilters = () => { setQ(''); setFGroup(''); setFCourse(''); setFAud(''); setFBand(''); setFFrom(''); setFTo(''); };
+            const anyFilter = q || fGroup || fCourse || fAud || fBand || fFrom || fTo;
+            const monthLabel = (m) => { const [y, mo] = m.split('-'); return new Date(Number(y), Number(mo) - 1, 1).toLocaleDateString(T.locale, { month: 'short' }).replace('.', ''); };
+            const dateLabel = (d) => d ? new Date(d).toLocaleDateString(T.locale, { day: '2-digit', month: '2-digit', year: '2-digit' }) : '';
+            const scoreClass = (v) => Number(v) >= 8 ? 'bg-emerald-50 text-emerald-700' : Number(v) >= 5 ? 'bg-amber-50 text-amber-700' : 'bg-rose-50 text-rose-700';
+            const barColor = (v) => v >= 8 ? 'bg-emerald-500' : v >= 5 ? 'bg-amber-400' : 'bg-rose-500';
+
+            const exportCsv = () => {
+                const sep = T.csvSep;
+                const cell = (v) => { const t = String(v ?? ''); return (t.includes(sep) || /["\n]/.test(t)) ? `"${t.replace(/"/g, '""')}"` : t; };
+                const rows = [T.csvHead].concat(sorted.map(s => [s.student_name, s.student_class, s.student_email, s.auditions?.title, s.auditions?.artist, fmt(s.score), dateLabel(s.created_at)]));
+                const csv = '\uFEFF' + rows.map(r => r.map(cell).join(sep)).join('\r\n');
+                const url = URL.createObjectURL(new Blob([csv], { type: 'text/csv;charset=utf-8' }));
+                const a = document.createElement('a'); a.href = url; a.download = `${T.fileName}_${new Date().toISOString().slice(0, 10)}.csv`;
+                document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(url), 1000);
+            };
+
+            const sel = "px-3 py-2 bg-slate-50 border rounded-xl text-xs font-medium outline-none focus:border-indigo-500 min-w-0";
+            const Th = ({ k, label, cls = '' }) => (
+                <th className={`py-3.5 px-4 ${cls}`}><button onClick={() => setSort(p => ({ key: k, dir: p.key === k ? -p.dir : (k === 'score' || k === 'date' ? -1 : 1) }))} className="uppercase font-bold hover:text-slate-700 inline-flex items-center gap-1">{label}{sort.key === k ? (sort.dir > 0 ? ' ▲' : ' ▼') : ''}</button></th>
+            );
+            const profRows = profile ? scores.filter(s => studentKey(s) === profile).sort((a, b) => String(a.created_at).localeCompare(String(b.created_at))) : [];
+
+            return (
+                <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+                    <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 mb-4">
+                        <h2 className="text-xl font-bold text-slate-900">{T.title}</h2>
+                        <div className="flex flex-wrap gap-2">
+                            <button onClick={() => setShowStats(v => !v)} className="px-3 py-2 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 rounded-xl text-xs font-bold">{showStats ? T.hideStats : T.showStats}</button>
+                            <button onClick={() => setHide(v => !v)} className="px-3 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-bold">{hide ? `👁 ${T.showNames}` : `🙈 ${T.hideNames}`}</button>
+                            {sorted.length > 0 && <button onClick={exportCsv} className="px-3 py-2 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 rounded-xl text-xs font-bold flex items-center gap-1"><Icons.Download /> {T.exportCsv}</button>}
+                            {scores.length > 0 && <button onClick={onDeleteAll} title={T.deleteAllTitle} className="px-3 py-2 bg-rose-600 hover:bg-rose-700 text-white rounded-xl text-xs font-bold flex items-center gap-1"><Icons.Trash /> <span className="hidden sm:inline">{T.deleteAll}</span></button>}
+                        </div>
+                    </div>
+
+                    <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 mb-2">
+                        <div className="relative col-span-2"><span className="absolute left-3 top-2.5 text-slate-400"><Icons.Search /></span><input type="text" placeholder={T.search} value={q} onChange={e => setQ(e.target.value)} className="w-full pl-9 pr-3 py-2 bg-slate-50 border rounded-xl text-xs outline-none focus:border-indigo-500" /></div>
+                        <select value={fCourse} onChange={e => setFCourse(e.target.value)} className={sel}><option value="">{T.allCourses}</option>{courses.map(c => <option key={c} value={c}>{c}</option>)}</select>
+                        <select value={fGroup} onChange={e => setFGroup(e.target.value)} className={sel}><option value="">{T.allGroups}</option>{groups.map(g => <option key={g} value={g}>{g}</option>)}</select>
+                        <select value={fAud} onChange={e => setFAud(e.target.value)} className={`${sel} col-span-2`}><option value="">{T.allAuditions}</option>{auds.map(([id, t]) => <option key={id} value={id}>{t}</option>)}</select>
+                        <select value={fBand} onChange={e => setFBand(e.target.value)} className={sel}><option value="">{T.allBands}</option>{Object.entries(T.bands).map(([k, v]) => <option key={k} value={k}>{v}</option>)}</select>
+                        <div className="flex gap-1 items-center text-[11px] text-slate-500">
+                            <input type="date" value={fFrom} onChange={e => setFFrom(e.target.value)} title={T.from} aria-label={T.from} className={`${sel} flex-1 px-2`} />
+                            <input type="date" value={fTo} onChange={e => setFTo(e.target.value)} title={T.to} aria-label={T.to} className={`${sel} flex-1 px-2`} />
+                        </div>
+                    </div>
+                    {anyFilter && <button onClick={resetFilters} className="text-xs font-bold text-indigo-700 hover:underline mb-3">✕ {T.reset}</button>}
+
+                    {showStats && st && (
+                        <div className="space-y-4 my-4">
+                            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
+                                {[[T.avg, fmt2(st.avg), 'from-indigo-500 to-purple-500'], [T.count, st.n, 'from-emerald-500 to-teal-500'], [T.passRate, `${st.pass} %`, 'from-sky-500 to-blue-500'],
+                                  [T.excellent, st.top, 'from-amber-500 to-orange-500'], [T.tens, st.tens, 'from-rose-500 to-pink-500'], [T.hints, `${st.hints} %`, 'from-slate-500 to-slate-600']].map(([l, v, g]) => (
+                                    <div key={l} className={`bg-gradient-to-br ${g} text-white p-3 rounded-2xl shadow`}><p className="text-[10px] font-bold uppercase tracking-wider opacity-80">{l}</p><p className="text-2xl font-black mt-1">{v}</p></div>
+                                ))}
+                            </div>
+                            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                                <StatCard title={`🏆 ${T.league}`}>
+                                    {st.league.map((x, i) => <StatBar key={x.g} label={x.g} value={x.avg} text={fmt(x.avg)} color={barColor(x.avg)} badge={st.league.length > 1 && i === 0 ? '🏆' : st.league.length > 1 && i === st.league.length - 1 ? '🏮' : ''} />)}
+                                    {st.league.length > 1 && <p className="text-[11px] text-slate-500 pt-1">🏆 {T.champion}: <b>{st.league[0].g}</b> · 🏮 {T.lantern}: <b>{st.league[st.league.length - 1].g}</b></p>}
+                                </StatCard>
+                                <StatCard title={`⭐ ${T.honour}`}>
+                                    {[['👑', T.king, st.king, x => T.kingSub(x.tens)], ['🎯', T.bestAvg, st.bestAvg, x => T.bestAvgSub(fmt(x.avg), x.n)], ['🔥', T.most, st.most, x => T.mostSub(x.n)], ['💪', T.push, st.push, x => T.pushSub(fmt(x.avg))]].map(([ic, label, x, sub]) => (
+                                        <div key={label} className="flex items-center gap-3 p-2 rounded-xl bg-white border border-slate-200">
+                                            <span className="text-xl">{ic}</span>
+                                            <div className="min-w-0 flex-1"><p className="text-[11px] font-bold uppercase text-slate-500">{label}</p>
+                                                {x ? <button onClick={() => setProfile(studentKey(x.s))} className="text-sm font-bold text-slate-900 hover:underline truncate block text-left">{nameOf(x.s)} <span className="font-normal text-slate-500">· {x.s.student_class}</span></button> : <p className="text-sm text-slate-400">{T.noData}</p>}
+                                            </div>
+                                            {x && <span className="text-xs font-bold text-slate-600 text-right">{sub(x)}</span>}
+                                        </div>
+                                    ))}
+                                </StatCard>
+                                <StatCard title={`🎧 ${T.auditions}`}>
+                                    {st.auds.length > 1 && <div className="grid grid-cols-2 gap-2 mb-1">
+                                        <div className="p-2 rounded-xl bg-emerald-50 border border-emerald-200"><p className="text-[10px] font-bold uppercase text-emerald-700">😊 {T.easiest}</p><p className="text-xs font-bold text-slate-900 truncate">{st.auds[0].title}</p><p className="text-xs text-emerald-700 font-bold">{fmt(st.auds[0].avg)}</p></div>
+                                        <div className="p-2 rounded-xl bg-rose-50 border border-rose-200"><p className="text-[10px] font-bold uppercase text-rose-700">😰 {T.hardest}</p><p className="text-xs font-bold text-slate-900 truncate">{st.auds[st.auds.length - 1].title}</p><p className="text-xs text-rose-700 font-bold">{fmt(st.auds[st.auds.length - 1].avg)}</p></div>
+                                    </div>}
+                                    <div className="max-h-48 overflow-y-auto space-y-2 pr-1">{st.auds.map(x => <StatBar key={x.title} label={x.title} value={x.avg} text={`${fmt(x.avg)} (${x.n})`} color={barColor(x.avg)} />)}</div>
+                                </StatCard>
+                                <StatCard title={`🎼 ${T.styles}`}>
+                                    {st.styles.map(x => <StatBar key={x.theme.id} label={x.theme.label} badge={x.theme.icon} value={x.avg} text={`${fmt(x.avg)} (${x.n})`} color={barColor(x.avg)} />)}
+                                </StatCard>
+                                <StatCard title={`📝 ${T.words}`} sub={T.wordsSub}>
+                                    {st.words.length ? st.words.map(x => <StatBar key={x.w} label={x.w} value={x.rate * 100} max={100} text={`${Math.round(x.rate * 100)} % (${x.fails}/${x.tries})`} color="bg-rose-500" />) : <p className="text-sm text-slate-400">{T.noData}</p>}
+                                </StatCard>
+                                <StatCard title={`📊 ${T.distribution}`}>
+                                    <div className="flex items-end gap-1 h-32 pt-2">
+                                        {st.dist.map((c, i) => { const mx = Math.max(...st.dist, 1); return (
+                                            <div key={i} className="flex-1 flex flex-col items-center justify-end h-full gap-1">
+                                                <span className="text-[10px] font-bold text-slate-600">{c || ''}</span>
+                                                <div className={`w-full rounded-t ${barColor(i)}`} style={{ height: `${(c / mx) * 80}%`, minHeight: c ? 4 : 0 }}></div>
+                                                <span className="text-[10px] text-slate-500">{i}</span>
+                                            </div>); })}
+                                    </div>
+                                </StatCard>
+                                <div className="lg:col-span-2"><StatCard title={`📈 ${T.evolution}`}>
+                                    {st.months.length ? <div className="flex items-end gap-2 h-36 pt-2 overflow-x-auto">
+                                        {st.months.map(x => (
+                                            <div key={x.m} className="min-w-[44px] flex-1 flex flex-col items-center justify-end h-full gap-1">
+                                                <span className="text-[10px] font-bold text-slate-700">{fmt(x.avg)}</span>
+                                                <div className="w-full max-w-[56px] rounded-t bg-indigo-500" style={{ height: `${(x.avg / 10) * 80}%`, minHeight: 4 }}></div>
+                                                <span className="text-[10px] text-slate-500 capitalize">{monthLabel(x.m)}</span>
+                                                <span className="text-[9px] text-slate-400">{x.n}</span>
+                                            </div>))}
+                                    </div> : <p className="text-sm text-slate-400">{T.noData}</p>}
+                                </StatCard></div>
+                            </div>
+                        </div>
+                    )}
+
+                    {sorted.length === 0 ? (<p className="text-slate-400 text-center py-10">{scores.length === 0 ? T.empty : T.noMatch}</p>) : (
+                        <div className="overflow-x-auto">
+                            <table className="w-full text-left text-sm border-collapse">
+                                <thead><tr className="border-b text-slate-400 text-xs uppercase bg-slate-50/50">
+                                    <Th k="name" label={T.cols[0]} /><Th k="group" label={T.cols[1]} /><Th k="audition" label={T.cols[2]} /><Th k="score" label={T.cols[3]} cls="text-center" /><Th k="date" label={T.cols[4]} /><th className="py-3.5 px-4 text-right">{T.cols[5]}</th>
+                                </tr></thead>
+                                <tbody>
+                                    {sorted.map(s => (
+                                        <tr key={s.id} className="border-b border-slate-100 hover:bg-slate-50/30 transition-colors">
+                                            <td className="py-3.5 px-4"><button onClick={() => setProfile(studentKey(s))} className="font-bold text-slate-950 hover:underline text-left">{nameOf(s)}</button><p className="text-xs text-slate-400">{hide ? '' : (s.student_email || T.noEmail)}</p></td>
+                                            <td className="py-3.5 px-4 font-mono text-xs">{s.student_class}</td>
+                                            <td className="py-3.5 px-4 text-slate-600 font-medium">{s.auditions?.title}</td>
+                                            <td className="py-3.5 px-4 text-center"><span className={`inline-block font-extrabold text-xs px-2.5 py-1 rounded-full ${scoreClass(s.score)}`}>{fmt(s.score)}/10</span></td>
+                                            <td className="py-3.5 px-4 text-xs text-slate-500 whitespace-nowrap">{dateLabel(s.created_at)}</td>
+                                            <td className="py-3.5 px-4 text-right space-x-1 whitespace-nowrap">
+                                                <button onClick={() => onView(s)} title={T.view} className="p-2 hover:bg-slate-100 rounded-lg text-slate-500 transition-colors"><Icons.Eye /></button>
+                                                <button onClick={() => onDelete(s.id)} title={T.del} className="p-2 hover:bg-rose-50 rounded-lg text-rose-600 transition-colors"><Icons.Trash /></button>
+                                            </td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
+                    )}
+
+                    {profile && profRows.length > 0 && (
+                        <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm flex items-center justify-center p-4 z-50" onClick={() => setProfile(null)}>
+                            <div className="bg-white rounded-2xl max-w-lg w-full p-6 shadow-xl space-y-4" onClick={e => e.stopPropagation()}>
+                                <div className="flex justify-between items-start gap-3">
+                                    <div><p className="text-[11px] font-bold uppercase text-slate-500">{T.profile}</p><h3 className="text-lg font-bold text-slate-900">{nameOf(profRows[0])}</h3><p className="text-xs text-slate-500">{profRows[0].student_class}{hide ? '' : ` · ${profRows[0].student_email || T.noEmail}`}</p></div>
+                                    <button onClick={() => setProfile(null)} className="text-slate-500 hover:text-slate-800 text-sm font-bold">✕</button>
+                                </div>
+                                <div className="grid grid-cols-4 gap-2 text-center">
+                                    {[[T.avg, fmt2(avgOf(profRows))], [T.count, profRows.length], [T.best, fmt(Math.max(...profRows.map(r => Number(r.score || 0))))], [T.tens, profRows.filter(r => Number(r.score) >= 10).length]].map(([l, v]) => (
+                                        <div key={l} className="bg-slate-50 border border-slate-200 rounded-xl p-2"><p className="text-[9px] font-bold uppercase text-slate-500">{l}</p><p className="text-lg font-black text-indigo-700">{v}</p></div>
+                                    ))}
+                                </div>
+                                <div className="flex items-end gap-1 h-24 border-b border-slate-200">
+                                    {profRows.map(r => <div key={r.id} title={`${r.auditions?.title}: ${fmt(r.score)}`} className={`flex-1 max-w-[28px] rounded-t ${barColor(Number(r.score))}`} style={{ height: `${Math.max(4, Number(r.score) * 10)}%` }}></div>)}
+                                </div>
+                                <div className="space-y-1.5 max-h-52 overflow-y-auto pr-1">
+                                    {[...profRows].reverse().map(r => (
+                                        <button key={r.id} onClick={() => { setProfile(null); onView(r); }} className="w-full flex justify-between items-center p-2.5 rounded-xl border border-slate-200 text-xs hover:bg-slate-50 text-left">
+                                            <span className="font-semibold text-slate-800 truncate">{r.auditions?.title}</span>
+                                            <span className="flex items-center gap-2 shrink-0"><span className="text-slate-400">{dateLabel(r.created_at)}</span><span className={`font-extrabold px-2 py-0.5 rounded-full ${scoreClass(r.score)}`}>{fmt(r.score)}</span></span>
+                                        </button>
+                                    ))}
+                                </div>
+                                <div className="flex justify-end"><button onClick={() => setProfile(null)} className="px-4 py-2 rounded-xl text-sm font-bold text-slate-600 bg-slate-100 hover:bg-slate-200">{T.close}</button></div>
+                            </div>
+                        </div>
+                    )}
+                </div>
+            );
+        };
+
         const App = () => {
             const initialTaskCode = getTaskCodeFromUrl();
             const recoveryHashPresent = typeof window !== 'undefined' && /type=recovery|access_token=/.test(window.location.hash || '');
@@ -1592,59 +1918,7 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
                                 )}
 
                                 {dashboardTab === 'scores' && (
-                                    <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
-                                        {stats && (
-                                            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
-                                                <div className="bg-gradient-to-br from-indigo-500 to-purple-500 text-white p-4 rounded-2xl shadow">
-                                                    <p className="text-[10px] font-bold uppercase tracking-wider opacity-80">Class Average</p>
-                                                    <p className="text-3xl font-black mt-1">{stats.avg} <span className="text-sm opacity-70">/ 10</span></p>
-                                                </div>
-                                                <div className="bg-gradient-to-br from-emerald-500 to-teal-500 text-white p-4 rounded-2xl shadow">
-                                                    <p className="text-[10px] font-bold uppercase tracking-wider opacity-80">Total Submissions</p>
-                                                    <p className="text-3xl font-black mt-1">{stats.count}</p>
-                                                </div>
-                                                <div className="bg-gradient-to-br from-amber-500 to-orange-500 text-white p-4 rounded-2xl shadow">
-                                                    <p className="text-[10px] font-bold uppercase tracking-wider opacity-80">Top Student</p>
-                                                    <p className="text-base font-black mt-1 truncate">{stats.bestName}</p>
-                                                    <p className="text-xs opacity-90">{stats.bestScore} / 10</p>
-                                                </div>
-                                            </div>
-                                        )}
-                                        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
-                                            <h2 className="text-xl font-bold text-slate-900">Your Students' Grades & Submissions</h2>
-                                            <div className="flex gap-2 w-full sm:w-auto">
-                                                <div className="relative flex-1 sm:w-72"><span className="absolute left-3 top-2.5 text-slate-400"><Icons.Search /></span><input type="text" placeholder="Search name, class, email, score..." value={searchTerm} onChange={e => setSearchTerm(e.target.value)} className="w-full pl-9 pr-4 py-2 border rounded-xl text-sm bg-slate-50 outline-none focus:ring-1 focus:ring-indigo-500" /></div>
-                                                {scoresList.length > 0 && (
-                                                    <button onClick={handleDeleteAllScores} className="px-3 py-2 bg-rose-600 hover:bg-rose-700 text-white rounded-xl text-xs font-bold flex items-center gap-1 whitespace-nowrap" title="Delete ALL student records">
-                                                        <Icons.Trash /> <span className="hidden sm:inline">Delete ALL</span>
-                                                    </button>
-                                                )}
-                                            </div>
-                                        </div>
-                                        {filteredScores.length === 0 ? ( <p className="text-slate-400 text-center py-10">No student submissions match your search.</p> ) : (
-                                            <div className="overflow-x-auto">
-                                                <table className="w-full text-left text-sm border-collapse">
-                                                    <thead>
-                                                        <tr className="border-b text-slate-400 text-xs uppercase bg-slate-50/50"><th className="py-3.5 px-4">Student</th><th className="py-3.5 px-4">Class</th><th className="py-3.5 px-4">Audition Task</th><th className="py-3.5 px-4 text-center">Score</th><th className="py-3.5 px-4 text-right">Actions</th></tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        {filteredScores.map(s => (
-                                                            <tr key={s.id} className="border-b border-slate-100 hover:bg-slate-50/30 transition-colors">
-                                                                <td className="py-3.5 px-4"><p className="font-bold text-slate-950">{s.student_name}</p><p className="text-xs text-slate-400">{s.student_email || 'No email'}</p></td>
-                                                                <td className="py-3.5 px-4 font-mono text-xs">{s.student_class}</td><td className="py-3.5 px-4 text-slate-600 font-medium">{s.auditions?.title}</td>
-                                                                <td className="py-3.5 px-4 text-center"><span className={`inline-block font-extrabold text-xs px-2.5 py-1 rounded-full ${Number(s.score) >= 8 ? 'bg-emerald-50 text-emerald-700' : Number(s.score) >= 5 ? 'bg-amber-50 text-amber-700' : 'bg-rose-50 text-rose-700'}`}>{Number(s.score).toFixed(1)}/10</span></td>
-                                                                <td className="py-3.5 px-4 text-right space-x-1">
-                                                                    <button onClick={() => setSelectedScoreDetails(s)} title="View" className="p-2 hover:bg-slate-100 rounded-lg text-slate-500 transition-colors"><Icons.Eye /></button>
-                                                                    <button onClick={() => generatePDF(s)} title="Diploma PDF" className="p-2 hover:bg-indigo-50 rounded-lg text-indigo-600 transition-colors"><Icons.Download /></button>
-                                                                    <button onClick={() => handleDeleteScore(s.id)} title="Delete" className="p-2 hover:bg-rose-50 rounded-lg text-rose-600 transition-colors"><Icons.Trash /></button>
-                                                                </td>
-                                                            </tr>
-                                                        ))}
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                        )}
-                                    </div>
+                                    <GradesDashboard scores={scoresList} auditions={auditionsList} lang="en" onView={setSelectedScoreDetails} onDelete={handleDeleteScore} onDeleteAll={handleDeleteAllScores} />
                                 )}
                             </div>
                         )}
