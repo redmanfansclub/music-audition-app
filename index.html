@@ -507,7 +507,10 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
                 view: 'Ver detalle', del: 'Eliminar', noEmail: 'Sin correo', anon: 'Alumno/a', profile: 'Ficha del alumno', close: 'Cerrar', best: 'Mejor nota',
                 csvHead: ['Alumno/a', 'Grupo', 'Correo', 'Audición', 'Artista', 'Nota', 'Fecha'], csvSep: ';', fileName: 'calificaciones', locale: 'es-ES',
                 ranking: 'Clasificación', allAvg: 'Todas las audiciones (media)', rankTie: 'Empate: va delante quien entregó antes y, si coincide, por orden alfabético.', rankTieAvg: 'Empate: más dieces; si sigue, quien entregó antes la última audición; y si no, orden alfabético.',
-                hall: 'Hall of Fame', top5: 'Top 10 general', top5class: 'Top 10 de la clase', top5course: (c) => `Top 10 de ${c}`, expand: (n) => `Ver clasificación completa (${n})`, collapse: 'Ver menos', project: 'Proyectar', projectClose: 'Cerrar', projectAll: 'Todos los grupos', below5: 'Media por debajo de 5', lowest5: 'Nadie por debajo de 5: los 5 más bajos', runners: 'Le siguen', entries: (n) => `${n} ${n === 1 ? 'entrega' : 'entregas'}`,
+                hall: 'Hall of Fame', top5: 'Top 10 general', top5class: 'Top 10 de la clase', top5course: (c) => `Top 10 de ${c}`, expand: (n) => `Ver clasificación completa (${n})`, collapse: 'Ver menos', project: 'Proyectar', projectClose: 'Cerrar', projectAll: 'Todos los grupos',
+                pj: { setup: 'Proyectar en clase', group: 'Grupo', aud: 'Audición', start: 'Empezar', s1: 'Top 10 de la audición', s2: 'Top 10 del curso', s3: 'Hall of Fame del curso', s4: 'Liga de grupos', s5: 'Nuestras audiciones',
+                      king: 'Rey o reina del 10', best: 'Mejor media', improve: 'Mejora del día', improveSub: (d) => `+${d} sobre su media`, tens: (n) => `${n} ${n === 1 ? 'diez' : 'dieces'}`, course: 'Media del curso', last: 'Última audición',
+                      easiest: 'La que mejor se os dio', hardest: 'El reto', isNew: 'NUEVO', reveal: 'Pulsa → para descubrir el podio', none: 'Todavía no hay datos', next: 'Siguiente', prev: 'Anterior' }, below5: 'Media por debajo de 5', lowest5: 'Nadie por debajo de 5: los 5 más bajos', runners: 'Le siguen', entries: (n) => `${n} ${n === 1 ? 'entrega' : 'entregas'}`,
                 edit: 'Editar', editTitle: 'Corregir datos de la entrega', name: 'Nombre y apellidos', group: 'Grupo', save: 'Guardar', cancel: 'Cancelar', editNote: 'Solo se cambia esta entrega. El correo no se puede modificar.'
             },
             en: {
@@ -526,7 +529,10 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
                 view: 'View', del: 'Delete', noEmail: 'No email', anon: 'Student', profile: 'Student profile', close: 'Close', best: 'Best mark',
                 csvHead: ['Student', 'Group', 'Email', 'Audition', 'Artist', 'Score', 'Date'], csvSep: ',', fileName: 'grades', locale: 'en-GB',
                 ranking: 'Leaderboard', allAvg: 'All auditions (average)', rankTie: 'Tie: whoever submitted first goes ahead, then alphabetical order.', rankTieAvg: 'Tie: more perfect 10s; then whoever submitted the latest audition first; then alphabetical order.',
-                hall: 'Hall of Fame', top5: 'Overall top 10', top5class: 'Class top 10', top5course: (c) => `${c} top 10`, expand: (n) => `Show full leaderboard (${n})`, collapse: 'Show less', project: 'Project', projectClose: 'Close', projectAll: 'All groups', below5: 'Average below 5', lowest5: 'Nobody below 5: the 5 lowest', runners: 'Runners-up', entries: (n) => `${n} ${n === 1 ? 'submission' : 'submissions'}`,
+                hall: 'Hall of Fame', top5: 'Overall top 10', top5class: 'Class top 10', top5course: (c) => `${c} top 10`, expand: (n) => `Show full leaderboard (${n})`, collapse: 'Show less', project: 'Project', projectClose: 'Close', projectAll: 'All groups',
+                pj: { setup: 'Project in class', group: 'Group', aud: 'Audition', start: 'Start', s1: 'Audition top 10', s2: 'Course top 10', s3: 'Course Hall of Fame', s4: 'Group league', s5: 'Our auditions',
+                      king: 'King or queen of 10', best: 'Best average', improve: 'Most improved today', improveSub: (d) => `+${d} over their average`, tens: (n) => `${n} perfect ${n === 1 ? 'score' : 'scores'}`, course: 'Course average', last: 'Latest audition',
+                      easiest: 'The one you did best', hardest: 'The challenge', isNew: 'NEW', reveal: 'Press → to reveal the podium', none: 'No data yet', next: 'Next', prev: 'Back' }, below5: 'Average below 5', lowest5: 'Nobody below 5: the 5 lowest', runners: 'Runners-up', entries: (n) => `${n} ${n === 1 ? 'submission' : 'submissions'}`,
                 edit: 'Edit', editTitle: 'Correct submission details', name: 'Full name', group: 'Group', save: 'Save', cancel: 'Cancel', editNote: 'Only this submission changes. The email cannot be edited.'
             }
         };
@@ -617,8 +623,10 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
             const [showStats, setShowStats] = React.useState(true);
             const [profile, setProfile] = React.useState(null);
             const [rankAll, setRankAll] = React.useState(false);
-            const [projRank, setProjRank] = React.useState(false);
-            React.useEffect(() => { if (!projRank) return; const k = (e) => { if (e.key === 'Escape' && !document.fullscreenElement) setProjRank(false); }; document.addEventListener('keydown', k); return () => document.removeEventListener('keydown', k); }, [projRank]);
+            const [pjSetup, setPjSetup] = React.useState(null);   // { group, aud } mientras se elige
+            const [pj, setPj] = React.useState(null);             // { group, aud } durante la proyección
+            const [pjScreen, setPjScreen] = React.useState(0);
+            const [pjReveal, setPjReveal] = React.useState(0);
             const [editing, setEditing] = React.useState(null);
             const [savingEdit, setSavingEdit] = React.useState(false);
 
@@ -722,6 +730,59 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
                 </ol>
             );
 
+
+            // ---------- PROYECCIÓN EN CLASE: presentación de 5 pantallas ----------
+            const lastAudOf = (group) => auditionOrder(scores.filter(s => s.student_class === group))[0] || '';
+            const openProjection = () => {
+                const g = fGroup || groups[0] || '';
+                setPjSetup({ group: g, aud: (fAud && scores.some(s => s.student_class === g && s.audition_id === fAud)) ? fAud : lastAudOf(g) });
+            };
+            const startProjection = () => { setPj(pjSetup); setPjSetup(null); setPjScreen(0); setPjReveal(0); };
+            const closeProjection = () => { try { if (document.fullscreenElement) document.exitFullscreen(); } catch (e) {} setPj(null); };
+            const pjData = React.useMemo(() => {
+                if (!pj) return null;
+                const inGroup = scores.filter(s => s.student_class === pj.group);
+                const audRank = buildRanking(inGroup, '', pj.aud);
+                const courseRank = buildRanking(inGroup, '', '');
+                const prevRank = buildRanking(inGroup.filter(s => s.audition_id !== pj.aud), '', '');
+                const prevPos = Object.fromEntries(prevRank.map((x, i) => [studentKey(x.s), i]));
+                const moves = Object.fromEntries(courseRank.map((x, i) => {
+                    const k = studentKey(x.s), before = prevPos[k];
+                    return [k, before === undefined || before >= 10 ? (i < 10 ? 'new' : 0) : before - i];
+                }));
+                const studs = aggregateStudents(inGroup);
+                const cmp = compareAvg(auditionOrder(inGroup));
+                const king = studs.filter(x => x.tens > 0).sort((a, b) => b.tens - a.tens || cmp(a, b)).slice(0, 5);
+                const poolB = studs.some(x => x.n >= 2) ? studs.filter(x => x.n >= 2) : studs;
+                const best = [...poolB].sort(cmp).slice(0, 5);
+                const improve = inGroup.filter(s => s.audition_id === pj.aud).map(s => {
+                    const others = inGroup.filter(o => studentKey(o) === studentKey(s) && o.audition_id !== pj.aud);
+                    return others.length ? { s, diff: Number(s.score || 0) - avgOf(others) } : null;
+                }).filter(x => x && x.diff > 0).sort((a, b) => b.diff - a.diff || byName(a, b)).slice(0, 3);
+                const league = groups.map(g => {
+                    const list = scores.filter(s => s.student_class === g);
+                    const la = auditionOrder(list)[0];
+                    return { g, avg: avgOf(list), last: avgOf(list.filter(s => s.audition_id === la)), n: list.length };
+                }).filter(x => x.n > 0).sort((a, b) => b.avg - a.avg);
+                const audLeague = Object.entries(groupBy(inGroup, s => s.audition_id)).map(([id, arr]) => ({ id, title: arr[0].auditions?.title || id, avg: avgOf(arr) })).sort((a, b) => b.avg - a.avg);
+                const audTitle = (auds.find(([id]) => id === pj.aud) || [])[1] || '';
+                return { audRank, courseRank, moves, noPrev: prevRank.length === 0, king, best, improve, league, audLeague, audTitle };
+            }, [pj, scores, groups, auds]);
+            const pjPodiumScreen = pjScreen === 0 || pjScreen === 1;
+            const pjMaxReveal = pjData ? Math.min(3, (pjScreen === 0 ? pjData.audRank : pjData.courseRank).length) : 0;
+            const pjNext = () => { if (pjPodiumScreen && pjReveal < pjMaxReveal) { setPjReveal(r => r + 1); return; } if (pjScreen < 4) { setPjScreen(n => n + 1); setPjReveal(0); } };
+            const pjPrev = () => { if (pjScreen > 0) { setPjScreen(n => n - 1); setPjReveal(3); } };
+            React.useEffect(() => {
+                if (!pj) return;
+                const k = (e) => {
+                    if (e.key === 'Escape' && !document.fullscreenElement) { closeProjection(); return; }
+                    if (['ArrowRight', 'PageDown', ' ', 'Enter'].includes(e.key)) { e.preventDefault(); pjNext(); }
+                    if (['ArrowLeft', 'PageUp'].includes(e.key)) { e.preventDefault(); pjPrev(); }
+                };
+                document.addEventListener('keydown', k);
+                return () => document.removeEventListener('keydown', k);
+            });
+
             const resetFilters = () => { setQ(''); setFGroup(''); setFCourse(''); setFAud(''); setFBand(''); setFFrom(''); setFTo(''); };
             const anyFilter = q || fGroup || fCourse || fAud || fBand || fFrom || fTo;
             const monthLabel = (m) => { const [y, mo] = m.split('-'); return new Date(Number(y), Number(mo) - 1, 1).toLocaleDateString(T.locale, { month: 'short' }).replace('.', ''); };
@@ -769,7 +830,7 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
                                 <h3 className="text-base font-black text-slate-900">🏁 {T.ranking}{fGroup ? ` · ${fGroup}` : ''}</h3>
                                 <div className="flex flex-wrap gap-2">
                                     {ranking.length > 15 && <button onClick={() => setRankAll(v => !v)} className="px-3 py-1.5 bg-white border border-indigo-200 text-indigo-700 rounded-lg text-xs font-bold">{rankAll ? `▲ ${T.collapse}` : `▼ ${T.expand(ranking.length)}`}</button>}
-                                    {ranking.length > 0 && <button onClick={() => setProjRank(true)} className="px-3 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg text-xs font-bold">📽 {T.project}</button>}
+                                    {ranking.length > 0 && <button onClick={() => openProjection()} className="px-3 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg text-xs font-bold">📽 {T.project}</button>}
                                 </div>
                             </div>
                             {ranking.length === 0 ? <p className="text-sm text-slate-400">{T.noData}</p> : (<>
@@ -930,47 +991,144 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
                         </div>
                     )}
 
-                    {projRank && (() => {
-                        const audTitle = fAud ? ((auds.find(([id]) => id === fAud) || [])[1] || '') : T.allAvg;
+                    {pjSetup && (
+                        <div className="fixed inset-0 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4 z-[70]" onClick={() => setPjSetup(null)}>
+                            <div className="bg-white rounded-2xl max-w-md w-full p-6 shadow-xl space-y-4" onClick={e => e.stopPropagation()}>
+                                <h3 className="text-lg font-bold text-slate-900">📽 {T.pj.setup}</h3>
+                                <div><label className="block text-xs font-bold uppercase text-slate-500 mb-1">{T.pj.group}</label>
+                                    <select value={pjSetup.group} onChange={e => setPjSetup({ group: e.target.value, aud: lastAudOf(e.target.value) })} className={`${sel} w-full text-sm py-2.5`}>{groups.map(g => <option key={g} value={g}>{g}</option>)}</select></div>
+                                <div><label className="block text-xs font-bold uppercase text-slate-500 mb-1">{T.pj.aud}</label>
+                                    <select value={pjSetup.aud} onChange={e => setPjSetup(v => ({ ...v, aud: e.target.value }))} className={`${sel} w-full text-sm py-2.5`}>
+                                        {auditionOrder(scores.filter(s => s.student_class === pjSetup.group)).map(id => <option key={id} value={id}>{(auds.find(([a]) => a === id) || [])[1] || id}</option>)}
+                                    </select></div>
+                                <div className="flex justify-end gap-2 pt-2">
+                                    <button onClick={() => setPjSetup(null)} className="px-4 py-2 rounded-xl text-sm font-bold text-slate-600 bg-slate-100 hover:bg-slate-200">{T.cancel}</button>
+                                    <button onClick={startProjection} disabled={!pjSetup.group || !pjSetup.aud} className="px-4 py-2 rounded-xl text-sm font-bold text-white bg-indigo-600 hover:bg-indigo-700 disabled:opacity-50">▶ {T.pj.start}</button>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+
+                    {pj && pjData && (() => {
+                        const P = T.pj;
                         const fs = () => { try { document.fullscreenElement ? document.exitFullscreen() : document.documentElement.requestFullscreen(); } catch (e) {} };
-                        const close = () => { try { if (document.fullscreenElement) document.exitFullscreen(); } catch (e) {} setProjRank(false); };
-                        const pod = [[1, 230, '#CBD5E1', '🥈', 0.5], [0, 300, '#FBBF24', '🥇', 0.9], [2, 170, '#FDBA74', '🥉', 0.2]];
+                        const titles = [`🎧 ${P.s1}`, `📚 ${P.s2}`, `🌟 ${P.s3}`, `🏆 ${P.s4}`, `🎼 ${P.s5}`];
+                        const sub = [pjData.audTitle, pj.group, pj.group, '', pj.group];
+                        const card = { background: 'rgba(255,255,255,.1)' };
+                        const gold = '#FBBF24';
+                        const Move = ({ k }) => { if (pjScreen !== 1 || pjData.noPrev) return null; const m = pjData.moves[k];
+                            if (m === 'new') return <span className="text-xs font-black px-2 py-0.5 rounded-full" style={{ background: gold, color: '#1E1B4B' }}>{P.isNew}</span>;
+                            if (!m) return <span className="text-lg font-black" style={{ opacity: .45 }}>=</span>;
+                            return <span className="text-lg font-black" style={{ color: m > 0 ? '#4ADE80' : '#FCA5A5' }}>{m > 0 ? '▲' : '▼'}{Math.abs(m)}</span>; };
+                        const Podium = ({ list }) => {
+                            const cnt = Math.min(3, list.length); const need = { 0: cnt, 1: cnt - 1, 2: cnt - 2 };   // se descubre de abajo arriba: 3.º, 2.º y 1.º
+                            const pod = [[1, 230, '#CBD5E1', '🥈'], [0, 300, gold, '🥇'], [2, 170, '#FDBA74', '🥉']];
+                            return (<>
+                                <div className="grid grid-cols-3 gap-4 items-end max-w-4xl mx-auto mt-6">
+                                    {pod.map(([pos, hgt, col, medal]) => { const x = list[pos]; if (!x) return <div key={pos}></div>; const shown = pjReveal >= need[pos]; return (
+                                        <div key={pos} className="flex flex-col items-center text-center min-w-0">
+                                            {shown ? (<div className="pr-pop">
+                                                <div className="text-5xl md:text-6xl">{medal}</div>
+                                                <div className="text-xl md:text-3xl font-black leading-tight mt-1 break-words">{x.s.student_name}</div>
+                                                <div className="text-sm md:text-base mb-2 flex items-center justify-center gap-2" style={{ opacity: .85 }}>{x.s.student_class} <Move k={studentKey(x.s)} /></div>
+                                            </div>) : <div className="text-6xl mb-3 pr-drum">❓</div>}
+                                            <div className={`${shown ? 'pr-bar' : ''} w-full rounded-t-2xl flex flex-col items-center pt-4 shadow-2xl`} style={{ height: hgt, background: shown ? col : 'rgba(255,255,255,.12)', color: '#1E1B4B' }}>
+                                                {shown && <><span className="text-4xl md:text-5xl font-black">{fmt(x.value)}</span><span className="text-lg font-black">{pos + 1}.º</span></>}
+                                            </div>
+                                        </div>); })}
+                                </div>
+                                {pjReveal < Math.min(3, list.length) && <p className="text-center mt-4 text-sm font-bold" style={{ opacity: .7 }}>🥁 {P.reveal}</p>}
+                                {list.length > 3 && <div className="max-w-3xl mx-auto mt-8 space-y-2">
+                                    {list.slice(3, 10).map((x, i) => (
+                                        <div key={i} className="pr-pop flex items-center gap-4 rounded-2xl px-5 py-2.5" style={{ ...card, animationDelay: `${0.15 + i * 0.12}s` }}>
+                                            <span className="w-14 text-2xl font-black text-right" style={{ color: gold }}>{i + 4}.º</span>
+                                            <span className="flex-1 min-w-0 text-xl md:text-2xl font-bold truncate">{x.s.student_name}</span>
+                                            <Move k={studentKey(x.s)} />
+                                            <span className="text-2xl font-black w-16 text-right">{fmt(x.value)}</span>
+                                        </div>))}
+                                </div>}
+                            </>);
+                        };
+                        const MiniTop = ({ title, list, val }) => (
+                            <div className="rounded-3xl p-5" style={card}>
+                                <p className="text-lg font-black mb-3" style={{ color: gold }}>{title}</p>
+                                {list.length ? list.map((x, i) => (
+                                    <div key={i} className="pr-pop flex items-center gap-3 py-1.5" style={{ animationDelay: `${0.1 + i * 0.1}s` }}>
+                                        <span className="text-2xl w-9">{['🥇', '🥈', '🥉', '4.º', '5.º'][i]}</span>
+                                        <span className="flex-1 min-w-0 text-lg md:text-xl font-bold truncate">{x.s.student_name}</span>
+                                        <span className="text-lg font-black">{val(x)}</span>
+                                    </div>)) : <p style={{ opacity: .6 }}>{P.none}</p>}
+                            </div>);
+                        const maxL = Math.max(10, ...pjData.league.map(x => x.avg));
                         return (
-                            <div className="fixed inset-0 z-[70] overflow-y-auto" style={{ background: 'linear-gradient(160deg,#1E1B4B 0%,#312E81 55%,#4338CA 100%)', color: '#FFFFFF' }}>
-                                <style>{`@keyframes prRise{from{transform:scaleY(0)}to{transform:scaleY(1)}}@keyframes prPop{from{opacity:0;transform:translateY(16px) scale(.96)}to{opacity:1;transform:none}}.pr-bar{transform-origin:bottom;animation:prRise .9s cubic-bezier(.2,.8,.2,1) both}.pr-pop{animation:prPop .5s ease-out both}`}</style>
+                            <div className="fixed inset-0 z-[80] overflow-y-auto select-none" style={{ background: 'linear-gradient(160deg,#1E1B4B 0%,#312E81 55%,#4338CA 100%)', color: '#FFFFFF' }}
+                                onClick={e => { if (!e.target.closest('button')) pjNext(); }}>
+                                <style>{`@keyframes prRise{from{transform:scaleY(0)}to{transform:scaleY(1)}}@keyframes prPop{from{opacity:0;transform:translateY(16px) scale(.96)}to{opacity:1;transform:none}}@keyframes prDrum{0%,100%{transform:rotate(-6deg)}50%{transform:rotate(6deg)}}.pr-bar{transform-origin:bottom;animation:prRise .8s cubic-bezier(.2,.8,.2,1) both}.pr-pop{animation:prPop .5s ease-out both}.pr-drum{animation:prDrum .5s ease-in-out infinite;opacity:.6}`}</style>
                                 <div className="sticky top-0 z-10 flex flex-wrap justify-between items-center gap-3 px-6 py-4" style={{ background: 'rgba(15,12,50,.88)' }}>
                                     <div>
-                                        <p className="text-sm font-bold uppercase tracking-widest" style={{ color: '#FBBF24' }}>🏁 {T.ranking}</p>
-                                        <p className="text-xl md:text-3xl font-black">{fGroup || T.projectAll} · {audTitle}</p>
+                                        <p className="text-sm font-bold uppercase tracking-widest" style={{ color: gold }}>{titles[pjScreen]}</p>
+                                        <p className="text-xl md:text-3xl font-black">{sub[pjScreen] || '\u00A0'}</p>
                                     </div>
-                                    <div className="flex gap-2">
-                                        <button onClick={fs} className="px-4 py-2 rounded-xl text-sm font-bold" style={{ background: 'rgba(255,255,255,.15)', color: '#FFFFFF' }}>⛶</button>
-                                        <button onClick={close} className="px-4 py-2 rounded-xl text-sm font-bold" style={{ background: '#FFFFFF', color: '#1E1B4B' }}>✕ {T.projectClose}</button>
+                                    <div className="flex items-center gap-2">
+                                        <button onClick={pjPrev} disabled={pjScreen === 0} className="px-4 py-2 rounded-xl text-lg font-black disabled:opacity-30" style={{ background: 'rgba(255,255,255,.15)', color: '#FFFFFF' }} aria-label={P.prev}>◀</button>
+                                        <span className="flex gap-1.5 px-2">{titles.map((_, i) => <span key={i} className="w-2.5 h-2.5 rounded-full" style={{ background: i === pjScreen ? gold : 'rgba(255,255,255,.3)' }}></span>)}</span>
+                                        <button onClick={pjNext} disabled={pjScreen === 4} className="px-4 py-2 rounded-xl text-lg font-black disabled:opacity-30" style={{ background: 'rgba(255,255,255,.15)', color: '#FFFFFF' }} aria-label={P.next}>▶</button>
+                                        <button onClick={fs} className="px-3 py-2 rounded-xl text-sm font-bold" style={{ background: 'rgba(255,255,255,.15)', color: '#FFFFFF' }}>⛶</button>
+                                        <button onClick={closeProjection} className="px-4 py-2 rounded-xl text-sm font-bold" style={{ background: '#FFFFFF', color: '#1E1B4B' }}>✕ {T.projectClose}</button>
                                     </div>
                                 </div>
-                                <div className="max-w-6xl mx-auto px-6 pb-16">
-                                    <div className="grid grid-cols-3 gap-4 items-end max-w-4xl mx-auto mt-10">
-                                        {pod.map(([pos, hgt, col, medal, delay]) => { const x = ranking[pos]; if (!x) return <div key={pos}></div>; return (
-                                            <div key={pos} className="flex flex-col items-center text-center min-w-0">
-                                                <div className="pr-pop" style={{ animationDelay: `${delay + 0.6}s` }}>
-                                                    <div className="text-5xl md:text-6xl">{medal}</div>
-                                                    <div className="text-xl md:text-3xl font-black leading-tight mt-1 break-words">{x.s.student_name}</div>
-                                                    <div className="text-sm md:text-base mb-3" style={{ opacity: .75 }}>{x.s.student_class}</div>
-                                                </div>
-                                                <div className="pr-bar w-full rounded-t-2xl flex flex-col items-center pt-4 shadow-2xl" style={{ height: hgt, background: col, color: '#1E1B4B', animationDelay: `${delay}s` }}>
-                                                    <span className="text-4xl md:text-5xl font-black">{fmt(x.value)}</span>
-                                                    <span className="text-lg font-black">{pos + 1}.º</span>
-                                                </div>
-                                            </div>); })}
-                                    </div>
-                                    {ranking.length > 3 && <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mt-10">
-                                        {ranking.slice(3).map((x, i) => (
-                                            <div key={i} className="pr-pop flex items-center gap-4 rounded-2xl px-5 py-3" style={{ background: 'rgba(255,255,255,.1)', animationDelay: `${Math.min(1.6 + i * 0.05, 3.5)}s` }}>
-                                                <span className="w-14 text-2xl font-black text-right" style={{ color: '#FBBF24' }}>{i + 4}.º</span>
-                                                <span className="flex-1 min-w-0"><span className="block text-xl font-bold truncate">{x.s.student_name}</span><span className="block text-sm" style={{ opacity: .7 }}>{x.s.student_class}</span></span>
-                                                <span className="text-2xl font-black">{fmt(x.value)}</span>
-                                            </div>))}
-                                    </div>}
+                                <div key={pjScreen} className="max-w-6xl mx-auto px-6 pb-16">
+                                    {pjScreen === 0 && (pjData.audRank.length ? <Podium list={pjData.audRank} /> : <p className="text-center mt-20 text-2xl">{P.none}</p>)}
+                                    {pjScreen === 1 && (pjData.courseRank.length ? <Podium list={pjData.courseRank} /> : <p className="text-center mt-20 text-2xl">{P.none}</p>)}
+                                    {pjScreen === 2 && (
+                                        <div className="grid grid-cols-1 lg:grid-cols-3 gap-5 mt-8">
+                                            <MiniTop title={`👑 ${P.king}`} list={pjData.king} val={x => P.tens(x.tens)} />
+                                            <MiniTop title={`🎯 ${P.best}`} list={pjData.best} val={x => fmt(x.avg)} />
+                                            <div className="rounded-3xl p-5" style={{ ...card, border: `2px solid ${gold}` }}>
+                                                <p className="text-lg font-black mb-1" style={{ color: gold }}>🚀 {P.improve}</p>
+                                                <p className="text-sm mb-3" style={{ opacity: .7 }}>{pjData.audTitle}</p>
+                                                {pjData.improve.length ? (<>
+                                                    <div className="pr-pop text-center py-3">
+                                                        <div className="text-5xl">🚀</div>
+                                                        <div className="text-2xl md:text-3xl font-black mt-2">{pjData.improve[0].s.student_name}</div>
+                                                        <div className="text-lg font-bold mt-1" style={{ color: '#4ADE80' }}>{P.improveSub(fmt(pjData.improve[0].diff))}</div>
+                                                    </div>
+                                                    {pjData.improve.slice(1).map((x, i) => (
+                                                        <div key={i} className="pr-pop flex justify-between gap-2 py-1.5 text-base" style={{ animationDelay: `${0.4 + i * 0.15}s` }}>
+                                                            <span className="truncate font-bold">{x.s.student_name}</span><span style={{ color: '#4ADE80' }} className="font-black">+{fmt(x.diff)}</span>
+                                                        </div>))}
+                                                </>) : <p style={{ opacity: .6 }}>{P.none}</p>}
+                                            </div>
+                                        </div>
+                                    )}
+                                    {pjScreen === 3 && (
+                                        <div className="max-w-4xl mx-auto mt-8 space-y-3">
+                                            <div className="flex justify-end gap-4 text-xs font-bold" style={{ opacity: .8 }}><span><span className="inline-block w-3 h-3 rounded-sm align-middle mr-1" style={{ background: gold }}></span>{P.course}</span><span><span className="inline-block w-3 h-3 rounded-sm align-middle mr-1" style={{ background: '#A5B4FC' }}></span>{P.last}</span></div>
+                                            {pjData.league.map((x, i) => (
+                                                <div key={x.g} className="pr-pop rounded-2xl px-5 py-3 flex items-center gap-4" style={{ ...card, animationDelay: `${i * 0.15}s`, outline: x.g === pj.group ? `2px solid ${gold}` : 'none' }}>
+                                                    <span className="w-10 text-2xl text-center">{['🥇', '🥈', '🥉'][i] || `${i + 1}.º`}</span>
+                                                    <span className="w-28 md:w-36 text-xl md:text-2xl font-black shrink-0">{x.g}</span>
+                                                    <div className="flex-1 space-y-1.5">
+                                                        <div className="h-4 rounded-full overflow-hidden" style={{ background: 'rgba(255,255,255,.12)' }}><div className="h-full rounded-full pr-grow" style={{ width: `${(x.avg / maxL) * 100}%`, background: gold }}></div></div>
+                                                        <div className="h-2.5 rounded-full overflow-hidden" style={{ background: 'rgba(255,255,255,.12)' }}><div className="h-full rounded-full" style={{ width: `${(x.last / maxL) * 100}%`, background: '#A5B4FC' }}></div></div>
+                                                    </div>
+                                                    <span className="w-24 text-right"><span className="block text-2xl font-black">{fmt(x.avg)}</span><span className="block text-xs" style={{ opacity: .75 }}>{fmt(x.last)}</span></span>
+                                                </div>))}
+                                        </div>
+                                    )}
+                                    {pjScreen === 4 && (
+                                        <div className="max-w-4xl mx-auto mt-8 space-y-3">
+                                            {pjData.audLeague.map((x, i) => {
+                                                const top = i === 0, last = i === pjData.audLeague.length - 1 && pjData.audLeague.length > 1;
+                                                return (
+                                                    <div key={x.id} className="pr-pop rounded-2xl px-5 py-3 flex items-center gap-4" style={{ ...card, animationDelay: `${i * 0.15}s`, outline: top ? `2px solid ${gold}` : last ? '2px solid #A5B4FC' : 'none' }}>
+                                                        <span className="w-10 text-2xl text-center">{top ? '⭐' : last ? '🧗' : `${i + 1}.º`}</span>
+                                                        <span className="flex-1 min-w-0"><span className="block text-xl md:text-2xl font-bold truncate">{x.title}</span>
+                                                            {(top || last) && <span className="block text-sm font-bold" style={{ color: top ? gold : '#A5B4FC' }}>{top ? P.easiest : P.hardest}</span>}</span>
+                                                        <span className="text-2xl font-black">{fmt(x.avg)}</span>
+                                                    </div>); })}
+                                        </div>
+                                    )}
                                 </div>
                             </div>);
                     })()}
