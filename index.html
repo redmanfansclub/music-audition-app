@@ -499,8 +499,7 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
                 showStats: 'Ver estadísticas', hideStats: 'Ocultar estadísticas', deleteAll: 'Borrar todo', deleteAllTitle: 'Borrar TODOS los resultados',
                 avg: 'Nota media', count: 'Entregas', passRate: 'Aprobados', excellent: 'Sobresalientes', tens: 'Dieces', hints: 'Con pistas',
                 league: 'Liga de grupos', champion: 'Campeón', lantern: 'Farolillo rojo', honour: 'Cuadro de honor',
-                king: 'Rey o reina del 10', kingSub: (n) => `${n} ${n === 1 ? 'diez' : 'dieces'}`, bestAvg: 'Mejor media', bestAvgSub: (a, n) => `${a} de media en ${n} entregas`,
-                most: 'Más constante', mostSub: (n) => `${n} entregas`, push: 'Necesita un empujón', pushSub: (a) => `${a} de media`,
+                king: 'Rey o reina del 10', kingSub: (n) => `${n} ${n === 1 ? 'diez' : 'dieces'}`, bestAvg: 'Mejor media', bestAvgSub: (a, n) => `${a} de media en ${n} entregas`, push: 'Necesita un empujón', pushSub: (a) => `${a} de media`,
                 auditions: 'Audiciones', easiest: 'La más fácil', hardest: 'La más difícil', styles: 'Estilos musicales',
                 words: 'Palabras más falladas', wordsSub: 'Vocabulario para repasar en clase', distribution: 'Distribución de notas', evolution: 'Evolución mes a mes',
                 students: 'alumnos', subs: 'entregas', noData: 'Sin datos suficientes', empty: 'Todavía no hay entregas. Aparecerán aquí cuando el alumnado haga la tarea en el ordenador.',
@@ -508,7 +507,7 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
                 view: 'Ver detalle', del: 'Eliminar', noEmail: 'Sin correo', anon: 'Alumno/a', profile: 'Ficha del alumno', close: 'Cerrar', best: 'Mejor nota',
                 csvHead: ['Alumno/a', 'Grupo', 'Correo', 'Audición', 'Artista', 'Nota', 'Fecha'], csvSep: ';', fileName: 'calificaciones', locale: 'es-ES',
                 ranking: 'Clasificación', allAvg: 'Todas las audiciones (media)', rankTie: 'Empate: va delante quien entregó antes.', rankTieAvg: 'Empate: va delante quien entregó antes.',
-                hall: 'Hall of Fame', top5: 'Top 5 general', top5class: 'Top 5 de la clase', runners: 'Le siguen', entries: (n) => `${n} ${n === 1 ? 'entrega' : 'entregas'}`,
+                hall: 'Hall of Fame', top5: 'Top 10 general', top5class: 'Top 10 de la clase', top5course: (c) => `Top 10 de ${c}`, expand: (n) => `Ver clasificación completa (${n})`, collapse: 'Ver menos', below5: 'Media por debajo de 5', lowest5: 'Nadie por debajo de 5: los 5 más bajos', runners: 'Le siguen', entries: (n) => `${n} ${n === 1 ? 'entrega' : 'entregas'}`,
                 edit: 'Editar', editTitle: 'Corregir datos de la entrega', name: 'Nombre y apellidos', group: 'Grupo', save: 'Guardar', cancel: 'Cancelar', editNote: 'Solo se cambia esta entrega. El correo no se puede modificar.'
             },
             en: {
@@ -519,8 +518,7 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
                 showStats: 'Show statistics', hideStats: 'Hide statistics', deleteAll: 'Delete ALL', deleteAllTitle: 'Delete ALL student records',
                 avg: 'Class average', count: 'Submissions', passRate: 'Passed', excellent: 'Excellent', tens: 'Perfect 10s', hints: 'Used hints',
                 league: 'Group league', champion: 'Champion', lantern: 'Bottom of the table', honour: 'Hall of fame',
-                king: 'King or queen of 10', kingSub: (n) => `${n} perfect ${n === 1 ? 'score' : 'scores'}`, bestAvg: 'Best average', bestAvgSub: (a, n) => `${a} average over ${n} submissions`,
-                most: 'Most consistent', mostSub: (n) => `${n} submissions`, push: 'Needs a little push', pushSub: (a) => `${a} average`,
+                king: 'King or queen of 10', kingSub: (n) => `${n} perfect ${n === 1 ? 'score' : 'scores'}`, bestAvg: 'Best average', bestAvgSub: (a, n) => `${a} average over ${n} submissions`, push: 'Needs a little push', pushSub: (a) => `${a} average`,
                 auditions: 'Auditions', easiest: 'Easiest', hardest: 'Hardest', styles: 'Musical styles',
                 words: 'Most missed words', wordsSub: 'Vocabulary to review in class', distribution: 'Mark distribution', evolution: 'Month by month',
                 students: 'students', subs: 'submissions', noData: 'Not enough data', empty: 'No submissions yet. They will appear here when students do the task on a computer.',
@@ -528,7 +526,7 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
                 view: 'View', del: 'Delete', noEmail: 'No email', anon: 'Student', profile: 'Student profile', close: 'Close', best: 'Best mark',
                 csvHead: ['Student', 'Group', 'Email', 'Audition', 'Artist', 'Score', 'Date'], csvSep: ',', fileName: 'grades', locale: 'en-GB',
                 ranking: 'Leaderboard', allAvg: 'All auditions (average)', rankTie: 'Tie: whoever submitted first goes ahead.', rankTieAvg: 'Tie: whoever submitted first goes ahead.',
-                hall: 'Hall of Fame', top5: 'Overall top 5', top5class: 'Class top 5', runners: 'Runners-up', entries: (n) => `${n} ${n === 1 ? 'submission' : 'submissions'}`,
+                hall: 'Hall of Fame', top5: 'Overall top 10', top5class: 'Class top 10', top5course: (c) => `${c} top 10`, expand: (n) => `Show full leaderboard (${n})`, collapse: 'Show less', below5: 'Average below 5', lowest5: 'Nobody below 5: the 5 lowest', runners: 'Runners-up', entries: (n) => `${n} ${n === 1 ? 'submission' : 'submissions'}`,
                 edit: 'Edit', editTitle: 'Correct submission details', name: 'Full name', group: 'Group', save: 'Save', cancel: 'Cancel', editNote: 'Only this submission changes. The email cannot be edited.'
             }
         };
@@ -590,9 +588,7 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
             const [hide, setHide] = React.useState(false);
             const [showStats, setShowStats] = React.useState(true);
             const [profile, setProfile] = React.useState(null);
-            const [rGroup, setRGroup] = React.useState('');
-            const [rAud, setRAud] = React.useState('');
-            const [hGroup, setHGroup] = React.useState('');
+            const [rankAll, setRankAll] = React.useState(false);
             const [editing, setEditing] = React.useState(null);
             const [savingEdit, setSavingEdit] = React.useState(false);
 
@@ -648,12 +644,12 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
                 const studs = Object.values(groupBy(filtered, studentKey)).map(arr => ({
                     s: arr[0], n: arr.length, avg: avgOf(arr), tens: arr.filter(x => Number(x.score) >= 10).length
                 }));
-                res.king = [...studs].filter(x => x.tens > 0).sort((a, b) => b.tens - a.tens || b.avg - a.avg).slice(0, 4);
+                res.king = [...studs].filter(x => x.tens > 0).sort((a, b) => b.tens - a.tens || b.avg - a.avg).slice(0, 10);
                 const pool = studs.some(x => x.n >= 2) ? studs.filter(x => x.n >= 2) : studs;
-                res.bestAvg = [...pool].sort((a, b) => b.avg - a.avg || b.n - a.n).slice(0, 4);
-                res.most = [...studs].sort((a, b) => b.n - a.n || b.avg - a.avg).slice(0, 4);
-                res.push = studs.length > 1 ? [...studs].sort((a, b) => a.avg - b.avg || b.n - a.n).slice(0, 4) : [];
-                res.top5 = buildRanking(filtered, '', '').slice(0, 5);
+                res.bestAvg = [...pool].sort((a, b) => b.avg - a.avg || b.n - a.n).slice(0, 10);
+                const asc = [...studs].sort((a, b) => a.avg - b.avg || b.n - a.n);
+                res.pushBelow = asc.some(x => x.avg < 5);
+                res.push = studs.length > 1 ? (res.pushBelow ? asc.filter(x => x.avg < 5) : asc.slice(0, 5)) : [];
                 const audStats = Object.entries(groupBy(filtered, s => s.audition_id)).map(([id, arr]) => ({ title: arr[0].auditions?.title || id, avg: avgOf(arr), n: arr.length })).sort((a, b) => b.avg - a.avg);
                 res.auds = audStats;
                 res.styles = Object.entries(groupBy(filtered, s => styleByCode[s.audition_id] || s.taskDetails?.style || 'classical'))
@@ -670,9 +666,13 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
                 return res;
             }, [filtered, styleByCode]);
 
-            const ranking = React.useMemo(() => buildRanking(scores, rGroup, rAud), [scores, rGroup, rAud]);
-            const hallGroup = hGroup || rGroup || fGroup || groups[0] || '';
-            const top5class = React.useMemo(() => buildRanking(filtered, hallGroup, '').slice(0, 5), [filtered, hallGroup]);
+            const ranking = React.useMemo(() => buildRanking(scores, fGroup, fAud), [scores, fGroup, fAud]);
+            const topAll = React.useMemo(() => buildRanking(scores, '', fAud).slice(0, 10), [scores, fAud]);
+            // Top 10 de la clase: el grupo elegido arriba; sin grupo, un top 10 por curso
+            const topClass = React.useMemo(() => fGroup
+                ? [{ label: fGroup, list: buildRanking(scores, fGroup, fAud).slice(0, 10) }]
+                : courses.map(c => ({ label: c, list: buildRanking(scores.filter(s => courseOf(s.student_class) === c), '', fAud).slice(0, 10) })),
+            [scores, fGroup, fAud, courses]);
             const timeLabel = (d) => d ? new Date(d).toLocaleString(T.locale, { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' }) : '';
             const saveEdit = async () => {
                 if (!editing || !editing.name.trim() || !editing.cls.trim()) return;
@@ -728,59 +728,57 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
                         </div>
                     </div>
 
-                    {scores.length > 0 && (
-                    <div className="mb-5">
-<div className="rounded-2xl p-4 border-2 border-indigo-200 bg-indigo-50">
-                        <div className="flex flex-col md:flex-row md:items-center justify-between gap-2 mb-4">
-                            <h3 className="text-base font-black text-slate-900">🏁 {T.ranking}</h3>
-                            <div className="flex flex-wrap gap-2">
-                                <select value={rGroup} onChange={e => setRGroup(e.target.value)} className={sel}><option value="">{T.allGroups}</option>{groups.map(g => <option key={g} value={g}>{g}</option>)}</select>
-                                <select value={rAud} onChange={e => setRAud(e.target.value)} className={sel}><option value="">{T.allAvg}</option>{auds.map(([id, t]) => <option key={id} value={id}>{t}</option>)}</select>
-                            </div>
-                        </div>
-                        {ranking.length === 0 ? <p className="text-sm text-slate-400">{T.noData}</p> : (<>
-                            <div className="grid grid-cols-3 gap-2 items-end max-w-xl mx-auto mb-4">
-                                {[1, 0, 2].map(pos => { const x = ranking[pos]; if (!x) return <div key={pos}></div>;
-                                    const h = ['h-28', 'h-20', 'h-14'][pos]; const medal = ['🥇', '🥈', '🥉'][pos];
-                                    const col = ['bg-amber-400', 'bg-slate-300', 'bg-orange-300'][pos];
-                                    return (
-                                        <button key={pos} onClick={() => setProfile(studentKey(x.s))} className="flex flex-col items-center text-center min-w-0">
-                                            <span className="text-3xl">{medal}</span>
-                                            <span className="text-sm font-black text-slate-900 truncate max-w-full px-1">{nameOf(x.s)}</span>
-                                            <span className="text-[11px] text-slate-500 mb-1">{x.s.student_class}</span>
-                                            <div className={`ink-dark w-full ${h} ${col} rounded-t-xl flex flex-col items-center justify-start pt-2 shadow-inner`}>
-                                                <span className="text-xl font-black text-slate-900">{fmt(x.value)}</span>
-                                                <span className="text-[10px] font-bold text-slate-800">{pos + 1}.º</span>
-                                            </div>
-                                        </button>);
-                                })}
-                            </div>
-                            {ranking.length > 3 && <ol className="max-h-80 overflow-y-auto space-y-1 pr-1">
-                                {ranking.slice(3).map((x, i) => (
-                                    <li key={i} className="flex items-center gap-3 bg-white rounded-xl px-3 py-2 border border-slate-200">
-                                        <span className="w-8 text-right text-sm font-black text-slate-500">{i + 4}.º</span>
-                                        <button onClick={() => setProfile(studentKey(x.s))} className="flex-1 min-w-0 text-left text-sm font-semibold text-slate-800 truncate hover:underline">{nameOf(x.s)} <span className="font-normal text-xs text-slate-500">· {x.s.student_class}</span></button>
-                                        <div className="hidden sm:block w-28 h-2 rounded-full bg-slate-100 overflow-hidden"><div className={`h-full ${barColor(x.value)}`} style={{ width: `${x.value * 10}%` }}></div></div>
-                                        <span className="text-[11px] text-slate-400 w-24 text-right hidden md:block">{rAud ? timeLabel(x.first) : T.entries(x.n)}</span>
-                                        <span className={`text-xs font-extrabold px-2 py-0.5 rounded-full ${scoreClass(x.value)}`}>{fmt(x.value)}</span>
-                                    </li>))}
-                            </ol>}
-                            <p className="text-[11px] text-slate-500 mt-2">{rAud ? T.rankTie : T.rankTieAvg}</p>
-                        </>)}
+                    {/* Selector único: grupo y audición mandan sobre clasificación, Hall of Fame, estadísticas y tabla */}
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mb-3">
+                        <select value={fGroup} onChange={e => setFGroup(e.target.value)} className={`${sel} text-sm font-bold py-2.5`}><option value="">{T.allGroups}</option>{groups.map(g => <option key={g} value={g}>{g}</option>)}</select>
+                        <select value={fAud} onChange={e => setFAud(e.target.value)} className={`${sel} text-sm font-bold py-2.5`}><option value="">{T.allAvg}</option>{auds.map(([id, t]) => <option key={id} value={id}>{t}</option>)}</select>
                     </div>
 
-                    </div>
+                    {scores.length > 0 && (
+                        <div className="rounded-2xl p-4 border-2 border-indigo-200 bg-indigo-50 mb-5">
+                            <h3 className="text-base font-black text-slate-900 mb-4">🏁 {T.ranking}{fGroup ? ` · ${fGroup}` : ''}</h3>
+                            {ranking.length === 0 ? <p className="text-sm text-slate-400">{T.noData}</p> : (<>
+                                <div className="grid grid-cols-3 gap-2 items-end max-w-xl mx-auto mb-4">
+                                    {[1, 0, 2].map(pos => { const x = ranking[pos]; if (!x) return <div key={pos}></div>;
+                                        const h = ['h-28', 'h-20', 'h-14'][pos]; const medal = ['🥇', '🥈', '🥉'][pos];
+                                        const col = ['bg-amber-400', 'bg-slate-300', 'bg-orange-300'][pos];
+                                        return (
+                                            <button key={pos} onClick={() => setProfile(studentKey(x.s))} className="flex flex-col items-center text-center min-w-0">
+                                                <span className="text-3xl">{medal}</span>
+                                                <span className="text-sm font-black text-slate-900 truncate max-w-full px-1">{nameOf(x.s)}</span>
+                                                <span className="text-[11px] text-slate-500 mb-1">{x.s.student_class}</span>
+                                                <div className={`ink-dark w-full ${h} ${col} rounded-t-xl flex flex-col items-center justify-start pt-2 shadow-inner`}>
+                                                    <span className="text-xl font-black text-slate-900">{fmt(x.value)}</span>
+                                                    <span className="text-[10px] font-bold text-slate-800">{pos + 1}.º</span>
+                                                </div>
+                                            </button>);
+                                    })}
+                                </div>
+                                {ranking.length > 3 && <ol className={`space-y-1 pr-1 ${rankAll ? '' : 'max-h-[36rem] overflow-y-auto'}`}>
+                                    {ranking.slice(3).map((x, i) => (
+                                        <li key={i} className="flex items-center gap-3 bg-white rounded-xl px-3 py-2 border border-slate-200">
+                                            <span className="w-8 text-right text-sm font-black text-slate-500">{i + 4}.º</span>
+                                            <button onClick={() => setProfile(studentKey(x.s))} className="flex-1 min-w-0 text-left text-sm font-semibold text-slate-800 truncate hover:underline">{nameOf(x.s)} <span className="font-normal text-xs text-slate-500">· {x.s.student_class}</span></button>
+                                            <div className="hidden sm:block w-28 h-2 rounded-full bg-slate-100 overflow-hidden"><div className={`h-full ${barColor(x.value)}`} style={{ width: `${x.value * 10}%` }}></div></div>
+                                            <span className="text-[11px] text-slate-400 w-24 text-right hidden md:block">{fAud ? timeLabel(x.first) : T.entries(x.n)}</span>
+                                            <span className={`text-xs font-extrabold px-2 py-0.5 rounded-full ${scoreClass(x.value)}`}>{fmt(x.value)}</span>
+                                        </li>))}
+                                </ol>}
+                                <div className="flex flex-wrap justify-between items-center gap-2 mt-2">
+                                    <p className="text-[11px] text-slate-500">{fAud ? T.rankTie : T.rankTieAvg}</p>
+                                    {ranking.length > 18 && <button onClick={() => setRankAll(v => !v)} className="text-xs font-bold text-indigo-700 hover:underline">{rankAll ? T.collapse : T.expand(ranking.length)}</button>}
+                                </div>
+                            </>)}
+                        </div>
                     )}
 
                     <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 mb-2">
                         <div className="relative col-span-2"><span className="absolute left-3 top-2.5 text-slate-400"><Icons.Search /></span><input type="text" placeholder={T.search} value={q} onChange={e => setQ(e.target.value)} className="w-full pl-9 pr-3 py-2 bg-slate-50 border rounded-xl text-xs outline-none focus:border-indigo-500" /></div>
                         <select value={fCourse} onChange={e => setFCourse(e.target.value)} className={sel}><option value="">{T.allCourses}</option>{courses.map(c => <option key={c} value={c}>{c}</option>)}</select>
-                        <select value={fGroup} onChange={e => setFGroup(e.target.value)} className={sel}><option value="">{T.allGroups}</option>{groups.map(g => <option key={g} value={g}>{g}</option>)}</select>
-                        <select value={fAud} onChange={e => setFAud(e.target.value)} className={`${sel} col-span-2`}><option value="">{T.allAuditions}</option>{auds.map(([id, t]) => <option key={id} value={id}>{t}</option>)}</select>
                         <select value={fBand} onChange={e => setFBand(e.target.value)} className={sel}><option value="">{T.allBands}</option>{Object.entries(T.bands).map(([k, v]) => <option key={k} value={k}>{v}</option>)}</select>
-                        <div className="flex gap-1 items-center text-[11px] text-slate-500">
-                            <input type="date" value={fFrom} onChange={e => setFFrom(e.target.value)} title={T.from} aria-label={T.from} className={`${sel} flex-1 px-2`} />
-                            <input type="date" value={fTo} onChange={e => setFTo(e.target.value)} title={T.to} aria-label={T.to} className={`${sel} flex-1 px-2`} />
+                        <div className="col-span-2 lg:col-span-4 flex gap-2 items-center text-[11px] text-slate-500">
+                            <span>{T.from}</span><input type="date" value={fFrom} onChange={e => setFFrom(e.target.value)} aria-label={T.from} className={`${sel} flex-1 px-2`} />
+                            <span>{T.to}</span><input type="date" value={fTo} onChange={e => setFTo(e.target.value)} aria-label={T.to} className={`${sel} flex-1 px-2`} />
                         </div>
                     </div>
                     {anyFilter && <button onClick={resetFilters} className="text-xs font-bold text-indigo-700 hover:underline mb-3">✕ {T.reset}</button>}
@@ -792,22 +790,25 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
                                 <h3 className="text-base font-black text-slate-900 mb-3">🌟 {T.hall}</h3>
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                                     <div className="bg-white rounded-xl p-3 border border-slate-200"><p className="text-xs font-bold uppercase text-slate-500 mb-2">🏅 {T.top5}</p>
-                                        {st.top5.length ? <MiniRank list={st.top5} valueFmt={x => fmt(x.value)} /> : <p className="text-sm text-slate-400">{T.noData}</p>}</div>
-                                    <div className="bg-white rounded-xl p-3 border border-slate-200">
-                                        <div className="flex items-center justify-between gap-2 mb-2"><p className="text-xs font-bold uppercase text-slate-500">🎓 {T.top5class}</p>
-                                            <select value={hallGroup} onChange={e => setHGroup(e.target.value)} className="px-2 py-1 bg-slate-50 border rounded-lg text-xs">{groups.map(g => <option key={g} value={g}>{g}</option>)}</select></div>
-                                        {top5class.length ? <MiniRank list={top5class} valueFmt={x => fmt(x.value)} /> : <p className="text-sm text-slate-400">{T.noData}</p>}</div>
+                                        {topAll.length ? <MiniRank list={topAll} valueFmt={x => fmt(x.value)} /> : <p className="text-sm text-slate-400">{T.noData}</p>}</div>
+                                    <div className="space-y-4">
+                                        {topClass.map(tc => (
+                                            <div key={tc.label} className="bg-white rounded-xl p-3 border border-slate-200"><p className="text-xs font-bold uppercase text-slate-500 mb-2">🎓 {fGroup ? `${T.top5class} · ${tc.label}` : T.top5course(tc.label)}</p>
+                                                {tc.list.length ? <MiniRank list={tc.list} valueFmt={x => fmt(x.value)} /> : <p className="text-sm text-slate-400">{T.noData}</p>}</div>
+                                        ))}
+                                    </div>
                                 </div>
-                                <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-3">
-                                    {[['👑', T.king, st.king, x => T.kingSub(x.tens)], ['🎯', T.bestAvg, st.bestAvg, x => fmt(x.avg)], ['🔥', T.most, st.most, x => T.mostSub(x.n)], ['💪', T.push, st.push, x => fmt(x.avg)]].map(([ic, label, list, sub]) => (
+                                <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                                    {[['👑', T.king, st.king, x => T.kingSub(x.tens)], ['🎯', T.bestAvg, st.bestAvg, x => fmt(x.avg)], ['💪', T.push, st.push, x => fmt(x.avg)]].map(([ic, label, list, sub]) => (
                                         <div key={label} className="bg-white rounded-xl p-3 border border-slate-200">
                                             <p className="text-[11px] font-bold uppercase text-slate-500">{ic} {label}</p>
+                                            {label === T.push && list && list.length > 0 && <p className="text-[10px] text-slate-400">{st.pushBelow ? T.below5 : T.lowest5}</p>}
                                             {list && list.length ? (<>
                                                 <button onClick={() => setProfile(studentKey(list[0].s))} className="block w-full text-left mt-1 hover:underline">
                                                     <span className="block text-base font-black text-slate-900 truncate">{nameOf(list[0].s)}</span>
                                                     <span className="block text-xs text-slate-500">{list[0].s.student_class} · <b className="text-slate-700">{sub(list[0])}</b></span>
                                                 </button>
-                                                {list.length > 1 && <div className="mt-2 pt-2 border-t border-slate-200 space-y-1">
+                                                {list.length > 1 && <div className="mt-2 pt-2 border-t border-slate-200 space-y-1 max-h-72 overflow-y-auto pr-1">
                                                     <p className="text-[10px] font-bold uppercase text-slate-400">{T.runners}</p>
                                                     {list.slice(1).map((x, i) => (
                                                         <button key={i} onClick={() => setProfile(studentKey(x.s))} className="flex w-full justify-between gap-2 text-xs hover:underline">
