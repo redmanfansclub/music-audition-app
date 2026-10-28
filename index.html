@@ -506,8 +506,8 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
                 noMatch: 'Ningún resultado coincide con los filtros.', cols: ['Alumno/a', 'Grupo', 'Audición', 'Nota', 'Fecha', 'Acciones'],
                 view: 'Ver detalle', del: 'Eliminar', noEmail: 'Sin correo', anon: 'Alumno/a', profile: 'Ficha del alumno', close: 'Cerrar', best: 'Mejor nota',
                 csvHead: ['Alumno/a', 'Grupo', 'Correo', 'Audición', 'Artista', 'Nota', 'Fecha'], csvSep: ';', fileName: 'calificaciones', locale: 'es-ES',
-                ranking: 'Clasificación', allAvg: 'Todas las audiciones (media)', rankTie: 'Empate: va delante quien entregó antes.', rankTieAvg: 'Empate: va delante quien entregó antes.',
-                hall: 'Hall of Fame', top5: 'Top 10 general', top5class: 'Top 10 de la clase', top5course: (c) => `Top 10 de ${c}`, expand: (n) => `Ver clasificación completa (${n})`, collapse: 'Ver menos', below5: 'Media por debajo de 5', lowest5: 'Nadie por debajo de 5: los 5 más bajos', runners: 'Le siguen', entries: (n) => `${n} ${n === 1 ? 'entrega' : 'entregas'}`,
+                ranking: 'Clasificación', allAvg: 'Todas las audiciones (media)', rankTie: 'Empate: va delante quien entregó antes y, si coincide, por orden alfabético.', rankTieAvg: 'Empate: más dieces; si sigue, quien entregó antes la última audición; y si no, orden alfabético.',
+                hall: 'Hall of Fame', top5: 'Top 10 general', top5class: 'Top 10 de la clase', top5course: (c) => `Top 10 de ${c}`, expand: (n) => `Ver clasificación completa (${n})`, collapse: 'Ver menos', project: 'Proyectar', projectClose: 'Cerrar', projectAll: 'Todos los grupos', below5: 'Media por debajo de 5', lowest5: 'Nadie por debajo de 5: los 5 más bajos', runners: 'Le siguen', entries: (n) => `${n} ${n === 1 ? 'entrega' : 'entregas'}`,
                 edit: 'Editar', editTitle: 'Corregir datos de la entrega', name: 'Nombre y apellidos', group: 'Grupo', save: 'Guardar', cancel: 'Cancelar', editNote: 'Solo se cambia esta entrega. El correo no se puede modificar.'
             },
             en: {
@@ -525,8 +525,8 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
                 noMatch: 'No records match the filters.', cols: ['Student', 'Group', 'Audition', 'Score', 'Date', 'Actions'],
                 view: 'View', del: 'Delete', noEmail: 'No email', anon: 'Student', profile: 'Student profile', close: 'Close', best: 'Best mark',
                 csvHead: ['Student', 'Group', 'Email', 'Audition', 'Artist', 'Score', 'Date'], csvSep: ',', fileName: 'grades', locale: 'en-GB',
-                ranking: 'Leaderboard', allAvg: 'All auditions (average)', rankTie: 'Tie: whoever submitted first goes ahead.', rankTieAvg: 'Tie: whoever submitted first goes ahead.',
-                hall: 'Hall of Fame', top5: 'Overall top 10', top5class: 'Class top 10', top5course: (c) => `${c} top 10`, expand: (n) => `Show full leaderboard (${n})`, collapse: 'Show less', below5: 'Average below 5', lowest5: 'Nobody below 5: the 5 lowest', runners: 'Runners-up', entries: (n) => `${n} ${n === 1 ? 'submission' : 'submissions'}`,
+                ranking: 'Leaderboard', allAvg: 'All auditions (average)', rankTie: 'Tie: whoever submitted first goes ahead, then alphabetical order.', rankTieAvg: 'Tie: more perfect 10s; then whoever submitted the latest audition first; then alphabetical order.',
+                hall: 'Hall of Fame', top5: 'Overall top 10', top5class: 'Class top 10', top5course: (c) => `${c} top 10`, expand: (n) => `Show full leaderboard (${n})`, collapse: 'Show less', project: 'Project', projectClose: 'Close', projectAll: 'All groups', below5: 'Average below 5', lowest5: 'Nobody below 5: the 5 lowest', runners: 'Runners-up', entries: (n) => `${n} ${n === 1 ? 'submission' : 'submissions'}`,
                 edit: 'Edit', editTitle: 'Correct submission details', name: 'Full name', group: 'Group', save: 'Save', cancel: 'Cancel', editNote: 'Only this submission changes. The email cannot be edited.'
             }
         };
@@ -545,16 +545,43 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
         const groupBy = (arr, keyFn) => arr.reduce((m, x) => { const k = keyFn(x); if (k == null || k === '') return m; (m[k] = m[k] || []).push(x); return m; }, {});
         const avgOf = (arr) => arr.length ? arr.reduce((a, s) => a + Number(s.score || 0), 0) / arr.length : 0;
         const courseOf = (cls) => String(cls || '').trim().replace(/\s+[A-Za-zÑñ]{1,2}$/, '') || String(cls || '');
+        const cleanClass = (c) => {
+            let t = String(c || '').replace(/[\u00A0\s]+/g, ' ').trim();
+            if (!t) return t;
+            t = t.replace(/[°˚ᵒºª]/g, 'º').replace(/(\d)\s*o\b/gi, '$1º').replace(/(eso|bach\w*)\s*[-_.·]\s*/i, '$1 ');
+            t = t.replace(/(\d)º?\s*(eso|bachillerato|bach)\s*/i, (m, d, w) => `${d}º ${/^eso$/i.test(w) ? 'ESO' : w.charAt(0).toUpperCase() + w.slice(1).toLowerCase()} `).trim();
+            return t.replace(/\s([a-zñ])$/i, (m, l) => ' ' + l.toUpperCase());
+        };
         const studentKey = (s) => String(s.student_email || s.student_name || '').trim().toLowerCase();
 
-        // Clasificación: a igual nota (o media), va delante quien entregó antes, como en el Kahoot.
+        // Reglas de desempate (se pueden explicar en clase):
+        //  · Una audición: nota → quien entregó antes → orden alfabético.
+        //  · Todas (media): media → más dieces → quien entregó antes la audición más reciente que hicieron los dos
+        //    (si coinciden o no la hicieron ambos, la anterior, y así hacia atrás) → orden alfabético.
+        const byName = (a, b) => String(a.s.student_name || '').localeCompare(String(b.s.student_name || ''), 'es', { sensitivity: 'base' });
+        const tieByRecent = (a, b, audOrder) => {
+            for (const id of audOrder) {
+                const ta = a.times[id], tb = b.times[id];
+                if (ta && tb && ta !== tb) return ta < tb ? -1 : 1;
+            }
+            return 0;
+        };
+        // Audiciones de la más reciente a la más antigua (según cuándo la entregó el primer alumno)
+        const auditionOrder = (list) => {
+            const firstAt = {};
+            list.forEach(s => { const t = String(s.created_at || ''); if (s.audition_id && (!firstAt[s.audition_id] || t < firstAt[s.audition_id])) firstAt[s.audition_id] = t; });
+            return Object.keys(firstAt).sort((a, b) => firstAt[b].localeCompare(firstAt[a]));
+        };
+        const aggregateStudents = (list) => Object.values(groupBy(list, studentKey)).map(arr => ({
+            s: arr[0], value: avgOf(arr), avg: avgOf(arr), n: arr.length, tens: arr.filter(x => Number(x.score) >= 10).length,
+            times: Object.fromEntries(arr.map(x => [x.audition_id, String(x.created_at || '')]))
+        }));
+        const compareAvg = (audOrder) => (a, b) => b.avg - a.avg || b.tens - a.tens || tieByRecent(a, b, audOrder) || byName(a, b);
         const buildRanking = (scores, group, audId) => {
             const pool = scores.filter(s => (!group || s.student_class === group) && (!audId || s.audition_id === audId));
             if (audId) return pool.map(s => ({ s, value: Number(s.score || 0), n: 1, first: String(s.created_at || '') }))
-                .sort((a, b) => b.value - a.value || a.first.localeCompare(b.first));
-            return Object.values(groupBy(pool, studentKey)).map(arr => ({
-                s: arr[0], value: avgOf(arr), n: arr.length, first: arr.map(x => String(x.created_at || '')).sort()[0] || ''
-            })).sort((a, b) => b.value - a.value || a.first.localeCompare(b.first));
+                .sort((a, b) => b.value - a.value || a.first.localeCompare(b.first) || byName(a, b));
+            return aggregateStudents(pool).sort(compareAvg(auditionOrder(pool)));
         };
 
         const StatBar = ({ label, value, max = 10, text, color = 'bg-indigo-500', badge }) => (
@@ -573,8 +600,9 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
             </div>
         );
 
-        const GradesDashboard = ({ scores, auditions, lang, onView, onDelete, onDeleteAll, onEdit }) => {
+        const GradesDashboard = ({ scores: rawScores, auditions, lang, onView, onDelete, onDeleteAll, onEdit }) => {
             const T = GRADES_TEXT[lang];
+            const scores = React.useMemo(() => rawScores.map(s => ({ ...s, student_class: cleanClass(s.student_class) })), [rawScores]);
             const fmt = (n) => { const v = Number(n || 0).toFixed(1); return lang === 'es' ? v.replace('.', ',') : v; };
             const fmt2 = (n) => { const v = Number(n || 0).toFixed(2); return lang === 'es' ? v.replace('.', ',') : v; };
             const [q, setQ] = React.useState('');
@@ -589,6 +617,8 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
             const [showStats, setShowStats] = React.useState(true);
             const [profile, setProfile] = React.useState(null);
             const [rankAll, setRankAll] = React.useState(false);
+            const [projRank, setProjRank] = React.useState(false);
+            React.useEffect(() => { if (!projRank) return; const k = (e) => { if (e.key === 'Escape' && !document.fullscreenElement) setProjRank(false); }; document.addEventListener('keydown', k); return () => document.removeEventListener('keydown', k); }, [projRank]);
             const [editing, setEditing] = React.useState(null);
             const [savingEdit, setSavingEdit] = React.useState(false);
 
@@ -641,13 +671,12 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
                     hints: Math.round(filtered.filter(s => (s.details?.words || []).some(w => w.usedHint)).length / n * 100)
                 };
                 res.league = Object.entries(groupBy(filtered, s => s.student_class)).map(([g, arr]) => ({ g, avg: avgOf(arr), n: arr.length })).sort((a, b) => b.avg - a.avg);
-                const studs = Object.values(groupBy(filtered, studentKey)).map(arr => ({
-                    s: arr[0], n: arr.length, avg: avgOf(arr), tens: arr.filter(x => Number(x.score) >= 10).length
-                }));
-                res.king = [...studs].filter(x => x.tens > 0).sort((a, b) => b.tens - a.tens || b.avg - a.avg).slice(0, 10);
+                const studs = aggregateStudents(filtered);
+                const cmp = compareAvg(auditionOrder(filtered));
+                res.king = [...studs].filter(x => x.tens > 0).sort((a, b) => b.tens - a.tens || cmp(a, b)).slice(0, 10);
                 const pool = studs.some(x => x.n >= 2) ? studs.filter(x => x.n >= 2) : studs;
-                res.bestAvg = [...pool].sort((a, b) => b.avg - a.avg || b.n - a.n).slice(0, 10);
-                const asc = [...studs].sort((a, b) => a.avg - b.avg || b.n - a.n);
+                res.bestAvg = [...pool].sort(cmp).slice(0, 10);
+                const asc = [...studs].sort((a, b) => a.avg - b.avg || byName(a, b));
                 res.pushBelow = asc.some(x => x.avg < 5);
                 res.push = studs.length > 1 ? (res.pushBelow ? asc.filter(x => x.avg < 5) : asc.slice(0, 5)) : [];
                 const audStats = Object.entries(groupBy(filtered, s => s.audition_id)).map(([id, arr]) => ({ title: arr[0].auditions?.title || id, avg: avgOf(arr), n: arr.length })).sort((a, b) => b.avg - a.avg);
@@ -677,7 +706,7 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
             const saveEdit = async () => {
                 if (!editing || !editing.name.trim() || !editing.cls.trim()) return;
                 setSavingEdit(true);
-                const ok = await onEdit(editing.id, { student_name: editing.name.trim(), student_class: editing.cls.trim() });
+                const ok = await onEdit(editing.id, { student_name: editing.name.trim(), student_class: cleanClass(editing.cls) });
                 setSavingEdit(false);
                 if (ok) setEditing(null);
             };
@@ -734,9 +763,15 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
                         <select value={fAud} onChange={e => setFAud(e.target.value)} className={`${sel} text-sm font-bold py-2.5`}><option value="">{T.allAvg}</option>{auds.map(([id, t]) => <option key={id} value={id}>{t}</option>)}</select>
                     </div>
 
-                    {scores.length > 0 && (
+                    {showStats && scores.length > 0 && (
                         <div className="rounded-2xl p-4 border-2 border-indigo-200 bg-indigo-50 mb-5">
-                            <h3 className="text-base font-black text-slate-900 mb-4">🏁 {T.ranking}{fGroup ? ` · ${fGroup}` : ''}</h3>
+                            <div className="flex flex-wrap items-center justify-between gap-2 mb-4">
+                                <h3 className="text-base font-black text-slate-900">🏁 {T.ranking}{fGroup ? ` · ${fGroup}` : ''}</h3>
+                                <div className="flex flex-wrap gap-2">
+                                    {ranking.length > 15 && <button onClick={() => setRankAll(v => !v)} className="px-3 py-1.5 bg-white border border-indigo-200 text-indigo-700 rounded-lg text-xs font-bold">{rankAll ? `▲ ${T.collapse}` : `▼ ${T.expand(ranking.length)}`}</button>}
+                                    {ranking.length > 0 && <button onClick={() => setProjRank(true)} className="px-3 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg text-xs font-bold">📽 {T.project}</button>}
+                                </div>
+                            </div>
                             {ranking.length === 0 ? <p className="text-sm text-slate-400">{T.noData}</p> : (<>
                                 <div className="grid grid-cols-3 gap-2 items-end max-w-xl mx-auto mb-4">
                                     {[1, 0, 2].map(pos => { const x = ranking[pos]; if (!x) return <div key={pos}></div>;
@@ -754,8 +789,8 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
                                             </button>);
                                     })}
                                 </div>
-                                {ranking.length > 3 && <ol className={`space-y-1 pr-1 ${rankAll ? '' : 'max-h-[36rem] overflow-y-auto'}`}>
-                                    {ranking.slice(3).map((x, i) => (
+                                {ranking.length > 3 && <ol className="space-y-1">
+                                    {ranking.slice(3, rankAll ? undefined : 15).map((x, i) => (
                                         <li key={i} className="flex items-center gap-3 bg-white rounded-xl px-3 py-2 border border-slate-200">
                                             <span className="w-8 text-right text-sm font-black text-slate-500">{i + 4}.º</span>
                                             <button onClick={() => setProfile(studentKey(x.s))} className="flex-1 min-w-0 text-left text-sm font-semibold text-slate-800 truncate hover:underline">{nameOf(x.s)} <span className="font-normal text-xs text-slate-500">· {x.s.student_class}</span></button>
@@ -766,7 +801,7 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
                                 </ol>}
                                 <div className="flex flex-wrap justify-between items-center gap-2 mt-2">
                                     <p className="text-[11px] text-slate-500">{fAud ? T.rankTie : T.rankTieAvg}</p>
-                                    {ranking.length > 18 && <button onClick={() => setRankAll(v => !v)} className="text-xs font-bold text-indigo-700 hover:underline">{rankAll ? T.collapse : T.expand(ranking.length)}</button>}
+                                    {ranking.length > 15 && <button onClick={() => setRankAll(v => !v)} className="text-xs font-bold text-indigo-700 hover:underline">{rankAll ? `▲ ${T.collapse}` : `▼ ${T.expand(ranking.length)}`}</button>}
                                 </div>
                             </>)}
                         </div>
@@ -894,6 +929,51 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
                             </table>
                         </div>
                     )}
+
+                    {projRank && (() => {
+                        const audTitle = fAud ? ((auds.find(([id]) => id === fAud) || [])[1] || '') : T.allAvg;
+                        const fs = () => { try { document.fullscreenElement ? document.exitFullscreen() : document.documentElement.requestFullscreen(); } catch (e) {} };
+                        const close = () => { try { if (document.fullscreenElement) document.exitFullscreen(); } catch (e) {} setProjRank(false); };
+                        const pod = [[1, 230, '#CBD5E1', '🥈', 0.5], [0, 300, '#FBBF24', '🥇', 0.9], [2, 170, '#FDBA74', '🥉', 0.2]];
+                        return (
+                            <div className="fixed inset-0 z-[70] overflow-y-auto" style={{ background: 'linear-gradient(160deg,#1E1B4B 0%,#312E81 55%,#4338CA 100%)', color: '#FFFFFF' }}>
+                                <style>{`@keyframes prRise{from{transform:scaleY(0)}to{transform:scaleY(1)}}@keyframes prPop{from{opacity:0;transform:translateY(16px) scale(.96)}to{opacity:1;transform:none}}.pr-bar{transform-origin:bottom;animation:prRise .9s cubic-bezier(.2,.8,.2,1) both}.pr-pop{animation:prPop .5s ease-out both}`}</style>
+                                <div className="sticky top-0 z-10 flex flex-wrap justify-between items-center gap-3 px-6 py-4" style={{ background: 'rgba(15,12,50,.88)' }}>
+                                    <div>
+                                        <p className="text-sm font-bold uppercase tracking-widest" style={{ color: '#FBBF24' }}>🏁 {T.ranking}</p>
+                                        <p className="text-xl md:text-3xl font-black">{fGroup || T.projectAll} · {audTitle}</p>
+                                    </div>
+                                    <div className="flex gap-2">
+                                        <button onClick={fs} className="px-4 py-2 rounded-xl text-sm font-bold" style={{ background: 'rgba(255,255,255,.15)', color: '#FFFFFF' }}>⛶</button>
+                                        <button onClick={close} className="px-4 py-2 rounded-xl text-sm font-bold" style={{ background: '#FFFFFF', color: '#1E1B4B' }}>✕ {T.projectClose}</button>
+                                    </div>
+                                </div>
+                                <div className="max-w-6xl mx-auto px-6 pb-16">
+                                    <div className="grid grid-cols-3 gap-4 items-end max-w-4xl mx-auto mt-10">
+                                        {pod.map(([pos, hgt, col, medal, delay]) => { const x = ranking[pos]; if (!x) return <div key={pos}></div>; return (
+                                            <div key={pos} className="flex flex-col items-center text-center min-w-0">
+                                                <div className="pr-pop" style={{ animationDelay: `${delay + 0.6}s` }}>
+                                                    <div className="text-5xl md:text-6xl">{medal}</div>
+                                                    <div className="text-xl md:text-3xl font-black leading-tight mt-1 break-words">{x.s.student_name}</div>
+                                                    <div className="text-sm md:text-base mb-3" style={{ opacity: .75 }}>{x.s.student_class}</div>
+                                                </div>
+                                                <div className="pr-bar w-full rounded-t-2xl flex flex-col items-center pt-4 shadow-2xl" style={{ height: hgt, background: col, color: '#1E1B4B', animationDelay: `${delay}s` }}>
+                                                    <span className="text-4xl md:text-5xl font-black">{fmt(x.value)}</span>
+                                                    <span className="text-lg font-black">{pos + 1}.º</span>
+                                                </div>
+                                            </div>); })}
+                                    </div>
+                                    {ranking.length > 3 && <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mt-10">
+                                        {ranking.slice(3).map((x, i) => (
+                                            <div key={i} className="pr-pop flex items-center gap-4 rounded-2xl px-5 py-3" style={{ background: 'rgba(255,255,255,.1)', animationDelay: `${Math.min(1.6 + i * 0.05, 3.5)}s` }}>
+                                                <span className="w-14 text-2xl font-black text-right" style={{ color: '#FBBF24' }}>{i + 4}.º</span>
+                                                <span className="flex-1 min-w-0"><span className="block text-xl font-bold truncate">{x.s.student_name}</span><span className="block text-sm" style={{ opacity: .7 }}>{x.s.student_class}</span></span>
+                                                <span className="text-2xl font-black">{fmt(x.value)}</span>
+                                            </div>))}
+                                    </div>}
+                                </div>
+                            </div>);
+                    })()}
 
                     {editing && (
                         <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm flex items-center justify-center p-4 z-50">
