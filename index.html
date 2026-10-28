@@ -61,6 +61,25 @@
         button:disabled.bg-slate-300 { color: #64748B !important; }
 
         /* ===== MODO OSCURO: todos los textos legibles ===== */
+
+        /* Zonas con fondo claro del tema musical (resultados, tarea, proyección): textos y etiquetas como en modo claro */
+        body.dark .keep-light .text-slate-950, body.dark .keep-light .text-slate-900 { color: #0F172A !important; }
+        body.dark .keep-light .text-slate-800 { color: #1E293B !important; }
+        body.dark .keep-light .text-slate-700 { color: #334155 !important; }
+        body.dark .keep-light .text-slate-600 { color: #475569 !important; }
+        body.dark .keep-light .text-slate-500 { color: #64748B !important; }
+        body.dark .keep-light .text-slate-400 { color: #94A3B8 !important; }
+        body.dark .keep-light .bg-emerald-50, body.dark .keep-light .bg-emerald-50\/50 { background-color: #ECFDF5 !important; }
+        body.dark .keep-light .bg-rose-50, body.dark .keep-light .bg-rose-50\/50 { background-color: #FFF1F2 !important; }
+        body.dark .keep-light .bg-amber-50 { background-color: #FFFBEB !important; }
+        body.dark .keep-light .text-emerald-700, body.dark .keep-light .text-emerald-800 { color: #065F46 !important; }
+        body.dark .keep-light .text-rose-700, body.dark .keep-light .text-rose-800 { color: #9F1239 !important; }
+        body.dark .keep-light .text-amber-700, body.dark .keep-light .text-amber-800, body.dark .keep-light .text-amber-900 { color: #92400E !important; }
+        body.dark .keep-light .border-emerald-200 { border-color: #A7F3D0 !important; }
+        body.dark .keep-light .border-rose-200 { border-color: #FECDD3 !important; }
+        body.dark .keep-light .bg-white { background-color: #FFFFFF !important; }
+        body.dark .keep-light .border-slate-200 { border-color: #E2E8F0 !important; }
+        body.dark .ink-dark, body.dark .ink-dark * { color: #0F172A !important; }
         body.dark { background-color: #0F172A; }
         body.dark .bg-slate-50, body.dark .bg-slate-100 { background-color: #273449 !important; }
         body.dark .text-slate-500, body.dark .text-slate-400 { color: #A3B1C6 !important; }
@@ -487,7 +506,10 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
                 students: 'alumnos', subs: 'entregas', noData: 'Sin datos suficientes', empty: 'Todavía no hay entregas. Aparecerán aquí cuando el alumnado haga la tarea en el ordenador.',
                 noMatch: 'Ningún resultado coincide con los filtros.', cols: ['Alumno/a', 'Grupo', 'Audición', 'Nota', 'Fecha', 'Acciones'],
                 view: 'Ver detalle', del: 'Eliminar', noEmail: 'Sin correo', anon: 'Alumno/a', profile: 'Ficha del alumno', close: 'Cerrar', best: 'Mejor nota',
-                csvHead: ['Alumno/a', 'Grupo', 'Correo', 'Audición', 'Artista', 'Nota', 'Fecha'], csvSep: ';', fileName: 'calificaciones', locale: 'es-ES'
+                csvHead: ['Alumno/a', 'Grupo', 'Correo', 'Audición', 'Artista', 'Nota', 'Fecha'], csvSep: ';', fileName: 'calificaciones', locale: 'es-ES',
+                ranking: 'Clasificación', allAvg: 'Todas las audiciones (media)', rankTie: 'Empate: va delante quien entregó antes.', rankTieAvg: 'Empate: va delante quien entregó antes.',
+                hall: 'Hall of Fame', top5: 'Top 5 general', top5class: 'Top 5 de la clase', runners: 'Le siguen', entries: (n) => `${n} ${n === 1 ? 'entrega' : 'entregas'}`,
+                edit: 'Editar', editTitle: 'Corregir datos de la entrega', name: 'Nombre y apellidos', group: 'Grupo', save: 'Guardar', cancel: 'Cancelar', editNote: 'Solo se cambia esta entrega. El correo no se puede modificar.'
             },
             en: {
                 title: "Your Students' Grades & Submissions", search: 'Search name, group (2A, 3B…), email or score...',
@@ -504,7 +526,10 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
                 students: 'students', subs: 'submissions', noData: 'Not enough data', empty: 'No submissions yet. They will appear here when students do the task on a computer.',
                 noMatch: 'No records match the filters.', cols: ['Student', 'Group', 'Audition', 'Score', 'Date', 'Actions'],
                 view: 'View', del: 'Delete', noEmail: 'No email', anon: 'Student', profile: 'Student profile', close: 'Close', best: 'Best mark',
-                csvHead: ['Student', 'Group', 'Email', 'Audition', 'Artist', 'Score', 'Date'], csvSep: ',', fileName: 'grades', locale: 'en-GB'
+                csvHead: ['Student', 'Group', 'Email', 'Audition', 'Artist', 'Score', 'Date'], csvSep: ',', fileName: 'grades', locale: 'en-GB',
+                ranking: 'Leaderboard', allAvg: 'All auditions (average)', rankTie: 'Tie: whoever submitted first goes ahead.', rankTieAvg: 'Tie: whoever submitted first goes ahead.',
+                hall: 'Hall of Fame', top5: 'Overall top 5', top5class: 'Class top 5', runners: 'Runners-up', entries: (n) => `${n} ${n === 1 ? 'submission' : 'submissions'}`,
+                edit: 'Edit', editTitle: 'Correct submission details', name: 'Full name', group: 'Group', save: 'Save', cancel: 'Cancel', editNote: 'Only this submission changes. The email cannot be edited.'
             }
         };
 
@@ -524,6 +549,16 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
         const courseOf = (cls) => String(cls || '').trim().replace(/\s+[A-Za-zÑñ]{1,2}$/, '') || String(cls || '');
         const studentKey = (s) => String(s.student_email || s.student_name || '').trim().toLowerCase();
 
+        // Clasificación: a igual nota (o media), va delante quien entregó antes, como en el Kahoot.
+        const buildRanking = (scores, group, audId) => {
+            const pool = scores.filter(s => (!group || s.student_class === group) && (!audId || s.audition_id === audId));
+            if (audId) return pool.map(s => ({ s, value: Number(s.score || 0), n: 1, first: String(s.created_at || '') }))
+                .sort((a, b) => b.value - a.value || a.first.localeCompare(b.first));
+            return Object.values(groupBy(pool, studentKey)).map(arr => ({
+                s: arr[0], value: avgOf(arr), n: arr.length, first: arr.map(x => String(x.created_at || '')).sort()[0] || ''
+            })).sort((a, b) => b.value - a.value || a.first.localeCompare(b.first));
+        };
+
         const StatBar = ({ label, value, max = 10, text, color = 'bg-indigo-500', badge }) => (
             <div className="flex items-center gap-2 text-xs">
                 <span className="w-24 sm:w-32 shrink-0 truncate font-semibold text-slate-700" title={label}>{badge} {label}</span>
@@ -540,7 +575,7 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
             </div>
         );
 
-        const GradesDashboard = ({ scores, auditions, lang, onView, onDelete, onDeleteAll }) => {
+        const GradesDashboard = ({ scores, auditions, lang, onView, onDelete, onDeleteAll, onEdit }) => {
             const T = GRADES_TEXT[lang];
             const fmt = (n) => { const v = Number(n || 0).toFixed(1); return lang === 'es' ? v.replace('.', ',') : v; };
             const fmt2 = (n) => { const v = Number(n || 0).toFixed(2); return lang === 'es' ? v.replace('.', ',') : v; };
@@ -555,6 +590,11 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
             const [hide, setHide] = React.useState(false);
             const [showStats, setShowStats] = React.useState(true);
             const [profile, setProfile] = React.useState(null);
+            const [rGroup, setRGroup] = React.useState('');
+            const [rAud, setRAud] = React.useState('');
+            const [hGroup, setHGroup] = React.useState('');
+            const [editing, setEditing] = React.useState(null);
+            const [savingEdit, setSavingEdit] = React.useState(false);
 
             const styleByCode = React.useMemo(() => Object.fromEntries((auditions || []).map(a => [a.share_link || a.id, a.style])), [auditions]);
             const anonMap = React.useMemo(() => {
@@ -608,12 +648,12 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
                 const studs = Object.values(groupBy(filtered, studentKey)).map(arr => ({
                     s: arr[0], n: arr.length, avg: avgOf(arr), tens: arr.filter(x => Number(x.score) >= 10).length
                 }));
-                const byTens = [...studs].sort((a, b) => b.tens - a.tens || b.avg - a.avg)[0];
-                res.king = byTens && byTens.tens > 0 ? byTens : null;
+                res.king = [...studs].filter(x => x.tens > 0).sort((a, b) => b.tens - a.tens || b.avg - a.avg).slice(0, 4);
                 const pool = studs.some(x => x.n >= 2) ? studs.filter(x => x.n >= 2) : studs;
-                res.bestAvg = [...pool].sort((a, b) => b.avg - a.avg || b.n - a.n)[0];
-                res.most = [...studs].sort((a, b) => b.n - a.n || b.avg - a.avg)[0];
-                res.push = studs.length > 1 ? [...studs].sort((a, b) => a.avg - b.avg || b.n - a.n)[0] : null;
+                res.bestAvg = [...pool].sort((a, b) => b.avg - a.avg || b.n - a.n).slice(0, 4);
+                res.most = [...studs].sort((a, b) => b.n - a.n || b.avg - a.avg).slice(0, 4);
+                res.push = studs.length > 1 ? [...studs].sort((a, b) => a.avg - b.avg || b.n - a.n).slice(0, 4) : [];
+                res.top5 = buildRanking(filtered, '', '').slice(0, 5);
                 const audStats = Object.entries(groupBy(filtered, s => s.audition_id)).map(([id, arr]) => ({ title: arr[0].auditions?.title || id, avg: avgOf(arr), n: arr.length })).sort((a, b) => b.avg - a.avg);
                 res.auds = audStats;
                 res.styles = Object.entries(groupBy(filtered, s => styleByCode[s.audition_id] || s.taskDetails?.style || 'classical'))
@@ -629,6 +669,29 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
                 res.months = Object.entries(groupBy(filtered, s => String(s.created_at || '').slice(0, 7))).map(([m, arr]) => ({ m, avg: avgOf(arr), n: arr.length })).sort((a, b) => a.m.localeCompare(b.m));
                 return res;
             }, [filtered, styleByCode]);
+
+            const ranking = React.useMemo(() => buildRanking(scores, rGroup, rAud), [scores, rGroup, rAud]);
+            const hallGroup = hGroup || rGroup || fGroup || groups[0] || '';
+            const top5class = React.useMemo(() => buildRanking(filtered, hallGroup, '').slice(0, 5), [filtered, hallGroup]);
+            const timeLabel = (d) => d ? new Date(d).toLocaleString(T.locale, { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' }) : '';
+            const saveEdit = async () => {
+                if (!editing || !editing.name.trim() || !editing.cls.trim()) return;
+                setSavingEdit(true);
+                const ok = await onEdit(editing.id, { student_name: editing.name.trim(), student_class: editing.cls.trim() });
+                setSavingEdit(false);
+                if (ok) setEditing(null);
+            };
+            const MiniRank = ({ list, valueFmt }) => (
+                <ol className="space-y-1.5">
+                    {list.map((x, i) => (
+                        <li key={studentKey(x.s) + i} className="flex items-center gap-2 text-sm">
+                            <span className={`w-6 h-6 shrink-0 rounded-full flex items-center justify-center text-[11px] font-black ${i === 0 ? 'bg-amber-400 text-white' : i === 1 ? 'bg-slate-300 text-slate-800' : i === 2 ? 'bg-orange-300 text-white' : 'bg-slate-100 text-slate-600'}`}>{i + 1}</span>
+                            <button onClick={() => setProfile(studentKey(x.s))} className="flex-1 min-w-0 text-left truncate font-semibold text-slate-800 hover:underline">{nameOf(x.s)} <span className="font-normal text-slate-500 text-xs">· {x.s.student_class}</span></button>
+                            <span className="text-xs font-bold text-slate-700">{valueFmt(x)}</span>
+                        </li>
+                    ))}
+                </ol>
+            );
 
             const resetFilters = () => { setQ(''); setFGroup(''); setFCourse(''); setFAud(''); setFBand(''); setFFrom(''); setFTo(''); };
             const anyFilter = q || fGroup || fCourse || fAud || fBand || fFrom || fTo;
@@ -665,6 +728,50 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
                         </div>
                     </div>
 
+                    {scores.length > 0 && (
+                    <div className="mb-5">
+<div className="rounded-2xl p-4 border-2 border-indigo-200 bg-indigo-50">
+                        <div className="flex flex-col md:flex-row md:items-center justify-between gap-2 mb-4">
+                            <h3 className="text-base font-black text-slate-900">🏁 {T.ranking}</h3>
+                            <div className="flex flex-wrap gap-2">
+                                <select value={rGroup} onChange={e => setRGroup(e.target.value)} className={sel}><option value="">{T.allGroups}</option>{groups.map(g => <option key={g} value={g}>{g}</option>)}</select>
+                                <select value={rAud} onChange={e => setRAud(e.target.value)} className={sel}><option value="">{T.allAvg}</option>{auds.map(([id, t]) => <option key={id} value={id}>{t}</option>)}</select>
+                            </div>
+                        </div>
+                        {ranking.length === 0 ? <p className="text-sm text-slate-400">{T.noData}</p> : (<>
+                            <div className="grid grid-cols-3 gap-2 items-end max-w-xl mx-auto mb-4">
+                                {[1, 0, 2].map(pos => { const x = ranking[pos]; if (!x) return <div key={pos}></div>;
+                                    const h = ['h-28', 'h-20', 'h-14'][pos]; const medal = ['🥇', '🥈', '🥉'][pos];
+                                    const col = ['bg-amber-400', 'bg-slate-300', 'bg-orange-300'][pos];
+                                    return (
+                                        <button key={pos} onClick={() => setProfile(studentKey(x.s))} className="flex flex-col items-center text-center min-w-0">
+                                            <span className="text-3xl">{medal}</span>
+                                            <span className="text-sm font-black text-slate-900 truncate max-w-full px-1">{nameOf(x.s)}</span>
+                                            <span className="text-[11px] text-slate-500 mb-1">{x.s.student_class}</span>
+                                            <div className={`ink-dark w-full ${h} ${col} rounded-t-xl flex flex-col items-center justify-start pt-2 shadow-inner`}>
+                                                <span className="text-xl font-black text-slate-900">{fmt(x.value)}</span>
+                                                <span className="text-[10px] font-bold text-slate-800">{pos + 1}.º</span>
+                                            </div>
+                                        </button>);
+                                })}
+                            </div>
+                            {ranking.length > 3 && <ol className="max-h-80 overflow-y-auto space-y-1 pr-1">
+                                {ranking.slice(3).map((x, i) => (
+                                    <li key={i} className="flex items-center gap-3 bg-white rounded-xl px-3 py-2 border border-slate-200">
+                                        <span className="w-8 text-right text-sm font-black text-slate-500">{i + 4}.º</span>
+                                        <button onClick={() => setProfile(studentKey(x.s))} className="flex-1 min-w-0 text-left text-sm font-semibold text-slate-800 truncate hover:underline">{nameOf(x.s)} <span className="font-normal text-xs text-slate-500">· {x.s.student_class}</span></button>
+                                        <div className="hidden sm:block w-28 h-2 rounded-full bg-slate-100 overflow-hidden"><div className={`h-full ${barColor(x.value)}`} style={{ width: `${x.value * 10}%` }}></div></div>
+                                        <span className="text-[11px] text-slate-400 w-24 text-right hidden md:block">{rAud ? timeLabel(x.first) : T.entries(x.n)}</span>
+                                        <span className={`text-xs font-extrabold px-2 py-0.5 rounded-full ${scoreClass(x.value)}`}>{fmt(x.value)}</span>
+                                    </li>))}
+                            </ol>}
+                            <p className="text-[11px] text-slate-500 mt-2">{rAud ? T.rankTie : T.rankTieAvg}</p>
+                        </>)}
+                    </div>
+
+                    </div>
+                    )}
+
                     <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 mb-2">
                         <div className="relative col-span-2"><span className="absolute left-3 top-2.5 text-slate-400"><Icons.Search /></span><input type="text" placeholder={T.search} value={q} onChange={e => setQ(e.target.value)} className="w-full pl-9 pr-3 py-2 bg-slate-50 border rounded-xl text-xs outline-none focus:border-indigo-500" /></div>
                         <select value={fCourse} onChange={e => setFCourse(e.target.value)} className={sel}><option value="">{T.allCourses}</option>{courses.map(c => <option key={c} value={c}>{c}</option>)}</select>
@@ -680,6 +787,38 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
 
                     {showStats && st && (
                         <div className="space-y-4 my-4">
+
+                            <div className="rounded-2xl p-4 border-2 border-amber-300 bg-amber-50">
+                                <h3 className="text-base font-black text-slate-900 mb-3">🌟 {T.hall}</h3>
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                                    <div className="bg-white rounded-xl p-3 border border-slate-200"><p className="text-xs font-bold uppercase text-slate-500 mb-2">🏅 {T.top5}</p>
+                                        {st.top5.length ? <MiniRank list={st.top5} valueFmt={x => fmt(x.value)} /> : <p className="text-sm text-slate-400">{T.noData}</p>}</div>
+                                    <div className="bg-white rounded-xl p-3 border border-slate-200">
+                                        <div className="flex items-center justify-between gap-2 mb-2"><p className="text-xs font-bold uppercase text-slate-500">🎓 {T.top5class}</p>
+                                            <select value={hallGroup} onChange={e => setHGroup(e.target.value)} className="px-2 py-1 bg-slate-50 border rounded-lg text-xs">{groups.map(g => <option key={g} value={g}>{g}</option>)}</select></div>
+                                        {top5class.length ? <MiniRank list={top5class} valueFmt={x => fmt(x.value)} /> : <p className="text-sm text-slate-400">{T.noData}</p>}</div>
+                                </div>
+                                <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-3">
+                                    {[['👑', T.king, st.king, x => T.kingSub(x.tens)], ['🎯', T.bestAvg, st.bestAvg, x => fmt(x.avg)], ['🔥', T.most, st.most, x => T.mostSub(x.n)], ['💪', T.push, st.push, x => fmt(x.avg)]].map(([ic, label, list, sub]) => (
+                                        <div key={label} className="bg-white rounded-xl p-3 border border-slate-200">
+                                            <p className="text-[11px] font-bold uppercase text-slate-500">{ic} {label}</p>
+                                            {list && list.length ? (<>
+                                                <button onClick={() => setProfile(studentKey(list[0].s))} className="block w-full text-left mt-1 hover:underline">
+                                                    <span className="block text-base font-black text-slate-900 truncate">{nameOf(list[0].s)}</span>
+                                                    <span className="block text-xs text-slate-500">{list[0].s.student_class} · <b className="text-slate-700">{sub(list[0])}</b></span>
+                                                </button>
+                                                {list.length > 1 && <div className="mt-2 pt-2 border-t border-slate-200 space-y-1">
+                                                    <p className="text-[10px] font-bold uppercase text-slate-400">{T.runners}</p>
+                                                    {list.slice(1).map((x, i) => (
+                                                        <button key={i} onClick={() => setProfile(studentKey(x.s))} className="flex w-full justify-between gap-2 text-xs hover:underline">
+                                                            <span className="truncate text-slate-700"><b>{i + 2}.</b> {nameOf(x.s)}</span><span className="shrink-0 text-slate-500">{sub(x)}</span>
+                                                        </button>))}
+                                                </div>}
+                                            </>) : <p className="text-sm text-slate-400 mt-1">{T.noData}</p>}
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
                             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
                                 {[[T.avg, fmt2(st.avg), 'from-indigo-500 to-purple-500'], [T.count, st.n, 'from-emerald-500 to-teal-500'], [T.passRate, `${st.pass} %`, 'from-sky-500 to-blue-500'],
                                   [T.excellent, st.top, 'from-amber-500 to-orange-500'], [T.tens, st.tens, 'from-rose-500 to-pink-500'], [T.hints, `${st.hints} %`, 'from-slate-500 to-slate-600']].map(([l, v, g]) => (
@@ -690,17 +829,6 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
                                 <StatCard title={`🏆 ${T.league}`}>
                                     {st.league.map((x, i) => <StatBar key={x.g} label={x.g} value={x.avg} text={fmt(x.avg)} color={barColor(x.avg)} badge={st.league.length > 1 && i === 0 ? '🏆' : st.league.length > 1 && i === st.league.length - 1 ? '🏮' : ''} />)}
                                     {st.league.length > 1 && <p className="text-[11px] text-slate-500 pt-1">🏆 {T.champion}: <b>{st.league[0].g}</b> · 🏮 {T.lantern}: <b>{st.league[st.league.length - 1].g}</b></p>}
-                                </StatCard>
-                                <StatCard title={`⭐ ${T.honour}`}>
-                                    {[['👑', T.king, st.king, x => T.kingSub(x.tens)], ['🎯', T.bestAvg, st.bestAvg, x => T.bestAvgSub(fmt(x.avg), x.n)], ['🔥', T.most, st.most, x => T.mostSub(x.n)], ['💪', T.push, st.push, x => T.pushSub(fmt(x.avg))]].map(([ic, label, x, sub]) => (
-                                        <div key={label} className="flex items-center gap-3 p-2 rounded-xl bg-white border border-slate-200">
-                                            <span className="text-xl">{ic}</span>
-                                            <div className="min-w-0 flex-1"><p className="text-[11px] font-bold uppercase text-slate-500">{label}</p>
-                                                {x ? <button onClick={() => setProfile(studentKey(x.s))} className="text-sm font-bold text-slate-900 hover:underline truncate block text-left">{nameOf(x.s)} <span className="font-normal text-slate-500">· {x.s.student_class}</span></button> : <p className="text-sm text-slate-400">{T.noData}</p>}
-                                            </div>
-                                            {x && <span className="text-xs font-bold text-slate-600 text-right">{sub(x)}</span>}
-                                        </div>
-                                    ))}
                                 </StatCard>
                                 <StatCard title={`🎧 ${T.auditions}`}>
                                     {st.auds.length > 1 && <div className="grid grid-cols-2 gap-2 mb-1">
@@ -755,6 +883,7 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
                                             <td className="py-3.5 px-4 text-center"><span className={`inline-block font-extrabold text-xs px-2.5 py-1 rounded-full ${scoreClass(s.score)}`}>{fmt(s.score)}/10</span></td>
                                             <td className="py-3.5 px-4 text-xs text-slate-500 whitespace-nowrap">{dateLabel(s.created_at)}</td>
                                             <td className="py-3.5 px-4 text-right space-x-1 whitespace-nowrap">
+                                                <button onClick={() => setEditing({ id: s.id, name: s.student_name || '', cls: s.student_class || '', email: s.student_email || '' })} title={T.edit} className="p-2 hover:bg-indigo-50 rounded-lg text-indigo-600 transition-colors">✏️</button>
                                                 <button onClick={() => onView(s)} title={T.view} className="p-2 hover:bg-slate-100 rounded-lg text-slate-500 transition-colors"><Icons.Eye /></button>
                                                 <button onClick={() => onDelete(s.id)} title={T.del} className="p-2 hover:bg-rose-50 rounded-lg text-rose-600 transition-colors"><Icons.Trash /></button>
                                             </td>
@@ -762,6 +891,25 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
                                     ))}
                                 </tbody>
                             </table>
+                        </div>
+                    )}
+
+                    {editing && (
+                        <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm flex items-center justify-center p-4 z-50">
+                            <div className="bg-white rounded-2xl max-w-md w-full p-6 shadow-xl space-y-4">
+                                <h3 className="text-lg font-bold text-slate-900">✏️ {T.editTitle}</h3>
+                                <p className="text-xs text-slate-500">{editing.email}</p>
+                                <div><label className="block text-[11px] font-bold uppercase text-slate-500 mb-1">{T.name}</label>
+                                    <input type="text" value={editing.name} onChange={e => setEditing(v => ({ ...v, name: e.target.value }))} className="w-full px-3 py-2 bg-slate-50 border rounded-xl text-sm outline-none focus:border-indigo-500" /></div>
+                                <div><label className="block text-[11px] font-bold uppercase text-slate-500 mb-1">{T.group}</label>
+                                    <input type="text" list="grades-groups" value={editing.cls} onChange={e => setEditing(v => ({ ...v, cls: e.target.value }))} className="w-full px-3 py-2 bg-slate-50 border rounded-xl text-sm outline-none focus:border-indigo-500" />
+                                    <datalist id="grades-groups">{groups.map(g => <option key={g} value={g} />)}</datalist></div>
+                                <p className="text-[11px] text-slate-500">{T.editNote}</p>
+                                <div className="flex justify-end gap-2">
+                                    <button onClick={() => setEditing(null)} className="px-4 py-2 rounded-xl text-sm font-bold text-slate-600 bg-slate-100 hover:bg-slate-200">{T.cancel}</button>
+                                    <button onClick={saveEdit} disabled={savingEdit || !editing.name.trim() || !editing.cls.trim()} className="px-4 py-2 rounded-xl text-sm font-bold text-white bg-indigo-600 hover:bg-indigo-700 disabled:opacity-50">{T.save}</button>
+                                </div>
+                            </div>
                         </div>
                     )}
 
@@ -1209,6 +1357,21 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
                         showToast("Record deleted.", "info");
                     }
                 });
+            };
+
+            // Corrige el nombre o el grupo de UNA entrega (lo que el alumno escribió mal)
+            const handleEditScore = async (id, patch) => {
+                if (supabaseClient) {
+                    try {
+                        const { data, error } = await supabaseClient.from('student_submissions').update(patch).eq('id', id).select('id');
+                        if (error || !data || data.length === 0) throw new Error(error?.message || 'RLS');
+                    } catch (e) { showToast("The change could not be saved: " + (e.message || ''), "error"); return false; }
+                }
+                const updated = scoresList.map(s => s.id === id ? { ...s, ...patch } : s);
+                setScoresList(updated);
+                try { saveStoredScores(getStoredScores().map(s => s.id === id ? { ...s, ...patch } : s)); } catch (e) {}
+                showToast("Submission updated.", "success");
+                return true;
             };
 
             const handleDeleteAllTasks = () => {
@@ -1918,7 +2081,7 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
                                 )}
 
                                 {dashboardTab === 'scores' && (
-                                    <GradesDashboard scores={scoresList} auditions={auditionsList} lang="en" onView={setSelectedScoreDetails} onDelete={handleDeleteScore} onDeleteAll={handleDeleteAllScores} />
+                                    <GradesDashboard scores={scoresList} auditions={auditionsList} lang="en" onView={setSelectedScoreDetails} onDelete={handleDeleteScore} onDeleteAll={handleDeleteAllScores} onEdit={handleEditScore} />
                                 )}
                             </div>
                         )}
@@ -1975,7 +2138,7 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
                                         <strong>⚠️ Note:</strong> You already submitted this task with this email. If you submit again, your previous score will be replaced.
                                     </div>
                                 )}
-                                <div className="p-6 md:p-8 rounded-2xl shadow-md border" style={{backgroundColor:activeMusicTheme.colors.paper,borderColor:activeMusicTheme.colors.soft,fontFamily:activeMusicTheme.font}}>
+                                <div className="keep-light p-6 md:p-8 rounded-2xl shadow-md border" style={{backgroundColor:activeMusicTheme.colors.paper,borderColor:activeMusicTheme.colors.soft,fontFamily:activeMusicTheme.font}}>
                                     <div className="mb-6 pb-6 border-b flex flex-col md:flex-row gap-6 items-center" style={{borderColor:activeMusicTheme.colors.soft}}>
                                         <div className="flex-1"><div className="text-[10px] font-extrabold uppercase tracking-[0.18em] mb-2" style={{color:activeMusicTheme.colors.accent}}>{activeMusicTheme.icon} {activeMusicTheme.label}</div><h2 className="text-2xl font-extrabold" style={{color:activeMusicTheme.colors.primary}}>{activeTask.title}</h2><p className="font-medium" style={{color:activeMusicTheme.colors.primary,opacity:0.8}}>{activeTask.artist}</p></div>
                                         <div className="w-full md:w-80 shrink-0 rounded-xl overflow-hidden border bg-slate-900 aspect-video relative flex flex-col items-center justify-center">
@@ -2073,7 +2236,7 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
                         )}
 
                         {view === 'results' && finalScoreRecord && (
-                            <div className="max-w-2xl mx-auto p-8 md:p-10 rounded-3xl shadow-xl border text-center relative overflow-hidden" style={{backgroundColor:getMusicTheme(finalScoreRecord.taskDetails?.style || finalScoreRecord.auditions?.style || 'classical').colors.paper, borderColor:getMusicTheme(finalScoreRecord.taskDetails?.style || finalScoreRecord.auditions?.style || 'classical').colors.accent}}>
+                            <div className="keep-light max-w-2xl mx-auto p-8 md:p-10 rounded-3xl shadow-xl border text-center relative overflow-hidden" style={{backgroundColor:getMusicTheme(finalScoreRecord.taskDetails?.style || finalScoreRecord.auditions?.style || 'classical').colors.paper, borderColor:getMusicTheme(finalScoreRecord.taskDetails?.style || finalScoreRecord.auditions?.style || 'classical').colors.accent}}>
                                 {(() => {
                                     const feedback = getEnglishFeedback(finalScoreRecord.score);
                                     return (
@@ -2135,7 +2298,7 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
                             const btn = "px-3 py-1.5 rounded-lg text-sm font-bold bg-white/15 hover:bg-white/25 text-white transition-colors disabled:opacity-40 disabled:cursor-not-allowed";
                             const btnOn = "px-3 py-1.5 rounded-lg text-sm font-bold bg-white text-slate-900 transition-colors";
                             return (
-                                <div className="fixed inset-0 z-[60] overflow-y-auto" style={{ backgroundColor: theme.colors.paper }}>
+                                <div className="keep-light fixed inset-0 z-[60] overflow-y-auto" style={{ backgroundColor: theme.colors.paper }}>
                                     <div className="sticky top-0 z-10 flex flex-wrap items-center justify-between gap-3 px-5 py-3 border-b-2" style={{ backgroundColor: theme.colors.primary, borderColor: theme.colors.accent }}>
                                         <div className="min-w-0">
                                             <p className="text-white text-lg font-bold truncate" style={{ fontFamily: theme.font }}>{projection.title}</p>
