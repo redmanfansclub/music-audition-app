@@ -110,8 +110,6 @@
         body.dark .text-emerald-700, body.dark .text-emerald-800 { color: #6EE7B7 !important; }
         body.dark .border-emerald-100, body.dark .border-emerald-200 { border-color: rgba(16, 185, 129, 0.4) !important; }
         /* tarjetas de tema: se quedan claras (muestran los colores del tema), pero sin deslumbrar y con texto legible */
-        body.dark .theme-card:not([aria-pressed="true"]) { background-color: #E2E8F0 !important; border-color: #475569 !important; }
-        body.dark .theme-card .text-slate-500 { color: #475569 !important; }
 
         /* Protección anti-copia */
         .proj-gap { display:inline-flex; align-items:baseline; gap:.35em; padding:0 .3em; border-bottom:3px solid currentColor; font-family: Arial, Helvetica, sans-serif; font-weight:700; letter-spacing:.06em; white-space:nowrap; }
@@ -513,7 +511,7 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
                 csvHead: ['Alumno/a', 'Grupo', 'Correo', 'Audición', 'Artista', 'Nota', 'Fecha'], csvSep: ';', fileName: 'calificaciones', locale: 'es-ES',
                 ranking: 'Clasificación', allAvg: 'Todas las audiciones (media)', rankTie: 'Empate: va delante quien entregó antes y, si coincide, por orden alfabético.', rankTieAvg: 'Empate: más dieces; si sigue, quien entregó antes la última audición; y si no, orden alfabético.',
                 hall: 'Hall of Fame', top5: 'Top 10 general', top5class: 'Top 10 de la clase', top5course: (c) => `Top 10 de ${c}`, expand: (n) => `Ver clasificación completa (${n})`, collapse: 'Ver menos', project: 'Proyectar', projectClose: 'Cerrar', projectAll: 'Todos los grupos',
-                pj: { s6: 'Vocabulario', tieNote: 'Empate: gana quien entregó antes.', wThis: 'Esta audición', wEasy: 'Las más fáciles del curso', wHard: 'Las más difíciles del curso', entregas: (n) => `${n} entregas`, passL: 'aprobados', tensL: 'dieces', participation: 'han entregado', anon: '🎭 Anónimo', badDay: 'Hoy fue su día malo', badDaySub: 'Nadie es perfecto: ¡a por la revancha!', leagueAvg: 'Media de todas las audiciones', leagueLast: 'Media de la última audición', groupUp: 'El grupo que más ha mejorado', groupDown: 'El grupo que ha tenido su día malo', setup: 'Proyectar en clase', group: 'Grupo', aud: 'Audición', start: 'Empezar', s1: 'Top 10 de la audición', s2: 'Top 10 del curso', s3: 'Hall of Fame del curso', s4: 'Liga de grupos', s5: 'Nuestras audiciones',
+                pj: { s6: 'Vocabulario', tieNote: 'Empate: gana quien entregó antes.', wThis: 'Esta audición', wEasy: 'Las más fáciles', wHard: 'Las más difíciles', entregas: (n) => `${n} entregas`, passL: 'aprobados', tensL: 'dieces', participation: 'han entregado', anon: '🎭 Anónimo', badDay: 'Hoy fue su día malo', badDaySub: 'Nadie es perfecto: ¡a por la revancha!', leagueAvg: 'Media de todas las audiciones', leagueLast: 'Media de la última audición', groupUp: 'El grupo que más ha mejorado', groupDown: 'El grupo que ha tenido su día malo', setup: 'Proyectar en clase', group: 'Grupo', aud: 'Audición', start: 'Empezar', s1: 'Top 10 de la audición', s2: 'Top 10 del curso', s3: 'Hall of Fame del curso', s4: 'Liga de grupos', s5: 'Nuestras audiciones',
                       king: 'Rey o reina del 10', best: 'Mejor media', improve: 'Mejora del día', improveSub: (d) => `+${d} sobre su media`, tens: (n) => `${n} ${n === 1 ? 'diez' : 'dieces'}`, course: 'Media del curso', last: 'Última audición',
                       easiest: 'La que mejor se os dio', hardest: 'El reto', isNew: 'NUEVO', reveal: 'Pulsa → para descubrir el podio', none: 'Todavía no hay datos', next: 'Siguiente', prev: 'Anterior' }, below5: 'Media por debajo de 5', lowest5: 'Nadie por debajo de 5: los 5 más bajos', runners: 'Le siguen', entries: (n) => `${n} ${n === 1 ? 'entrega' : 'entregas'}`,
                 edit: 'Editar', hideName: 'Ocultar nombre al proyectar (saldrá como anónimo)', editTitle: 'Corregir datos de la entrega', name: 'Nombre y apellidos', group: 'Grupo', save: 'Guardar', cancel: 'Cancelar', editNote: 'Solo se cambia esta entrega. El correo no se puede modificar.'
@@ -535,7 +533,7 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
                 csvHead: ['Student', 'Group', 'Email', 'Audition', 'Artist', 'Score', 'Date'], csvSep: ',', fileName: 'grades', locale: 'en-GB',
                 ranking: 'Leaderboard', allAvg: 'All auditions (average)', rankTie: 'Tie: whoever submitted first goes ahead, then alphabetical order.', rankTieAvg: 'Tie: more perfect 10s; then whoever submitted the latest audition first; then alphabetical order.',
                 hall: 'Hall of Fame', top5: 'Overall top 10', top5class: 'Class top 10', top5course: (c) => `${c} top 10`, expand: (n) => `Show full leaderboard (${n})`, collapse: 'Show less', project: 'Project', projectClose: 'Close', projectAll: 'All groups',
-                pj: { s6: 'Vocabulary', tieNote: 'Tie: whoever handed in first ranks higher.', wThis: 'This audition', wEasy: 'Easiest words of the course', wHard: 'Hardest words of the course', entregas: (n) => `${n} submissions`, passL: 'passed', tensL: 'perfect 10s', participation: 'submitted', anon: '🎭 Anonymous', badDay: 'Today was their off day', badDaySub: 'Nobody is perfect: rematch time!', leagueAvg: 'Average of all auditions', leagueLast: 'Average of the last audition', groupUp: 'Most improved group', groupDown: 'The group that had an off day', setup: 'Project in class', group: 'Group', aud: 'Audition', start: 'Start', s1: 'Audition top 10', s2: 'Course top 10', s3: 'Course Hall of Fame', s4: 'Group league', s5: 'Our auditions',
+                pj: { s6: 'Vocabulary', tieNote: 'Tie: whoever handed in first ranks higher.', wThis: 'This audition', wEasy: 'Easiest words', wHard: 'Hardest words', entregas: (n) => `${n} submissions`, passL: 'passed', tensL: 'perfect 10s', participation: 'submitted', anon: '🎭 Anonymous', badDay: 'Today was their off day', badDaySub: 'Nobody is perfect: rematch time!', leagueAvg: 'Average of all auditions', leagueLast: 'Average of the last audition', groupUp: 'Most improved group', groupDown: 'The group that had an off day', setup: 'Project in class', group: 'Group', aud: 'Audition', start: 'Start', s1: 'Audition top 10', s2: 'Course top 10', s3: 'Course Hall of Fame', s4: 'Group league', s5: 'Our auditions',
                       king: 'King or queen of 10', best: 'Best average', improve: 'Most improved today', improveSub: (d) => `+${d} over their average`, tens: (n) => `${n} perfect ${n === 1 ? 'score' : 'scores'}`, course: 'Course average', last: 'Latest audition',
                       easiest: 'The one you did best', hardest: 'The challenge', isNew: 'NEW', reveal: 'Press → to reveal the podium', none: 'No data yet', next: 'Next', prev: 'Back' }, below5: 'Average below 5', lowest5: 'Nobody below 5: the 5 lowest', runners: 'Runners-up', entries: (n) => `${n} ${n === 1 ? 'submission' : 'submissions'}`,
                 edit: 'Edit', hideName: 'Hide name when projecting (shown as anonymous)', editTitle: 'Correct submission details', name: 'Full name', group: 'Group', save: 'Save', cancel: 'Cancel', editNote: 'Only this submission changes. The email cannot be edited.'
@@ -608,6 +606,23 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
             if (i > 0 && NAME_PARTICLES.has(low)) return low;
             return low.replace(/(^|[-'’])(\p{L})/gu, (m, p, c) => p + c.toUpperCase());
         }).join(' ');
+        const splitName = (full) => {
+            const t = String(full || '').trim().split(/\s+/).filter(Boolean);
+            if (t.length >= 4 && NAME_PARTICLES.has(t[t.length - 2].toLowerCase())) return { first: t.slice(0, t.length - 3).join(' '), l1: t[t.length - 3], l2: t.slice(t.length - 2).join(' ') };
+            if (t.length >= 4) return { first: t.slice(0, t.length - 2).join(' '), l1: t[t.length - 2], l2: t[t.length - 1] };
+            if (t.length === 3) return { first: t[0], l1: t[1], l2: t[2] };
+            if (t.length === 2) return { first: t[0], l1: t[1], l2: '' };
+            return { first: t[0] || '', l1: '', l2: '' };
+        };
+        // Proyección: «Nombre Apellido1»; el 2.º nombre con inicial; si coinciden dos alumnos, inicial del 2.º apellido
+        const abbrevParts = (sc) => {
+            const sp = splitName(sc.student_name);
+            const first = String(sc.__fn || sp.first || '').trim().split(/\s+/).filter(Boolean);
+            const l1 = String(sc.__l1 || sp.l1 || '').trim(), l2 = String(sc.__l2 || sp.l2 || '').trim();
+            const compound = first.slice(1).some(w => NAME_PARTICLES.has(w.toLowerCase()));
+            const given = !first.length ? '' : compound ? first.join(' ') : first[0] + first.slice(1).map(w => ' ' + w.charAt(0).toUpperCase() + '.').join('');
+            return { base: `${given} ${l1}`.trim(), l2i: l2 ? l2.charAt(0).toUpperCase() + '.' : '' };
+        };
         const wkey = (w) => String(w || '').toUpperCase().replace(/Ñ/g, '\u0001').normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/\u0001/g, 'Ñ').replace(/[^A-ZÑ]/g, '');
         // Evaluaciones por meses: 1.ª sep-dic, 2.ª ene-mar, 3.ª abr-ago. Curso escolar: septiembre a agosto.
         const termOf = (d) => { const m = new Date(d).getMonth() + 1; return m >= 9 ? 1 : m <= 3 ? 2 : 3; };
@@ -651,7 +666,8 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
                 nm = niceName(nm);
                 const klass = cls || cleanClass(defaultGroup);
                 const valid = SCHOOL_EMAIL_RE.test(email) && nm.length >= 3 && !!klass;
-                rows.push({ email, name: nm, class: klass, valid, why: !SCHOOL_EMAIL_RE.test(email) ? 'email' : nm.length < 3 ? 'name' : !klass ? 'group' : '' });
+                const sp = splitName(nm);
+                rows.push({ email, name: nm, first_name: sp.first, last_name1: sp.l1, last_name2: sp.l2, class: klass, valid, why: !SCHOOL_EMAIL_RE.test(email) ? 'email' : nm.length < 3 ? 'name' : !klass ? 'group' : '' });
             });
             const seen = new Set();
             const unique = rows.filter(r => { if (seen.has(r.email)) return false; seen.add(r.email); return true; });
@@ -679,11 +695,12 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
                 if (!r || !r.some(c => String(c || '').trim())) return;
                 let email = get(r, 'EMAILOFICIAL').toLowerCase().replace(/\s+/g, '');
                 if (!email && get(r, 'NRE')) email = get(r, 'NRE').replace(/\D/g, '') + '@alu.murciaeduca.es';
-                const nm = niceName([get(r, 'NOMBRE'), get(r, 'APELLIDO1'), get(r, 'APELLIDO2')].filter(Boolean).join(' '));
+                const fn = niceName(get(r, 'NOMBRE')), l1 = niceName(get(r, 'APELLIDO1')), l2 = niceName(get(r, 'APELLIDO2'));
+                const nm = [fn, l1, l2].filter(Boolean).join(' ');
                 if (!email && !nm) { skipped.push(r.join(' ')); return; }
                 const klass = mapGroupCode(get(r, 'GRUPO')) || cleanClass(defaultGroup);
                 const valid = SCHOOL_EMAIL_RE.test(email) && nm.length >= 3 && !!klass;
-                rows.push({ email, name: nm, class: klass, valid, why: !SCHOOL_EMAIL_RE.test(email) ? 'email' : nm.length < 3 ? 'name' : !klass ? 'group' : '' });
+                rows.push({ email, name: nm, first_name: fn, last_name1: l1, last_name2: l2, class: klass, valid, why: !SCHOOL_EMAIL_RE.test(email) ? 'email' : nm.length < 3 ? 'name' : !klass ? 'group' : '' });
             });
             const seen = new Set();
             return { rows: rows.filter(r => { if (!r.email || seen.has(r.email)) return false; seen.add(r.email); return true; }), skipped };
@@ -732,6 +749,7 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
             const [pg, setPg] = React.useState('');
             const [pa, setPa] = React.useState('');
             const [busy, setBusy] = React.useState(false);
+            const [openG, setOpenG] = React.useState({});
             const sel = "px-3 py-2 bg-slate-50 border rounded-xl text-sm font-medium outline-none focus:border-indigo-500 min-w-0";
             const groups = React.useMemo(() => [...new Set(roster.map(r => r.class).filter(Boolean))].sort((a, b) => a.localeCompare(b, 'es', { numeric: true })), [roster]);
             const emailSet = React.useMemo(() => new Set(roster.map(r => r.email.toLowerCase())), [roster]);
@@ -778,7 +796,7 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
                 rd.onload = async () => {
                     try {
                         const data = JSON.parse(String(rd.result));
-                        const list = (Array.isArray(data) ? data : data.students || []).map(r => ({ email: String(r.email || '').toLowerCase().trim(), name: niceName(r.name), class: cleanClass(r.class || ''), anonymous: !!r.anonymous }))
+                        const list = (Array.isArray(data) ? data : data.students || []).map(r => ({ email: String(r.email || '').toLowerCase().trim(), name: niceName(r.name), first_name: r.first_name ?? null, last_name1: r.last_name1 ?? null, last_name2: r.last_name2 ?? null, class: cleanClass(r.class || ''), anonymous: !!r.anonymous }))
                             .filter(r => SCHOOL_EMAIL_RE.test(r.email) && r.name);
                         if (!list.length) { showToast('That file has no valid students.', 'error'); return; }
                         await onSave(list, false);
@@ -838,20 +856,24 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
                         </div>
                         {outsiders > 0 && <p className="text-xs text-amber-800 bg-amber-50 border border-amber-200 rounded-xl px-3 py-2 mb-3">⚠ {outsiders} submission(s) use an email that is not on this list. They are marked ⚠ in Student Grades and do not count in statistics until you fix or delete them.</p>}
                         {shown.length === 0 ? <p className="text-sm text-slate-400 text-center py-6">No students yet. Paste your list above.</p> : (
-                            <div className="overflow-x-auto"><table className="w-full text-left text-sm">
-                                <thead><tr className="border-b text-slate-400 text-xs uppercase"><th className="py-2 px-2">Name</th><th className="py-2 px-2">Email</th><th className="py-2 px-2">Group</th><th className="py-2 px-2 text-center" title="Shown as anonymous when projecting">Anonymous</th><th className="py-2 px-2"></th></tr></thead>
-                                <tbody>{shown.map(r => (
-                                    <tr key={r.email} className="border-b border-slate-100">
-                                        <td className="py-2 px-2 font-semibold text-slate-900">{r.name}</td>
-                                        <td className="py-2 px-2 text-xs text-slate-500">{r.email}</td>
-                                        <td className="py-2 px-2 text-xs font-mono">{r.class}</td>
-                                        <td className="py-2 px-2 text-center"><input type="checkbox" checked={!!r.anonymous} onChange={() => onUpdate(r.email, { anonymous: !r.anonymous })} aria-label="Anonymous in projections" /></td>
-                                        <td className="py-2 px-2 text-right whitespace-nowrap">
-                                            <button onClick={() => setEdit({ old: r.email, name: r.name, email: r.email, class: r.class })} title="Edit" className="p-1.5 hover:bg-indigo-50 rounded-lg">✏️</button>
-                                            <button onClick={() => { if (window.confirm(`Remove ${r.name} from the list? Their past submissions are kept but stop counting.`)) onDelete([r.email]); }} title="Remove" className="p-1.5 hover:bg-rose-50 rounded-lg text-rose-600">✕</button>
-                                        </td>
-                                    </tr>))}</tbody>
-                            </table></div>
+                            <div className="space-y-2">
+                                {groups.filter(g => !fg || g === fg).map(g => { const mem = shown.filter(r => r.class === g); const isOpen = !!fg || !!openG[g]; return (
+                                    <div key={g} className="rounded-xl border border-slate-200 overflow-hidden">
+                                        <button onClick={() => setOpenG(v => ({ ...v, [g]: !v[g] }))} className="w-full flex items-center justify-between px-4 py-2.5 bg-slate-50 hover:bg-slate-100 text-left"><span className="font-bold text-slate-900 text-sm">{g} <span className="font-normal text-slate-500">· {mem.length} students</span></span><span className="text-slate-400 text-xs">{isOpen ? '▲' : '▼'}</span></button>
+                                        {isOpen && <div className="overflow-x-auto"><table className="w-full text-left text-sm">
+                                            <tbody>{mem.map(r => (
+                                                <tr key={r.email} className="border-t border-slate-100">
+                                                    <td className="py-2 px-3 font-semibold text-slate-900">{r.name}</td>
+                                                    <td className="py-2 px-3 text-xs text-slate-500">{r.email}</td>
+                                                    <td className="py-2 px-3 text-center"><input type="checkbox" checked={!!r.anonymous} onChange={() => onUpdate(r.email, { anonymous: !r.anonymous })} aria-label="Anonymous in projections" title="Anonymous in projections" /></td>
+                                                    <td className="py-2 px-3 text-right whitespace-nowrap">
+                                                        <button onClick={() => { const sp = splitName(r.name); setEdit({ old: r.email, email: r.email, class: r.class, first_name: r.first_name ?? sp.first, last_name1: r.last_name1 ?? sp.l1, last_name2: r.last_name2 ?? sp.l2 }); }} title="Edit" className="p-1.5 hover:bg-indigo-50 rounded-lg">✏️</button>
+                                                        <button onClick={() => { if (window.confirm(`Remove ${r.name} from the list? Their past submissions are kept but stop counting.`)) onDelete([r.email]); }} title="Remove" className="p-1.5 hover:bg-rose-50 rounded-lg text-rose-600">✕</button>
+                                                    </td>
+                                                </tr>))}</tbody>
+                                        </table></div>}
+                                    </div>); })}
+                            </div>
                         )}
                     </div>
 
@@ -877,12 +899,16 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
                         <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm flex items-center justify-center p-4 z-50">
                             <div className="bg-white rounded-2xl max-w-md w-full p-6 shadow-xl space-y-3">
                                 <h3 className="text-lg font-bold text-slate-900">✏️ Edit student</h3>
-                                <div><label className="block text-[11px] font-bold uppercase text-slate-500 mb-1">Name</label><input type="text" value={edit.name} onChange={e => setEdit(v => ({ ...v, name: e.target.value }))} className={`${sel} w-full`} /></div>
+                                <div className="grid grid-cols-3 gap-2">
+                                    <div><label className="block text-[11px] font-bold uppercase text-slate-500 mb-1">First name</label><input type="text" value={edit.first_name} onChange={e => setEdit(v => ({ ...v, first_name: e.target.value }))} className={`${sel} w-full`} /></div>
+                                    <div><label className="block text-[11px] font-bold uppercase text-slate-500 mb-1">Surname 1</label><input type="text" value={edit.last_name1} onChange={e => setEdit(v => ({ ...v, last_name1: e.target.value }))} className={`${sel} w-full`} /></div>
+                                    <div><label className="block text-[11px] font-bold uppercase text-slate-500 mb-1">Surname 2</label><input type="text" value={edit.last_name2} onChange={e => setEdit(v => ({ ...v, last_name2: e.target.value }))} className={`${sel} w-full`} /></div>
+                                </div>
                                 <div><label className="block text-[11px] font-bold uppercase text-slate-500 mb-1">Email</label><input type="email" value={edit.email} onChange={e => setEdit(v => ({ ...v, email: e.target.value }))} className={`${sel} w-full`} /></div>
                                 <div><label className="block text-[11px] font-bold uppercase text-slate-500 mb-1">Group</label><input type="text" value={edit.class} onChange={e => setEdit(v => ({ ...v, class: e.target.value }))} className={`${sel} w-full`} /></div>
                                 <div className="flex justify-end gap-2 pt-2">
                                     <button onClick={() => setEdit(null)} className="px-4 py-2 rounded-xl text-sm font-bold text-slate-600 bg-slate-100">Cancel</button>
-                                    <button onClick={async () => { const ok = await onUpdate(edit.old, { name: niceName(edit.name), email: edit.email.trim().toLowerCase(), class: cleanClass(edit.class) }); if (ok !== false) setEdit(null); }} disabled={!SCHOOL_EMAIL_RE.test(edit.email.trim()) || edit.name.trim().length < 3 || !edit.class.trim()} className="px-4 py-2 rounded-xl text-sm font-bold text-white bg-indigo-600 disabled:opacity-50">Save</button>
+                                    <button onClick={async () => { const fn = niceName(edit.first_name), l1 = niceName(edit.last_name1), l2 = niceName(edit.last_name2); const ok = await onUpdate(edit.old, { name: [fn, l1, l2].filter(Boolean).join(' '), first_name: fn, last_name1: l1, last_name2: l2, email: edit.email.trim().toLowerCase(), class: cleanClass(edit.class) }); if (ok !== false) setEdit(null); }} disabled={!SCHOOL_EMAIL_RE.test(edit.email.trim()) || (edit.first_name + edit.last_name1).trim().length < 3 || !edit.class.trim()} className="px-4 py-2 rounded-xl text-sm font-bold text-white bg-indigo-600 disabled:opacity-50">Save</button>
                                 </div>
                             </div>
                         </div>
@@ -907,7 +933,224 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
             </div>
         );
 
-        const GradesDashboard = ({ scores: rawScores, auditions, lang, onView, onDelete, onDeleteAll, onEdit, projectNonce, onProjectHandled, roster, edLabel, onBackup }) => {
+        // ---------- COMPONENTES NUEVOS: confirmaciones, secciones plegables, gráficos y estadísticas ----------
+        const DangerConfirm = ({ title, body, word = 'DELETE', steps = 2, onConfirm, onCancel }) => {
+            const [step, setStep] = React.useState(1);
+            const [typed, setTyped] = React.useState('');
+            const [wait, setWait] = React.useState(0);
+            React.useEffect(() => {
+                if (step < 2) return;
+                setWait(5);
+                const t = setInterval(() => setWait(w => (w > 0 ? w - 1 : 0)), 1000);
+                return () => clearInterval(t);
+            }, [step]);
+            const last = step >= steps;
+            return (
+                <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 z-[70]">
+                    <div className="bg-white rounded-2xl max-w-md w-full p-6 shadow-xl space-y-4">
+                        <h3 className="text-lg font-black text-rose-700">{title}</h3>
+                        <p className="text-sm text-slate-700">{body}</p>
+                        {step === 1
+                            ? <div><p className="text-xs text-slate-500 mb-1">To continue, type <b>{word}</b>:</p><input autoFocus type="text" value={typed} onChange={e => setTyped(e.target.value)} className="w-full px-3 py-2 bg-slate-50 border rounded-xl text-sm outline-none focus:border-rose-500" /></div>
+                            : <p className="text-sm font-bold text-rose-700">{last && steps > 2 ? 'Last chance. This cannot be undone.' : 'Are you sure? This cannot be undone.'}</p>}
+                        <div className="flex items-center justify-between gap-3 pt-1">
+                            <button onClick={onCancel} className="px-5 py-2.5 rounded-xl text-sm font-bold text-white bg-indigo-600 hover:bg-indigo-700">Go back</button>
+                            {step === 1
+                                ? <button onClick={() => setStep(2)} disabled={typed.trim().toUpperCase() !== word} className="px-3 py-1.5 rounded-lg text-xs font-bold text-rose-700 bg-rose-50 border border-rose-200 disabled:opacity-40">Continue</button>
+                                : <button onClick={() => (last ? onConfirm() : setStep(s => s + 1))} disabled={wait > 0} className="px-3 py-1.5 rounded-lg text-xs font-bold text-white bg-rose-600 disabled:opacity-40">{wait > 0 ? `Wait ${wait}s` : (last ? 'Delete permanently' : 'Continue')}</button>}
+                        </div>
+                    </div>
+                </div>
+            );
+        };
+
+        const Section = ({ title, icon, open: startOpen = true, right, children }) => {
+            const [open, setOpen] = React.useState(startOpen);
+            return (
+                <div className="rounded-2xl border border-slate-200 bg-white overflow-hidden">
+                    <button onClick={() => setOpen(v => !v)} className="w-full flex items-center justify-between gap-3 px-4 py-3 text-left hover:bg-slate-50">
+                        <span className="font-bold text-slate-900 text-sm">{icon} {title}</span>
+                        <span className="flex items-center gap-3">{right}<span className="text-slate-400 text-xs">{open ? '▲' : '▼'}</span></span>
+                    </button>
+                    {open && <div className="px-4 pb-4">{children}</div>}
+                </div>
+            );
+        };
+
+        const JOURNEY_COLORS = ['#6366F1', '#F59E0B', '#10B981', '#EF4444', '#8B5CF6', '#06B6D4', '#EC4899', '#84CC16'];
+        const JourneyChart = ({ labels, series }) => {
+            const W = 760, H = 290, pl = 34, pr = 16, pt = 14, pb = 78;
+            const vals = series.flatMap(s => s.points.map(p => p.y));
+            if (!labels.length || !vals.length) return <p className="text-sm text-slate-400 py-6 text-center">Not enough data yet.</p>;
+            const lo = Math.max(0, Math.floor(Math.min(...vals) - 0.5)), hi = 10;
+            const x = (i) => pl + (labels.length === 1 ? (W - pl - pr) / 2 : (i * (W - pl - pr)) / (labels.length - 1));
+            const y = (v) => pt + (1 - (v - lo) / (hi - lo)) * (H - pt - pb);
+            const ticks = []; for (let v = Math.ceil(lo); v <= hi; v += (hi - lo > 6 ? 2 : 1)) ticks.push(v);
+            return (
+                <div>
+                    <div className="overflow-x-auto"><svg viewBox={`0 0 ${W} ${H}`} className="w-full min-w-[540px] text-slate-500" role="img" aria-label="Average of each group, audition by audition">
+                        {ticks.map(v => <g key={v}><line x1={pl} x2={W - pr} y1={y(v)} y2={y(v)} stroke="currentColor" strokeOpacity=".18" /><text x={pl - 6} y={y(v) + 4} fontSize="11" textAnchor="end" fill="currentColor">{v}</text></g>)}
+                        {labels.map((l, i) => <text key={i} x={x(i)} y={H - pb + 16} fontSize="10.5" fill="currentColor" textAnchor="end" transform={`rotate(-28 ${x(i)} ${H - pb + 16})`}>{l.length > 20 ? l.slice(0, 19) + '…' : l}</text>)}
+                        {series.map(s => (
+                            <g key={s.name}>
+                                <polyline fill="none" stroke={s.color} strokeWidth="2.5" strokeLinejoin="round" strokeLinecap="round" points={s.points.map(p => `${x(p.x)},${y(p.y)}`).join(' ')} />
+                                {s.points.map((p, i) => <circle key={i} cx={x(p.x)} cy={y(p.y)} r="4.5" fill={s.color}><title>{`${s.name} · ${labels[p.x]} · ${p.y.toFixed(1)}`}</title></circle>)}
+                            </g>))}
+                    </svg></div>
+                    <div className="flex flex-wrap gap-x-4 gap-y-1 mt-1 text-xs font-semibold text-slate-600">{series.map(s => <span key={s.name} className="flex items-center gap-1.5"><span className="w-3 h-3 rounded-full" style={{ background: s.color }}></span>{s.name}</span>)}</div>
+                </div>
+            );
+        };
+
+        // ---------- PESTAÑA «STATISTICS»: solo estadísticas (sin tabla de entregas) ----------
+        const StatsView = ({ scores, auditions, roster, hiddenKeys }) => {
+            const [reveal, setReveal] = React.useState(false);
+            const [rg, setRg] = React.useState('');
+            const [allRank, setAllRank] = React.useState(false);
+            const f1 = (n) => Number(n || 0).toFixed(1);
+            const dn = (s) => (hiddenKeys.has(studentKey(s)) && !reveal) ? 'Anonymous' : s.student_name;
+            const groups = React.useMemo(() => [...new Set(scores.map(s => s.student_class).filter(Boolean))].sort((a, b) => a.localeCompare(b, 'es', { numeric: true })), [scores]);
+            const audsOrd = React.useMemo(() => {
+                const first = {}, title = {};
+                scores.forEach(s => { const t = String(s.created_at || ''); if (!first[s.audition_id] || t < first[s.audition_id]) first[s.audition_id] = t; title[s.audition_id] = s.auditions?.title || s.audition_id; });
+                return Object.keys(first).sort((a, b) => first[a].localeCompare(first[b])).map(id => ({ id, title: title[id] }));
+            }, [scores]);
+            if (!scores.length) return <p className="text-slate-400 text-center py-10">No submissions in this period yet.</p>;
+            const rosterN = (g) => roster.filter(r => r.class === g).length || new Set(scores.filter(s => s.student_class === g).map(studentKey)).size;
+            const applies = (id, g) => { const a = auditions.find(x => (x.share_link || x.id) === id); const au = a && Array.isArray(a.audience) ? a.audience : []; return !au.length || au.includes(courseOf(g)) || scores.some(s => s.audition_id === id && s.student_class === g); };
+            const n = scores.length, pct = (k) => (n ? Math.round(k / n * 100) : 0);
+            const cards = [['Average', f1(avgOf(scores)), 'from-violet-500 to-indigo-500'], ['Submissions', n, 'from-emerald-500 to-teal-500'], ['Passed', pct(scores.filter(s => Number(s.score) >= 5).length) + ' %', 'from-sky-500 to-blue-500'],
+                ['Excellent (≥ 9)', scores.filter(s => Number(s.score) >= 9).length, 'from-amber-500 to-orange-500'], ['Perfect 10s', scores.filter(s => Number(s.score) >= 10).length, 'from-pink-500 to-rose-500'],
+                ['Used hints', pct(scores.filter(s => (s.details?.words || []).some(w => w.usedHint)).length) + ' %', 'from-slate-500 to-slate-700']];
+            const series = groups.map((g, i) => ({ name: g, color: JOURNEY_COLORS[i % JOURNEY_COLORS.length], points: audsOrd.map((a, xi) => { const r = scores.filter(s => s.student_class === g && s.audition_id === a.id); return r.length ? { x: xi, y: avgOf(r) } : null; }).filter(Boolean) })).filter(s => s.points.length);
+            const cmp = groups.map(g => {
+                const rows = scores.filter(s => s.student_class === g), order = auditionOrder(rows), lastRows = rows.filter(s => s.audition_id === order[0]), prev = rows.filter(s => s.audition_id !== order[0]);
+                return { g, students: rosterN(g), avg: avgOf(rows), last: avgOf(lastRows), delta: prev.length ? avgOf(lastRows) - avgOf(prev) : null, tens: Math.round(rows.filter(s => Number(s.score) >= 10).length / rows.length * 100), pass: Math.round(rows.filter(s => Number(s.score) >= 5).length / rows.length * 100), nLast: lastRows.length };
+            }).sort((a, b) => b.avg - a.avg);
+            const delta = (g, i) => { const mine = (id) => scores.filter(s => s.student_class === g && s.audition_id === id); const cur = mine(audsOrd[i].id); if (!cur.length) return null; for (let j = i - 1; j >= 0; j--) { const p = mine(audsOrd[j].id); if (p.length) return avgOf(cur) - avgOf(p); } return null; };
+            const diff = audsOrd.map(a => { const r = scores.filter(s => s.audition_id === a.id), ws = r.flatMap(s => s.details?.words || []); return { ...a, avg: avgOf(r), n: r.length, hints: ws.length ? Math.round(ws.filter(w => w.usedHint).length / ws.length * 100) : 0, pass: Math.round(r.filter(s => Number(s.score) >= 5).length / r.length * 100) }; }).sort((a, b) => a.avg - b.avg);
+            const bucket = (v) => v >= 9 ? 3 : v >= 7 ? 2 : v >= 5 ? 1 : 0;
+            const BK = [['< 5', 'bg-rose-500'], ['5 – 6.9', 'bg-amber-400'], ['7 – 8.9', 'bg-emerald-400'], ['9 – 10', 'bg-emerald-600']];
+            const dist = groups.map(g => { const rows = scores.filter(s => s.student_class === g), c = [0, 0, 0, 0]; rows.forEach(s => c[bucket(Number(s.score))]++); return { g, c, t: rows.length }; });
+            const bestAud = diff.filter(d => d.n >= 5).sort((a, b) => b.avg - a.avg)[0];
+            const streaks = Object.values(groupBy(scores, studentKey)).map(arr => { const o = [...arr].sort((a, b) => String(a.created_at).localeCompare(String(b.created_at))); let best = 0, run = 0; o.forEach(s => { run = Number(s.score) >= 10 ? run + 1 : 0; if (run > best) best = run; }); return { s: arr[0], best }; }).sort((a, b) => b.best - a.best)[0];
+            const tensBy = groups.map(g => ({ g, k: scores.filter(s => s.student_class === g && Number(s.score) >= 10).length })).sort((a, b) => b.k - a.k)[0];
+            const rankRows = buildRanking(scores.filter(s => !rg || s.student_class === rg), '', '');
+            const th = "py-2 px-2 text-left text-[11px] uppercase text-slate-400 font-bold";
+            const dCell = (d) => d === null ? <span className="text-slate-300">–</span> : <span className={`font-bold ${d > 0.04 ? 'text-emerald-600' : d < -0.04 ? 'text-rose-600' : 'text-slate-400'}`}>{d > 0 ? '+' : ''}{f1(d)}</span>;
+            return (
+                <div className="space-y-4">
+                    <div className="flex items-center justify-between gap-3 flex-wrap">
+                        <p className="text-xs text-slate-500">Statistics of the selected school year and term. Names of students marked as anonymous show as “Anonymous”.</p>
+                        {hiddenKeys.size > 0 && <button onClick={() => setReveal(v => !v)} className="px-3 py-1.5 rounded-lg text-xs font-bold bg-slate-100 hover:bg-slate-200 text-slate-700">{reveal ? '🙈 Hide anonymous names' : '👁 Show real names'}</button>}
+                    </div>
+                    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
+                        {cards.map(([l, v, g]) => <div key={l} className={`rounded-2xl p-4 text-white bg-gradient-to-br ${g}`}><p className="text-[10px] font-bold uppercase opacity-80">{l}</p><p className="text-2xl font-black mt-1">{v}</p></div>)}
+                    </div>
+                    <Section title="Our journey" icon="📈"><JourneyChart labels={audsOrd.map(a => a.title)} series={series} /></Section>
+                    <Section title="Group comparison" icon="🏆">
+                        <div className="overflow-x-auto"><table className="w-full text-sm"><thead><tr className="border-b"><th className={th}>Group</th><th className={th}>Students</th><th className={th}>Average</th><th className={th}>Last audition</th><th className={th}>vs before</th><th className={th}>% 10s</th><th className={th}>% passed</th><th className={th}>Submitted last</th></tr></thead>
+                            <tbody>{cmp.map(r => <tr key={r.g} className="border-b border-slate-100"><td className="py-2 px-2 font-bold">{r.g}</td><td className="py-2 px-2">{r.students}</td><td className="py-2 px-2 font-bold">{f1(r.avg)}</td><td className="py-2 px-2">{f1(r.last)}</td><td className="py-2 px-2">{dCell(r.delta)}</td><td className="py-2 px-2">{r.tens} %</td><td className="py-2 px-2">{r.pass} %</td><td className="py-2 px-2">{r.nLast}/{r.students}</td></tr>)}</tbody></table></div>
+                    </Section>
+                    <Section title="Participation" icon="🙋" open={false}>
+                        <div className="overflow-x-auto"><table className="w-full text-xs"><thead><tr className="border-b"><th className={th}>Audition</th>{groups.map(g => <th key={g} className={th}>{g}</th>)}</tr></thead>
+                            <tbody>{audsOrd.map(a => <tr key={a.id} className="border-b border-slate-100"><td className="py-2 px-2 font-semibold">{a.title}</td>{groups.map(g => { if (!applies(a.id, g)) return <td key={g} className="py-2 px-2 text-slate-300">–</td>; const k = scores.filter(s => s.student_class === g && s.audition_id === a.id).length, N = rosterN(g), p = N ? Math.min(100, Math.round(k / N * 100)) : 0; return <td key={g} className="py-2 px-2"><span className="font-bold">{k}/{N}</span><div className="h-1.5 rounded-full bg-slate-100 mt-1 w-16"><div className={`h-full rounded-full ${p >= 90 ? 'bg-emerald-500' : p >= 70 ? 'bg-amber-400' : 'bg-rose-500'}`} style={{ width: `${p}%` }}></div></div></td>; })}</tr>)}</tbody></table></div>
+                    </Section>
+                    <Section title="Improvement by group, audition by audition" icon="📊" open={false}>
+                        <div className="overflow-x-auto"><table className="w-full text-xs"><thead><tr className="border-b"><th className={th}>Group</th>{audsOrd.map(a => <th key={a.id} className={th}>{a.title.length > 16 ? a.title.slice(0, 15) + '…' : a.title}</th>)}</tr></thead>
+                            <tbody>{groups.map(g => <tr key={g} className="border-b border-slate-100"><td className="py-2 px-2 font-bold">{g}</td>{audsOrd.map((a, i) => <td key={a.id} className="py-2 px-2">{dCell(delta(g, i))}</td>)}</tr>)}</tbody></table></div>
+                    </Section>
+                    <Section title="Difficulty of the auditions" icon="🎧" open={false}>
+                        <div className="space-y-2">{diff.map(d => <div key={d.id} className="flex items-center gap-3 text-sm"><span className="w-44 sm:w-56 truncate font-semibold">{d.title}</span><div className="flex-1 h-2.5 rounded-full bg-slate-100 overflow-hidden"><div className={`h-full rounded-full ${d.avg >= 8 ? 'bg-emerald-500' : d.avg >= 5 ? 'bg-amber-400' : 'bg-rose-500'}`} style={{ width: `${d.avg * 10}%` }}></div></div><span className="w-10 text-right font-black">{f1(d.avg)}</span><span className="w-28 text-right text-xs text-slate-500">hints {d.hints} % · n={d.n}</span></div>)}</div>
+                        <p className="text-[11px] text-slate-400 mt-2">Sorted from hardest to easiest. “Hints” is the share of words answered using the hint.</p>
+                    </Section>
+                    <Section title="Mark distribution by group" icon="🧮" open={false}>
+                        <div className="space-y-2">{dist.map(d => <div key={d.g} className="flex items-center gap-3 text-sm"><span className="w-20 font-bold">{d.g}</span><div className="flex-1 flex h-4 rounded-full overflow-hidden bg-slate-100">{d.c.map((k, i) => k ? <div key={i} className={BK[i][1]} style={{ width: `${k / d.t * 100}%` }} title={`${BK[i][0]}: ${k}`}></div> : null)}</div><span className="w-10 text-xs text-slate-500 text-right">{d.t}</span></div>)}</div>
+                        <div className="flex flex-wrap gap-3 mt-3 text-[11px] text-slate-600">{BK.map(([l, c]) => <span key={l} className="flex items-center gap-1"><span className={`w-3 h-3 rounded ${c}`}></span>{l}</span>)}</div>
+                    </Section>
+                    <Section title="Records" icon="🏅" open={false}>
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                            <div className="rounded-xl bg-amber-50 border border-amber-200 p-3"><p className="text-[11px] font-bold uppercase text-amber-700">Best audition</p><p className="font-black text-slate-900">{bestAud ? bestAud.title : '—'}</p><p className="text-sm text-slate-600">{bestAud ? `average ${f1(bestAud.avg)} · ${bestAud.n} submissions` : 'needs at least 5 submissions'}</p></div>
+                            <div className="rounded-xl bg-emerald-50 border border-emerald-200 p-3"><p className="text-[11px] font-bold uppercase text-emerald-700">Longest streak of 10s</p><p className="font-black text-slate-900">{streaks && streaks.best > 1 ? dn(streaks.s) : '—'}</p><p className="text-sm text-slate-600">{streaks && streaks.best > 1 ? `${streaks.best} perfect scores in a row` : 'no streaks yet'}</p></div>
+                            <div className="rounded-xl bg-indigo-50 border border-indigo-200 p-3"><p className="text-[11px] font-bold uppercase text-indigo-700">Group with most 10s</p><p className="font-black text-slate-900">{tensBy && tensBy.k ? tensBy.g : '—'}</p><p className="text-sm text-slate-600">{tensBy && tensBy.k ? `${tensBy.k} perfect scores` : 'no 10s yet'}</p></div>
+                        </div>
+                    </Section>
+                    <Section title="Rankings" icon="🥇" open={false}>
+                        <div className="flex flex-wrap items-center gap-2 mb-3">
+                            <select value={rg} onChange={e => setRg(e.target.value)} className="px-3 py-2 bg-slate-50 border rounded-xl text-sm font-medium outline-none"><option value="">All students</option>{groups.map(g => <option key={g} value={g}>{g}</option>)}</select>
+                            <button onClick={() => setAllRank(v => !v)} className="px-3 py-2 rounded-xl text-xs font-bold bg-slate-100 hover:bg-slate-200 text-slate-700">{allRank ? 'Show top 10' : `Show all (${rankRows.length})`}</button>
+                        </div>
+                        <div className="space-y-1.5 max-h-[28rem] overflow-y-auto pr-1">{(allRank ? rankRows : rankRows.slice(0, 10)).map((x, i) => <div key={studentKey(x.s)} className="flex items-center gap-3 text-sm px-3 py-1.5 rounded-lg bg-slate-50"><span className="w-7 font-black text-slate-400">{i + 1}</span><span className="flex-1 min-w-0 truncate font-semibold">{dn(x.s)} <span className="text-xs text-slate-400 font-normal">· {x.s.student_class}</span></span><span className="text-xs text-slate-400">{x.n} sub.</span><span className="font-black w-10 text-right">{f1(x.value)}</span></div>)}</div>
+                    </Section>
+                </div>
+            );
+        };
+
+        // ---------- PESTAÑA «VOCABULARY»: todas las palabras ----------
+        const VocabView = ({ rows }) => {
+            const [q, setQ] = React.useState('');
+            const [mode, setMode] = React.useState('hard');
+            const all = React.useMemo(() => wordStats(rows), [rows]);
+            const list = React.useMemo(() => {
+                const l = all.filter(x => !q.trim() || x.w.toLowerCase().includes(q.trim().toLowerCase()));
+                return [...l].sort(mode === 'alpha' ? (a, b) => a.w.localeCompare(b.w) : mode === 'easy' ? byEase : (a, b) => a.rate - b.rate || b.tries - a.tries || a.w.localeCompare(b.w));
+            }, [all, q, mode]);
+            if (!all.length) return <p className="text-slate-400 text-center py-10">No words yet for this selection.</p>;
+            const btn = (k, label) => <button key={k} onClick={() => setMode(k)} className={`px-3 py-1.5 rounded-lg text-xs font-bold ${mode === k ? 'bg-indigo-600 text-white' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'}`}>{label}</button>;
+            return (
+                <div>
+                    <div className="flex flex-wrap items-center gap-2 mb-3">
+                        <input type="text" value={q} onChange={e => setQ(e.target.value)} placeholder="Search a word…" className="px-3 py-2 bg-slate-50 border rounded-xl text-sm outline-none focus:border-indigo-500 flex-1 min-w-[180px]" />
+                        {btn('hard', 'Hardest first')}{btn('easy', 'Easiest first')}{btn('alpha', 'A – Z')}
+                        <span className="text-xs text-slate-400">{list.length} words</span>
+                    </div>
+                    <div className="max-h-[34rem] overflow-y-auto pr-1 space-y-1">
+                        {list.map(x => <div key={x.w} className="flex items-center gap-3 text-sm px-3 py-1.5 rounded-lg bg-slate-50"><span className="w-40 font-black truncate">{x.w}</span><div className="flex-1 h-2 rounded-full bg-slate-200 overflow-hidden"><div className={`h-full rounded-full ${x.rate >= 0.8 ? 'bg-emerald-500' : x.rate >= 0.5 ? 'bg-amber-400' : 'bg-rose-500'}`} style={{ width: `${x.rate * 100}%` }}></div></div><span className="w-24 text-right text-xs text-slate-500">{x.hits}/{x.tries}</span><span className="w-12 text-right font-bold">{Math.round(x.rate * 100)} %</span></div>)}
+                    </div>
+                </div>
+            );
+        };
+
+        // ---------- «END OF COURSE»: copias y borrado seguro ----------
+        const EndOfCourse = ({ yearCounts, groups, idsFor, onExportCsv, onBackupGrades, onBackupTasks, onBackupRoster, onDeleteGrades, onClearRoster, rosterCount }) => {
+            const [sel, setSel] = React.useState({});
+            const [allYears, setAllYears] = React.useState(false);
+            const [grp, setGrp] = React.useState('');
+            const [ask, setAsk] = React.useState(null);
+            const years = Object.keys(yearCounts).sort().reverse();
+            const chosen = allYears ? years : years.filter(y => sel[y]);
+            const ids = idsFor(chosen, grp);
+            const btn = "px-3 py-2 rounded-xl text-xs font-bold bg-indigo-50 hover:bg-indigo-100 text-indigo-700";
+            return (
+                <Section title="Advanced · End of course" icon="🧹" open={false}>
+                    <div className="space-y-5">
+                        <div>
+                            <p className="text-sm font-bold text-slate-900 mb-1">1. Copies <span className="font-normal text-slate-500">(optional, recommended)</span></p>
+                            <div className="flex flex-wrap gap-2"><button onClick={onExportCsv} className={btn}>Grades · Excel</button><button onClick={onBackupGrades} className={btn}>Grades · JSON</button><button onClick={onBackupTasks} className={btn}>Tasks · JSON</button><button onClick={onBackupRoster} className={btn}>Class list · JSON</button></div>
+                        </div>
+                        <div>
+                            <p className="text-sm font-bold text-slate-900 mb-1">2. Delete student grades</p>
+                            <p className="text-xs text-slate-500 mb-2">Tasks are never deleted here. Choose one or more school years:</p>
+                            <div className="flex flex-wrap gap-3 mb-2">{years.map(y => <label key={y} className="flex items-center gap-1.5 text-sm"><input type="checkbox" checked={allYears || !!sel[y]} disabled={allYears} onChange={e => setSel(v => ({ ...v, [y]: e.target.checked }))} /> {y} <span className="text-xs text-slate-400">({yearCounts[y]})</span></label>)}
+                                <label className="flex items-center gap-1.5 text-sm font-bold"><input type="checkbox" checked={allYears} onChange={e => setAllYears(e.target.checked)} /> All school years</label></div>
+                            <div className="flex flex-wrap items-center gap-2">
+                                <select value={grp} onChange={e => setGrp(e.target.value)} className="px-3 py-2 bg-slate-50 border rounded-xl text-sm outline-none"><option value="">All groups</option>{groups.map(g => <option key={g} value={g}>{g}</option>)}</select>
+                                <span className="text-xs text-slate-500">{ids.length} submission(s) selected</span>
+                                <button disabled={!ids.length} onClick={() => setAsk('grades')} className="ml-auto px-3 py-1.5 rounded-lg text-xs font-bold text-rose-700 bg-rose-50 border border-rose-200 disabled:opacity-40">Delete selected…</button>
+                            </div>
+                        </div>
+                        <div>
+                            <p className="text-sm font-bold text-slate-900 mb-1">3. Clear the class list <span className="font-normal text-slate-500">(optional, for a new course)</span></p>
+                            <button disabled={!rosterCount} onClick={() => setAsk('roster')} className="px-3 py-1.5 rounded-lg text-xs font-bold text-rose-700 bg-rose-50 border border-rose-200 disabled:opacity-40">Clear the list ({rosterCount} students)…</button>
+                        </div>
+                    </div>
+                    {ask === 'grades' && <DangerConfirm title="Delete student grades" body={`${ids.length} submission(s) from ${allYears ? 'all school years' : chosen.join(', ')}${grp ? ' · ' + grp : ''} will be deleted. Your tasks are not touched.`} onCancel={() => setAsk(null)} onConfirm={() => { setAsk(null); onDeleteGrades(ids); }} />}
+                    {ask === 'roster' && <DangerConfirm title="Clear the class list" body={`All ${rosterCount} students will be removed from your list. Past grades are kept.`} onCancel={() => setAsk(null)} onConfirm={() => { setAsk(null); onClearRoster(); }} />}
+                </Section>
+            );
+        };
+
+        const GradesDashboard = ({ scores: rawScores, auditions, lang, onView, onDelete, onDeleteAll, onEdit, projectNonce, onProjectHandled, roster, edLabel, onBackup, onDiploma, onBackupTasks, onBackupRoster, onDeleteGrades, onClearRoster }) => {
             const T = GRADES_TEXT[lang];
             const [fYear, setFYear] = React.useState(currentSchoolYear());
             const [fTerm, setFTerm] = React.useState(String(currentTerm()));   // '' = todo el curso
@@ -969,6 +1212,33 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
                 return true;
             }), [scoresP, q, fGroup, fCourse, fAud, fBand, fFrom, fTo]);
             const filteredC = React.useMemo(() => filtered.filter(s => !s.__out), [filtered]);
+            const [showAll, setShowAll] = React.useState(false);
+            const [filtersOpen, setFiltersOpen] = React.useState(false);
+            const showTable = showAll || !!(fGroup || q.trim() || fAud || fCourse || fBand);
+            const activeFilters = (fAud ? 1 : 0) + (fCourse ? 1 : 0) + (fBand ? 1 : 0) + ((fYear !== currentSchoolYear() || fTerm !== String(currentTerm())) ? 1 : 0);
+            const termLabel = fTerm === '' ? (lang === 'es' ? 'Todo el curso' : 'Whole course') : (lang === 'es' ? `${fTerm}.ª evaluación` : ({ '1': '1st', '2': '2nd', '3': '3rd' })[fTerm] + ' term');
+            const chip = (on) => `px-3 py-1.5 rounded-full text-xs font-bold border transition-all ${on ? 'bg-indigo-600 text-white border-indigo-600' : 'bg-white text-slate-600 border-slate-200 hover:border-indigo-300'}`;
+            const idsFor = (years, group) => scoresAll0.filter(s => years.includes(schoolYearOf(s.created_at)) && (!group || s.student_class === group)).map(s => s.id);
+            const yearCounts = React.useMemo(() => { const m = {}; scoresAll0.forEach(s => { const y = schoolYearOf(s.created_at); m[y] = (m[y] || 0) + 1; }); return m; }, [scoresAll0]);
+            const groupCards = React.useMemo(() => groups.map(g => {
+                const rows = scores.filter(s => s.student_class === g), order = auditionOrder(rows), lastRows = rows.filter(s => s.audition_id === order[0]);
+                const N = (roster || []).filter(r => r.class === g).length || new Set(rows.map(studentKey)).size;
+                return { g, N, avg: avgOf(rows), n: rows.length, last: lastRows[0]?.auditions?.title || '—', nLast: lastRows.length };
+            }), [groups, scores, roster]);
+            const attention = React.useMemo(() => {
+                const out = [];
+                Object.entries(groupBy(scores, s => s.student_class)).forEach(([g, rows]) => {
+                    const last2 = auditionOrder(rows).slice(0, 2); if (last2.length < 2) return;
+                    const ros = (roster || []).filter(r => r.class === g);
+                    const people = ros.length ? ros.map(r => ({ key: r.email.toLowerCase(), name: r.name })) : Object.values(groupBy(rows, studentKey)).map(arr => ({ key: studentKey(arr[0]), name: arr[0].student_name }));
+                    people.forEach(p => {
+                        const mine = rows.filter(s => studentKey(s) === p.key), got = last2.map(id => mine.find(s => s.audition_id === id));
+                        if (!got[0] && !got[1]) out.push({ g, name: p.name, why: 'No submission in the last 2 auditions' });
+                        else if (got[0] && got[1] && Number(got[0].score) < 5 && Number(got[1].score) < 5) out.push({ g, name: p.name, why: 'Below 5 in the last 2 auditions' });
+                    });
+                });
+                return out.sort((a, b) => a.g.localeCompare(b.g, 'es', { numeric: true }) || a.name.localeCompare(b.name, 'es'));
+            }, [scores, roster]);
 
             const sorted = React.useMemo(() => {
                 const get = {
@@ -1051,6 +1321,13 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
             React.useEffect(() => { if (projectNonce) { openProjection(); if (onProjectHandled) onProjectHandled(); } }, [projectNonce]);
             const startProjection = () => { setPj({ group: pjSetup.group, aud: lastAudOf(pjSetup.group) }); setPjSetup(null); setPjScreen(0); setPjReveal(0); setPjFast(false); };
             const closeProjection = () => { try { if (document.fullscreenElement) document.exitFullscreen(); } catch (e) {} setPj(null); };
+            const shortNames = React.useMemo(() => {
+                const m = {}; if (!pj) return m;
+                const people = Object.values(groupBy(scores.filter(sc => sc.student_class === pj.group), studentKey)).map(a => a[0]);
+                const byBase = groupBy(people, sc => abbrevParts(sc).base);
+                Object.values(byBase).forEach(arr => arr.forEach(sc => { const p = abbrevParts(sc); m[studentKey(sc)] = arr.length > 1 && p.l2i ? `${p.base} ${p.l2i}` : p.base; }));
+                return m;
+            }, [pj, scores]);
             const pjData = React.useMemo(() => {
                 if (!pj) return null;
                 const inGroup = scores.filter(s => s.student_class === pj.group);
@@ -1177,171 +1454,69 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
                     <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 mb-4">
                         <h2 className="text-xl font-bold text-slate-900">{T.title}</h2>
                         <div className="flex flex-wrap gap-2">
-                                                        {scores.length > 0 && onBackup && <button onClick={onBackup} title="Full copy of all grades (JSON)" className="px-3 py-2 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 rounded-xl text-xs font-bold">Backup JSON</button>}
+                            {scores.length > 0 && onBackup && <button onClick={onBackup} title="Full copy of all grades (JSON)" className="px-3 py-2 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 rounded-xl text-xs font-bold">Backup JSON</button>}
                             {sorted.length > 0 && <button onClick={exportCsv} className="px-3 py-2 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 rounded-xl text-xs font-bold flex items-center gap-1"><Icons.Download /> {T.exportCsv}</button>}
-                            {scores.length > 0 && <button onClick={onDeleteAll} title={T.deleteAllTitle} className="px-3 py-2 bg-rose-600 hover:bg-rose-700 text-white rounded-xl text-xs font-bold flex items-center gap-1"><Icons.Trash /> <span className="hidden sm:inline">{T.deleteAll}</span></button>}
                         </div>
                     </div>
 
                     <div className="flex bg-slate-100 p-1 rounded-xl gap-1 text-sm mb-3 max-w-md">
-                        {[['table', lang === 'es' ? 'Entregas' : 'Entries'], ['rank', lang === 'es' ? 'Clasificación' : 'Rankings'], ['stats', lang === 'es' ? 'Estadísticas' : 'Statistics']].map(([k, label]) => (
+                        {[['table', lang === 'es' ? 'Entregas' : 'Entries'], ['stats', lang === 'es' ? 'Estadísticas' : 'Statistics'], ['vocab', lang === 'es' ? 'Vocabulario' : 'Vocabulary']].map(([k, label]) => (
                             <button key={k} onClick={() => setGtab(k)} className={`flex-1 py-1.5 rounded-lg font-semibold transition-all ${gtab === k ? 'bg-white text-slate-900 shadow-sm font-bold' : 'text-slate-500 hover:text-slate-800'}`}>{label}</button>))}
                     </div>
-                    <div className="grid grid-cols-2 gap-2 mb-3">
-                        <select value={fYear} onChange={e => setFYear(e.target.value)} aria-label="School year" className={`${sel} text-sm font-bold py-2.5`}>{years.map(y => <option key={y} value={y}>{lang === 'es' ? 'Curso' : 'School year'} {y}</option>)}</select>
-                        <select value={fTerm} onChange={e => setFTerm(e.target.value)} aria-label="Term" className={`${sel} text-sm font-bold py-2.5`}>
-                            <option value="">{lang === 'es' ? 'Todo el curso' : 'Whole course'}</option>
-                            <option value="1">{lang === 'es' ? '1.ª evaluación' : '1st term'}</option><option value="2">{lang === 'es' ? '2.ª evaluación' : '2nd term'}</option><option value="3">{lang === 'es' ? '3.ª evaluación' : '3rd term'}</option>
-                        </select>
-                    </div>
-                    {/* Selector único: grupo y audición mandan sobre clasificación, Hall of Fame, estadísticas y tabla */}
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mb-3">
-                        <select value={fGroup} onChange={e => setFGroup(e.target.value)} className={`${sel} text-sm font-bold py-2.5`}><option value="">{T.allGroups}</option>{groups.map(g => <option key={g} value={g}>{g}</option>)}</select>
-                        <select value={fAud} onChange={e => setFAud(e.target.value)} className={`${sel} text-sm font-bold py-2.5`}><option value="">{T.allAvg}</option>{auds.map(([id, t]) => <option key={id} value={id}>{t}</option>)}</select>
-                    </div>
 
-                    {gtab === 'rank' && scores.length > 0 && (
-                        <div className="rounded-2xl p-4 border-2 border-indigo-200 bg-indigo-50 mb-5">
-                            <div className="flex flex-wrap items-center justify-between gap-2 mb-4">
-                                <h3 className="text-base font-black text-slate-900">🏁 {T.ranking}{fGroup ? ` · ${fGroup}` : ''}</h3>
-                                <div className="flex flex-wrap gap-2">
-                                    {ranking.length > 15 && <button onClick={() => setRankAll(v => !v)} className="px-3 py-1.5 bg-white border border-indigo-200 text-indigo-700 rounded-lg text-xs font-bold">{rankAll ? `▲ ${T.collapse}` : `▼ ${T.expand(ranking.length)}`}</button>}
-                                    {ranking.length > 0 && <button onClick={() => openProjection()} className="px-3 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg text-xs font-bold">📽 {T.project}</button>}
-                                </div>
+                    {gtab !== 'stats' && (
+                        <div className="space-y-2 mb-3">
+                            <div className="relative"><span className="absolute left-3 top-3 text-slate-400"><Icons.Search /></span><input type="text" placeholder={T.search} value={q} onChange={e => setQ(e.target.value)} className="w-full pl-9 pr-3 py-2.5 bg-slate-50 border rounded-xl text-sm outline-none focus:border-indigo-500" /></div>
+                            <div className="flex flex-wrap gap-1.5">
+                                <button onClick={() => setFGroup('')} className={chip(!fGroup)}>{lang === 'es' ? 'Todos' : 'All'}</button>
+                                {groups.map(g => <button key={g} onClick={() => setFGroup(fGroup === g ? '' : g)} className={chip(fGroup === g)}>{g}</button>)}
                             </div>
-                            {ranking.length === 0 ? <p className="text-sm text-slate-400">{T.noData}</p> : (<>
-                                <div className="grid grid-cols-3 gap-2 items-end max-w-xl mx-auto mb-4">
-                                    {[1, 0, 2].map(pos => { const x = ranking[pos]; if (!x) return <div key={pos}></div>;
-                                        const h = ['h-28', 'h-20', 'h-14'][pos]; const medal = ['🥇', '🥈', '🥉'][pos];
-                                        const col = ['bg-amber-400', 'bg-slate-300', 'bg-orange-300'][pos];
-                                        return (
-                                            <button key={pos} onClick={() => setProfile(studentKey(x.s))} className="flex flex-col items-center text-center min-w-0">
-                                                <span className="text-3xl">{medal}</span>
-                                                <span className="text-sm font-black text-slate-900 truncate max-w-full px-1">{nameOf(x.s)}</span>
-                                                <span className="text-[11px] text-slate-500 mb-1">{x.s.student_class}</span>
-                                                <div className={`ink-dark w-full ${h} ${col} rounded-t-xl flex flex-col items-center justify-start pt-2 shadow-inner`}>
-                                                    <span className="text-xl font-black text-slate-900">{fmt(x.value)}</span>
-                                                    <span className="text-[10px] font-bold text-slate-800">{pos + 1}.º</span>
-                                                </div>
-                                            </button>);
-                                    })}
-                                </div>
-                                {ranking.length > 3 && <ol className="space-y-1">
-                                    {ranking.slice(3, rankAll ? undefined : 15).map((x, i) => (
-                                        <li key={i} className="flex items-center gap-3 bg-white rounded-xl px-3 py-2 border border-slate-200">
-                                            <span className="w-8 text-right text-sm font-black text-slate-500">{i + 4}.º</span>
-                                            <button onClick={() => setProfile(studentKey(x.s))} className="flex-1 min-w-0 text-left text-sm font-semibold text-slate-800 truncate hover:underline">{nameOf(x.s)} <span className="font-normal text-xs text-slate-500">· {x.s.student_class}</span></button>
-                                            <div className="hidden sm:block w-28 h-2 rounded-full bg-slate-100 overflow-hidden"><div className={`h-full ${barColor(x.value)}`} style={{ width: `${x.value * 10}%` }}></div></div>
-                                            <span className="text-[11px] text-slate-400 w-24 text-right hidden md:block">{fAud ? timeLabel(x.first) : T.entries(x.n)}</span>
-                                            <span className={`text-xs font-extrabold px-2 py-0.5 rounded-full ${scoreClass(x.value)}`}>{fmt(x.value)}</span>
-                                        </li>))}
-                                </ol>}
-                                <div className="flex flex-wrap justify-between items-center gap-2 mt-2">
-                                    <p className="text-[11px] text-slate-500">{fAud ? T.rankTie : T.rankTieAvg}</p>
-                                    {ranking.length > 15 && <button onClick={() => setRankAll(v => !v)} className="text-xs font-bold text-indigo-700 hover:underline">{rankAll ? `▲ ${T.collapse}` : `▼ ${T.expand(ranking.length)}`}</button>}
-                                </div>
-                            </>)}
+                        </div>
+                    )}
+                    <div className="flex items-center justify-between gap-2 text-xs text-slate-500 mb-3">
+                        <span className="truncate">{fYear} · {termLabel}{gtab !== 'stats' && fGroup ? ` · ${fGroup}` : ''}{gtab !== 'stats' && q ? ` · “${q}”` : ''}</span>
+                        <button onClick={() => setFiltersOpen(v => !v)} className="shrink-0 px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 font-bold text-slate-700">Filters{activeFilters ? ` · ${activeFilters}` : ''} {filtersOpen ? '▲' : '▼'}</button>
+                    </div>
+                    {filtersOpen && (
+                        <div className="rounded-2xl border border-slate-200 bg-slate-50/60 p-3 mb-4 grid grid-cols-2 lg:grid-cols-3 gap-2">
+                            <select value={fYear} onChange={e => setFYear(e.target.value)} aria-label="School year" className={`${sel} text-sm font-bold py-2.5`}>{years.map(y => <option key={y} value={y}>{lang === 'es' ? 'Curso' : 'School year'} {y}</option>)}</select>
+                            <select value={fTerm} onChange={e => setFTerm(e.target.value)} aria-label="Term" className={`${sel} text-sm font-bold py-2.5`}>
+                                <option value="">{lang === 'es' ? 'Todo el curso' : 'Whole course'}</option>
+                                <option value="1">{lang === 'es' ? '1.ª evaluación' : '1st term'}</option><option value="2">{lang === 'es' ? '2.ª evaluación' : '2nd term'}</option><option value="3">{lang === 'es' ? '3.ª evaluación' : '3rd term'}</option>
+                            </select>
+                            <select value={fAud} onChange={e => setFAud(e.target.value)} className={`${sel} text-sm font-bold py-2.5`}><option value="">{T.allAvg}</option>{auds.map(([id, t]) => <option key={id} value={id}>{t}</option>)}</select>
+                            <select value={fCourse} onChange={e => setFCourse(e.target.value)} className={sel}><option value="">{T.allCourses}</option>{courses.map(c => <option key={c} value={c}>{c}</option>)}</select>
+                            <select value={fBand} onChange={e => setFBand(e.target.value)} className={sel}><option value="">{T.allBands}</option>{Object.entries(T.bands).map(([k, v]) => <option key={k} value={k}>{v}</option>)}</select>
+                            <button onClick={() => { resetFilters(); setFYear(currentSchoolYear()); setFTerm(String(currentTerm())); }} className="text-xs font-bold text-indigo-700 hover:underline text-left px-2">✕ {T.reset}</button>
                         </div>
                     )}
 
-                    <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 mb-2">
-                        <div className="relative col-span-2"><span className="absolute left-3 top-2.5 text-slate-400"><Icons.Search /></span><input type="text" placeholder={T.search} value={q} onChange={e => setQ(e.target.value)} className="w-full pl-9 pr-3 py-2 bg-slate-50 border rounded-xl text-xs outline-none focus:border-indigo-500" /></div>
-                        <select value={fCourse} onChange={e => setFCourse(e.target.value)} className={sel}><option value="">{T.allCourses}</option>{courses.map(c => <option key={c} value={c}>{c}</option>)}</select>
-                        <select value={fBand} onChange={e => setFBand(e.target.value)} className={sel}><option value="">{T.allBands}</option>{Object.entries(T.bands).map(([k, v]) => <option key={k} value={k}>{v}</option>)}</select>
-                        <div className="col-span-2 lg:col-span-4 flex gap-2 items-center text-[11px] text-slate-500">
-                            <span>{T.from}</span><input type="date" value={fFrom} onChange={e => setFFrom(e.target.value)} aria-label={T.from} className={`${sel} flex-1 px-2`} />
-                            <span>{T.to}</span><input type="date" value={fTo} onChange={e => setFTo(e.target.value)} aria-label={T.to} className={`${sel} flex-1 px-2`} />
-                        </div>
-                    </div>
-                    {anyFilter && <button onClick={resetFilters} className="text-xs font-bold text-indigo-700 hover:underline mb-3">✕ {T.reset}</button>}
-
-                    {gtab === 'stats' && st && (
-                        <div className="space-y-4 my-4">
-
-                            <div className="rounded-2xl p-4 border-2 border-amber-300 bg-amber-50">
-                                <h3 className="text-base font-black text-slate-900 mb-3">🌟 {T.hall}</h3>
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                                    <div className="bg-white rounded-xl p-3 border border-slate-200"><p className="text-xs font-bold uppercase text-slate-500 mb-2">🏅 {T.top5}</p>
-                                        {topAll.length ? <MiniRank list={topAll} valueFmt={x => fmt(x.value)} /> : <p className="text-sm text-slate-400">{T.noData}</p>}</div>
-                                    <div className="space-y-4">
-                                        {topClass.map(tc => (
-                                            <div key={tc.label} className="bg-white rounded-xl p-3 border border-slate-200"><p className="text-xs font-bold uppercase text-slate-500 mb-2">🎓 {fGroup ? `${T.top5class} · ${tc.label}` : T.top5course(tc.label)}</p>
-                                                {tc.list.length ? <MiniRank list={tc.list} valueFmt={x => fmt(x.value)} /> : <p className="text-sm text-slate-400">{T.noData}</p>}</div>
-                                        ))}
-                                    </div>
-                                </div>
-                                <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-                                    {[['👑', T.king, st.king, x => T.kingSub(x.tens)], ['🎯', T.bestAvg, st.bestAvg, x => fmt(x.avg)], ['💪', T.push, st.push, x => fmt(x.avg)]].map(([ic, label, list, sub]) => (
-                                        <div key={label} className="bg-white rounded-xl p-3 border border-slate-200">
-                                            <p className="text-[11px] font-bold uppercase text-slate-500">{ic} {label}</p>
-                                            {label === T.push && list && list.length > 0 && <p className="text-[10px] text-slate-400">{st.pushBelow ? T.below5 : T.lowest5}</p>}
-                                            {list && list.length ? (<>
-                                                <button onClick={() => setProfile(studentKey(list[0].s))} className="block w-full text-left mt-1 hover:underline">
-                                                    <span className="block text-base font-black text-slate-900 truncate">{nameOf(list[0].s)}</span>
-                                                    <span className="block text-xs text-slate-500">{list[0].s.student_class} · <b className="text-slate-700">{sub(list[0])}</b></span>
-                                                </button>
-                                                {list.length > 1 && <div className="mt-2 pt-2 border-t border-slate-200 space-y-1 max-h-72 overflow-y-auto pr-1">
-                                                    <p className="text-[10px] font-bold uppercase text-slate-400">{T.runners}</p>
-                                                    {list.slice(1).map((x, i) => (
-                                                        <button key={i} onClick={() => setProfile(studentKey(x.s))} className="flex w-full justify-between gap-2 text-xs hover:underline">
-                                                            <span className="truncate text-slate-700"><b>{i + 2}.</b> {nameOf(x.s)}</span><span className="shrink-0 text-slate-500">{sub(x)}</span>
-                                                        </button>))}
-                                                </div>}
-                                            </>) : <p className="text-sm text-slate-400 mt-1">{T.noData}</p>}
+                    {gtab === 'table' && (
+                        <div className="space-y-4">
+                            {attention.length > 0 && (
+                                <Section title={`Needs attention (${attention.length})`} icon="⚠️" open={false}>
+                                    <div className="space-y-1 max-h-60 overflow-y-auto pr-1">{attention.map((a, i) => <div key={i} className="flex justify-between gap-3 text-sm px-3 py-1.5 rounded-lg bg-amber-50"><span className="font-semibold truncate">{a.name} <span className="text-xs text-slate-400 font-normal">· {a.g}</span></span><span className="text-xs text-amber-800 shrink-0">{a.why}</span></div>)}</div>
+                                </Section>
+                            )}
+                            {!showTable ? (
+                                scores.length === 0 ? <p className="text-slate-400 text-center py-10">{T.empty}</p> : (
+                                    <div>
+                                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                                            {groupCards.map(c => (
+                                                <button key={c.g} onClick={() => setFGroup(c.g)} className="text-left rounded-2xl border border-slate-200 bg-white hover:border-indigo-300 hover:shadow-md transition-all p-4">
+                                                    <div className="flex items-start justify-between gap-2"><span className="text-xl font-black text-slate-900">{c.g}</span><span className="text-2xl font-black text-indigo-600">{fmt(c.avg)}</span></div>
+                                                    <p className="text-xs text-slate-500 mt-1">{c.N} students · {c.n} submissions</p>
+                                                    <p className="text-xs text-slate-600 mt-2 truncate">Last: <b>{c.last}</b></p>
+                                                    <div className="flex items-center gap-2 mt-1.5"><div className="flex-1 h-1.5 rounded-full bg-slate-100 overflow-hidden"><div className="h-full rounded-full bg-emerald-500" style={{ width: `${c.N ? Math.min(100, c.nLast / c.N * 100) : 0}%` }}></div></div><span className="text-[11px] font-bold text-slate-500">{c.nLast}/{c.N}</span></div>
+                                                </button>))}
                                         </div>
-                                    ))}
-                                </div>
-                            </div>
-                            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
-                                {[[T.avg, fmt2(st.avg), 'from-indigo-500 to-purple-500'], [T.count, st.n, 'from-emerald-500 to-teal-500'], [T.passRate, `${st.pass} %`, 'from-sky-500 to-blue-500'],
-                                  [T.excellent, st.top, 'from-amber-500 to-orange-500'], [T.tens, st.tens, 'from-rose-500 to-pink-500'], [T.hints, `${st.hints} %`, 'from-slate-500 to-slate-600']].map(([l, v, g]) => (
-                                    <div key={l} className={`bg-gradient-to-br ${g} text-white p-3 rounded-2xl shadow`}><p className="text-[10px] font-bold uppercase tracking-wider opacity-80">{l}</p><p className="text-2xl font-black mt-1">{v}</p></div>
-                                ))}
-                            </div>
-                            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-                                <StatCard title={`🏆 ${T.league}`}>
-                                    {st.league.map((x, i) => <StatBar key={x.g} label={x.g} value={x.avg} text={fmt(x.avg)} color={barColor(x.avg)} badge={st.league.length > 1 && i === 0 ? '🏆' : st.league.length > 1 && i === st.league.length - 1 ? '🏮' : ''} />)}
-                                    {st.league.length > 1 && <p className="text-[11px] text-slate-500 pt-1">🏆 {T.champion}: <b>{st.league[0].g}</b> · 🏮 {T.lantern}: <b>{st.league[st.league.length - 1].g}</b></p>}
-                                </StatCard>
-                                <StatCard title={`🎧 ${T.auditions}`}>
-                                    {st.auds.length > 1 && <div className="grid grid-cols-2 gap-2 mb-1">
-                                        <div className="p-2 rounded-xl bg-emerald-50 border border-emerald-200"><p className="text-[10px] font-bold uppercase text-emerald-700">😊 {T.easiest}</p><p className="text-xs font-bold text-slate-900 truncate">{st.auds[0].title}</p><p className="text-xs text-emerald-700 font-bold">{fmt(st.auds[0].avg)}</p></div>
-                                        <div className="p-2 rounded-xl bg-rose-50 border border-rose-200"><p className="text-[10px] font-bold uppercase text-rose-700">😰 {T.hardest}</p><p className="text-xs font-bold text-slate-900 truncate">{st.auds[st.auds.length - 1].title}</p><p className="text-xs text-rose-700 font-bold">{fmt(st.auds[st.auds.length - 1].avg)}</p></div>
-                                    </div>}
-                                    <div className="max-h-48 overflow-y-auto space-y-2 pr-1">{st.auds.map(x => <StatBar key={x.title} label={x.title} value={x.avg} text={`${fmt(x.avg)} (${x.n})`} color={barColor(x.avg)} />)}</div>
-                                </StatCard>
-                                <StatCard title={`🎼 ${T.styles}`}>
-                                    {st.styles.map(x => <StatBar key={x.theme.id} label={x.theme.label} badge={x.theme.icon} value={x.avg} text={`${fmt(x.avg)} (${x.n})`} color={barColor(x.avg)} />)}
-                                </StatCard>
-                                <StatCard title={`📝 ${T.words}`} sub={T.wordsSub}>
-                                    {st.words.length ? st.words.map(x => <StatBar key={x.w} label={x.w} value={x.rate * 100} max={100} text={`${Math.round(x.rate * 100)} % (${x.fails}/${x.tries})`} color="bg-rose-500" />) : <p className="text-sm text-slate-400">{T.noData}</p>}
-                                </StatCard>
-                                <StatCard title={`📊 ${T.distribution}`}>
-                                    <div className="flex items-end gap-1 h-32 pt-2">
-                                        {st.dist.map((c, i) => { const mx = Math.max(...st.dist, 1); return (
-                                            <div key={i} className="flex-1 flex flex-col items-center justify-end h-full gap-1">
-                                                <span className="text-[10px] font-bold text-slate-600">{c || ''}</span>
-                                                <div className={`w-full rounded-t ${barColor(i)}`} style={{ height: `${(c / mx) * 80}%`, minHeight: c ? 4 : 0 }}></div>
-                                                <span className="text-[10px] text-slate-500">{i}</span>
-                                            </div>); })}
+                                        <button onClick={() => setShowAll(true)} className="mt-4 text-xs font-bold text-indigo-700 hover:underline">Show all entries ({filtered.length})</button>
                                     </div>
-                                </StatCard>
-                                <div className="lg:col-span-2"><StatCard title={`📈 ${T.evolution}`}>
-                                    {st.months.length ? <div className="flex items-end gap-2 h-36 pt-2 overflow-x-auto">
-                                        {st.months.map(x => (
-                                            <div key={x.m} className="min-w-[44px] flex-1 flex flex-col items-center justify-end h-full gap-1">
-                                                <span className="text-[10px] font-bold text-slate-700">{fmt(x.avg)}</span>
-                                                <div className="w-full max-w-[56px] rounded-t bg-indigo-500" style={{ height: `${(x.avg / 10) * 80}%`, minHeight: 4 }}></div>
-                                                <span className="text-[10px] text-slate-500 capitalize">{monthLabel(x.m)}</span>
-                                                <span className="text-[9px] text-slate-400">{x.n}</span>
-                                            </div>))}
-                                    </div> : <p className="text-sm text-slate-400">{T.noData}</p>}
-                                </StatCard></div>
-                            </div>
-                        </div>
-                    )}
-
-                    {gtab === 'table' && (sorted.length === 0 ? (<p className="text-slate-400 text-center py-10">{scores.length === 0 ? T.empty : T.noMatch}</p>) : (
+                                )
+                            ) : (
+                                <div>
+                                    <div className="flex items-center justify-between mb-2"><button onClick={() => { setFGroup(''); setQ(''); setShowAll(false); }} className="text-xs font-bold text-indigo-700 hover:underline">← Groups</button><span className="text-xs text-slate-400">{sorted.length} entries</span></div>
+                                    {(sorted.length === 0 ? (<p className="text-slate-400 text-center py-10">{scores.length === 0 ? T.empty : T.noMatch}</p>) : (
                         <div className="overflow-x-auto">
                             <table className="w-full text-left text-sm border-collapse">
                                 <thead><tr className="border-b text-slate-400 text-xs uppercase bg-slate-50/50">
@@ -1357,7 +1532,8 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
                                             <td className="py-3.5 px-4 text-xs text-slate-500 whitespace-nowrap">{dateLabel(s.created_at)}</td>
                                             <td className="py-3.5 px-4 text-right space-x-1 whitespace-nowrap">
                                                 <button onClick={() => setEditing({ id: s.id, name: s.student_name || '', cls: s.student_class || '', email: s.student_email || '' })} title={T.edit} className="p-2 hover:bg-indigo-50 rounded-lg text-indigo-600 transition-colors">✏️</button>
-                                                <button onClick={() => onView(s)} title={T.view} className="p-2 hover:bg-slate-100 rounded-lg text-slate-500 transition-colors"><Icons.Eye /></button>
+                                                <button onClick={() => onDiploma && onDiploma(s)} title="Download this student's diploma (PDF)" className="p-2 hover:bg-amber-50 rounded-lg transition-colors">🎓</button>
+                                                <button onClick={() => onView(s)} title="View the results as the student sees them" className="p-2 hover:bg-slate-100 rounded-lg text-slate-500 transition-colors"><Icons.Eye /></button>
                                                 <button onClick={() => onDelete(s.id)} title={T.del} className="p-2 hover:bg-rose-50 rounded-lg text-rose-600 transition-colors"><Icons.Trash /></button>
                                             </td>
                                         </tr>
@@ -1366,6 +1542,13 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
                             </table>
                         </div>
                     ))}
+                                </div>
+                            )}
+                        </div>
+                    )}
+                    {gtab === 'stats' && <StatsView scores={scores} auditions={auditions} roster={roster || []} hiddenKeys={hiddenKeys} />}
+                    {gtab === 'vocab' && <VocabView rows={filteredC} />}
+                    <div className="mt-6"><EndOfCourse yearCounts={yearCounts} groups={groups} idsFor={idsFor} onExportCsv={exportCsv} onBackupGrades={onBackup} onBackupTasks={onBackupTasks} onBackupRoster={onBackupRoster} onDeleteGrades={onDeleteGrades} onClearRoster={onClearRoster} rosterCount={(roster || []).length} /></div>
 
                     {pjSetup && (
                         <div className="fixed inset-0 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4 z-[70]" onClick={() => setPjSetup(null)}>
@@ -1393,7 +1576,7 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
                         const sub = [pjData.audTitle, pj.group, pj.group, pj.group, pj.group, ''];
                         const card = { background: 'rgba(255,255,255,.1)' };
                         const gold = '#FBBF24';
-                        const pjName = (sc, n) => hiddenKeys.has(studentKey(sc)) ? P.anon : shortName(niceName(sc.student_name), n);
+                        const pjName = (sc, n) => hiddenKeys.has(studentKey(sc)) ? P.anon : (shortNames[studentKey(sc)] || shortName(niceName(sc.student_name), n));
                         const Move = ({ k }) => { if (pjScreen !== 1 || pjData.noPrev) return null; const m = pjData.moves[k];
                             if (m === 'new') return <span className="text-xs font-black px-2 py-0.5 rounded-full" style={{ background: gold, color: '#1E1B4B' }}>{P.isNew}</span>;
                             if (!m) return <span className="text-lg font-black" style={{ opacity: .45 }}>=</span>;
@@ -1444,9 +1627,6 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
                                         <span className="text-xl md:text-2xl font-black shrink-0 text-right">{val(x)}</span>
                                     </div>)) : <p className="text-xl" style={{ opacity: .6 }}>{P.none}</p>}
                             </div>);
-                        const maxL = 10;
-                        const gUp = pjData.groupUp && pjData.groupUp.delta > 0 ? pjData.groupUp : null;
-                        const gDown = pjData.groupDown && pjData.groupDown.delta < 0 && pjData.groupDown.g !== gUp?.g ? pjData.groupDown : null;
                         return (
                             <div className="fixed inset-0 z-[80] overflow-y-auto select-none" style={{ background: 'linear-gradient(160deg,#1E1B4B 0%,#312E81 55%,#4338CA 100%)', color: '#FFFFFF' }}
                                 onClick={e => { if (!e.target.closest('button')) pjNext(); }}>
@@ -1556,8 +1736,8 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
                                                     </div>))}
                                             </div>
                                             {(() => {
-                                                const gUp = pjData.groupUp && pjData.groupUp.delta > 0 ? pjData.groupUp : null;
-                                                const gDown = pjData.groupDown && pjData.groupDown.delta < 0 && pjData.groupDown.g !== (gUp && gUp.g) ? pjData.groupDown : null;
+                                                const gUp = pjData.groupUp && pjData.groupUp.delta >= 0.5 ? pjData.groupUp : null;
+                                                const gDown = pjData.groupDown && pjData.groupDown.delta <= -0.5 && pjData.groupDown.g !== (gUp && gUp.g) ? pjData.groupDown : null;
                                                 if (!gUp && !gDown) return null;
                                                 return (<div className={`grid grid-cols-1 ${gUp && gDown ? 'md:grid-cols-2' : ''} gap-6 mt-6 max-w-3xl mx-auto`}>
                                                     {gUp && <div className="pr-pop rounded-3xl px-6 py-5 text-center" style={{ ...card, border: '3px solid #4ADE80', animationDelay: '1.2s' }}><p className="text-lg font-bold" style={{ color: '#4ADE80' }}>📈 {P.groupUp}</p><p className="text-4xl font-black mt-1">{gUp.g} <span className="text-2xl" style={{ color: '#4ADE80' }}>+{fmt(gUp.delta)}</span></p></div>}
@@ -1653,9 +1833,7 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
             const [authMode, setAuthMode] = useState('signin');
             const [toast, setToast] = useState(null);
             const [confirmModal, setConfirmModal] = useState(null);
-            const [deleteAllModal, setDeleteAllModal] = useState(null);
-            const [deleteAllConfirmText, setDeleteAllConfirmText] = useState('');
-            const [createdTaskModal, setCreatedTaskModal] = useState(null);
+                        const [createdTaskModal, setCreatedTaskModal] = useState(null);
             const [lookupModal, setLookupModal] = useState(false);
             const [lookupEmail, setLookupEmail] = useState('');
 
@@ -1668,6 +1846,13 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
             const [hintsPaste, setHintsPaste] = useState('');
             const [editingTask, setEditingTask] = useState(null);
             const [rosterList, setRosterList] = useState([]);
+            const [rosterLoaded, setRosterLoaded] = useState(false);
+            const [taskAudience, setTaskAudience] = useState([]);
+            const [teacherViewing, setTeacherViewing] = useState(false);
+            const [emptyAsk, setEmptyAsk] = useState(0);
+            const [showDelTasks, setShowDelTasks] = useState(false);
+            const [histCourse, setHistCourse] = useState('');
+            const previewTried = React.useRef('');
             const [gateStatus, setGateStatus] = useState('');
             const [gateBusy, setGateBusy] = useState(false);
 
@@ -1676,8 +1861,7 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
             const [searchTerm, setSearchTerm] = useState('');
             const [searchTermHistory, setSearchTermHistory] = useState('');
             const [copiedId, setCopiedId] = useState(null);
-            const [selectedScoreDetails, setSelectedScoreDetails] = useState(null);
-
+            
             const [activeTask, setActiveTask] = useState(null);
             const [studentName, setStudentName] = useState('');
             const [studentClass, setStudentClass] = useState('2º ESO A');
@@ -1947,11 +2131,11 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
             };
             const startEditTask = (aud) => {
                 setTitle(aud.title || ''); setArtist(aud.artist || ''); setStyle(aud.style || 'classical'); setYoutubeUrl(aud.youtube_url || '');
-                setCommentText(aud.comment || ''); setTaskHints([...(Array.isArray(aud.hints) ? aud.hints : []), ...Array(10).fill('')].slice(0, 10));
+                setCommentText(aud.comment || ''); setTaskAudience(Array.isArray(aud.audience) ? aud.audience : []); setTaskHints([...(Array.isArray(aud.hints) ? aud.hints : []), ...Array(10).fill('')].slice(0, 10));
                 setEditingTask(aud); setDashboardTab('create'); window.scrollTo({ top: 0, behavior: 'smooth' });
                 showToast("Editing this task. Change what you need and press Save changes.", "info");
             };
-            const cancelEditTask = () => { setEditingTask(null); setTitle(''); setArtist(''); setStyle('classical'); setYoutubeUrl(''); setCommentText(''); setTaskHints(Array(10).fill('')); };
+            const cancelEditTask = () => { setEditingTask(null); setTitle(''); setArtist(''); setStyle('classical'); setYoutubeUrl(''); setCommentText(''); setTaskHints(Array(10).fill('')); setTaskAudience([]); };
 
             const handlePublishTask = async () => {
                 if (uppercaseWords.length !== 10) { showToast("You must include exactly 10 UPPERCASE words in the commentary.", "error"); return; }
@@ -1966,6 +2150,7 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
                     title: title || 'Untitled Audition',
                     artist: artist || 'Unknown Artist',
                     style: style,
+                    audience: taskAudience,
                     youtube_url: youtubeUrl,
                     comment: commentText,
                     uppercase_words: uppercaseWords,
@@ -1981,13 +2166,13 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
                     if (hasSubs && wordsChanged && !window.confirm("Students have already submitted this task. Their saved scores will NOT be recalculated with the new words. Save the changes anyway (same link)?")) { setLoading(false); return; }
                     {
                         try {
-                            const { data, error } = await supabaseClient.from('auditions').update({ title: taskPayload.title, artist: taskPayload.artist, style, youtube_url: youtubeUrl, comment: commentText, uppercase_words: uppercaseWords, hints: taskHints.slice(0, 10) }).eq('share_link', key).select('share_link');
+                            const { data, error } = await supabaseClient.from('auditions').update({ title: taskPayload.title, artist: taskPayload.artist, style, audience: taskAudience, youtube_url: youtubeUrl, comment: commentText, uppercase_words: uppercaseWords, hints: taskHints.slice(0, 10) }).eq('share_link', key).select('share_link');
                             if (error || !data || !data.length) throw new Error(error?.message || 'not allowed');
                         } catch (e) { showToast("The changes could not be saved: " + (e.message || ''), "error"); setLoading(false); return; }
-                        const upd = { ...editingTask, title: taskPayload.title, artist: taskPayload.artist, style, youtube_url: youtubeUrl, comment: commentText, uppercase_words: uppercaseWords, hints: taskHints.slice(0, 10) };
+                        const upd = { ...editingTask, title: taskPayload.title, artist: taskPayload.artist, style, audience: taskAudience, youtube_url: youtubeUrl, comment: commentText, uppercase_words: uppercaseWords, hints: taskHints.slice(0, 10) };
                         const list = getStoredAuditions().map(a => (a.share_link || a.id) === key ? upd : a); saveStoredAuditions(list);
                         setAuditionsList(prev => prev.map(a => (a.share_link || a.id) === key ? upd : a));
-                        setEditingTask(null); setTitle(''); setArtist(''); setStyle('classical'); setYoutubeUrl(''); setCommentText(''); setTaskHints(Array(10).fill(''));
+                        setEditingTask(null); setTitle(''); setArtist(''); setStyle('classical'); setYoutubeUrl(''); setCommentText(''); setTaskHints(Array(10).fill('')); setTaskAudience([]);
                         try { const meta = { title: taskPayload.title, artist: taskPayload.artist, style }; const { error: e2 } = await supabaseClient.from('student_submissions').update({ auditions: meta }).eq('audition_id', key); if (!e2) setScoresList(prev => prev.map(sc => sc.audition_id === key ? { ...sc, auditions: meta } : sc)); } catch (e) { console.error(e); }
                         showToast("Task updated. Same student link; results are kept.", "success"); setLoading(false); setDashboardTab('history'); return;
                     }
@@ -2020,7 +2205,7 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
                 setAuditionsList(updatedList.filter(a => (a.teacher_email || a.teacher_id)?.toLowerCase() === teacherEmail));
                 const fullTaskUrl = buildStudentUrl(taskId);
                 setCreatedTaskModal({ title: taskPayload.title, fullUrl: fullTaskUrl, taskPayload: taskPayload });
-                setTitle(''); setArtist(''); setStyle('classical'); setYoutubeUrl(''); setCommentText(''); setTaskHints(Array(10).fill(''));
+                setTitle(''); setArtist(''); setStyle('classical'); setYoutubeUrl(''); setCommentText(''); setTaskHints(Array(10).fill('')); setTaskAudience([]);
                 showToast("Audition saved to Supabase Cloud.", "success");
                 setLoading(false);
             };
@@ -2047,14 +2232,14 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
                 const te = rosterTeacher(); if (!te || !supabaseClient) return;
                 const { data, error } = await supabaseClient.from('class_roster').select('*').eq('teacher_email', te).order('class').order('name');
                 if (error) { console.warn('class_roster is not available yet:', error.message); return; }
-                setRosterList((data || []).map(r => ({ ...r, email: String(r.email).toLowerCase() })));
+                setRosterList((data || []).map(r => ({ ...r, email: String(r.email).toLowerCase() }))); setRosterLoaded(true);
             };
             const saveRosterRows = async (rows, replaceAll) => {
                 const te = rosterTeacher(); if (!te || !supabaseClient) return false;
                 const payload = rows.map(r => {
                     const em = String(r.email).toLowerCase().trim();
                     const prev = rosterList.find(x => x.email === em);
-                    return { teacher_email: te, email: em, name: r.name, class: r.class || '', anonymous: r.anonymous ?? !!prev?.anonymous };
+                    return { teacher_email: te, email: em, name: r.name, class: r.class || '', anonymous: r.anonymous ?? !!prev?.anonymous, first_name: r.first_name ?? prev?.first_name ?? null, last_name1: r.last_name1 ?? prev?.last_name1 ?? null, last_name2: r.last_name2 ?? prev?.last_name2 ?? null };
                 });
                 const { error } = await supabaseClient.from('class_roster').upsert(payload, { onConflict: 'teacher_email,email' });
                 if (error) { showToast('The list could not be saved: ' + error.message, 'error'); return false; }
@@ -2079,11 +2264,11 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
                 const row = { ...cur, ...patch };
                 if (row.email !== oldEmail) {
                     if (rosterList.some(r => r.email === row.email)) { showToast('That email is already on the list.', 'error'); return false; }
-                    const up = await supabaseClient.from('class_roster').upsert([{ teacher_email: te, email: row.email, name: row.name, class: row.class, anonymous: !!row.anonymous }], { onConflict: 'teacher_email,email' });
+                    const up = await supabaseClient.from('class_roster').upsert([{ teacher_email: te, email: row.email, name: row.name, class: row.class, anonymous: !!row.anonymous, first_name: row.first_name ?? null, last_name1: row.last_name1 ?? null, last_name2: row.last_name2 ?? null }], { onConflict: 'teacher_email,email' });
                     if (up.error) { showToast('Could not save: ' + up.error.message, 'error'); return false; }
                     await supabaseClient.from('class_roster').delete().eq('teacher_email', te).eq('email', oldEmail);
                 } else {
-                    const up = await supabaseClient.from('class_roster').update({ name: row.name, class: row.class, anonymous: !!row.anonymous }).eq('teacher_email', te).eq('email', oldEmail);
+                    const up = await supabaseClient.from('class_roster').update({ name: row.name, class: row.class, anonymous: !!row.anonymous, first_name: row.first_name ?? null, last_name1: row.last_name1 ?? null, last_name2: row.last_name2 ?? null }).eq('teacher_email', te).eq('email', oldEmail);
                     if (up.error) { showToast('Could not save: ' + up.error.message, 'error'); return false; }
                 }
                 await fetchRoster(); return true;
@@ -2092,7 +2277,7 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
             // Con lista activa, nombre y grupo OFICIALES; las entregas con emails fuera de la lista se marcan y no cuentan
             const scoresView = useMemo(() => !rosterList.length ? scoresList : scoresList.map(sc => {
                 const r = rosterMap[String(sc.student_email || '').toLowerCase()];
-                return r ? { ...sc, student_name: r.name, student_class: r.class } : { ...sc, __out: true };
+                return r ? { ...sc, student_name: r.name, student_class: r.class, __fn: r.first_name, __l1: r.last_name1, __l2: r.last_name2 } : { ...sc, __out: true };
             }), [scoresList, rosterList, rosterMap]);
             const editions = useMemo(() => buildEditions(scoresList), [scoresList]);
             const editedTasks = useMemo(() => {
@@ -2105,6 +2290,43 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
                 return out;
             }, [auditionsList, editions]);
             const backupScores = () => downloadFile(JSON.stringify({ type: 'music_audition_grades_backup', version: 1, exportedAt: new Date().toISOString(), scores: scoresList }, null, 2), `grades_backup_${new Date().toISOString().slice(0, 10)}.json`, 'application/json');
+            const rosterCourses = useMemo(() => [...new Set(rosterList.map(r => courseOf(r.class)).filter(Boolean))].sort(), [rosterList]);
+            const backupTasks = () => downloadFile(JSON.stringify(auditionsList, null, 2), `tasks_backup_${new Date().toISOString().slice(0, 10)}.json`, 'application/json');
+            const backupRoster = () => downloadFile(JSON.stringify({ type: 'music_audition_class_list', version: 1, students: rosterList.map(r => ({ email: r.email, name: r.name, first_name: r.first_name, last_name1: r.last_name1, last_name2: r.last_name2, class: r.class, anonymous: !!r.anonymous })) }, null, 2), 'class_list.json', 'application/json');
+            const deleteGradesByIds = async (ids) => {
+                const te = rosterTeacher(); if (!te || !supabaseClient || !ids.length) return;
+                let failed = 0;
+                for (let i = 0; i < ids.length; i += 100) {
+                    const chunk = ids.slice(i, i + 100);
+                    const { error } = await supabaseClient.from('student_submissions').delete().eq('teacher_email', te).in('id', chunk);
+                    if (error) { failed += chunk.length; console.error(error); }
+                }
+                if (failed) { showToast('Some submissions could not be deleted.', 'error'); fetchHistoryAndScores(); return; }
+                const gone = new Set(ids);
+                setScoresList(prev => prev.filter(sc => !gone.has(sc.id)));
+                try { saveStoredScores(getStoredScores().filter(sc => !gone.has(sc.id))); } catch (e) {}
+                showToast(`${ids.length} submission(s) deleted.`, 'success');
+            };
+            const clearRoster = async () => {
+                const te = rosterTeacher(); if (!te || !supabaseClient) return;
+                const { error } = await supabaseClient.from('class_roster').delete().eq('teacher_email', te);
+                if (error) { showToast('Could not clear the list: ' + error.message, 'error'); return; }
+                setRosterList([]); showToast('Class list cleared.', 'success');
+            };
+            const deleteAllTasksNow = async () => {
+                saveStoredAuditions([]); setAuditionsList([]);
+                const te = rosterTeacher();
+                if (supabaseClient && te) { try { await supabaseClient.from('auditions').delete().eq('teacher_email', te).not('share_link', 'like', SPANISH_PREFIX + '%'); } catch (e) { console.error(e); } }
+                showToast('All tasks deleted.', 'info');
+            };
+            const buildRecordFor = (sc) => {
+                const aud = auditionsList.find(a => (a.share_link || a.id) === sc.audition_id);
+                return hydrateRecord(sc, { title: aud?.title || sc.auditions?.title || 'Audition', artist: aud?.artist || sc.auditions?.artist || '', style: aud?.style || sc.auditions?.style || 'classical', comment: aud?.comment });
+            };
+            const diplomaFor = (sc) => generatePDF(buildRecordFor(sc));
+            const viewResultsAsTeacher = (sc) => { setFinalScoreRecord(buildRecordFor(sc)); setExamSubmitted(true); setTeacherViewing(true); setView('results'); window.scrollTo({ top: 0 }); };
+            const leaveTeacherView = () => { setTeacherViewing(false); setFinalScoreRecord(null); setExamSubmitted(false); if (activeTask && activeTask.preview) setActiveTask(null); setView('dashboard'); };
+            const previewMode = !!(activeTask && activeTask.preview);
             const importTasksFile = (file) => {
                 if (!file) return;
                 const rd = new FileReader();
@@ -2187,44 +2409,7 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
                 return true;
             };
 
-            const handleDeleteAllTasks = () => {
-                setDeleteAllConfirmText('');
-                setDeleteAllModal({
-                    title: "DELETE ALL TASKS",
-                    message: "This will permanently delete ALL your English audition tasks from local storage AND from Supabase. This CANNOT be undone. Auditions from the Spanish version are not affected.",
-                    danger: true,
-                    onConfirm: async () => {
-                        setDeleteAllModal(null);
-                        saveStoredAuditions([]);
-                        setAuditionsList([]);
-                        const teacherEmail = session?.user?.email?.toLowerCase().trim();
-                        if (supabaseClient && teacherEmail) {
-                            try { await supabaseClient.from('auditions').delete().eq('teacher_email', teacherEmail).not('share_link', 'like', SPANISH_PREFIX + '%'); } catch (e) { console.error(e); }
-                        }
-                        showToast("All tasks deleted.", "info");
-                    }
-                });
-            };
-
-            const handleDeleteAllScores = () => {
-                setDeleteAllConfirmText('');
-                setDeleteAllModal({
-                    title: "DELETE ALL STUDENT RECORDS",
-                    message: "This will permanently delete ALL student submissions of your English auditions from local storage AND from Supabase. This CANNOT be undone. Use this at the end of the school year. Spanish version results are not affected.",
-                    danger: true,
-                    onConfirm: async () => {
-                        setDeleteAllModal(null);
-                        saveStoredScores([]);
-                        setScoresList([]);
-                        const teacherEmail = session?.user?.email?.toLowerCase().trim();
-                        if (supabaseClient && teacherEmail) {
-                            try { await supabaseClient.from('student_submissions').delete().eq('teacher_email', teacherEmail).not('audition_id', 'like', SPANISH_PREFIX + '%'); } catch (e) { console.error(e); }
-                        }
-                        showToast("All student records deleted.", "info");
-                    }
-                });
-            };
-
+            
             const handleStudentLookup = async (e) => {
                 e.preventDefault(); if (!lookupEmail.trim()) return;
                 setLoading(true);
@@ -2272,6 +2457,7 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
             const filteredAuditions = useMemo(() => {
                 return auditionsList.filter(a => {
                     const q = normalizeSearch(searchTermHistory);
+                    if (histCourse && !(Array.isArray(a.audience) && a.audience.includes(histCourse))) return false;
                     if (!q) return true;
                     const fields = [
                         normalizeSearch(a.title),
@@ -2280,7 +2466,7 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
                     ];
                     return fields.some(f => f.includes(q));
                 });
-            }, [auditionsList, searchTermHistory]);
+            }, [auditionsList, searchTermHistory, histCourse]);
 
             const stats = useMemo(() => {
                 if (filteredScores.length === 0) return null;
@@ -2311,12 +2497,24 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
 
             const checkExistingSubmission = async () => {
                 const em = studentEmail.trim().toLowerCase();
-                if (!em || !activeTask || activeTask.gated || !supabaseClient || examSubmitted || !SCHOOL_EMAIL_RE.test(em)) return;
+                if (!em || !activeTask || activeTask.gated || activeTask.preview || !supabaseClient || examSubmitted || !SCHOOL_EMAIL_RE.test(em)) return;
                 try {
                     const { data } = await supabaseClient.rpc('lookup_submission', { p_code: activeTask.share_link || activeTask.id, p_email: em });
                     if (data) { setFinalScoreRecord(hydrateRecord(data, activeTask)); setExamSubmitted(true); setView('results'); showToast('You already completed this task. Here is your result.', 'info'); }
                 } catch (e) { console.error(e); }
             };
+            useEffect(() => {
+                if (!session || !supabaseClient || view !== 'student-test' || !activeTask || activeTask.preview || examSubmitted) return;
+                const code = activeTask.share_link || activeTask.id;
+                if (!code || previewTried.current === code) return;
+                previewTried.current = code;
+                (async () => {
+                    try {
+                        const { data } = await supabaseClient.rpc('get_audition_public', { p_code: code });
+                        if (data && data.preview) { setActiveTask(data); setStudentName('Teacher preview'); setStudentEmail(session.user.email || ''); }
+                    } catch (e) { console.error(e); }
+                })();
+            }, [session, supabaseClient, view, activeTask]);
             const GATE_MSG = {
                 invalid_email: 'Use your school email (ending in @alu.murciaeduca.es).',
                 email_not_registered: 'This email is not registered for this class. Check it, or ask your teacher.',
@@ -2348,8 +2546,21 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
                 finally { setGateBusy(false); }
             };
 
-            const handleEvaluation = async () => {
+            const handlePreviewSubmit = async () => {
+                setSubmitting(true);
+                try {
+                    const { data, error } = await supabaseClient.rpc('preview_grade', { p_code: activeTask.share_link, p_answers: studentAnswers, p_hints: usedHints });
+                    if (error) throw error;
+                    setFinalScoreRecord(hydrateRecord(data, activeTask)); setExamSubmitted(true); setView('results'); window.scrollTo({ top: 0 });
+                } catch (err) { console.error(err); showToast('Preview failed: ' + (err.message || ''), 'error'); }
+                finally { setSubmitting(false); }
+            };
+            const handleEvaluation = async (force) => {
                 if (submitting) return;
+                if (activeTask && activeTask.preview) { await handlePreviewSubmit(); return; }
+                const gaps = (activeTask?.gap_clues || []).length;
+                const empties = Array.from({ length: gaps }).filter((_, i) => !String(studentAnswers[i] || '').trim()).length;
+                if (force !== true && empties > 0) { setEmptyAsk(empties); return; }
                 if (!supabaseClient) { showToast('The server is unavailable. Your answers have not been submitted.', 'error'); return; }
                 if (!studentName.trim() || !studentEmail.trim()) { showToast("Please fill in your Full Name and School Email.", "error"); return; }
                 if (!/@(alu\.)?murciaeduca\.es$/i.test(studentEmail.trim())) { showToast("You must use your school email, the one ending in @alu.murciaeduca.es.", "error"); return; }
@@ -2414,6 +2625,10 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
                         font: 'Helvetica', style: 'bold', align: 'left', max: 150,
                         color: item.correct ? [21, 128, 61] : [200, 30, 30]
                     });
+                    const mx = (col ? 1488 : 1246) * K, my = (rowsY[idx % 5] - 11) * K;
+                    doc.setLineWidth(0.55); doc.setLineCap('round');
+                    if (item.correct) { doc.setDrawColor(21, 128, 61); doc.line(mx, my, mx + 0.9, my + 1); doc.line(mx + 0.9, my + 1, mx + 2.5, my - 1.1); }
+                    else { doc.setDrawColor(200, 30, 30); doc.line(mx, my - 1.1, mx + 2.2, my + 1.1); doc.line(mx + 2.2, my - 1.1, mx, my + 1.1); }
                 });
 
                 // Teacher's feedback
@@ -2668,34 +2883,7 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
                         </div>
                     )}
 
-                    {deleteAllModal && (
-                        <div className="fixed inset-0 bg-rose-900/60 backdrop-blur-md z-50 flex items-center justify-center p-4">
-                            <div className="bg-white rounded-2xl p-6 max-w-md w-full shadow-2xl border-2 border-rose-300">
-                                <div className="flex items-center gap-3 mb-4">
-                                    <div className="w-12 h-12 bg-rose-100 rounded-full flex items-center justify-center text-rose-600 text-2xl">⚠️</div>
-                                    <h3 className="text-xl font-black text-rose-700">{deleteAllModal.title}</h3>
-                                </div>
-                                <p className="text-sm text-slate-700 mb-4">{deleteAllModal.message}</p>
-                                <p className="text-xs font-bold text-rose-600 mb-2">Type DELETE below to confirm:</p>
-                                <input
-                                    type="text"
-                                    value={deleteAllConfirmText}
-                                    onChange={e => setDeleteAllConfirmText(e.target.value)}
-                                    placeholder="DELETE"
-                                    className="w-full px-4 py-2.5 border-2 border-rose-300 rounded-xl text-sm outline-none focus:border-rose-600 font-bold uppercase"
-                                    autoFocus
-                                />
-                                <div className="flex justify-end gap-2 mt-6">
-                                    <button onClick={() => setDeleteAllModal(null)} className="px-4 py-2 rounded-xl text-sm font-bold text-slate-600 bg-slate-100 hover:bg-slate-200">Cancel</button>
-                                    <button
-                                        onClick={deleteAllModal.onConfirm}
-                                        disabled={deleteAllConfirmText.trim().toUpperCase() !== 'DELETE'}
-                                        className={`px-4 py-2 rounded-xl text-sm font-bold text-white transition-all ${deleteAllConfirmText.trim().toUpperCase() === 'DELETE' ? 'bg-rose-600 hover:bg-rose-700' : 'bg-rose-300 cursor-not-allowed'}`}
-                                    >Delete All Permanently</button>
-                                </div>
-                            </div>
-                        </div>
-                    )}
+                    {showDelTasks && <DangerConfirm title="Delete ALL tasks" steps={3} body="All your English audition tasks will be deleted from this device and from Supabase. Their links stop working. This is the file you most want to keep: download a copy first." onCancel={() => setShowDelTasks(false)} onConfirm={() => { setShowDelTasks(false); deleteAllTasksNow(); }} />}
 
                     {lookupModal && (
                         <div className="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
@@ -2786,6 +2974,18 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
                                         <button key={k} onClick={() => setDashboardTab(k)} className={`flex-1 py-2 rounded-lg font-semibold transition-all ${dashboardTab === k ? 'bg-white text-slate-900 shadow-sm font-bold' : 'text-slate-500 hover:text-slate-800'}`}><span className="hidden sm:inline">{long}</span><span className="sm:hidden">{short}</span></button>))}
                                     <button onClick={() => { setDashboardTab('scores'); setProjectNonce(n => n + 1); }} className="flex-1 py-2 rounded-lg font-semibold transition-all text-indigo-700 hover:bg-white">📽️ Project</button>
                                 </div>
+                                {rosterLoaded && rosterList.length === 0 && dashboardTab !== 'roster' && (
+                                    <div className="flex flex-wrap items-center justify-between gap-3 bg-amber-50 border border-amber-200 text-amber-900 text-sm rounded-xl px-4 py-3 mt-3 max-w-3xl">
+                                        <span>⚠️ No class list: any school email can open your tasks.</span>
+                                        <button onClick={() => setDashboardTab('roster')} className="text-xs font-bold underline">Upload your list</button>
+                                    </div>
+                                )}
+                                {dashboardTab === 'create' && auditionsList.length === 0 && rosterList.length === 0 && (
+                                    <div className="bg-indigo-50 border border-indigo-200 rounded-2xl p-5 mt-3 max-w-3xl">
+                                        <p className="font-bold text-indigo-900 mb-1">Welcome! Two steps to start</p>
+                                        <p className="text-sm text-indigo-900"><b>1.</b> In <b>Class list</b>, upload your students (Plumier file or paste).&nbsp; <b>2.</b> Here, create your first task and give the link to your students.</p>
+                                    </div>
+                                )}
                                 {dashboardTab === 'roster' && <ClassList roster={rosterList} scores={scoresView} auditions={auditionsList} onSave={saveRosterRows} onDelete={deleteRosterRows} onUpdate={updateRosterRow} showToast={showToast} />}
 
                                 {dashboardTab === 'create' && (
@@ -2832,6 +3032,13 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
                                                     </div>
                                                 </div>
                                             )}
+                                            {rosterCourses.length > 0 && (
+                                                <div className="mt-6 pt-6 border-t border-slate-200">
+                                                    <h3 className="text-sm font-bold text-slate-800 mb-2">Assign to course(s)</h3>
+                                                    <div className="flex flex-wrap gap-2">{rosterCourses.map(c => { const on = taskAudience.includes(c); return <button key={c} type="button" onClick={() => setTaskAudience(a => on ? a.filter(x => x !== c) : [...a, c])} className={`px-3 py-1.5 rounded-full text-xs font-bold border transition-all ${on ? 'bg-indigo-600 text-white border-indigo-600' : 'bg-white text-slate-600 border-slate-200 hover:border-indigo-300'}`}>{on ? '✓ ' : ''}{c}</button>; })}</div>
+                                                    <p className="text-[11px] text-slate-400 mt-1.5">Used for statistics and “Who has not submitted”. Leave empty for all courses.</p>
+                                                </div>
+                                            )}
                                             <button onClick={handlePublishTask} disabled={loading} className={`w-full mt-6 py-3.5 rounded-xl font-bold text-white transition-all shadow-md ${uppercaseWords.length === 10 && videoId ? 'bg-slate-900 hover:bg-slate-800' : 'bg-slate-300 cursor-not-allowed'}`}>{editingTask ? 'Save changes' : 'Publish Audition Task & Save Cloud Link'}</button>
                                         </div>
                                         <div className="lg:col-span-5">
@@ -2846,12 +3053,12 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
                                                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                                                     {Object.values(MUSIC_THEMES).map(t0 => getUiTheme(t0.id, darkMode)).map(theme => (
                                                         <button key={theme.id} type="button" onClick={() => setStyle(theme.id)} aria-pressed={style === theme.id}
-                                                            className={`theme-card text-left p-2.5 rounded-xl border-2 transition-all ${style === theme.id ? 'ring-2 ring-offset-1' : 'hover:border-slate-300'}`}
+                                                            className={`theme-card relative text-left p-2.5 rounded-xl border-2 transition-all ${style === theme.id ? 'ring-2 ring-offset-1' : 'hover:border-slate-300'}`}
                                                             style={{ backgroundColor: style === theme.id ? theme.colors.paper : (darkMode ? '#1E293B' : '#FFFFFF'), borderColor: style === theme.id ? theme.colors.accent : (darkMode ? '#334155' : '#E2E8F0'), '--tw-ring-color': theme.colors.accent }}>
                                                             <div className="flex items-center gap-2 mb-1">
                                                                 <span className="w-9 h-9 rounded-lg flex items-center justify-center text-lg shrink-0" style={{backgroundColor:theme.colors.primary,color:theme.colors.accent}}>{theme.icon}</span>
                                                                 <span className="text-xs font-extrabold" style={{color:theme.colors.primary}}>{theme.label}</span>
-                                                                {style === theme.id && <span className="ml-auto text-[10px] font-black uppercase tracking-wide" style={{color:theme.colors.primary}}>Selected</span>}
+                                                                {style === theme.id && <span className="absolute top-1.5 right-2 text-[9px] font-black uppercase tracking-wide px-1.5 py-0.5 rounded-full" style={{backgroundColor:theme.colors.accent,color:theme.colors.paper}}>✓ Selected</span>}
                                                             </div>
                                                             <span className="block text-[10px] leading-snug text-slate-500">{theme.genres}</span>
                                                         </button>
@@ -2869,6 +3076,7 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
                                         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
                                             <h2 className="text-xl font-bold text-slate-900">Your Published Audition Tasks</h2>
                                             <div className="flex gap-2 w-full sm:w-auto">
+                                                {rosterCourses.length > 0 && <select value={histCourse} onChange={e => setHistCourse(e.target.value)} className="px-3 py-2 bg-slate-50 border rounded-xl text-xs font-bold outline-none"><option value="">All courses</option>{rosterCourses.map(c => <option key={c} value={c}>{c}</option>)}</select>}
                                                 <div className="relative flex-1 sm:w-72"><span className="absolute left-3 top-2.5 text-slate-400"><Icons.Search /></span><input type="text" placeholder="Search by title, artist or link..." value={searchTermHistory} onChange={e => setSearchTermHistory(e.target.value)} className="w-full pl-9 pr-4 py-2 border rounded-xl text-sm bg-slate-50 outline-none focus:ring-1 focus:ring-indigo-500" /></div>
                                                 
                                                 {/* Backup Button */}
@@ -2887,9 +3095,9 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
                                                 <label className="px-3 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-bold flex items-center gap-1 whitespace-nowrap cursor-pointer" title="Restore tasks from a backup file (same links)">⬆ <span className="hidden sm:inline">Import</span><input type="file" accept="application/json,.json" className="hidden" onChange={e => { importTasksFile(e.target.files[0]); e.target.value = ''; }} /></label>
 
                                                 {auditionsList.length > 0 && (
-                                                    <button onClick={handleDeleteAllTasks} className="px-3 py-2 bg-rose-600 hover:bg-rose-700 text-white rounded-xl text-xs font-bold flex items-center gap-1 whitespace-nowrap" title="Delete ALL tasks">
-                                                        <Icons.Trash /> <span className="hidden sm:inline">Delete ALL</span>
-                                                    </button>
+                                                    <details className="relative text-xs text-slate-400"><summary className="cursor-pointer select-none px-2 py-2 hover:text-slate-600">Advanced</summary>
+                                                        <div className="absolute right-0 mt-1 z-10 bg-white border border-slate-200 rounded-xl shadow-lg p-2 w-48"><button onClick={() => setShowDelTasks(true)} className="w-full text-left px-3 py-2 rounded-lg hover:bg-rose-50 text-rose-700 font-semibold">Delete ALL tasks…</button></div>
+                                                    </details>
                                                 )}
                                             </div>
                                         </div>
@@ -2904,7 +3112,7 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
                                                     <tbody>
                                                         {filteredAuditions.map(aud => (
                                                             <tr key={aud.id || aud.share_link} className="border-b border-slate-100 hover:bg-slate-50/30 transition-colors">
-                                                                <td className="py-4 px-4 font-bold text-slate-950">{aud.title}{editedTasks.has(aud.share_link || aud.id) && <span title="The 10 words were changed after students had submitted" className="ml-2 text-[10px] font-black px-1.5 py-0.5 rounded bg-amber-100 text-amber-800">✏️ Words edited</span>}</td><td className="py-4 px-4 text-slate-500">{aud.artist}</td>
+                                                                <td className="py-4 px-4 font-bold text-slate-950">{aud.title}{editedTasks.has(aud.share_link || aud.id) && <span title="The 10 words were changed after students had submitted" className="ml-2 text-[10px] font-black px-1.5 py-0.5 rounded bg-amber-100 text-amber-800">✏️ Words edited</span>}{(aud.audience || []).map(c => <span key={c} className="ml-1.5 text-[10px] font-black px-1.5 py-0.5 rounded bg-indigo-50 text-indigo-700">{c}</span>)}</td><td className="py-4 px-4 text-slate-500">{aud.artist}</td>
                                                                 <td className="py-4 px-4 text-center"><button onClick={() => handleCopyLink(aud.share_link || aud.id, aud.id)} className="bg-indigo-50 hover:bg-indigo-100 text-indigo-700 font-bold px-3 py-1.5 rounded-lg text-xs flex items-center gap-1 mx-auto transition-all">{copiedId === aud.id ? <Icons.Check /> : <Icons.Link />} {copiedId === aud.id ? "Copied!" : "Copy Link"}</button></td>
                                                                 <td className="py-4 px-4 text-right space-x-1 whitespace-nowrap">
                                                                     <a href={buildStudentUrl(aud.share_link || aud.id)} target="_blank" title="Preview" className="inline-block align-middle p-2 hover:bg-slate-100 rounded-lg text-slate-500 transition-colors"><Icons.External /></a>
@@ -2923,31 +3131,12 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
                                 )}
 
                                 {dashboardTab === 'scores' && (
-                                    <GradesDashboard scores={scoresView} roster={rosterList} edLabel={editions.label} onBackup={backupScores} onProjectHandled={() => setProjectNonce(0)} auditions={auditionsList} lang="en" onView={setSelectedScoreDetails} onDelete={handleDeleteScore} onDeleteAll={handleDeleteAllScores} onEdit={handleEditScore} projectNonce={projectNonce} />
+                                    <GradesDashboard onDiploma={diplomaFor} onBackupTasks={backupTasks} onBackupRoster={backupRoster} onDeleteGrades={deleteGradesByIds} onClearRoster={clearRoster} scores={scoresView} roster={rosterList} edLabel={editions.label} onBackup={backupScores} onProjectHandled={() => setProjectNonce(0)} auditions={auditionsList} lang="en" onView={viewResultsAsTeacher} onDelete={handleDeleteScore} onEdit={handleEditScore} projectNonce={projectNonce} />
                                 )}
                             </div>
                         )}
 
-                        {selectedScoreDetails && (
-                            <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm flex items-center justify-center p-4 z-50">
-                                <div className="bg-white rounded-2xl max-w-lg w-full p-6 shadow-xl space-y-4">
-                                    <div className="flex justify-between items-start">
-                                        <div><h3 className="text-lg font-bold text-slate-900">{selectedScoreDetails.student_name}</h3><p className="text-xs text-slate-400">{selectedScoreDetails.student_email || 'N/A'}</p></div>
-                                        <span className="text-3xl font-black text-indigo-600">{Number(selectedScoreDetails.score).toFixed(1)}/10</span>
-                                    </div>
-                                    <div className="space-y-1.5 max-h-56 overflow-y-auto pr-1">
-                                        {selectedScoreDetails.details?.words?.map((w, i) => (
-                                            <div key={i} className={`flex justify-between p-2.5 rounded-xl border text-xs font-semibold ${w.correct ? 'bg-emerald-50/50 border-emerald-100 text-emerald-800' : 'bg-rose-50/50 border-rose-100 text-rose-800'}`}>
-                                                <span>Gap {i + 1}: {w.correct ? (w.usedHint ? "Correct with hint (0.5 pt)" : "Correct (1.0 pt)") : "Incorrect"}</span>
-                                                <span className="font-mono">{w.correct ? w.original : (w.answer || '(empty)')}</span>
-                                            </div>
-                                        ))}
-                                    </div>
-                                    <div className="flex justify-end pt-4"><button onClick={() => setSelectedScoreDetails(null)} className="bg-slate-100 hover:bg-slate-200 text-slate-600 px-4 py-2 rounded-xl text-sm font-bold transition-all">Close</button></div>
-                                </div>
-                            </div>
-                        )}
-
+                        
                         {view === 'student-test' && !activeTask && (
                             <div className="max-w-md mx-auto bg-white p-8 rounded-2xl shadow-sm border border-rose-200 mt-12 text-center space-y-4">
                                 <div className="text-5xl">🔍</div>
@@ -2957,6 +3146,21 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
                             </div>
                         )}
 
+                        {emptyAsk > 0 && (
+                            <div className="fixed inset-0 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4 z-[70]">
+                                <div className="bg-white rounded-2xl max-w-sm w-full p-6 shadow-xl space-y-4">
+                                    <h3 className="text-lg font-black text-slate-900">You still have {emptyAsk} empty blank{emptyAsk > 1 ? 's' : ''}</h3>
+                                    <p className="text-sm text-slate-600">Empty blanks score 0, and you cannot change your answers after submitting.</p>
+                                    <div className="flex items-center justify-between gap-3">
+                                        <button onClick={() => setEmptyAsk(0)} className="px-5 py-2.5 rounded-xl text-sm font-bold text-white bg-indigo-600 hover:bg-indigo-700">Go back</button>
+                                        <button onClick={() => { setEmptyAsk(0); handleEvaluation(true); }} className="px-3 py-1.5 rounded-lg text-xs font-bold text-slate-500 bg-slate-100 hover:bg-slate-200">Submit anyway</button>
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+                        {view === 'student-test' && activeTask && activeTask.preview && !examSubmitted && (
+                            <div className="max-w-3xl mx-auto mb-3 bg-indigo-50 border border-indigo-200 text-indigo-900 text-sm font-semibold rounded-xl px-4 py-2.5">👀 Teacher preview: you can do the task and see the result and the diploma, but nothing is saved.</div>
+                        )}
                         {view === 'student-test' && activeTask && activeTask.gated && !examSubmitted && (
                             <div className="max-w-md mx-auto mt-8">
                                 <div className="bg-white p-6 md:p-8 rounded-2xl shadow-md border border-slate-200 space-y-4">
@@ -2988,7 +3192,7 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
                                         </select>
                                         {!standardStudentClasses.includes(studentClass) && <input type="text" value={studentClass} onChange={e => setStudentClass(e.target.value)} placeholder="e.g. 4º ESO A, 1º Bachillerato" className="w-full mt-2 px-3 py-2 bg-slate-50 border rounded-lg text-sm outline-none focus:border-indigo-500" required aria-label="Custom course or group" />}</>)}
                                     </div>
-                                    <div><label className="block text-[10px] font-bold text-slate-500 uppercase mb-1">School Email</label><input type="email" placeholder="@alu.murciaeduca.es" value={studentEmail} onChange={e => setStudentEmail(e.target.value)} onBlur={checkExistingSubmission} readOnly={!!activeTask.roster} className="w-full px-3 py-2 bg-slate-50 border rounded-lg text-sm outline-none focus:border-indigo-500" /></div>
+                                    <div><label className="block text-[10px] font-bold text-slate-500 uppercase mb-1">School Email</label><input type="email" placeholder="@alu.murciaeduca.es" value={studentEmail} onChange={e => setStudentEmail(e.target.value)} onBlur={checkExistingSubmission} readOnly={!!activeTask.roster || !!activeTask.preview} className="w-full px-3 py-2 bg-slate-50 border rounded-lg text-sm outline-none focus:border-indigo-500" /></div>
                                 </div>
                                                                 <div className="p-6 md:p-8 rounded-2xl shadow-md border" style={{backgroundColor:activeMusicTheme.colors.paper,color:activeMusicTheme.colors.text,borderColor:activeMusicTheme.colors.soft,fontFamily:activeMusicTheme.font}}>
                                     <div className="mb-6 pb-6 border-b flex flex-col md:flex-row gap-6 items-center" style={{borderColor:activeMusicTheme.colors.soft}}>
@@ -3087,6 +3291,12 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
                             </div>
                         )}
 
+                        {view === 'results' && finalScoreRecord && (teacherViewing || previewMode) && (
+                            <div className="max-w-2xl mx-auto mb-3 flex items-center justify-between gap-3 bg-indigo-50 border border-indigo-200 text-indigo-900 text-sm font-semibold rounded-xl px-4 py-2.5">
+                                <span>{previewMode ? '👀 Teacher preview: nothing is saved.' : '👀 You are seeing the results as the student sees them.'}</span>
+                                <button onClick={leaveTeacherView} className="shrink-0 px-3 py-1.5 rounded-lg bg-white border border-indigo-200 text-xs font-bold hover:bg-indigo-100">← Back to dashboard</button>
+                            </div>
+                        )}
                         {view === 'results' && finalScoreRecord && (
                             <div className="max-w-2xl mx-auto p-8 md:p-10 rounded-3xl shadow-xl border text-center relative overflow-hidden" style={{backgroundColor:getUiTheme(finalScoreRecord.taskDetails?.style || finalScoreRecord.auditions?.style || 'classical', darkMode).colors.paper, borderColor:getUiTheme(finalScoreRecord.taskDetails?.style || finalScoreRecord.auditions?.style || 'classical', darkMode).colors.accent}}>
                                 {(() => {
@@ -3113,7 +3323,7 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
                                                 <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
                                                     {(finalScoreRecord.details?.words || []).map((item, idx) => (
                                                         <div key={idx} className={`px-3 py-2 rounded-lg border text-xs font-semibold ${item.correct ? 'bg-emerald-50 border-emerald-200 text-emerald-800' : 'bg-rose-50 border-rose-200 text-rose-800'}`}>
-                                                            <span className="opacity-60 mr-1">{String(idx + 1).padStart(2, '0')}.</span>{String(item.answer || '').trim() ? String(item.answer).toUpperCase() : '(no answer)'}
+                                                            <span className="mr-1 font-black">{item.correct ? '✓' : '✗'}</span><span className="opacity-60 mr-1">{String(idx + 1).padStart(2, '0')}.</span>{String(item.answer || '').trim() ? String(item.answer).toUpperCase() : '(no answer)'}
                                                         </div>
                                                     ))}
                                                 </div>
@@ -3130,7 +3340,7 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
                                             </div>
                                             <div className="pt-2 border-t flex justify-between items-center text-xs text-slate-400">
                                                 <button onClick={fetchHistoryAndScores} className="hover:text-slate-600 flex items-center gap-1"><Icons.Refresh /> Check Status Update</button>
-                                                <button onClick={() => { setExamSubmitted(false); setView('student-test'); }} className="hover:text-slate-600">Back to Task View</button>
+                                                {!teacherViewing && <button onClick={() => { setExamSubmitted(false); setView('student-test'); }} className="hover:text-slate-600">Back to Task View</button>}
                                             </div>
                                         </div>
                                     );
