@@ -511,7 +511,7 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
                 csvHead: ['Alumno/a', 'Grupo', 'Correo', 'Audición', 'Artista', 'Nota', 'Fecha'], csvSep: ';', fileName: 'calificaciones', locale: 'es-ES',
                 ranking: 'Clasificación', allAvg: 'Todas las audiciones (media)', rankTie: 'Empate: va delante quien entregó antes y, si coincide, por orden alfabético.', rankTieAvg: 'Empate: más dieces; si sigue, quien entregó antes la última audición; y si no, orden alfabético.',
                 hall: 'Hall of Fame', top5: 'Top 10 general', top5class: 'Top 10 de la clase', top5course: (c) => `Top 10 de ${c}`, expand: (n) => `Ver clasificación completa (${n})`, collapse: 'Ver menos', project: 'Proyectar', projectClose: 'Cerrar', projectAll: 'Todos los grupos',
-                pj: { s6: 'Vocabulario', tieNote: 'Empate: gana quien entregó antes.', wThis: 'Esta audición', wEasy: 'Las más fáciles', wHard: 'Las más difíciles', entregas: (n) => `${n} entregas`, passL: 'aprobados', tensL: 'dieces', participation: 'han entregado', anon: '🎭 Anónimo', badDay: 'Hoy fue su día malo', badDaySub: 'Nadie es perfecto: ¡a por la revancha!', leagueAvg: 'Media de todas las audiciones', leagueLast: 'Media de la última audición', groupUp: 'El grupo que más ha mejorado', groupDown: 'El grupo que ha tenido su día malo', setup: 'Proyectar en clase', group: 'Grupo', aud: 'Audición', start: 'Empezar', s1: 'Top 10 de la audición', s2: 'Top 10 del curso', s3: 'Hall of Fame del curso', s4: 'Liga de grupos', s5: 'Nuestras audiciones',
+                pj: { s6: 'Vocabulario', tieNote: 'Empate: gana quien entregó antes.', wThis: 'Esta audición', wEasy: 'Las más fáciles', wHard: 'Las más difíciles', entregas: (n) => `${n} ${n === 1 ? 'entrega' : 'entregas'}`, passL: 'aprobados', tensL: 'dieces', participation: 'han entregado', anon: '🎭 Anónimo', badDay: 'Hoy fue su día malo', badDaySub: 'Nadie es perfecto: ¡a por la revancha!', leagueAvg: 'Media de todas las audiciones', leagueLast: 'Media de la última audición', groupUp: 'El grupo que más ha mejorado', groupDown: 'El grupo que ha tenido su día malo', setup: 'Proyectar en clase', group: 'Grupo', aud: 'Audición', start: 'Empezar', s1: 'Top 10 de la audición', s2: 'Top 10 del curso', s3: 'Hall of Fame del curso', s4: 'Liga de grupos', s5: 'Nuestras audiciones',
                       king: 'Rey o reina del 10', best: 'Mejor media', improve: 'Mejora del día', improveSub: (d) => `+${d} sobre su media`, tens: (n) => `${n} ${n === 1 ? 'diez' : 'dieces'}`, course: 'Media del curso', last: 'Última audición',
                       easiest: 'La que mejor se os dio', hardest: 'El reto', isNew: 'NUEVO', reveal: 'Pulsa → para descubrir el podio', none: 'Todavía no hay datos', next: 'Siguiente', prev: 'Anterior' }, below5: 'Media por debajo de 5', lowest5: 'Nadie por debajo de 5: los 5 más bajos', runners: 'Le siguen', entries: (n) => `${n} ${n === 1 ? 'entrega' : 'entregas'}`,
                 edit: 'Editar', hideName: 'Ocultar nombre al proyectar (saldrá como anónimo)', editTitle: 'Corregir datos de la entrega', name: 'Nombre y apellidos', group: 'Grupo', save: 'Guardar', cancel: 'Cancelar', editNote: 'Solo se cambia esta entrega. El correo no se puede modificar.'
@@ -533,7 +533,7 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
                 csvHead: ['Student', 'Group', 'Email', 'Audition', 'Artist', 'Score', 'Date'], csvSep: ',', fileName: 'grades', locale: 'en-GB',
                 ranking: 'Leaderboard', allAvg: 'All auditions (average)', rankTie: 'Tie: whoever submitted first goes ahead, then alphabetical order.', rankTieAvg: 'Tie: more perfect 10s; then whoever submitted the latest audition first; then alphabetical order.',
                 hall: 'Hall of Fame', top5: 'Overall top 10', top5class: 'Class top 10', top5course: (c) => `${c} top 10`, expand: (n) => `Show full leaderboard (${n})`, collapse: 'Show less', project: 'Project', projectClose: 'Close', projectAll: 'All groups',
-                pj: { s6: 'Vocabulary', tieNote: 'Tie: whoever handed in first ranks higher.', wThis: 'This audition', wEasy: 'Easiest words', wHard: 'Hardest words', entregas: (n) => `${n} submissions`, passL: 'passed', tensL: 'perfect 10s', participation: 'submitted', anon: '🎭 Anonymous', badDay: 'Today was their off day', badDaySub: 'Nobody is perfect: rematch time!', leagueAvg: 'Average of all auditions', leagueLast: 'Average of the last audition', groupUp: 'Most improved group', groupDown: 'The group that had an off day', setup: 'Project in class', group: 'Group', aud: 'Audition', start: 'Start', s1: 'Audition top 10', s2: 'Course top 10', s3: 'Course Hall of Fame', s4: 'Group league', s5: 'Our auditions',
+                pj: { s6: 'Vocabulary', tieNote: 'Tie: whoever handed in first ranks higher.', wThis: 'This audition', wEasy: 'Easiest words', wHard: 'Hardest words', entregas: (n) => `${n} ${n === 1 ? 'submission' : 'submissions'}`, passL: 'passed', tensL: 'perfect 10s', participation: 'submitted', anon: '🎭 Anonymous', badDay: 'Today was their off day', badDaySub: 'Nobody is perfect: rematch time!', leagueAvg: 'Average of all auditions', leagueLast: 'Average of the last audition', groupUp: 'Most improved group', groupDown: 'The group that had an off day', setup: 'Project in class', group: 'Group', aud: 'Audition', start: 'Start', s1: 'Audition top 10', s2: 'Course top 10', s3: 'Course Hall of Fame', s4: 'Group league', s5: 'Our auditions',
                       king: 'King or queen of 10', best: 'Best average', improve: 'Most improved today', improveSub: (d) => `+${d} over their average`, tens: (n) => `${n} perfect ${n === 1 ? 'score' : 'scores'}`, course: 'Course average', last: 'Latest audition',
                       easiest: 'The one you did best', hardest: 'The challenge', isNew: 'NEW', reveal: 'Press → to reveal the podium', none: 'No data yet', next: 'Next', prev: 'Back' }, below5: 'Average below 5', lowest5: 'Nobody below 5: the 5 lowest', runners: 'Runners-up', entries: (n) => `${n} ${n === 1 ? 'submission' : 'submissions'}`,
                 edit: 'Edit', hideName: 'Hide name when projecting (shown as anonymous)', editTitle: 'Correct submission details', name: 'Full name', group: 'Group', save: 'Save', cancel: 'Cancel', editNote: 'Only this submission changes. The email cannot be edited.'
@@ -600,6 +600,7 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
         };
 
         // ---------- AYUDAS COMUNES: nombres, periodos, ediciones y lista de alumnos ----------
+        const pl = (n, one, many) => `${n} ${Number(n) === 1 ? one : many}`;
         const NAME_PARTICLES = new Set(['de', 'del', 'la', 'las', 'los', 'el', 'y', 'e', 'da', 'do', 'dos', 'van', 'von', 'di', 'du']);
         const niceName = (n) => String(n || '').trim().replace(/\s+/g, ' ').split(' ').filter(Boolean).map((w, i) => {
             const low = w.toLowerCase();
@@ -648,6 +649,7 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
                     line.split(delim).map(c => c.trim().replace(/^"|"$/g, '').trim()).filter(Boolean).forEach(c => {
                         if (!email && /@/.test(c)) { email = c.toLowerCase().replace(/\s+/g, ''); return; }
                         if (!email && /^\d{4,10}$/.test(c)) { email = c + '@alu.murciaeduca.es'; return; }
+                        if (!cls && /^E\d[A-Za-z]$/.test(c)) { cls = mapGroupCode(c); return; }
                         if (!cls && (GROUP_RE.test(c) || /^\d\s*[º°]\s*[A-Za-zÑñ]$/.test(c))) { cls = cleanClass(c); return; }
                         nameParts.push(c);
                     });
@@ -658,6 +660,7 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
                     else { const id = rest.match(/(^|\s)(\d{4,10})(\s|$)/); if (id) { email = id[2] + '@alu.murciaeduca.es'; rest = rest.replace(id[2], ' '); } }
                     const gm = rest.match(/\d\s*[º°ºo]?\s*(eso|bach\w*|fp\w*)\s*[A-Za-zÑñ]?\b/i);
                     if (gm) { cls = cleanClass(gm[0]); rest = rest.replace(gm[0], ' '); }
+                    else { const gc = rest.match(/(^|\s)(E\d[A-Za-z])(\s|$)/); if (gc) { cls = mapGroupCode(gc[2]); rest = rest.replace(gc[2], ' '); } }
                     rest = rest.trim(); if (rest) nameParts.push(rest);
                 }
                 if (!email) { skipped.push(line); return; }
@@ -806,13 +809,13 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
             };
             const copyPending = () => {
                 const txt = pending.map(r => r.name).join('\n');
-                try { navigator.clipboard.writeText(txt); showToast(`${pending.length} names copied.`, 'success'); } catch (e) { showToast('Could not copy.', 'error'); }
+                try { navigator.clipboard.writeText(txt); showToast(`${pl(pending.length, 'name', 'names')} copied.`, 'success'); } catch (e) { showToast('Could not copy.', 'error'); }
             };
             return (
                 <div className="space-y-6">
                     <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
                         <h2 className="text-xl font-bold text-slate-900 mb-1">📋 Class list</h2>
-                        <p className="text-xs text-slate-500 mb-4">Students on this list are the only ones who can open your tasks. Their name and group here are the official ones for grades, rankings and diplomas. With no list, the app works as before.</p>
+                        <p className="text-xs text-slate-500 mb-4">Students on this list are the only ones who can open your tasks. Their name and group here are the official ones for grades, rankings and diplomas. With no list, the app works as before. <b>This list is shared with your Spanish version (Audiciones Comentadas)</b>: changes here also apply there.</p>
                         <div className="flex flex-wrap items-center gap-3 mb-3">
                             <label className="px-4 py-2 rounded-xl text-sm font-bold text-white bg-indigo-600 hover:bg-indigo-700 cursor-pointer">📂 Upload Plumier file (.xls / .xlsx)<input type="file" accept=".xls,.xlsx" className="hidden" onChange={e => { onFile(e.target.files[0]); e.target.value = ''; }} /></label>
                             <span className="text-[11px] text-slate-500 flex-1 min-w-[220px]">Only the name, surnames, official email and group are read, on your computer. Phones, birth dates and personal emails are ignored. Upload one file per group.</span>
@@ -835,10 +838,10 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
                                             </tr>))}
                                     </tbody></table>
                                 </div>
-                                <label className="flex items-center gap-2 text-xs text-slate-700 mt-3"><input type="checkbox" checked={replaceAll} onChange={e => setReplaceAll(e.target.checked)} /> Remove from the list any student who is not in this paste</label>
+                                <label className="flex items-center gap-2 text-xs text-slate-700 mt-3"><input type="checkbox" checked={replaceAll} onChange={e => setReplaceAll(e.target.checked)} /> Remove from the list any student who is not in this paste (also in the Spanish version)</label>
                                 <div className="flex justify-end gap-2 mt-3">
                                     <button onClick={() => setPreview(null)} className="px-4 py-2 rounded-xl text-sm font-bold text-slate-600 bg-white border border-slate-200">Cancel</button>
-                                    <button onClick={save} disabled={busy || !preview.rows.some(r => r.valid)} className="px-4 py-2 rounded-xl text-sm font-bold text-white bg-emerald-600 hover:bg-emerald-700 disabled:opacity-50">Save {preview.rows.filter(r => r.valid).length} students</button>
+                                    <button onClick={save} disabled={busy || !preview.rows.some(r => r.valid)} className="px-4 py-2 rounded-xl text-sm font-bold text-white bg-emerald-600 hover:bg-emerald-700 disabled:opacity-50">Save {pl(preview.rows.filter(r => r.valid).length, 'student', 'students')}</button>
                                 </div>
                             </div>
                         )}
@@ -859,7 +862,7 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
                             <div className="space-y-2">
                                 {groups.filter(g => !fg || g === fg).map(g => { const mem = shown.filter(r => r.class === g); const isOpen = !!fg || !!openG[g]; return (
                                     <div key={g} className="rounded-xl border border-slate-200 overflow-hidden">
-                                        <button onClick={() => setOpenG(v => ({ ...v, [g]: !v[g] }))} className="w-full flex items-center justify-between px-4 py-2.5 bg-slate-50 hover:bg-slate-100 text-left"><span className="font-bold text-slate-900 text-sm">{g} <span className="font-normal text-slate-500">· {mem.length} students</span></span><span className="text-slate-400 text-xs">{isOpen ? '▲' : '▼'}</span></button>
+                                        <button onClick={() => setOpenG(v => ({ ...v, [g]: !v[g] }))} className="w-full flex items-center justify-between px-4 py-2.5 bg-slate-50 hover:bg-slate-100 text-left"><span className="font-bold text-slate-900 text-sm">{g} <span className="font-normal text-slate-500">· {pl(mem.length, 'student', 'students')}</span></span><span className="text-slate-400 text-xs">{isOpen ? '▲' : '▼'}</span></button>
                                         {isOpen && <div className="overflow-x-auto"><table className="w-full text-left text-sm">
                                             <tbody>{mem.map(r => (
                                                 <tr key={r.email} className="border-t border-slate-100">
@@ -868,7 +871,7 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
                                                     <td className="py-2 px-3 text-center"><input type="checkbox" checked={!!r.anonymous} onChange={() => onUpdate(r.email, { anonymous: !r.anonymous })} aria-label="Anonymous in projections" title="Anonymous in projections" /></td>
                                                     <td className="py-2 px-3 text-right whitespace-nowrap">
                                                         <button onClick={() => { const sp = splitName(r.name); setEdit({ old: r.email, email: r.email, class: r.class, first_name: r.first_name ?? sp.first, last_name1: r.last_name1 ?? sp.l1, last_name2: r.last_name2 ?? sp.l2 }); }} title="Edit" className="p-1.5 hover:bg-indigo-50 rounded-lg">✏️</button>
-                                                        <button onClick={() => { if (window.confirm(`Remove ${r.name} from the list? Their past submissions are kept but stop counting.`)) onDelete([r.email]); }} title="Remove" className="p-1.5 hover:bg-rose-50 rounded-lg text-rose-600">✕</button>
+                                                        <button onClick={() => { if (window.confirm(`Remove ${r.name} from the list? This also removes them in the Spanish version. Their past submissions are kept but stop counting.`)) onDelete([r.email]); }} title="Remove" className="p-1.5 hover:bg-rose-50 rounded-lg text-rose-600">✕</button>
                                                     </td>
                                                 </tr>))}</tbody>
                                         </table></div>}
@@ -1070,9 +1073,9 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
                     </Section>
                     <Section title="Records" icon="🏅" open={false}>
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-                            <div className="rounded-xl bg-amber-50 border border-amber-200 p-3"><p className="text-[11px] font-bold uppercase text-amber-700">Best audition</p><p className="font-black text-slate-900">{bestAud ? bestAud.title : '—'}</p><p className="text-sm text-slate-600">{bestAud ? `average ${f1(bestAud.avg)} · ${bestAud.n} submissions` : 'needs at least 5 submissions'}</p></div>
+                            <div className="rounded-xl bg-amber-50 border border-amber-200 p-3"><p className="text-[11px] font-bold uppercase text-amber-700">Best audition</p><p className="font-black text-slate-900">{bestAud ? bestAud.title : '—'}</p><p className="text-sm text-slate-600">{bestAud ? `average ${f1(bestAud.avg)} · ${pl(bestAud.n, 'submission', 'submissions')}` : 'needs at least 5 submissions'}</p></div>
                             <div className="rounded-xl bg-emerald-50 border border-emerald-200 p-3"><p className="text-[11px] font-bold uppercase text-emerald-700">Longest streak of 10s</p><p className="font-black text-slate-900">{streaks && streaks.best > 1 ? dn(streaks.s) : '—'}</p><p className="text-sm text-slate-600">{streaks && streaks.best > 1 ? `${streaks.best} perfect scores in a row` : 'no streaks yet'}</p></div>
-                            <div className="rounded-xl bg-indigo-50 border border-indigo-200 p-3"><p className="text-[11px] font-bold uppercase text-indigo-700">Group with most 10s</p><p className="font-black text-slate-900">{tensBy && tensBy.k ? tensBy.g : '—'}</p><p className="text-sm text-slate-600">{tensBy && tensBy.k ? `${tensBy.k} perfect scores` : 'no 10s yet'}</p></div>
+                            <div className="rounded-xl bg-indigo-50 border border-indigo-200 p-3"><p className="text-[11px] font-bold uppercase text-indigo-700">Group with most 10s</p><p className="font-black text-slate-900">{tensBy && tensBy.k ? tensBy.g : '—'}</p><p className="text-sm text-slate-600">{tensBy && tensBy.k ? pl(tensBy.k, 'perfect score', 'perfect scores') : 'no 10s yet'}</p></div>
                         </div>
                     </Section>
                     <Section title="Rankings" icon="🥇" open={false}>
@@ -1135,17 +1138,17 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
                                 <label className="flex items-center gap-1.5 text-sm font-bold"><input type="checkbox" checked={allYears} onChange={e => setAllYears(e.target.checked)} /> All school years</label></div>
                             <div className="flex flex-wrap items-center gap-2">
                                 <select value={grp} onChange={e => setGrp(e.target.value)} className="px-3 py-2 bg-slate-50 border rounded-xl text-sm outline-none"><option value="">All groups</option>{groups.map(g => <option key={g} value={g}>{g}</option>)}</select>
-                                <span className="text-xs text-slate-500">{ids.length} submission(s) selected</span>
+                                <span className="text-xs text-slate-500">{pl(ids.length, 'submission', 'submissions')} selected</span>
                                 <button disabled={!ids.length} onClick={() => setAsk('grades')} className="ml-auto px-3 py-1.5 rounded-lg text-xs font-bold text-rose-700 bg-rose-50 border border-rose-200 disabled:opacity-40">Delete selected…</button>
                             </div>
                         </div>
                         <div>
                             <p className="text-sm font-bold text-slate-900 mb-1">3. Clear the class list <span className="font-normal text-slate-500">(optional, for a new course)</span></p>
-                            <button disabled={!rosterCount} onClick={() => setAsk('roster')} className="px-3 py-1.5 rounded-lg text-xs font-bold text-rose-700 bg-rose-50 border border-rose-200 disabled:opacity-40">Clear the list ({rosterCount} students)…</button>
+                            <button disabled={!rosterCount} onClick={() => setAsk('roster')} className="px-3 py-1.5 rounded-lg text-xs font-bold text-rose-700 bg-rose-50 border border-rose-200 disabled:opacity-40">Clear the list ({pl(rosterCount, 'student', 'students')}, shared with the Spanish version)…</button>
                         </div>
                     </div>
                     {ask === 'grades' && <DangerConfirm title="Delete student grades" body={`${ids.length} submission(s) from ${allYears ? 'all school years' : chosen.join(', ')}${grp ? ' · ' + grp : ''} will be deleted. Your tasks are not touched.`} onCancel={() => setAsk(null)} onConfirm={() => { setAsk(null); onDeleteGrades(ids); }} />}
-                    {ask === 'roster' && <DangerConfirm title="Clear the class list" body={`All ${rosterCount} students will be removed from your list. Past grades are kept.`} onCancel={() => setAsk(null)} onConfirm={() => { setAsk(null); onClearRoster(); }} />}
+                    {ask === 'roster' && <DangerConfirm title="Clear the class list" body={`All ${rosterCount} students will be removed from your list. The list is shared with the Spanish version, so it is emptied there too. Past grades are kept.`} onCancel={() => setAsk(null)} onConfirm={() => { setAsk(null); onClearRoster(); }} />}
                 </Section>
             );
         };
@@ -1505,7 +1508,7 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
                                             {groupCards.map(c => (
                                                 <button key={c.g} onClick={() => setFGroup(c.g)} className="text-left rounded-2xl border border-slate-200 bg-white hover:border-indigo-300 hover:shadow-md transition-all p-4">
                                                     <div className="flex items-start justify-between gap-2"><span className="text-xl font-black text-slate-900">{c.g}</span><span className="text-2xl font-black text-indigo-600">{fmt(c.avg)}</span></div>
-                                                    <p className="text-xs text-slate-500 mt-1">{c.N} students · {c.n} submissions</p>
+                                                    <p className="text-xs text-slate-500 mt-1">{pl(c.N, 'student', 'students')} · {pl(c.n, 'submission', 'submissions')}</p>
                                                     <p className="text-xs text-slate-600 mt-2 truncate">Last: <b>{c.last}</b></p>
                                                     <div className="flex items-center gap-2 mt-1.5"><div className="flex-1 h-1.5 rounded-full bg-slate-100 overflow-hidden"><div className="h-full rounded-full bg-emerald-500" style={{ width: `${c.N ? Math.min(100, c.nLast / c.N * 100) : 0}%` }}></div></div><span className="text-[11px] font-bold text-slate-500">{c.nLast}/{c.N}</span></div>
                                                 </button>))}
@@ -1515,7 +1518,7 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
                                 )
                             ) : (
                                 <div>
-                                    <div className="flex items-center justify-between mb-2"><button onClick={() => { setFGroup(''); setQ(''); setShowAll(false); }} className="text-xs font-bold text-indigo-700 hover:underline">← Groups</button><span className="text-xs text-slate-400">{sorted.length} entries</span></div>
+                                    <div className="flex items-center justify-between mb-2"><button onClick={() => { setFGroup(''); setQ(''); setShowAll(false); }} className="text-xs font-bold text-indigo-700 hover:underline">← Groups</button><span className="text-xs text-slate-400">{pl(sorted.length, 'entry', 'entries')}</span></div>
                                     {(sorted.length === 0 ? (<p className="text-slate-400 text-center py-10">{scores.length === 0 ? T.empty : T.noMatch}</p>) : (
                         <div className="overflow-x-auto">
                             <table className="w-full text-left text-sm border-collapse">
@@ -2336,14 +2339,15 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
                         const list = Array.isArray(raw) ? raw : (raw.tasks || []);
                         const te = rosterTeacher();
                         const have = new Set(auditionsList.map(a => a.share_link || a.id));
-                        const toAdd = list.filter(t => t && t.share_link && t.title && t.comment && !have.has(t.share_link)).map(t => ({
+                        const spanish = list.filter(t => t && isSpanishCode(t.share_link)).length;
+                        const toAdd = list.filter(t => t && t.share_link && !isSpanishCode(t.share_link) && t.title && t.comment && !have.has(t.share_link)).map(t => ({
                             teacher_email: te, title: t.title, artist: t.artist || 'Unknown Artist', style: String(t.style || 'classical').toLowerCase(),
                             youtube_url: t.youtube_url || '', comment: t.comment, uppercase_words: t.uppercase_words || [], hints: t.hints || [],
                             share_link: t.share_link, is_exam_mode: !!t.is_exam_mode, created_at: t.created_at || new Date().toISOString() }));
-                        if (!toAdd.length) { showToast('Nothing to import: those tasks already exist.', 'info'); return; }
+                        if (!toAdd.length) { showToast(spanish ? 'Nothing to import: those are tasks of the Spanish version.' : 'Nothing to import: those tasks already exist.', 'info'); return; }
                         const { error } = await supabaseClient.from('auditions').insert(toAdd);
                         if (error) throw error;
-                        showToast(`${toAdd.length} task(s) restored with their original links.`, 'success');
+                        showToast(`${pl(toAdd.length, 'task', 'tasks')} restored with their original links.${spanish ? ` ${pl(spanish, 'task', 'tasks')} of the Spanish version skipped.` : ''}`, 'success');
                         fetchHistoryAndScores();
                     } catch (e) { showToast('Could not import: ' + (e.message || 'invalid file'), 'error'); }
                 };
