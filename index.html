@@ -301,12 +301,12 @@
         };
 
         const MUSIC_THEMES = {
-            classical: { id:'classical', label:'Classical & Orchestral', genres:'Classical, Baroque, Romantic, opera and symphonic music', icon:'♬', colors:{ primary:'#192747', accent:'#B69A5B', paper:'#F3EBDD', soft:'#E8E0D0', text:'#192747' }, pdf:{ primary:[25,39,71], accent:[182,154,91], paper:[243,235,221], soft:[232,224,208] }, font:'Georgia, "Times New Roman", serif' },
-            jazz: { id:'jazz', label:'Jazz & Blues', genres:'Jazz, blues, swing, bossa nova, soul, Motown, funk, gospel and R&B', icon:'♫', colors:{ primary:'#542D42', accent:'#D49A48', paper:'#FBF3E8', soft:'#F1E1D2', text:'#542D42' }, pdf:{ primary:[84,45,66], accent:[212,154,72], paper:[251,243,232], soft:[241,225,210] }, font:'Trebuchet MS, Arial, sans-serif' },
-            rock: { id:'rock', label:'Rock & Metal', genres:'Rock and roll, classic rock, hard rock, heavy metal, punk, grunge, alternative rock and indie rock', icon:'⚡', colors:{ primary:'#181818', accent:'#C52D35', paper:'#F3F3F3', soft:'#E4E4E4', text:'#181818' }, pdf:{ primary:[24,24,24], accent:[197,45,53], paper:[243,243,243], soft:[228,228,228] }, font:'Trebuchet MS, Arial, sans-serif' },
-            pop: { id:'pop', label:'Pop & Electronic', genres:'Pop, disco, electronic, techno, house, hip-hop, rap, trap, reggae, reggaeton and K-pop', icon:'♫', colors:{ primary:'#30205E', accent:'#42D6D0', paper:'#F5F2FF', soft:'#E8E1FF', text:'#30205E' }, pdf:{ primary:[48,32,94], accent:[66,214,208], paper:[245,242,255], soft:[232,225,255] }, font:'Arial, Helvetica, sans-serif' },
-            folk: { id:'folk', label:'Folk & World Music', genres:'Flamenco, country, Celtic music, folk, Latin music, traditional Spanish music, folk dances and world music', icon:'♧', colors:{ primary:'#435640', accent:'#B47A50', paper:'#F0E4CE', soft:'#E5D5B9', text:'#435640' }, pdf:{ primary:[67,86,64], accent:[180,122,80], paper:[240,228,206], soft:[229,213,185] }, font:'Palatino Linotype, Palatino, Georgia, serif' },
-            film: { id:'film', label:'Film, TV & Game Music', genres:'Film scores, TV soundtracks, video game music, musicals, animation soundtracks and cinematic themes', icon:'✦', colors:{ primary:'#222B48', accent:'#9A83C6', paper:'#F0EDF7', soft:'#E0D9ED', text:'#222B48' }, pdf:{ primary:[34,43,72], accent:[154,131,198], paper:[240,237,247], soft:[224,217,237] }, font:'Arial, Helvetica, sans-serif' }
+            classical: { id:'classical', label:'Classical & Orchestral', genres:'Classical, Baroque, Romantic, opera and symphonic music', icon:'♬', colors:{ primary:'#192747', accent:'#B69A5B', paper:'#F3EBDD', soft:'#E8E0D0', text:'#192747' }, pdf:{ primary:[25,39,71], accent:[182,154,91], paper:[243,235,221], soft:[232,224,208] }, font:'Baskerville, "Baskerville Old Face", "Times New Roman", serif', headStyle:{ fontVariant:'small-caps', letterSpacing:'0.05em' } },
+            jazz: { id:'jazz', label:'Jazz & Blues', genres:'Jazz, blues, swing, bossa nova, soul, Motown, funk, gospel and R&B', icon:'♫', colors:{ primary:'#542D42', accent:'#D49A48', paper:'#FBF3E8', soft:'#F1E1D2', text:'#542D42' }, pdf:{ primary:[84,45,66], accent:[212,154,72], paper:[251,243,232], soft:[241,225,210] }, font:'Rockwell, "Rockwell Nova", Georgia, serif', headStyle:{ fontFamily:'Copperplate, "Copperplate Gothic Light", Futura, "Century Gothic", sans-serif', letterSpacing:'0.09em' } },
+            rock: { id:'rock', label:'Rock & Metal', genres:'Rock and roll, classic rock, hard rock, heavy metal, punk, grunge, alternative rock and indie rock', icon:'⚡', colors:{ primary:'#181818', accent:'#C52D35', paper:'#F3F3F3', soft:'#E4E4E4', text:'#181818' }, pdf:{ primary:[24,24,24], accent:[197,45,53], paper:[243,243,243], soft:[228,228,228] }, font:'"Trebuchet MS", "Arial Narrow", Arial, sans-serif', headStyle:{ letterSpacing:'0.1em' } },
+            pop: { id:'pop', label:'Pop & Electronic', genres:'Pop, disco, electronic, techno, house, hip-hop, rap, trap, reggae, reggaeton and K-pop', icon:'♫', colors:{ primary:'#86198F', accent:'#06B6D4', paper:'#FDF2F8', soft:'#FBDDEE', text:'#4A044E' }, pdf:{ primary:[134,25,143], accent:[6,182,212], paper:[253,242,248], soft:[251,221,238] }, font:'Futura, "Century Gothic", "Avenir Next", Avenir, "Segoe UI", sans-serif', headStyle:{ letterSpacing:'0.03em' } },
+            folk: { id:'folk', label:'Folk & World Music', genres:'Flamenco, country, Celtic music, folk, Latin music, traditional Spanish music, folk dances and world music', icon:'♧', colors:{ primary:'#435640', accent:'#B47A50', paper:'#F0E4CE', soft:'#E5D5B9', text:'#435640' }, pdf:{ primary:[67,86,64], accent:[180,122,80], paper:[240,228,206], soft:[229,213,185] }, font:'Cambria, "Hoefler Text", Georgia, serif', headStyle:{ letterSpacing:'0.02em' } },
+            film: { id:'film', label:'Film, TV & Game Music', genres:'Film scores, TV soundtracks, video game music, musicals, animation soundtracks and cinematic themes', icon:'✦', colors:{ primary:'#2E1065', accent:'#F5B82E', paper:'#F3F0FA', soft:'#E4DDF3', text:'#2E1065' }, pdf:{ primary:[46,16,101], accent:[245,184,46], paper:[243,240,250], soft:[228,221,243] }, font:'Optima, Candara, "Segoe UI", Calibri, sans-serif', headStyle:{ fontVariant:'small-caps', letterSpacing:'0.07em' } }
         };
         const getMusicTheme = (value) => {
             const v0 = String(value || '').toLowerCase();
@@ -498,7 +498,7 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
                 title: 'Calificaciones del alumnado', search: 'Buscar nombre, grupo (2A, 3B…), correo o nota...',
                 allGroups: 'Todos los grupos', allCourses: 'Todos los cursos', allAuditions: 'Todas las audiciones', allBands: 'Todas las notas',
                 bands: { fail: 'Suspensos (< 5)', pass: 'Aprobados (5 - 6,9)', good: 'Notables (7 - 8,9)', top: 'Sobresalientes (9 - 10)' },
-                from: 'Desde', to: 'Hasta', reset: 'Quitar filtros', exportCsv: 'Exportar a Excel', hideNames: 'Ocultar nombres', showNames: 'Mostrar nombres',
+                from: 'Desde', to: 'Hasta', reset: 'Quitar filtros', exportCsv: 'Exportar a Excel', 
                 showStats: 'Ver estadísticas', hideStats: 'Ocultar estadísticas', deleteAll: 'Borrar todo', deleteAllTitle: 'Borrar TODOS los resultados',
                 avg: 'Nota media', count: 'Entregas', passRate: 'Aprobados', excellent: 'Sobresalientes', tens: 'Dieces', hints: 'Con pistas',
                 league: 'Liga de grupos', champion: 'Campeón', lantern: 'Farolillo rojo', honour: 'Cuadro de honor',
@@ -520,7 +520,7 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
                 title: "Your Students' Grades & Submissions", search: 'Search name, group (2A, 3B…), email or score...',
                 allGroups: 'All groups', allCourses: 'All levels', allAuditions: 'All auditions', allBands: 'All marks',
                 bands: { fail: 'Fail (< 5)', pass: 'Pass (5 - 6.9)', good: 'Good (7 - 8.9)', top: 'Excellent (9 - 10)' },
-                from: 'From', to: 'To', reset: 'Clear filters', exportCsv: 'Export to Excel', hideNames: 'Hide names', showNames: 'Show names',
+                from: 'From', to: 'To', reset: 'Clear filters', exportCsv: 'Export to Excel', 
                 showStats: 'Show statistics', hideStats: 'Hide statistics', deleteAll: 'Delete ALL', deleteAllTitle: 'Delete ALL student records',
                 avg: 'Class average', count: 'Submissions', passRate: 'Passed', excellent: 'Excellent', tens: 'Perfect 10s', hints: 'Used hints',
                 league: 'Group league', champion: 'Champion', lantern: 'Bottom of the table', honour: 'Hall of fame',
@@ -588,18 +588,26 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
             return Object.keys(firstAt).sort((a, b) => firstAt[b].localeCompare(firstAt[a]));
         };
         const aggregateStudents = (list) => Object.values(groupBy(list, studentKey)).map(arr => ({
-            s: arr[0], value: avgOf(arr), avg: avgOf(arr), n: arr.length, tens: arr.filter(x => Number(x.score) >= 10).length,
+            s: arr[0], value: avgOf(arr), avg: avgOf(arr), n: arr.length, tens: arr.filter(x => Number(x.score) >= 10).length, paper: arr.some(x => x.details && x.details.paper),
             times: Object.fromEntries(arr.map(x => [x.audition_id, String(x.created_at || '')]))
         }));
-        const compareAvg = (audOrder) => (a, b) => b.avg - a.avg || b.tens - a.tens || tieByRecent(a, b, audOrder) || byName(a, b);
+        const compareAvg = (audOrder) => (a, b) => b.avg - a.avg || ((a.paper ? 1 : 0) - (b.paper ? 1 : 0)) || b.tens - a.tens || tieByRecent(a, b, audOrder) || byName(a, b);
         const buildRanking = (scores, group, audId) => {
             const pool = scores.filter(s => (!group || s.student_class === group) && (!audId || s.audition_id === audId));
-            if (audId) return pool.map(s => ({ s, value: Number(s.score || 0), n: 1, first: String(s.created_at || '') }))
-                .sort((a, b) => b.value - a.value || a.first.localeCompare(b.first) || byName(a, b));
+            if (audId) return pool.map(s => ({ s, value: Number(s.score || 0), n: 1, paper: !!(s.details && s.details.paper), first: String(s.created_at || '') }))
+                .sort((a, b) => b.value - a.value || ((a.paper ? 1 : 0) - (b.paper ? 1 : 0)) || a.first.localeCompare(b.first) || byName(a, b));
             return aggregateStudents(pool).sort(compareAvg(auditionOrder(pool)));
+        };
+        // Ranking del curso: si el grupo lleva N audiciones (N ≥ 3), entran quienes llevan N-1 o más; con 1-2 audiciones entran todos
+        const rankNeed = (list) => { const N = new Set(list.map(s => s.audition_id)).size; return N >= 3 ? N - 1 : 1; };
+        const eligibleRank = (list) => { const need = rankNeed(list); return buildRanking(list, '', '').filter(x => x.n >= need); };
+        const eligibleRankAll = (list) => {
+            const need = Object.fromEntries(Object.entries(groupBy(list, s => s.student_class)).map(([g, rows]) => [g, rankNeed(rows)]));
+            return buildRanking(list, '', '').filter(x => x.n >= (need[x.s.student_class] || 1));
         };
 
         // ---------- AYUDAS COMUNES: nombres, periodos, ediciones y lista de alumnos ----------
+        const HINT_STYLE = 'pattern'; // 'pattern' = pauta pequeña bajo el hueco · 'label' = etiqueta encima ("starts with T · 7 letters")
         const pl = (n, one, many) => `${n} ${Number(n) === 1 ? one : many}`;
         const NAME_PARTICLES = new Set(['de', 'del', 'la', 'las', 'los', 'el', 'y', 'e', 'da', 'do', 'dos', 'van', 'von', 'di', 'du']);
         const niceName = (n) => String(n || '').trim().replace(/\s+/g, ' ').split(' ').filter(Boolean).map((w, i) => {
@@ -742,7 +750,10 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
         const byEase = (a, b) => b.rate - a.rate || b.tries - a.tries || a.w.localeCompare(b.w);
 
         // ---------- PESTAÑA «CLASS LIST»: lista de alumnos autorizados ----------
-        const ClassList = ({ roster, scores, auditions, onSave, onDelete, onUpdate, showToast }) => {
+        const ClassList = ({ roster, scores, auditions, onSave, onDelete, onUpdate, onPaper, showToast }) => {
+            const [upOpen, setUpOpen] = React.useState(roster.length === 0);
+            React.useEffect(() => { if (roster.length > 0) setUpOpen(false); }, [roster.length > 0]);
+            const [paper, setPaper] = React.useState(null);
             const [paste, setPaste] = React.useState('');
             const [defGroup, setDefGroup] = React.useState('');
             const [preview, setPreview] = React.useState(null);
@@ -764,6 +775,18 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
             const done = new Map(scores.filter(s => s.audition_id === pendAud).map(s => [String(s.student_email || '').toLowerCase(), s]));
             const groupStudents = roster.filter(r => r.class === pendGroup);
             const pending = groupStudents.filter(r => !done.has(r.email.toLowerCase()));
+            const audObj = auditions.find(a => (a.share_link || a.id) === pendAud);
+            const paperWords = audObj ? (String(audObj.comment || '').match(/[A-ZÁÉÍÓÚÑ]{2,}/g) || []) : [];
+            const openPaper = (r) => { if (!paperWords.length) { showToast('This task has no words to mark.', 'error'); return; } setPaper({ r, states: Array(paperWords.length).fill(0), date: new Date().toISOString().slice(0, 10), busy: false }); };
+            const cyclePaper = (i) => setPaper(p => ({ ...p, states: p.states.map((v, j) => (j === i ? (v + 1) % 3 : v)) }));
+            const savePaper = async (goNext) => {
+                setPaper(p => ({ ...p, busy: true }));
+                const ok = await onPaper(pendAud, paper.r.email, paper.states, paper.date);
+                if (!ok) { setPaper(p => ({ ...p, busy: false })); return; }
+                const next = goNext ? pending.find(x => x.email !== paper.r.email) : null;
+                if (next) openPaper(next); else setPaper(null);
+            };
+            const pScore = paper ? paper.states.reduce((a, v) => a + (v === 1 ? 1 : v === 2 ? 0.5 : 0), 0) : 0;
             const detect = () => {
                 const res = parsePlumierRows(paste.split(/\r?\n/).map(l => l.split('\t')), defGroup) || parseRosterText(paste, defGroup);
                 if (!res.rows.length) { showToast('No students found in the pasted text.', 'error'); return; }
@@ -814,13 +837,14 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
             return (
                 <div className="space-y-6">
                     <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
-                        <h2 className="text-xl font-bold text-slate-900 mb-1">📋 Class list</h2>
+                        <div className="flex items-center justify-between gap-3"><h2 className="text-xl font-bold text-slate-900">📋 Class list</h2><button onClick={() => setUpOpen(v => !v)} className="px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-xs font-bold text-slate-700">{upOpen ? 'Hide ▲' : 'Upload or paste a list ▼'}</button></div>
+                        {upOpen && <div className="mt-2">
                         <p className="text-xs text-slate-500 mb-4">Students on this list are the only ones who can open your tasks. Their name and group here are the official ones for grades, rankings and diplomas. With no list, the app works as before. <b>This list is shared with your Spanish version (Audiciones Comentadas)</b>: changes here also apply there.</p>
                         <div className="flex flex-wrap items-center gap-3 mb-3">
                             <label className="px-4 py-2 rounded-xl text-sm font-bold text-white bg-indigo-600 hover:bg-indigo-700 cursor-pointer">📂 Upload Plumier file (.xls / .xlsx)<input type="file" accept=".xls,.xlsx" className="hidden" onChange={e => { onFile(e.target.files[0]); e.target.value = ''; }} /></label>
-                            <span className="text-[11px] text-slate-500 flex-1 min-w-[220px]">Only the name, surnames, official email and group are read, on your computer. Phones, birth dates and personal emails are ignored. Upload one file per group.</span>
+                            <span className="text-xs text-slate-500 flex-1 min-w-[220px]">Only the name, surnames, official email and group are read, on your computer. Phones, birth dates and personal emails are ignored. Upload one file per group.</span>
                         </div>
-                        <p className="text-[11px] text-slate-500 mb-1">Or paste the rows here:</p>
+                        <p className="text-xs text-slate-500 mb-1">Or paste the rows here:</p>
                         <textarea value={paste} onChange={e => setPaste(e.target.value)} rows={4} placeholder={"Paste your list here (from Excel or Plumier). Any column order works.\n7433740\tPérez García, Juan\t2º ESO B\n7452010@alu.murciaeduca.es  Ana Ruiz López  2º ESO B"} className="w-full px-3 py-2 bg-slate-50 border rounded-xl text-xs font-mono outline-none focus:border-indigo-500" />
                         <div className="flex flex-wrap items-center gap-2 mt-2">
                             <input type="text" value={defGroup} onChange={e => setDefGroup(e.target.value)} placeholder="Group for rows without one (e.g. 2º ESO B)" className={`${sel} flex-1 min-w-[220px]`} />
@@ -845,6 +869,7 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
                                 </div>
                             </div>
                         )}
+                        </div>}
                     </div>
 
                     <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
@@ -890,25 +915,43 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
                             <p className="text-xs text-slate-500 mb-2">{groupStudents.length - pending.length} of {groupStudents.length} submitted · {pending.length} pending</p>
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-1 max-h-72 overflow-y-auto">
                                 {groupStudents.map(r => { const s = done.get(r.email.toLowerCase()); return (
-                                    <div key={r.email} className={`flex justify-between gap-2 text-sm px-3 py-1.5 rounded-lg ${s ? 'bg-emerald-50 text-emerald-800' : 'bg-amber-50 text-amber-900'}`}>
-                                        <span className="truncate">{s ? '✓' : '⏳'} {r.name}</span><span className="font-bold shrink-0">{s ? Number(s.score).toFixed(1) : 'pending'}</span>
+                                    <div key={r.email} className={`flex items-center justify-between gap-2 text-sm px-3 py-1.5 rounded-lg ${s ? 'bg-emerald-50 text-emerald-800' : 'bg-amber-50 text-amber-900'}`}>
+                                        <span className="truncate">{s ? '✓' : '⏳'} {r.name}</span>{s ? <span className="font-bold shrink-0">{s.details && s.details.paper ? '📄 ' : ''}{Number(s.score).toFixed(1)}</span> : <button onClick={() => openPaper(r)} title="Enter the result of a paper worksheet" className="shrink-0 px-2.5 py-1 rounded-lg text-xs font-bold bg-white border border-amber-300 text-amber-900 hover:bg-amber-100">✍ Paper</button>}
                                     </div>); })}
                             </div>
                             {pending.length > 0 && <button onClick={copyPending} className="mt-3 px-3 py-2 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 rounded-xl text-xs font-bold">Copy pending names</button>}
                         </div>
                     )}
 
+                    {paper && (
+                        <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm flex items-center justify-center p-4 z-50">
+                            <div className="bg-white rounded-2xl max-w-md w-full p-6 shadow-xl space-y-4">
+                                <div><h3 className="text-lg font-bold text-slate-900">✍ Paper submission</h3><p className="text-sm text-slate-600">{paper.r.name} · {paper.r.class}</p><p className="text-xs text-slate-400">{audObj ? audObj.title : ''}</p></div>
+                                <p className="text-xs text-slate-500">Tap each word: once = correct, twice = correct with hint (0.5), three times = wrong.</p>
+                                <div className="grid grid-cols-2 gap-2">{paperWords.map((w, i) => { const stt = paper.states[i]; const cls = stt === 1 ? 'bg-emerald-100 border-emerald-400 text-emerald-900' : stt === 2 ? 'bg-amber-100 border-amber-400 text-amber-900' : 'bg-rose-50 border-rose-200 text-rose-800'; return <button key={i} onClick={() => cyclePaper(i)} className={`flex items-center justify-between gap-2 px-3 py-2.5 rounded-xl border-2 text-sm font-bold ${cls}`}><span className="truncate">{i + 1}. {w}</span><span className="shrink-0">{stt === 1 ? '✓' : stt === 2 ? '✓ hint' : '✗'}</span></button>; })}</div>
+                                <div className="flex items-center justify-between gap-3">
+                                    <label className="text-xs font-bold text-slate-500">Date <input type="date" value={paper.date} onChange={e => setPaper(p => ({ ...p, date: e.target.value }))} className="ml-2 px-2 py-1 border rounded-lg text-sm" /></label>
+                                    <span className="text-2xl font-black text-indigo-600">{pScore.toFixed(1)} / 10</span>
+                                </div>
+                                <div className="flex flex-wrap justify-end gap-2">
+                                    <button onClick={() => setPaper(null)} className="px-4 py-2 rounded-xl text-sm font-bold text-slate-600 bg-slate-100">Cancel</button>
+                                    <button onClick={() => savePaper(false)} disabled={paper.busy} className="px-4 py-2 rounded-xl text-sm font-bold text-white bg-indigo-600 disabled:opacity-50">Save</button>
+                                    {pending.some(x => x.email !== paper.r.email) && <button onClick={() => savePaper(true)} disabled={paper.busy} className="px-4 py-2 rounded-xl text-sm font-bold text-indigo-700 bg-indigo-50 border border-indigo-200 disabled:opacity-50">Save and next pending</button>}
+                                </div>
+                            </div>
+                        </div>
+                    )}
                     {edit && (
                         <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm flex items-center justify-center p-4 z-50">
                             <div className="bg-white rounded-2xl max-w-md w-full p-6 shadow-xl space-y-3">
                                 <h3 className="text-lg font-bold text-slate-900">✏️ Edit student</h3>
                                 <div className="grid grid-cols-3 gap-2">
-                                    <div><label className="block text-[11px] font-bold uppercase text-slate-500 mb-1">First name</label><input type="text" value={edit.first_name} onChange={e => setEdit(v => ({ ...v, first_name: e.target.value }))} className={`${sel} w-full`} /></div>
-                                    <div><label className="block text-[11px] font-bold uppercase text-slate-500 mb-1">Surname 1</label><input type="text" value={edit.last_name1} onChange={e => setEdit(v => ({ ...v, last_name1: e.target.value }))} className={`${sel} w-full`} /></div>
-                                    <div><label className="block text-[11px] font-bold uppercase text-slate-500 mb-1">Surname 2</label><input type="text" value={edit.last_name2} onChange={e => setEdit(v => ({ ...v, last_name2: e.target.value }))} className={`${sel} w-full`} /></div>
+                                    <div><label className="block text-xs font-bold uppercase text-slate-500 mb-1">First name</label><input type="text" value={edit.first_name} onChange={e => setEdit(v => ({ ...v, first_name: e.target.value }))} className={`${sel} w-full`} /></div>
+                                    <div><label className="block text-xs font-bold uppercase text-slate-500 mb-1">Surname 1</label><input type="text" value={edit.last_name1} onChange={e => setEdit(v => ({ ...v, last_name1: e.target.value }))} className={`${sel} w-full`} /></div>
+                                    <div><label className="block text-xs font-bold uppercase text-slate-500 mb-1">Surname 2</label><input type="text" value={edit.last_name2} onChange={e => setEdit(v => ({ ...v, last_name2: e.target.value }))} className={`${sel} w-full`} /></div>
                                 </div>
-                                <div><label className="block text-[11px] font-bold uppercase text-slate-500 mb-1">Email</label><input type="email" value={edit.email} onChange={e => setEdit(v => ({ ...v, email: e.target.value }))} className={`${sel} w-full`} /></div>
-                                <div><label className="block text-[11px] font-bold uppercase text-slate-500 mb-1">Group</label><input type="text" value={edit.class} onChange={e => setEdit(v => ({ ...v, class: e.target.value }))} className={`${sel} w-full`} /></div>
+                                <div><label className="block text-xs font-bold uppercase text-slate-500 mb-1">Email</label><input type="email" value={edit.email} onChange={e => setEdit(v => ({ ...v, email: e.target.value }))} className={`${sel} w-full`} /></div>
+                                <div><label className="block text-xs font-bold uppercase text-slate-500 mb-1">Group</label><input type="text" value={edit.class} onChange={e => setEdit(v => ({ ...v, class: e.target.value }))} className={`${sel} w-full`} /></div>
                                 <div className="flex justify-end gap-2 pt-2">
                                     <button onClick={() => setEdit(null)} className="px-4 py-2 rounded-xl text-sm font-bold text-slate-600 bg-slate-100">Cancel</button>
                                     <button onClick={async () => { const fn = niceName(edit.first_name), l1 = niceName(edit.last_name1), l2 = niceName(edit.last_name2); const ok = await onUpdate(edit.old, { name: [fn, l1, l2].filter(Boolean).join(' '), first_name: fn, last_name1: l1, last_name2: l2, email: edit.email.trim().toLowerCase(), class: cleanClass(edit.class) }); if (ok !== false) setEdit(null); }} disabled={!SCHOOL_EMAIL_RE.test(edit.email.trim()) || (edit.first_name + edit.last_name1).trim().length < 3 || !edit.class.trim()} className="px-4 py-2 rounded-xl text-sm font-bold text-white bg-indigo-600 disabled:opacity-50">Save</button>
@@ -931,7 +974,7 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
         const StatCard = ({ title, children, sub }) => (
             <div className="bg-slate-50 border border-slate-200 rounded-2xl p-4">
                 <h3 className="text-sm font-bold text-slate-900">{title}</h3>
-                {sub && <p className="text-[11px] text-slate-500 mb-1">{sub}</p>}
+                {sub && <p className="text-xs text-slate-500 mb-1">{sub}</p>}
                 <div className="mt-3 space-y-2">{children}</div>
             </div>
         );
@@ -1038,8 +1081,10 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
             const bestAud = diff.filter(d => d.n >= 5).sort((a, b) => b.avg - a.avg)[0];
             const streaks = Object.values(groupBy(scores, studentKey)).map(arr => { const o = [...arr].sort((a, b) => String(a.created_at).localeCompare(String(b.created_at))); let best = 0, run = 0; o.forEach(s => { run = Number(s.score) >= 10 ? run + 1 : 0; if (run > best) best = run; }); return { s: arr[0], best }; }).sort((a, b) => b.best - a.best)[0];
             const tensBy = groups.map(g => ({ g, k: scores.filter(s => s.student_class === g && Number(s.score) >= 10).length })).sort((a, b) => b.k - a.k)[0];
-            const rankRows = buildRanking(scores.filter(s => !rg || s.student_class === rg), '', '');
-            const th = "py-2 px-2 text-left text-[11px] uppercase text-slate-400 font-bold";
+            const rankPool = scores.filter(s => !rg || s.student_class === rg);
+            const rankRows = eligibleRankAll(rankPool);
+            const notRanked = Math.max(0, buildRanking(rankPool, '', '').length - rankRows.length);
+            const th = "py-2 px-2 text-left text-xs uppercase text-slate-400 font-bold";
             const dCell = (d) => d === null ? <span className="text-slate-300">–</span> : <span className={`font-bold ${d > 0.04 ? 'text-emerald-600' : d < -0.04 ? 'text-rose-600' : 'text-slate-400'}`}>{d > 0 ? '+' : ''}{f1(d)}</span>;
             return (
                 <div className="space-y-4">
@@ -1048,7 +1093,7 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
                         {hiddenKeys.size > 0 && <button onClick={() => setReveal(v => !v)} className="px-3 py-1.5 rounded-lg text-xs font-bold bg-slate-100 hover:bg-slate-200 text-slate-700">{reveal ? '🙈 Hide anonymous names' : '👁 Show real names'}</button>}
                     </div>
                     <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
-                        {cards.map(([l, v, g]) => <div key={l} className={`rounded-2xl p-4 text-white bg-gradient-to-br ${g}`}><p className="text-[10px] font-bold uppercase opacity-80">{l}</p><p className="text-2xl font-black mt-1">{v}</p></div>)}
+                        {cards.map(([l, v, g]) => <div key={l} className={`rounded-2xl p-4 text-white bg-gradient-to-br ${g}`}><p className="text-xs font-bold uppercase opacity-80">{l}</p><p className="text-2xl font-black mt-1">{v}</p></div>)}
                     </div>
                     <Section title="Our journey" icon="📈"><JourneyChart labels={audsOrd.map(a => a.title)} series={series} /></Section>
                     <Section title="Group comparison" icon="🏆">
@@ -1065,23 +1110,24 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
                     </Section>
                     <Section title="Difficulty of the auditions" icon="🎧" open={false}>
                         <div className="space-y-2">{diff.map(d => <div key={d.id} className="flex items-center gap-3 text-sm"><span className="w-44 sm:w-56 truncate font-semibold">{d.title}</span><div className="flex-1 h-2.5 rounded-full bg-slate-100 overflow-hidden"><div className={`h-full rounded-full ${d.avg >= 8 ? 'bg-emerald-500' : d.avg >= 5 ? 'bg-amber-400' : 'bg-rose-500'}`} style={{ width: `${d.avg * 10}%` }}></div></div><span className="w-10 text-right font-black">{f1(d.avg)}</span><span className="w-28 text-right text-xs text-slate-500">hints {d.hints} % · n={d.n}</span></div>)}</div>
-                        <p className="text-[11px] text-slate-400 mt-2">Sorted from hardest to easiest. “Hints” is the share of words answered using the hint.</p>
+                        <p className="text-xs text-slate-400 mt-2">Sorted from hardest to easiest. “Hints” is the share of words answered using the hint.</p>
                     </Section>
                     <Section title="Mark distribution by group" icon="🧮" open={false}>
                         <div className="space-y-2">{dist.map(d => <div key={d.g} className="flex items-center gap-3 text-sm"><span className="w-20 font-bold">{d.g}</span><div className="flex-1 flex h-4 rounded-full overflow-hidden bg-slate-100">{d.c.map((k, i) => k ? <div key={i} className={BK[i][1]} style={{ width: `${k / d.t * 100}%` }} title={`${BK[i][0]}: ${k}`}></div> : null)}</div><span className="w-10 text-xs text-slate-500 text-right">{d.t}</span></div>)}</div>
-                        <div className="flex flex-wrap gap-3 mt-3 text-[11px] text-slate-600">{BK.map(([l, c]) => <span key={l} className="flex items-center gap-1"><span className={`w-3 h-3 rounded ${c}`}></span>{l}</span>)}</div>
+                        <div className="flex flex-wrap gap-3 mt-3 text-xs text-slate-600">{BK.map(([l, c]) => <span key={l} className="flex items-center gap-1"><span className={`w-3 h-3 rounded ${c}`}></span>{l}</span>)}</div>
                     </Section>
                     <Section title="Records" icon="🏅" open={false}>
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-                            <div className="rounded-xl bg-amber-50 border border-amber-200 p-3"><p className="text-[11px] font-bold uppercase text-amber-700">Best audition</p><p className="font-black text-slate-900">{bestAud ? bestAud.title : '—'}</p><p className="text-sm text-slate-600">{bestAud ? `average ${f1(bestAud.avg)} · ${pl(bestAud.n, 'submission', 'submissions')}` : 'needs at least 5 submissions'}</p></div>
-                            <div className="rounded-xl bg-emerald-50 border border-emerald-200 p-3"><p className="text-[11px] font-bold uppercase text-emerald-700">Longest streak of 10s</p><p className="font-black text-slate-900">{streaks && streaks.best > 1 ? dn(streaks.s) : '—'}</p><p className="text-sm text-slate-600">{streaks && streaks.best > 1 ? `${streaks.best} perfect scores in a row` : 'no streaks yet'}</p></div>
-                            <div className="rounded-xl bg-indigo-50 border border-indigo-200 p-3"><p className="text-[11px] font-bold uppercase text-indigo-700">Group with most 10s</p><p className="font-black text-slate-900">{tensBy && tensBy.k ? tensBy.g : '—'}</p><p className="text-sm text-slate-600">{tensBy && tensBy.k ? pl(tensBy.k, 'perfect score', 'perfect scores') : 'no 10s yet'}</p></div>
+                            <div className="rounded-xl bg-amber-50 border border-amber-200 p-3"><p className="text-xs font-bold uppercase text-amber-700">Best audition</p><p className="font-black text-slate-900">{bestAud ? bestAud.title : '—'}</p><p className="text-sm text-slate-600">{bestAud ? `average ${f1(bestAud.avg)} · ${pl(bestAud.n, 'submission', 'submissions')}` : 'needs at least 5 submissions'}</p></div>
+                            <div className="rounded-xl bg-emerald-50 border border-emerald-200 p-3"><p className="text-xs font-bold uppercase text-emerald-700">Longest streak of 10s</p><p className="font-black text-slate-900">{streaks && streaks.best > 1 ? dn(streaks.s) : '—'}</p><p className="text-sm text-slate-600">{streaks && streaks.best > 1 ? `${streaks.best} perfect scores in a row` : 'no streaks yet'}</p></div>
+                            <div className="rounded-xl bg-indigo-50 border border-indigo-200 p-3"><p className="text-xs font-bold uppercase text-indigo-700">Group with most 10s</p><p className="font-black text-slate-900">{tensBy && tensBy.k ? tensBy.g : '—'}</p><p className="text-sm text-slate-600">{tensBy && tensBy.k ? pl(tensBy.k, 'perfect score', 'perfect scores') : 'no 10s yet'}</p></div>
                         </div>
                     </Section>
                     <Section title="Rankings" icon="🥇" open={false}>
                         <div className="flex flex-wrap items-center gap-2 mb-3">
                             <select value={rg} onChange={e => setRg(e.target.value)} className="px-3 py-2 bg-slate-50 border rounded-xl text-sm font-medium outline-none"><option value="">All students</option>{groups.map(g => <option key={g} value={g}>{g}</option>)}</select>
                             <button onClick={() => setAllRank(v => !v)} className="px-3 py-2 rounded-xl text-xs font-bold bg-slate-100 hover:bg-slate-200 text-slate-700">{allRank ? 'Show top 10' : `Show all (${rankRows.length})`}</button>
+                            {notRanked > 0 && <span className="text-xs text-slate-500">{pl(notRanked, 'student', 'students')} not ranked yet (pending auditions)</span>}
                         </div>
                         <div className="space-y-1.5 max-h-[28rem] overflow-y-auto pr-1">{(allRank ? rankRows : rankRows.slice(0, 10)).map((x, i) => <div key={studentKey(x.s)} className="flex items-center gap-3 text-sm px-3 py-1.5 rounded-lg bg-slate-50"><span className="w-7 font-black text-slate-400">{i + 1}</span><span className="flex-1 min-w-0 truncate font-semibold">{dn(x.s)} <span className="text-xs text-slate-400 font-normal">· {x.s.student_class}</span></span><span className="text-xs text-slate-400">{x.n} sub.</span><span className="font-black w-10 text-right">{f1(x.value)}</span></div>)}</div>
                     </Section>
@@ -1156,7 +1202,7 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
         const GradesDashboard = ({ scores: rawScores, auditions, lang, onView, onDelete, onDeleteAll, onEdit, projectNonce, onProjectHandled, roster, edLabel, onBackup, onDiploma, onBackupTasks, onBackupRoster, onDeleteGrades, onClearRoster }) => {
             const T = GRADES_TEXT[lang];
             const [fYear, setFYear] = React.useState(currentSchoolYear());
-            const [fTerm, setFTerm] = React.useState(String(currentTerm()));   // '' = todo el curso
+            const [fTerm, setFTerm] = React.useState('');   // '' = todo el curso
             const [gtab, setGtab] = React.useState('table');
             const scoresAll0 = React.useMemo(() => rawScores.map(s => ({ ...s, student_class: cleanClass(s.student_class) })), [rawScores]);
             const years = React.useMemo(() => [...new Set([currentSchoolYear(), ...scoresAll0.map(s => schoolYearOf(s.created_at))])].sort().reverse(), [scoresAll0]);
@@ -1173,7 +1219,6 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
             const [fTo, setFTo] = React.useState('');
             const [sort, setSort] = React.useState({ key: 'date', dir: -1 });
             const hide = false;
-            const [showStats, setShowStats] = React.useState(true);
             const [profile, setProfile] = React.useState(null);
             const [rankAll, setRankAll] = React.useState(false);
             const [pjSetup, setPjSetup] = React.useState(null);   // { group, aud } mientras se elige
@@ -1218,7 +1263,7 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
             const [showAll, setShowAll] = React.useState(false);
             const [filtersOpen, setFiltersOpen] = React.useState(false);
             const showTable = showAll || !!(fGroup || q.trim() || fAud || fCourse || fBand);
-            const activeFilters = (fAud ? 1 : 0) + (fCourse ? 1 : 0) + (fBand ? 1 : 0) + ((fYear !== currentSchoolYear() || fTerm !== String(currentTerm())) ? 1 : 0);
+            const activeFilters = (fAud ? 1 : 0) + (fCourse ? 1 : 0) + (fBand ? 1 : 0) + ((fYear !== currentSchoolYear() || fTerm !== '') ? 1 : 0);
             const termLabel = fTerm === '' ? (lang === 'es' ? 'Todo el curso' : 'Whole course') : (lang === 'es' ? `${fTerm}.ª evaluación` : ({ '1': '1st', '2': '2nd', '3': '3rd' })[fTerm] + ' term');
             const chip = (on) => `px-3 py-1.5 rounded-full text-xs font-bold border transition-all ${on ? 'bg-indigo-600 text-white border-indigo-600' : 'bg-white text-slate-600 border-slate-200 hover:border-indigo-300'}`;
             const idsFor = (years, group) => scoresAll0.filter(s => years.includes(schoolYearOf(s.created_at)) && (!group || s.student_class === group)).map(s => s.id);
@@ -1251,40 +1296,6 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
                 return [...filtered].sort((a, b) => { const x = get(a), y = get(b); return (x < y ? -1 : x > y ? 1 : 0) * sort.dir; });
             }, [filtered, sort]);
 
-            const st = React.useMemo(() => {
-                if (!filteredC.length) return null;
-                const n = filteredC.length;
-                const res = {
-                    avg: avgOf(filteredC), n,
-                    pass: Math.round(filteredC.filter(s => Number(s.score) >= 5).length / n * 100),
-                    top: filteredC.filter(s => Number(s.score) >= 9).length,
-                    tens: filteredC.filter(s => Number(s.score) >= 10).length,
-                    hints: Math.round(filteredC.filter(s => (s.details?.words || []).some(w => w.usedHint)).length / n * 100)
-                };
-                res.league = Object.entries(groupBy(filteredC, s => s.student_class)).map(([g, arr]) => ({ g, avg: avgOf(arr), n: arr.length })).sort((a, b) => b.avg - a.avg);
-                const studs = aggregateStudents(filteredC);
-                const cmp = compareAvg(auditionOrder(filteredC));
-                res.king = [...studs].filter(x => x.tens > 0).sort((a, b) => b.tens - a.tens || cmp(a, b)).slice(0, 10);
-                const pool = studs.some(x => x.n >= 2) ? studs.filter(x => x.n >= 2) : studs;
-                res.bestAvg = [...pool].sort(cmp).slice(0, 10);
-                const asc = [...studs].sort((a, b) => a.avg - b.avg || byName(a, b));
-                res.pushBelow = asc.some(x => x.avg < 5);
-                res.push = studs.length > 1 ? (res.pushBelow ? asc.filter(x => x.avg < 5) : asc.slice(0, 5)) : [];
-                const audStats = Object.entries(groupBy(filteredC, s => s.audition_id)).map(([id, arr]) => ({ title: arr[0].auditions?.title || id, avg: avgOf(arr), n: arr.length })).sort((a, b) => b.avg - a.avg);
-                res.auds = audStats;
-                res.styles = Object.entries(groupBy(filteredC, s => styleByCode[s.audition_id] || s.taskDetails?.style || 'classical'))
-                    .map(([k, arr]) => ({ theme: getMusicTheme(k), avg: avgOf(arr), n: arr.length })).sort((a, b) => b.avg - a.avg);
-                const wordMap = {};
-                filteredC.forEach(s => (s.details?.words || []).forEach(w => {
-                    const k = String(w.original || '').trim().toUpperCase(); if (!k) return;
-                    const e = (wordMap[k] = wordMap[k] || { w: k, tries: 0, fails: 0 }); e.tries++; if (!w.correct) e.fails++;
-                }));
-                res.words = Object.values(wordMap).filter(e => e.fails > 0).map(e => ({ ...e, rate: e.fails / e.tries }))
-                    .sort((a, b) => b.rate - a.rate || b.fails - a.fails).slice(0, 10);
-                res.dist = Array.from({ length: 11 }, (_, i) => filteredC.filter(s => Math.min(10, Math.floor(Number(s.score || 0))) === i).length);
-                res.months = Object.entries(groupBy(filteredC, s => String(s.created_at || '').slice(0, 7))).map(([m, arr]) => ({ m, avg: avgOf(arr), n: arr.length })).sort((a, b) => a.m.localeCompare(b.m));
-                return res;
-            }, [filteredC, styleByCode]);
 
             const ranking = React.useMemo(() => buildRanking(scores, fGroup, fAud), [scores, fGroup, fAud]);
             const topAll = React.useMemo(() => buildRanking(scores, '', fAud).slice(0, 10), [scores, fAud]);
@@ -1305,7 +1316,7 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
                 <ol className="space-y-1.5">
                     {list.map((x, i) => (
                         <li key={studentKey(x.s) + i} className="flex items-center gap-2 text-sm">
-                            <span className={`w-6 h-6 shrink-0 rounded-full flex items-center justify-center text-[11px] font-black ${i === 0 ? 'bg-amber-400 text-white' : i === 1 ? 'bg-slate-300 text-slate-800' : i === 2 ? 'bg-orange-300 text-white' : 'bg-slate-100 text-slate-600'}`}>{i + 1}</span>
+                            <span className={`w-6 h-6 shrink-0 rounded-full flex items-center justify-center text-xs font-black ${i === 0 ? 'bg-amber-400 text-white' : i === 1 ? 'bg-slate-300 text-slate-800' : i === 2 ? 'bg-orange-300 text-white' : 'bg-slate-100 text-slate-600'}`}>{i + 1}</span>
                             <button onClick={() => setProfile(studentKey(x.s))} className="flex-1 min-w-0 text-left truncate font-semibold text-slate-800 hover:underline">{nameOf(x.s)} <span className="font-normal text-slate-500 text-xs">· {x.s.student_class}</span></button>
                             <span className="text-xs font-bold text-slate-700">{valueFmt(x)}</span>
                         </li>
@@ -1335,8 +1346,9 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
                 if (!pj) return null;
                 const inGroup = scores.filter(s => s.student_class === pj.group);
                 const audRank = buildRanking(inGroup, '', pj.aud);
-                const courseRank = buildRanking(inGroup, '', '');
-                const prevRank = buildRanking(inGroup.filter(s => s.audition_id !== pj.aud), '', '');
+                const courseRank = eligibleRank(inGroup);
+                const pendingN = Math.max(0, buildRanking(inGroup, '', '').length - courseRank.length);
+                const prevRank = eligibleRank(inGroup.filter(s => s.audition_id !== pj.aud));
                 const prevPos = Object.fromEntries(prevRank.map((x, i) => [studentKey(x.s), i]));
                 const moves = Object.fromEntries(courseRank.map((x, i) => {
                     const k = studentKey(x.s), before = prevPos[k];
@@ -1384,7 +1396,7 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
                 const withD = league.filter(x => x.delta !== null);
                 const groupUp = [...withD].sort((a, b) => b.delta - a.delta)[0], groupDown = [...withD].sort((a, b) => a.delta - b.delta)[0];
                 const audTitle = (auds.find(([id]) => id === pj.aud) || [])[1] || '';
-                return { audRank, courseRank, moves, noPrev: prevRank.length === 0, totalAud, king, improve, badDay, audWords, wordsEasy, wordsHard, audList, league, leagueLast: [...league].sort((a, b) => b.last - a.last), groupUp, groupDown, audTitle };
+                return { audRank, courseRank, pendingN, moves, noPrev: prevRank.length === 0, totalAud, king, improve, badDay, audWords, wordsEasy, wordsHard, audList, league, leagueLast: [...league].sort((a, b) => b.last - a.last), groupUp, groupDown, audTitle };
             }, [pj, scores, groups, auds, auditions, roster]);
             const pjPodiumScreen = pjScreen === 0 || pjScreen === 1;
             const pjMaxReveal = pjData ? Math.min(3, (pjScreen === 0 ? pjData.audRank : pjData.courseRank).length) : 0;
@@ -1490,7 +1502,7 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
                             <select value={fAud} onChange={e => setFAud(e.target.value)} className={`${sel} text-sm font-bold py-2.5`}><option value="">{T.allAvg}</option>{auds.map(([id, t]) => <option key={id} value={id}>{t}</option>)}</select>
                             <select value={fCourse} onChange={e => setFCourse(e.target.value)} className={sel}><option value="">{T.allCourses}</option>{courses.map(c => <option key={c} value={c}>{c}</option>)}</select>
                             <select value={fBand} onChange={e => setFBand(e.target.value)} className={sel}><option value="">{T.allBands}</option>{Object.entries(T.bands).map(([k, v]) => <option key={k} value={k}>{v}</option>)}</select>
-                            <button onClick={() => { resetFilters(); setFYear(currentSchoolYear()); setFTerm(String(currentTerm())); }} className="text-xs font-bold text-indigo-700 hover:underline text-left px-2">✕ {T.reset}</button>
+                            <button onClick={() => { resetFilters(); setFYear(currentSchoolYear()); setFTerm(''); }} className="text-xs font-bold text-indigo-700 hover:underline text-left px-2">✕ {T.reset}</button>
                         </div>
                     )}
 
@@ -1510,7 +1522,7 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
                                                     <div className="flex items-start justify-between gap-2"><span className="text-xl font-black text-slate-900">{c.g}</span><span className="text-2xl font-black text-indigo-600">{fmt(c.avg)}</span></div>
                                                     <p className="text-xs text-slate-500 mt-1">{pl(c.N, 'student', 'students')} · {pl(c.n, 'submission', 'submissions')}</p>
                                                     <p className="text-xs text-slate-600 mt-2 truncate">Last: <b>{c.last}</b></p>
-                                                    <div className="flex items-center gap-2 mt-1.5"><div className="flex-1 h-1.5 rounded-full bg-slate-100 overflow-hidden"><div className="h-full rounded-full bg-emerald-500" style={{ width: `${c.N ? Math.min(100, c.nLast / c.N * 100) : 0}%` }}></div></div><span className="text-[11px] font-bold text-slate-500">{c.nLast}/{c.N}</span></div>
+                                                    <div className="flex items-center gap-2 mt-1.5"><div className="flex-1 h-1.5 rounded-full bg-slate-100 overflow-hidden"><div className="h-full rounded-full bg-emerald-500" style={{ width: `${c.N ? Math.min(100, c.nLast / c.N * 100) : 0}%` }}></div></div><span className="text-xs font-bold text-slate-500">{c.nLast}/{c.N}</span></div>
                                                 </button>))}
                                         </div>
                                         <button onClick={() => setShowAll(true)} className="mt-4 text-xs font-bold text-indigo-700 hover:underline">Show all entries ({filtered.length})</button>
@@ -1528,9 +1540,9 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
                                 <tbody>
                                     {sorted.map(s => (
                                         <tr key={s.id} className="border-b border-slate-100 hover:bg-slate-50/30 transition-colors">
-                                            <td className="py-3.5 px-4">{s.__out && <span title="Email not on the class list: not counted in statistics" className="mr-1">⚠️</span>}<button onClick={() => setProfile(studentKey(s))} className="font-bold text-slate-950 hover:underline text-left">{nameOf(s)}</button><p className="text-xs text-slate-400">{hide ? '' : (s.student_email || T.noEmail)}</p></td>
+                                            <td className="py-3.5 px-4">{s.__out && <span title="Email not on the class list: not counted in statistics" className="mr-1">⚠️</span>}{s.details && s.details.paper && <span title="Paper submission" className="mr-1">📄</span>}<button onClick={() => setProfile(studentKey(s))} className="font-bold text-slate-950 hover:underline text-left">{nameOf(s)}</button><p className="text-xs text-slate-400">{hide ? '' : (s.student_email || T.noEmail)}</p></td>
                                             <td className="py-3.5 px-4 font-mono text-xs">{s.student_class}</td>
-                                            <td className="py-3.5 px-4 text-slate-600 font-medium">{s.auditions?.title}{edLabel && edLabel(s) ? <span className="ml-1.5 text-[10px] font-black px-1.5 py-0.5 rounded bg-amber-100 text-amber-800" title="Version of the words used">{edLabel(s)}</span> : null}</td>
+                                            <td className="py-3.5 px-4 text-slate-600 font-medium"><span className="inline-block w-2.5 h-2.5 rounded-full mr-2 align-middle" style={{ backgroundColor: getMusicTheme(styleByCode[s.audition_id] || s.auditions?.style).colors.accent }} title={getMusicTheme(styleByCode[s.audition_id] || s.auditions?.style).label}></span>{s.auditions?.title}{edLabel && edLabel(s) ? <span className="ml-1.5 text-xs font-black px-1.5 py-0.5 rounded bg-amber-100 text-amber-800" title="Version of the words used">{edLabel(s)}</span> : null}</td>
                                             <td className="py-3.5 px-4 text-center"><span className={`inline-block font-extrabold text-xs px-2.5 py-1 rounded-full ${scoreClass(s.score)}`}>{fmt(s.score)}/10</span></td>
                                             <td className="py-3.5 px-4 text-xs text-slate-500 whitespace-nowrap">{dateLabel(s.created_at)}</td>
                                             <td className="py-3.5 px-4 text-right space-x-1 whitespace-nowrap">
@@ -1650,7 +1662,7 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
                                 </div>
                                 <div key={pjScreen} className="max-w-7xl mx-auto px-6 md:px-14 pb-12 flex flex-col justify-center" style={{ minHeight: 'calc(100vh - 100px)' }}>
                                     {pjScreen === 0 && (pjData.audRank.length ? <><Podium list={pjData.audRank} />{pjReveal >= pjMaxReveal && <p className="text-center mt-5 text-sm font-semibold" style={{ opacity: .6 }}>{P.tieNote}</p>}</> : <p className="text-center mt-20 text-2xl">{P.none}</p>)}
-                                    {pjScreen === 1 && (pjData.courseRank.length ? <Podium list={pjData.courseRank} showN /> : <p className="text-center mt-20 text-2xl">{P.none}</p>)}
+                                    {pjScreen === 1 && (pjData.courseRank.length ? <><Podium list={pjData.courseRank} showN />{pjData.pendingN > 0 && <p className="text-center mt-4 text-sm font-semibold" style={{ opacity: .65 }}>{lang === 'es' ? `${pjData.pendingN} sin clasificar: les faltan audiciones por hacer.` : `${pjData.pendingN} not ranked yet: they still have auditions to catch up on.`}</p>}</> : <p className="text-center mt-20 text-2xl">{P.none}</p>)}
                                     {pjScreen === 2 && (() => {
                                         const HofCol = ({ title, sub2, color, children }) => (
                                             <div className="rounded-3xl px-6 py-5" style={{ ...card, border: `3px solid ${color}` }}>
@@ -1732,7 +1744,7 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
                                                             <div key={x.g} className="pr-pop flex items-center gap-3" style={{ animationDelay: `${0.3 + i * 0.2}s` }}>
                                                                 <span className="w-10 text-2xl text-center font-black shrink-0">{['🥇', '🥈', '🥉'][i] || `${i + 1}.º`}</span>
                                                                 <span className="w-24 shrink-0"><span className="block text-xl font-black leading-tight" style={{ color: x.g === pj.group ? gold : '#FFFFFF' }}>{x.g}</span>
-                                                                    <span className="block text-[11px]" style={{ opacity: .65 }}>{key === 'avg' ? P.entregas(x.n) : (x.rosterN ? `${x.nLast}/${x.rosterN} ${P.participation}` : P.entregas(x.nLast))}</span></span>
+                                                                    <span className="block text-xs" style={{ opacity: .65 }}>{key === 'avg' ? P.entregas(x.n) : (x.rosterN ? `${x.nLast}/${x.rosterN} ${P.participation}` : P.entregas(x.nLast))}</span></span>
                                                                 <div className="flex-1 h-5 rounded-full overflow-hidden" style={{ background: 'rgba(255,255,255,.12)' }}><div className="h-full rounded-full" style={{ width: `${(x[key] / 10) * 100}%`, background: col }}></div></div>
                                                                 <span className="w-14 text-right text-xl font-black shrink-0">{fmt(x[key])}</span>
                                                             </div>))}</div>
@@ -1757,13 +1769,13 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
                         <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm flex items-center justify-center p-4 z-50">
                             <div className="bg-white rounded-2xl max-w-md w-full p-6 shadow-xl space-y-4">
                                 <h3 className="text-lg font-bold text-slate-900">✏️ {T.editTitle}</h3>
-                                <div><label className="block text-[11px] font-bold uppercase text-slate-500 mb-1">Email</label><input type="email" value={editing.email} onChange={e => setEditing(v => ({ ...v, email: e.target.value }))} className="w-full px-3 py-2 bg-slate-50 border rounded-xl text-sm outline-none focus:border-indigo-500" /></div>
-                                <div><label className="block text-[11px] font-bold uppercase text-slate-500 mb-1">{T.name}</label>
+                                <div><label className="block text-xs font-bold uppercase text-slate-500 mb-1">Email</label><input type="email" value={editing.email} onChange={e => setEditing(v => ({ ...v, email: e.target.value }))} className="w-full px-3 py-2 bg-slate-50 border rounded-xl text-sm outline-none focus:border-indigo-500" /></div>
+                                <div><label className="block text-xs font-bold uppercase text-slate-500 mb-1">{T.name}</label>
                                     <input type="text" value={editing.name} onChange={e => setEditing(v => ({ ...v, name: e.target.value }))} className="w-full px-3 py-2 bg-slate-50 border rounded-xl text-sm outline-none focus:border-indigo-500" /></div>
-                                <div><label className="block text-[11px] font-bold uppercase text-slate-500 mb-1">{T.group}</label>
+                                <div><label className="block text-xs font-bold uppercase text-slate-500 mb-1">{T.group}</label>
                                     <input type="text" list="grades-groups" value={editing.cls} onChange={e => setEditing(v => ({ ...v, cls: e.target.value }))} className="w-full px-3 py-2 bg-slate-50 border rounded-xl text-sm outline-none focus:border-indigo-500" />
                                     <datalist id="grades-groups">{groups.map(g => <option key={g} value={g} />)}</datalist></div>
-                                <p className="text-[11px] text-slate-500">{T.editNote}</p>
+                                <p className="text-xs text-slate-500">{T.editNote}</p>
                                 <div className="flex justify-end gap-2">
                                     <button onClick={() => setEditing(null)} className="px-4 py-2 rounded-xl text-sm font-bold text-slate-600 bg-slate-100 hover:bg-slate-200">{T.cancel}</button>
                                     <button onClick={saveEdit} disabled={savingEdit || !editing.name.trim() || !editing.cls.trim() || !/^[^@\s]+@[^@\s]+$/.test(editing.email.trim())} className="px-4 py-2 rounded-xl text-sm font-bold text-white bg-indigo-600 hover:bg-indigo-700 disabled:opacity-50">{T.save}</button>
@@ -1776,12 +1788,12 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
                         <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm flex items-center justify-center p-4 z-50" onClick={() => setProfile(null)}>
                             <div className="bg-white rounded-2xl max-w-lg w-full p-6 shadow-xl space-y-4" onClick={e => e.stopPropagation()}>
                                 <div className="flex justify-between items-start gap-3">
-                                    <div><p className="text-[11px] font-bold uppercase text-slate-500">{T.profile}</p><h3 className="text-lg font-bold text-slate-900">{nameOf(profRows[0])}</h3><p className="text-xs text-slate-500">{profRows[0].student_class}{hide ? '' : ` · ${profRows[0].student_email || T.noEmail}`}</p></div>
+                                    <div><p className="text-xs font-bold uppercase text-slate-500">{T.profile}</p><h3 className="text-lg font-bold text-slate-900">{nameOf(profRows[0])}</h3><p className="text-xs text-slate-500">{profRows[0].student_class}{hide ? '' : ` · ${profRows[0].student_email || T.noEmail}`}</p></div>
                                     <button onClick={() => setProfile(null)} className="text-slate-500 hover:text-slate-800 text-sm font-bold">✕</button>
                                 </div>
                                 <div className="grid grid-cols-4 gap-2 text-center">
                                     {[[T.avg, fmt2(avgOf(profRows))], [T.count, profRows.length], [T.best, fmt(Math.max(...profRows.map(r => Number(r.score || 0))))], [T.tens, profRows.filter(r => Number(r.score) >= 10).length]].map(([l, v]) => (
-                                        <div key={l} className="bg-slate-50 border border-slate-200 rounded-xl p-2"><p className="text-[9px] font-bold uppercase text-slate-500">{l}</p><p className="text-lg font-black text-indigo-700">{v}</p></div>
+                                        <div key={l} className="bg-slate-50 border border-slate-200 rounded-xl p-2"><p className="text-xs font-bold uppercase text-slate-500">{l}</p><p className="text-lg font-black text-indigo-700">{v}</p></div>
                                     ))}
                                 </div>
                                 <div className="flex items-end gap-1 h-24 border-b border-slate-200">
@@ -1807,9 +1819,9 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
             classical: { paper: '#101A33', soft: '#27365A', primary: '#F3EBDD', text: '#F3EBDD', accent: '#E2C57E' },
             jazz:      { paper: '#2A1620', soft: '#4A2A3D', primary: '#FBE9D0', text: '#FBF3E8', accent: '#F0B45C' },
             rock:      { paper: '#141414', soft: '#2B2B2B', primary: '#F5F5F5', text: '#F5F5F5', accent: '#FF4650' },
-            pop:       { paper: '#1A1235', soft: '#30265E', primary: '#F5F2FF', text: '#F5F2FF', accent: '#42D6D0' },
+            pop:       { paper: '#2A0F2E', soft: '#4A1B50', primary: '#FDE8F4', text: '#FDE8F4', accent: '#22D3EE' },
             folk:      { paper: '#1E2A1D', soft: '#33452F', primary: '#F0E4CE', text: '#F0E4CE', accent: '#E3A872' },
-            film:      { paper: '#151B33', soft: '#283058', primary: '#F0EDF7', text: '#F0EDF7', accent: '#BBA6EA' }
+            film:      { paper: '#150A30', soft: '#2A1A55', primary: '#EFE9FB', text: '#EFE9FB', accent: '#F5B82E' }
         };
         const getUiTheme = (id, dark) => { const t = getMusicTheme(id); return dark ? { ...t, colors: { ...t.colors, ...(DARK_COLORS[t.id] || {}) } } : t; };
 
@@ -1822,6 +1834,8 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
             const [submitting, setSubmitting] = useState(false);
             const [dashboardTab, setDashboardTab] = useState('create');
             const [projectNonce, setProjectNonce] = useState(0);
+            const [fontScale, setFontScale] = useState(() => { try { return Number(localStorage.getItem('audition_font_scale')) || 100; } catch (e) { return 100; } });
+            useEffect(() => { document.documentElement.style.fontSize = fontScale + '%'; try { localStorage.setItem('audition_font_scale', String(fontScale)); } catch (e) {} }, [fontScale]);
             const [darkMode, setDarkMode] = useState(() => localStorage.getItem('audition_dark_mode') === 'true');
             const [showAwayWarning, setShowAwayWarning] = useState(false);
 
@@ -1833,7 +1847,6 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
             const [authPassword, setAuthPassword] = useState('');
             const [recoveryPassword, setRecoveryPassword] = useState('');
             const [recoveryPasswordConfirm, setRecoveryPasswordConfirm] = useState('');
-            const [authMode, setAuthMode] = useState('signin');
             const [toast, setToast] = useState(null);
             const [confirmModal, setConfirmModal] = useState(null);
                         const [createdTaskModal, setCreatedTaskModal] = useState(null);
@@ -2028,36 +2041,13 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
                     showToast("Enter your email and password.", "error");
                     return;
                 }
-                if (authMode === 'signup' && authPassword.length < 10) {
-                    showToast("Choose a password with at least 10 characters.", "error");
-                    return;
-                }
                 setLoading(true);
                 try {
-                    if (authMode === 'signup') {
-                        const { data, error } = await supabaseClient.auth.signUp({
-                            email: normalizedEmail,
-                            password: authPassword
-                        });
-                        if (error) throw error;
-                        if (data.session) {
-                            setSession(data.session);
-                            setView('dashboard');
-                            showToast("Teacher account created successfully.", "success");
-                        } else {
-                            showToast("Account created. Check your email to confirm it, then sign in.", "success");
-                            setAuthMode('signin');
-                        }
-                    } else {
-                        const { data, error } = await supabaseClient.auth.signInWithPassword({
-                            email: normalizedEmail,
-                            password: authPassword
-                        });
-                        if (error) throw error;
-                        setSession(data.session);
-                        setView('dashboard');
-                        showToast("Signed in successfully.", "success");
-                    }
+                    const { data, error } = await supabaseClient.auth.signInWithPassword({ email: normalizedEmail, password: authPassword });
+                    if (error) throw error;
+                    setSession(data.session);
+                    setView('dashboard');
+                    showToast("Signed in successfully.", "success");
                 } catch (error) {
                     console.error("Teacher authentication error:", error);
                     showToast(error?.message || "Authentication failed. Check your email and password.", "error");
@@ -2119,6 +2109,12 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
                 return w;
             }, [commentText]);
             const activeMusicTheme = getUiTheme(activeTask?.style || 'classical', darkMode);
+            const selTheme = getUiTheme(style, darkMode);
+            const tintTheme = view === 'student-test' && activeTask ? activeMusicTheme : (view === 'results' && finalScoreRecord ? getUiTheme(finalScoreRecord.taskDetails?.style || finalScoreRecord.auditions?.style || 'classical', darkMode) : null);
+            useEffect(() => {
+                document.body.style.backgroundColor = tintTheme ? tintTheme.colors.soft : '';
+                return () => { document.body.style.backgroundColor = ''; };
+            }, [tintTheme && tintTheme.id, darkMode]);
 
             const handleHintChange = (idx, value) => {
                 const newHints = [...taskHints]; newHints[idx] = value; setTaskHints(newHints);
@@ -2309,6 +2305,20 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
                 setScoresList(prev => prev.filter(sc => !gone.has(sc.id)));
                 try { saveStoredScores(getStoredScores().filter(sc => !gone.has(sc.id))); } catch (e) {}
                 showToast(`${ids.length} submission(s) deleted.`, 'success');
+            };
+            const savePaperResult = async (code, email, states, dateStr) => {
+                if (!supabaseClient) return false;
+                try {
+                    const { data, error } = await supabaseClient.rpc('submit_paper', { p_code: code, p_email: email, p_states: states, p_date: dateStr ? new Date(dateStr + 'T12:00:00').toISOString() : null });
+                    if (error) throw error;
+                    setScoresList(prev => [data, ...prev.filter(x => x.id !== data.id)]);
+                    showToast(`Paper submission saved: ${Number(data.score).toFixed(1)}.`, 'success');
+                    return true;
+                } catch (e) {
+                    const m = String(e.message || '');
+                    showToast(/already_submitted/.test(m) ? 'That student already has a submission for this task.' : /not_in_roster/.test(m) ? 'That student is not on your class list.' : 'Could not save: ' + m, 'error');
+                    return false;
+                }
             };
             const clearRoster = async () => {
                 const te = rosterTeacher(); if (!te || !supabaseClient) return;
@@ -2625,7 +2635,7 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
                 words.slice(0, 10).forEach((item, idx) => {
                     const col = idx < 5 ? 0 : 1;
                     const written = String(item.answer || '').trim();
-                    put(written ? written.toUpperCase() : '(NO ANSWER)', col ? 1316 : 1082, rowsY[idx % 5] - 6, 10, {
+                    put(written ? written.toUpperCase() : (record.details && record.details.paper ? '—' : '(NO ANSWER)'), col ? 1316 : 1082, rowsY[idx % 5] - 6, 10, {
                         font: 'Helvetica', style: 'bold', align: 'left', max: 150,
                         color: item.correct ? [21, 128, 61] : [200, 30, 30]
                     });
@@ -2934,6 +2944,7 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
                                         <Icons.Cloud /> Supabase
                                     </a>
                                 )}
+                                <div className="flex items-center rounded-lg bg-slate-100 overflow-hidden" role="group" aria-label="Text size">{[['A−', 87.5], ['A', 100], ['A+', 112.5]].map(([l, v]) => <button key={l} onClick={() => setFontScale(v)} aria-pressed={fontScale === v} title="Text size" className={`px-2 py-1.5 text-xs font-bold ${fontScale === v ? 'bg-indigo-600 text-white' : 'text-slate-600 hover:bg-slate-200'}`}>{l}</button>)}</div>
                                 <button onClick={() => setDarkMode(!darkMode)} className="text-xs font-bold p-2 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-lg" title="Toggle dark mode">{darkMode ? <Icons.Sun /> : <Icons.Moon />}</button>
                                 {session && view !== 'student-test' && view !== 'results' && (
                                     <button onClick={handleLogout} className="text-xs font-bold text-slate-500 hover:text-slate-800 flex items-center gap-1">
@@ -2990,11 +3001,11 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
                                         <p className="text-sm text-indigo-900"><b>1.</b> In <b>Class list</b>, upload your students (Plumier file or paste).&nbsp; <b>2.</b> Here, create your first task and give the link to your students.</p>
                                     </div>
                                 )}
-                                {dashboardTab === 'roster' && <ClassList roster={rosterList} scores={scoresView} auditions={auditionsList} onSave={saveRosterRows} onDelete={deleteRosterRows} onUpdate={updateRosterRow} showToast={showToast} />}
+                                {dashboardTab === 'roster' && <ClassList roster={rosterList} scores={scoresView} auditions={auditionsList} onSave={saveRosterRows} onDelete={deleteRosterRows} onUpdate={updateRosterRow} onPaper={savePaperResult} showToast={showToast} />}
 
                                 {dashboardTab === 'create' && (
                                     <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-                                        <div className="lg:col-span-7 bg-white p-6 md:p-8 rounded-2xl shadow-sm border border-slate-200">
+                                        <div className="lg:col-span-7 bg-white p-6 md:p-8 rounded-2xl shadow-sm border border-slate-200" style={{ borderLeft: `6px solid ${selTheme.colors.accent}`, backgroundColor: selTheme.colors.paper + '66' }}>
                                             {editingTask && <div className="mb-4 flex items-center justify-between gap-3 bg-amber-50 border border-amber-200 text-amber-800 text-sm font-semibold rounded-xl px-4 py-2.5"><span>✏️ Editing: {editingTask.title}</span><button type="button" onClick={cancelEditTask} className="text-xs font-bold underline">Cancel</button></div>}
                                             <h2 className="text-xl font-bold text-slate-900 mb-4">Audition Task Details</h2>
                                             <div className="grid grid-cols-2 gap-4 mb-4">
@@ -3029,7 +3040,7 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
                                                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 max-h-60 overflow-y-auto pr-1">
                                                         {uppercaseWords.map((word, idx) => (
                                                             <div key={idx} className="bg-slate-50 p-2.5 rounded-xl border">
-                                                                <label className="block text-[10px] font-bold text-indigo-600 uppercase mb-1">Gap {idx + 1}: {word}</label>
+                                                                <label className="block text-xs font-bold text-indigo-600 uppercase mb-1">Gap {idx + 1}: {word}</label>
                                                                 <input type="text" placeholder={`Hint for ${word}...`} value={taskHints[idx] || ''} onChange={(e) => handleHintChange(idx, e.target.value)} className="w-full px-2.5 py-1.5 bg-white border rounded-lg text-xs outline-none focus:border-indigo-500" />
                                                             </div>
                                                         ))}
@@ -3040,7 +3051,7 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
                                                 <div className="mt-6 pt-6 border-t border-slate-200">
                                                     <h3 className="text-sm font-bold text-slate-800 mb-2">Assign to course(s)</h3>
                                                     <div className="flex flex-wrap gap-2">{rosterCourses.map(c => { const on = taskAudience.includes(c); return <button key={c} type="button" onClick={() => setTaskAudience(a => on ? a.filter(x => x !== c) : [...a, c])} className={`px-3 py-1.5 rounded-full text-xs font-bold border transition-all ${on ? 'bg-indigo-600 text-white border-indigo-600' : 'bg-white text-slate-600 border-slate-200 hover:border-indigo-300'}`}>{on ? '✓ ' : ''}{c}</button>; })}</div>
-                                                    <p className="text-[11px] text-slate-400 mt-1.5">Used for statistics and “Who has not submitted”. Leave empty for all courses.</p>
+                                                    <p className="text-xs text-slate-400 mt-1.5">Used for statistics and “Who has not submitted”. Leave empty for all courses.</p>
                                                 </div>
                                             )}
                                             <button onClick={handlePublishTask} disabled={loading} className={`w-full mt-6 py-3.5 rounded-xl font-bold text-white transition-all shadow-md ${uppercaseWords.length === 10 && videoId ? 'bg-slate-900 hover:bg-slate-800' : 'bg-slate-300 cursor-not-allowed'}`}>{editingTask ? 'Save changes' : 'Publish Audition Task & Save Cloud Link'}</button>
@@ -3048,8 +3059,8 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
                                         <div className="lg:col-span-5">
                                             <div className="sticky top-24 bg-slate-900 rounded-2xl overflow-hidden shadow-xl aspect-video flex flex-col items-center justify-center relative">
                                                 {videoId ? (
-                                                    <><iframe className="w-full h-full" src={`https://www.youtube.com/embed/${videoId}?rel=0&enablejsapi=1`} title="Preview" frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowFullScreen></iframe><a href={`https://www.youtube.com/watch?v=${videoId}`} target="_blank" rel="noopener noreferrer" className="absolute bottom-2 right-2 bg-black/70 hover:bg-black text-white text-[10px] font-bold px-2.5 py-1 rounded-lg backdrop-blur-sm flex items-center gap-1 z-10"><Icons.External /> Open in YouTube</a></>
-                                                ) : (<div className="text-center p-4"><span className="text-slate-500 font-bold text-xs block mb-1">Video Preview</span><span className="text-slate-600 text-[11px]">Enter a valid YouTube URL</span></div>)}
+                                                    <><iframe className="w-full h-full" src={`https://www.youtube.com/embed/${videoId}?rel=0&enablejsapi=1`} title="Preview" frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowFullScreen></iframe><a href={`https://www.youtube.com/watch?v=${videoId}`} target="_blank" rel="noopener noreferrer" className="absolute bottom-2 right-2 bg-black/70 hover:bg-black text-white text-xs font-bold px-2.5 py-1 rounded-lg backdrop-blur-sm flex items-center gap-1 z-10"><Icons.External /> Open in YouTube</a></>
+                                                ) : (<div className="text-center p-4"><span className="text-slate-500 font-bold text-xs block mb-1">Video Preview</span><span className="text-slate-600 text-xs">Enter a valid YouTube URL</span></div>)}
                                             </div>
                                             <div className="mt-5 bg-white p-4 md:p-5 rounded-2xl shadow-sm border border-slate-200">
                                                 <div className="mb-4">
@@ -3058,17 +3069,18 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
                                                     {Object.values(MUSIC_THEMES).map(t0 => getUiTheme(t0.id, darkMode)).map(theme => (
                                                         <button key={theme.id} type="button" onClick={() => setStyle(theme.id)} aria-pressed={style === theme.id}
                                                             className={`theme-card relative text-left p-2.5 rounded-xl border-2 transition-all ${style === theme.id ? 'ring-2 ring-offset-1' : 'hover:border-slate-300'}`}
-                                                            style={{ backgroundColor: style === theme.id ? theme.colors.paper : (darkMode ? '#1E293B' : '#FFFFFF'), borderColor: style === theme.id ? theme.colors.accent : (darkMode ? '#334155' : '#E2E8F0'), '--tw-ring-color': theme.colors.accent }}>
+                                                            style={{ backgroundColor: theme.colors.paper, borderColor: style === theme.id ? theme.colors.accent : theme.colors.soft, borderLeft: `6px solid ${theme.colors.accent}`, fontFamily: theme.font, '--tw-ring-color': theme.colors.accent }}>
                                                             <div className="flex items-center gap-2 mb-1">
                                                                 <span className="w-9 h-9 rounded-lg flex items-center justify-center text-lg shrink-0" style={{backgroundColor:theme.colors.primary,color:theme.colors.accent}}>{theme.icon}</span>
-                                                                <span className="text-xs font-extrabold" style={{color:theme.colors.primary}}>{theme.label}</span>
-                                                                {style === theme.id && <span className="absolute top-1.5 right-2 text-[9px] font-black uppercase tracking-wide px-1.5 py-0.5 rounded-full" style={{backgroundColor:theme.colors.accent,color:theme.colors.paper}}>✓ Selected</span>}
+                                                                <span className="text-xs font-extrabold" style={{color:theme.colors.primary,...theme.headStyle}}>{theme.label}</span>
+                                                                {style === theme.id && <span className="absolute top-1.5 right-2 text-xs font-black uppercase tracking-wide px-1.5 py-0.5 rounded-full" style={{backgroundColor:theme.colors.accent,color:theme.colors.paper}}>✓ Selected</span>}
                                                             </div>
-                                                            <span className="block text-[10px] leading-snug text-slate-500">{theme.genres}</span>
+                                                            <span className="block text-xs leading-snug" style={{color:theme.colors.text,opacity:0.8}}>{theme.genres}</span>
+                                                            <span className="block mt-1.5 text-xs" style={{color:theme.colors.primary}}>A bright <span style={{borderBottom:`2px solid ${theme.colors.accent}`,padding:'0 6px'}}>S _ _ _</span> opens it.</span>
                                                         </button>
                                                     ))}
                                                 </div>
-                                                <p className="text-[11px] text-slate-400 mt-2">This theme changes the student audition page and diploma. The teacher dashboard stays indigo.</p>
+                                                <p className="text-xs text-slate-400 mt-2">This theme changes the student audition page and diploma. The teacher dashboard stays indigo.</p>
                                             </div>
                                             </div>
                                         </div>
@@ -3116,7 +3128,7 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
                                                     <tbody>
                                                         {filteredAuditions.map(aud => (
                                                             <tr key={aud.id || aud.share_link} className="border-b border-slate-100 hover:bg-slate-50/30 transition-colors">
-                                                                <td className="py-4 px-4 font-bold text-slate-950">{aud.title}{editedTasks.has(aud.share_link || aud.id) && <span title="The 10 words were changed after students had submitted" className="ml-2 text-[10px] font-black px-1.5 py-0.5 rounded bg-amber-100 text-amber-800">✏️ Words edited</span>}{(aud.audience || []).map(c => <span key={c} className="ml-1.5 text-[10px] font-black px-1.5 py-0.5 rounded bg-indigo-50 text-indigo-700">{c}</span>)}</td><td className="py-4 px-4 text-slate-500">{aud.artist}</td>
+                                                                <td className="py-4 px-4 font-bold text-slate-950"><span className="inline-block w-2.5 h-2.5 rounded-full mr-2 align-middle" style={{ backgroundColor: getMusicTheme(aud.style).colors.accent }} title={getMusicTheme(aud.style).label}></span>{aud.title}{editedTasks.has(aud.share_link || aud.id) && <span title="The 10 words were changed after students had submitted" className="ml-2 text-xs font-black px-1.5 py-0.5 rounded bg-amber-100 text-amber-800">✏️ Words edited</span>}{(aud.audience || []).map(c => <span key={c} className="ml-1.5 text-xs font-black px-1.5 py-0.5 rounded bg-indigo-50 text-indigo-700">{c}</span>)}</td><td className="py-4 px-4 text-slate-500">{aud.artist}</td>
                                                                 <td className="py-4 px-4 text-center"><button onClick={() => handleCopyLink(aud.share_link || aud.id, aud.id)} className="bg-indigo-50 hover:bg-indigo-100 text-indigo-700 font-bold px-3 py-1.5 rounded-lg text-xs flex items-center gap-1 mx-auto transition-all">{copiedId === aud.id ? <Icons.Check /> : <Icons.Link />} {copiedId === aud.id ? "Copied!" : "Copy Link"}</button></td>
                                                                 <td className="py-4 px-4 text-right space-x-1 whitespace-nowrap">
                                                                     <a href={buildStudentUrl(aud.share_link || aud.id)} target="_blank" title="Preview" className="inline-block align-middle p-2 hover:bg-slate-100 rounded-lg text-slate-500 transition-colors"><Icons.External /></a>
@@ -3163,7 +3175,7 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
                             </div>
                         )}
                         {view === 'student-test' && activeTask && activeTask.preview && !examSubmitted && (
-                            <div className="max-w-3xl mx-auto mb-3 bg-indigo-50 border border-indigo-200 text-indigo-900 text-sm font-semibold rounded-xl px-4 py-2.5">👀 Teacher preview: you can do the task and see the result and the diploma, but nothing is saved.</div>
+                            <div className="max-w-3xl mx-auto mb-3 flex items-center justify-between gap-3 bg-indigo-50 border border-indigo-200 text-indigo-900 text-sm font-semibold rounded-xl px-4 py-2.5"><span>👀 Teacher preview: you can do the task and see the result and the diploma, but nothing is saved.</span><button onClick={leaveTeacherView} className="shrink-0 px-3 py-1.5 rounded-lg bg-white border border-indigo-200 text-xs font-bold hover:bg-indigo-100">← Back to dashboard</button></div>
                         )}
                         {view === 'student-test' && activeTask && activeTask.gated && !examSubmitted && (
                             <div className="max-w-md mx-auto mt-8">
@@ -3171,8 +3183,8 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
                                     <div className="text-center"><div className="text-4xl mb-1">🎧</div><h2 className="text-xl font-bold text-slate-900">{activeTask.title}</h2><p className="text-sm text-slate-500">{activeTask.artist}</p></div>
                                     <p className="text-xs text-slate-500 text-center">Identify yourself to open the task. Only the students on your teacher's class list can take it.</p>
                                     <form onSubmit={handleGate} className="space-y-3">
-                                        <div><label className="block text-[10px] font-bold text-slate-500 uppercase mb-1">Full Name</label><input type="text" autoComplete="name" placeholder="e.g. Alex Morgan" value={studentName} onChange={e => setStudentName(e.target.value)} className="w-full px-3 py-2.5 bg-slate-50 border rounded-lg text-sm outline-none focus:border-indigo-500" /></div>
-                                        <div><label className="block text-[10px] font-bold text-slate-500 uppercase mb-1">School Email</label><input type="email" autoComplete="email" placeholder="@alu.murciaeduca.es" value={studentEmail} onChange={e => setStudentEmail(e.target.value)} className="w-full px-3 py-2.5 bg-slate-50 border rounded-lg text-sm outline-none focus:border-indigo-500" /></div>
+                                        <div><label className="block text-xs font-bold text-slate-500 uppercase mb-1">Full Name</label><input type="text" autoComplete="name" placeholder="e.g. Alex Morgan" value={studentName} onChange={e => setStudentName(e.target.value)} className="w-full px-3 py-2.5 bg-slate-50 border rounded-lg text-sm outline-none focus:border-indigo-500" /></div>
+                                        <div><label className="block text-xs font-bold text-slate-500 uppercase mb-1">School Email</label><input type="email" autoComplete="email" placeholder="@alu.murciaeduca.es" value={studentEmail} onChange={e => setStudentEmail(e.target.value)} className="w-full px-3 py-2.5 bg-slate-50 border rounded-lg text-sm outline-none focus:border-indigo-500" /></div>
                                         {gateStatus && GATE_MSG[gateStatus] && <div className="bg-rose-50 border border-rose-200 text-rose-800 text-sm rounded-xl px-4 py-3">{GATE_MSG[gateStatus]}</div>}
                                         <button type="submit" disabled={gateBusy} className="w-full py-3 rounded-xl font-bold text-white bg-indigo-600 hover:bg-indigo-700 disabled:opacity-60 transition-all shadow-md">{gateBusy ? 'Checking…' : 'Open task'}</button>
                                     </form>
@@ -3187,24 +3199,24 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
                                     <button onClick={() => setLookupModal(true)} className="bg-slate-100 hover:bg-slate-200 text-indigo-700 text-xs font-bold px-3 py-2 rounded-xl transition-all flex items-center gap-1.5"><Icons.Eye /> Already completed?</button>
                                 </div>
                                 <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 grid grid-cols-1 md:grid-cols-3 gap-4 items-end">
-                                    <div><label className="block text-[10px] font-bold text-slate-500 uppercase mb-1">Full Name</label><input type="text" placeholder="e.g. Alex Morgan" value={studentName} onChange={e => setStudentName(e.target.value)} className="w-full px-3 py-2 bg-slate-50 border rounded-lg text-sm outline-none focus:border-indigo-500" /></div>
+                                    <div><label className="block text-xs font-bold text-slate-500 uppercase mb-1">Full Name</label><input type="text" placeholder="e.g. Alex Morgan" value={studentName} onChange={e => setStudentName(e.target.value)} className="w-full px-3 py-2 bg-slate-50 border rounded-lg text-sm outline-none focus:border-indigo-500" /></div>
                                     <div>
-                                        <label className="block text-[10px] font-bold text-slate-500 uppercase mb-1">Group / Class</label>
+                                        <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Group / Class</label>
                                         {activeTask.roster ? (<div className="w-full px-3 py-2 bg-slate-100 border rounded-lg text-sm font-semibold text-slate-700">{activeTask.roster.class}</div>) : (<><select value={standardStudentClasses.includes(studentClass) ? studentClass : '__custom__'} onChange={e => setStudentClass(e.target.value === '__custom__' ? '' : e.target.value)} className="w-full px-3 py-2 bg-slate-50 border rounded-lg text-sm outline-none focus:border-indigo-500 font-medium">
                                             {standardStudentClasses.map(group => <option key={group} value={group}>{group}</option>)}
                                             <option value="__custom__">Other course or group…</option>
                                         </select>
                                         {!standardStudentClasses.includes(studentClass) && <input type="text" value={studentClass} onChange={e => setStudentClass(e.target.value)} placeholder="e.g. 4º ESO A, 1º Bachillerato" className="w-full mt-2 px-3 py-2 bg-slate-50 border rounded-lg text-sm outline-none focus:border-indigo-500" required aria-label="Custom course or group" />}</>)}
                                     </div>
-                                    <div><label className="block text-[10px] font-bold text-slate-500 uppercase mb-1">School Email</label><input type="email" placeholder="@alu.murciaeduca.es" value={studentEmail} onChange={e => setStudentEmail(e.target.value)} onBlur={checkExistingSubmission} readOnly={!!activeTask.roster || !!activeTask.preview} className="w-full px-3 py-2 bg-slate-50 border rounded-lg text-sm outline-none focus:border-indigo-500" /></div>
+                                    <div><label className="block text-xs font-bold text-slate-500 uppercase mb-1">School Email</label><input type="email" placeholder="@alu.murciaeduca.es" value={studentEmail} onChange={e => setStudentEmail(e.target.value)} onBlur={checkExistingSubmission} readOnly={!!activeTask.roster || !!activeTask.preview} className="w-full px-3 py-2 bg-slate-50 border rounded-lg text-sm outline-none focus:border-indigo-500" /></div>
                                 </div>
-                                                                <div className="p-6 md:p-8 rounded-2xl shadow-md border" style={{backgroundColor:activeMusicTheme.colors.paper,color:activeMusicTheme.colors.text,borderColor:activeMusicTheme.colors.soft,fontFamily:activeMusicTheme.font}}>
-                                    <div className="mb-6 pb-6 border-b flex flex-col md:flex-row gap-6 items-center" style={{borderColor:activeMusicTheme.colors.soft}}>
-                                        <div className="flex-1"><div className="text-[10px] font-extrabold uppercase tracking-[0.18em] mb-2" style={{color:activeMusicTheme.colors.accent}}>{activeMusicTheme.icon} {activeMusicTheme.label}</div><h2 className="text-2xl font-extrabold" style={{color:activeMusicTheme.colors.primary}}>{activeTask.title}</h2><p className="font-medium" style={{color:activeMusicTheme.colors.primary,opacity:0.8}}>{activeTask.artist}</p></div>
+                                                                <div className="p-6 md:p-8 rounded-2xl shadow-md border" style={{backgroundColor:activeMusicTheme.colors.paper,color:activeMusicTheme.colors.text,borderColor:activeMusicTheme.colors.soft,borderLeft:`8px solid ${activeMusicTheme.colors.accent}`,borderTop:`5px solid ${activeMusicTheme.colors.primary}`,fontFamily:activeMusicTheme.font}}>
+                                    <div className="mb-6 p-4 rounded-xl flex flex-col md:flex-row gap-6 items-center" style={{backgroundColor:activeMusicTheme.colors.soft}}>
+                                        <div className="flex-1"><div className="inline-block text-xs font-extrabold uppercase tracking-[0.18em] mb-2 px-2.5 py-1 rounded-full" style={{backgroundColor:activeMusicTheme.colors.primary,color:activeMusicTheme.colors.paper}}>{activeMusicTheme.icon} {activeMusicTheme.label}</div><h2 className="text-2xl font-extrabold" style={{color:activeMusicTheme.colors.primary,...activeMusicTheme.headStyle}}>{activeTask.title}</h2><p className="font-medium" style={{color:activeMusicTheme.colors.primary,opacity:0.8}}>{activeTask.artist}</p></div>
                                         <div className="w-full md:w-80 shrink-0 rounded-xl overflow-hidden border bg-slate-900 aspect-video relative flex flex-col items-center justify-center">
                                             {(() => {
                                                 const studentVideoId = extractYouTubeId(activeTask.youtube_url);
-                                                if (studentVideoId) return (<><iframe className="w-full h-full" src={`https://www.youtube-nocookie.com/embed/${studentVideoId}?rel=0`} title="Student Video" frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowFullScreen></iframe><a href={`https://www.youtube.com/watch?v=${studentVideoId}`} target="_blank" rel="noopener noreferrer" className="absolute bottom-1.5 right-1.5 bg-black/70 hover:bg-black text-white text-[10px] font-bold px-2 py-0.5 rounded-md backdrop-blur-sm flex items-center gap-1 z-10"><Icons.External /> YouTube</a></>);
+                                                if (studentVideoId) return (<><iframe className="w-full h-full" src={`https://www.youtube-nocookie.com/embed/${studentVideoId}?rel=0`} title="Student Video" frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowFullScreen></iframe><a href={`https://www.youtube.com/watch?v=${studentVideoId}`} target="_blank" rel="noopener noreferrer" className="absolute bottom-1.5 right-1.5 bg-black/70 hover:bg-black text-white text-xs font-bold px-2 py-0.5 rounded-md backdrop-blur-sm flex items-center gap-1 z-10"><Icons.External /> YouTube</a></>);
                                                 return (<div className="w-full h-full flex flex-col items-center justify-center text-xs text-slate-500 font-bold p-2 text-center"><span>Video Not Available</span></div>);
                                             })()}
                                         </div>
@@ -3222,7 +3234,7 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
                                                     <button onClick={() => toggleSpeech(paragraphSpeechText, pIndex)} title="Listen in English" className={`absolute top-4 right-4 p-2 rounded-full shadow-sm transition-all ${speakingIndex === pIndex ? 'bg-indigo-600 text-white animate-pulse' : 'bg-white text-indigo-600 border hover:bg-indigo-50'}`}>
                                                         {speakingIndex === pIndex ? <Icons.Stop /> : <Icons.Speaker />}
                                                     </button>
-                                                    <p className="leading-loose text-[15px]" style={{ color: activeMusicTheme.colors.text }}>
+                                                    <p className="leading-loose text-base" style={{ color: activeMusicTheme.colors.text }}>
                                                         {paragraphTokens.map((token, tIndex) => {
                                                             if (token.type === 'text') return <span key={tIndex}>{token.content}</span>;
                                                             const gapIdx = token.gapIndex;
@@ -3245,7 +3257,7 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
                                                                                 <option value="" disabled>Select...</option>
                                                                                 {options.map((opt, i) => <option key={i} value={opt}>{opt}</option>)}
                                                                             </select>
-                                                                            {hintText && (<button onClick={() => setUsedHints({...usedHints, [gapIdx]: true})} className="mt-1 text-[10px] bg-amber-100 hover:bg-amber-200 text-amber-900 px-2 py-0.5 font-bold rounded-md whitespace-nowrap flex items-center gap-1 shadow-sm"><Icons.Lightbulb />{usedHints[gapIdx] ? `Hint: ${hintText}` : "Hint (-0.5 pt)"}</button>)}
+                                                                            {hintText && (<button onClick={() => setUsedHints({...usedHints, [gapIdx]: true})} className="mt-1 text-xs bg-amber-100 hover:bg-amber-200 text-amber-900 px-2 py-0.5 font-bold rounded-md whitespace-nowrap flex items-center gap-1 shadow-sm"><Icons.Lightbulb />{usedHints[gapIdx] ? `Hint: ${hintText}` : "Hint (-0.5 pt)"}</button>)}
                                                                         </span>
                                                                     </span>
                                                                 );
@@ -3264,8 +3276,10 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
                                                                 return (
                                                                     <span key={tIndex} className="inline-block mx-1 align-bottom max-w-full">
                                                                         <span className="relative inline-flex max-w-full flex-col items-center align-bottom">
+                                                                            {HINT_STYLE === 'label' && <span className="mb-0.5 text-xs rounded-md px-2 py-0.5 select-none" style={{ backgroundColor: activeMusicTheme.colors.soft, color: activeMusicTheme.colors.primary }}>{[0, 4, 6, 8].includes(gapIdx) ? `starts with ${clue.first}` : [1, 3, 5, 9].includes(gapIdx) ? `ends with ${clue.last2}` : 'gap'} · {len} letters</span>}
                                                                             <input type="text" aria-label={`Answer for gap ${gapIdx + 1}`} placeholder={clueDisplay} value={studentAnswers[gapIdx] || ''} onChange={e => handleStudentAnswerChange(gapIdx, e.target.value)} size={Math.max(8, len * 2, answerLength * 2)} className="px-3 py-1.5 text-center border-b-2 border-indigo-500 shadow-md font-semibold text-indigo-800 uppercase outline-none text-sm bg-white rounded-t placeholder-slate-500 transition-shadow focus:shadow-lg" style={{ width: `${fieldWidthCh}ch`, maxWidth: 'min(88vw, 42ch)', boxSizing: 'border-box', letterSpacing: '0.04em', fontFamily: 'Arial, Helvetica, sans-serif', fontWeight: 600 }} />
-                                                                            {hintText && (<button onClick={() => setUsedHints({...usedHints, [gapIdx]: true})} className="mt-1 text-[10px] bg-amber-100 hover:bg-amber-200 text-amber-900 px-2 py-0.5 font-semibold rounded-md whitespace-nowrap flex items-center gap-1 shadow-sm"><Icons.Lightbulb />{usedHints[gapIdx] ? `Hint: ${hintText}` : "Hint (-0.5 pt)"}</button>)}
+                                                                            {HINT_STYLE === 'pattern' && String(studentAnswers[gapIdx] || '').length > 0 && <span className="mt-0.5 text-xs tracking-[0.18em] font-mono select-none" style={{ color: activeMusicTheme.colors.accent }} aria-hidden="true">{clueDisplay}</span>}
+                                                                            {hintText && (<button onClick={() => setUsedHints({...usedHints, [gapIdx]: true})} className="mt-1 text-xs bg-amber-100 hover:bg-amber-200 text-amber-900 px-2 py-0.5 font-semibold rounded-md whitespace-nowrap flex items-center gap-1 shadow-sm"><Icons.Lightbulb />{usedHints[gapIdx] ? `Hint: ${hintText}` : "Hint (-0.5 pt)"}</button>)}
                                                                         </span>
                                                                     </span>
                                                                 );
@@ -3313,11 +3327,11 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
                                                 <p className="text-xs text-slate-400">{finalScoreRecord.student_name} ({finalScoreRecord.student_class})</p>
                                             </div>
                                             <div className="border-2 px-8 py-6 rounded-3xl inline-block mx-auto shadow-sm" style={{backgroundColor:getUiTheme(finalScoreRecord.taskDetails?.style || finalScoreRecord.auditions?.style || 'classical', darkMode).colors.primary,borderColor:getUiTheme(finalScoreRecord.taskDetails?.style || finalScoreRecord.auditions?.style || 'classical', darkMode).colors.accent}}>
-                                                <span className="block text-[11px] font-bold text-slate-400 uppercase tracking-widest mb-2">FINAL SCORE</span>
+                                                <span className="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">FINAL SCORE</span>
                                                 <span className="text-7xl font-black tracking-tighter" style={{color:'#FFFFFF'}}>{Number(finalScoreRecord.score).toFixed(1)} <span className="text-3xl text-white/70 font-medium">/ 10</span></span>
                                             </div>
                                             <div className="border p-6 rounded-2xl text-left shadow-sm" style={{backgroundColor:getUiTheme(finalScoreRecord.taskDetails?.style || finalScoreRecord.auditions?.style || 'classical', darkMode).colors.soft,borderColor:getUiTheme(finalScoreRecord.taskDetails?.style || finalScoreRecord.auditions?.style || 'classical', darkMode).colors.accent}}>
-                                                <span className="text-[10px] font-bold uppercase tracking-wider block mb-1" style={{color:getUiTheme(finalScoreRecord.taskDetails?.style || finalScoreRecord.auditions?.style || 'classical', darkMode).colors.primary}}>Pedagogy Evaluation</span>
+                                                <span className="text-xs font-bold uppercase tracking-wider block mb-1" style={{color:getUiTheme(finalScoreRecord.taskDetails?.style || finalScoreRecord.auditions?.style || 'classical', darkMode).colors.primary}}>Pedagogy Evaluation</span>
                                                 <h4 className="text-lg font-semibold mb-1" style={{color:getUiTheme(finalScoreRecord.taskDetails?.style || finalScoreRecord.auditions?.style || 'classical', darkMode).colors.primary,fontFamily:getUiTheme(finalScoreRecord.taskDetails?.style || finalScoreRecord.auditions?.style || 'classical', darkMode).font}}>{feedback.title}</h4>
                                                 <p className="text-slate-600 text-sm leading-relaxed">{feedback.text}</p>
                                             </div>
@@ -3327,7 +3341,7 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
                                                 <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
                                                     {(finalScoreRecord.details?.words || []).map((item, idx) => (
                                                         <div key={idx} className={`px-3 py-2 rounded-lg border text-xs font-semibold ${item.correct ? 'bg-emerald-50 border-emerald-200 text-emerald-800' : 'bg-rose-50 border-rose-200 text-rose-800'}`}>
-                                                            <span className="mr-1 font-black">{item.correct ? '✓' : '✗'}</span><span className="opacity-60 mr-1">{String(idx + 1).padStart(2, '0')}.</span>{String(item.answer || '').trim() ? String(item.answer).toUpperCase() : '(no answer)'}
+                                                            <span className="mr-1 font-black">{item.correct ? '✓' : '✗'}</span><span className="opacity-60 mr-1">{String(idx + 1).padStart(2, '0')}.</span>{String(item.answer || '').trim() ? String(item.answer).toUpperCase() : (finalScoreRecord.details && finalScoreRecord.details.paper ? '—' : '(no answer)')}
                                                         </div>
                                                     ))}
                                                 </div>

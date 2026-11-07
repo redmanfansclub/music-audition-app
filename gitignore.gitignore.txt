@@ -1,0 +1,9 @@
+# Datos de alumnado: NO subir (el repositorio es público)
+*.xls
+*.xlsx
+*.csv
+DatosAlumno*
+*grades_backup*.json
+class_list*.json
+*lista*alumn*
+.DS_Store
