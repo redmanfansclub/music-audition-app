@@ -121,6 +121,8 @@
             user-select: none;
         }
     
+
+
 /* DARK-AUTO START */
 body.dark .text-amber-400 { color: #fcd34d !important; }
 body.dark .text-amber-500 { color: #fcd34d !important; }
@@ -484,12 +486,12 @@ body.dark .hover\:text-slate-800:hover { color: #f1f5f9 !important; }
         };
 
         const MUSIC_THEMES = {
-            classical: { id:'classical', label:'Classical & Orchestral', genres:'Classical, Baroque, Romantic, opera and symphonic music', icon:'♬', colors:{ primary:'#192747', accent:'#B69A5B', paper:'#F3EBDD', soft:'#E8E0D0', text:'#192747' }, pdf:{ primary:[25,39,71], accent:[182,154,91], paper:[243,235,221], soft:[232,224,208] }, font:'Baskerville, "Baskerville Old Face", "Times New Roman", serif', headStyle:{ fontVariant:'small-caps', letterSpacing:'0.05em' } },
-            jazz: { id:'jazz', label:'Jazz & Blues', genres:'Jazz, blues, swing, bossa nova, soul, Motown, funk, gospel and R&B', icon:'♫', colors:{ primary:'#542D42', accent:'#D49A48', paper:'#FBF3E8', soft:'#F1E1D2', text:'#542D42' }, pdf:{ primary:[84,45,66], accent:[212,154,72], paper:[251,243,232], soft:[241,225,210] }, font:'Rockwell, "Rockwell Nova", Georgia, serif', headStyle:{ fontFamily:'Copperplate, "Copperplate Gothic Light", Futura, "Century Gothic", sans-serif', letterSpacing:'0.09em' } },
+            classical: { id:'classical', label:'Classical & Orchestral', genres:'Classical, Baroque, Romantic, opera and symphonic music', icon:'♬', colors:{ primary:'#713F12', accent:'#C9A227', paper:'#FEF9E1', soft:'#FBEDB0', text:'#422006' }, pdf:{ primary:[25,39,71], accent:[182,154,91], paper:[243,235,221], soft:[232,224,208] }, font:'Baskerville, "Baskerville Old Face", "Times New Roman", serif', headStyle:{ fontVariant:'small-caps', letterSpacing:'0.05em' } },
+            jazz: { id:'jazz', label:'Jazz & Blues', genres:'Jazz, blues, swing, bossa nova, soul, Motown, funk, gospel and R&B', icon:'♫', colors:{ primary:'#9D174D', accent:'#D9A404', paper:'#FDF2F8', soft:'#FBDCEB', text:'#500724' }, pdf:{ primary:[84,45,66], accent:[212,154,72], paper:[251,243,232], soft:[241,225,210] }, font:'Rockwell, "Rockwell Nova", Georgia, serif', headStyle:{ fontFamily:'Copperplate, "Copperplate Gothic Light", Futura, "Century Gothic", sans-serif', letterSpacing:'0.09em' } },
             rock: { id:'rock', label:'Rock & Metal', genres:'Rock and roll, classic rock, hard rock, heavy metal, punk, grunge, alternative rock and indie rock', icon:'⚡', colors:{ primary:'#181818', accent:'#C52D35', paper:'#F3F3F3', soft:'#E4E4E4', text:'#181818' }, pdf:{ primary:[24,24,24], accent:[197,45,53], paper:[243,243,243], soft:[228,228,228] }, font:'"Trebuchet MS", "Arial Narrow", Arial, sans-serif', headStyle:{ letterSpacing:'0.1em' } },
-            pop: { id:'pop', label:'Pop & Electronic', genres:'Pop, disco, electronic, techno, house, hip-hop, rap, trap, reggae, reggaeton and K-pop', icon:'♫', colors:{ primary:'#86198F', accent:'#06B6D4', paper:'#FDF2F8', soft:'#FBDDEE', text:'#4A044E' }, pdf:{ primary:[134,25,143], accent:[6,182,212], paper:[253,242,248], soft:[251,221,238] }, font:'Futura, "Century Gothic", "Avenir Next", Avenir, "Segoe UI", sans-serif', headStyle:{ letterSpacing:'0.03em' } },
-            folk: { id:'folk', label:'Folk & World Music', genres:'Flamenco, country, Celtic music, folk, Latin music, traditional Spanish music, folk dances and world music', icon:'♧', colors:{ primary:'#435640', accent:'#B47A50', paper:'#F0E4CE', soft:'#E5D5B9', text:'#435640' }, pdf:{ primary:[67,86,64], accent:[180,122,80], paper:[240,228,206], soft:[229,213,185] }, font:'Cambria, "Hoefler Text", Georgia, serif', headStyle:{ letterSpacing:'0.02em' } },
-            film: { id:'film', label:'Film, TV & Game Music', genres:'Film scores, TV soundtracks, video game music, musicals, animation soundtracks and cinematic themes', icon:'✦', colors:{ primary:'#2E1065', accent:'#F5B82E', paper:'#F3F0FA', soft:'#E4DDF3', text:'#2E1065' }, pdf:{ primary:[46,16,101], accent:[245,184,46], paper:[243,240,250], soft:[228,221,243] }, font:'Optima, Candara, "Segoe UI", Calibri, sans-serif', headStyle:{ fontVariant:'small-caps', letterSpacing:'0.07em' } }
+            pop: { id:'pop', label:'Pop & Electronic', genres:'Pop, disco, electronic, techno, house, hip-hop, rap, trap, reggae, reggaeton and K-pop', icon:'♫', colors:{ primary:'#1D4ED8', accent:'#06B6D4', paper:'#EFF6FF', soft:'#DBEAFE', text:'#1E3A8A' }, pdf:{ primary:[48,32,94], accent:[66,214,208], paper:[245,242,255], soft:[232,225,255] }, font:'Futura, "Century Gothic", "Avenir Next", Avenir, "Segoe UI", sans-serif', headStyle:{ letterSpacing:'0.03em' } },
+            folk: { id:'folk', label:'Folk & World Music', genres:'Flamenco, country, Celtic music, folk, Latin music, traditional Spanish music, folk dances and world music', icon:'♧', colors:{ primary:'#166534', accent:'#C2570C', paper:'#F0F7EC', soft:'#DCEBD3', text:'#14532D' }, pdf:{ primary:[67,86,64], accent:[180,122,80], paper:[240,228,206], soft:[229,213,185] }, font:'Cambria, "Hoefler Text", Georgia, serif', headStyle:{ letterSpacing:'0.02em' } },
+            film: { id:'film', label:'Film, TV & Game Music', genres:'Film scores, TV soundtracks, video game music, musicals, animation soundtracks and cinematic themes', icon:'✦', colors:{ primary:'#4C1D95', accent:'#F5B82E', paper:'#F4EFFA', soft:'#E4D9F3', text:'#2E1065' }, pdf:{ primary:[34,43,72], accent:[154,131,198], paper:[240,237,247], soft:[224,217,237] }, font:'Optima, Candara, "Segoe UI", Calibri, sans-serif', headStyle:{ fontVariant:'small-caps', letterSpacing:'0.07em' } }
         };
         const getMusicTheme = (value) => {
             const v0 = String(value || '').toLowerCase();
@@ -802,6 +804,7 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
             return words.map((w, i) => { const x = dw[i]; return x && x.correct ? (x.usedHint ? 2 : 1) : 0; });
         };
         const localDay = (d) => new Date(d || Date.now()).toLocaleDateString('sv-SE');
+        const FONT_STEPS = [70, 80, 90, 100, 115, 130, 150];
         const HINT_STYLE = 'pattern'; // 'pattern' = pauta pequeña bajo el hueco · 'label' = etiqueta encima ("starts with T · 7 letters")
         const pl = (n, one, many) => `${n} ${Number(n) === 1 ? one : many}`;
         const NAME_PARTICLES = new Set(['de', 'del', 'la', 'las', 'los', 'el', 'y', 'e', 'da', 'do', 'dos', 'van', 'von', 'di', 'du']);
@@ -1007,6 +1010,7 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
             const [preview, setPreview] = React.useState(null);
             const [replaceAll, setReplaceAll] = React.useState(false);
             const [fg, setFg] = usePState('cl.fg', '');
+            const [stuOpen, setStuOpen] = usePState('cl.stuOpen', false);
             const [edit, setEdit] = React.useState(null);
             const [pg, setPg] = usePState('cl.pg', '');
             const [pa, setPa] = usePState('cl.pa', '');
@@ -1110,18 +1114,36 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
                         </div>}
                     </div>
 
+                    {groups.length > 0 && (
+                        <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+                            <h3 className="text-base font-bold text-slate-900 mb-3">Who has not submitted?</h3>
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mb-3">
+                                <select value={pendGroup} onChange={e => { setPg(e.target.value); setPa(''); }} className={sel}>{groups.map(g => <option key={g} value={g}>{g}</option>)}</select>
+                                <select value={pendAud} onChange={e => setPa(e.target.value)} className={sel}>{audOptions.map(a => <option key={a.share_link || a.id} value={a.share_link || a.id}>{a.number ? `${a.number} · ` : ''}{a.title}</option>)}</select>
+                            </div>
+                            <p className="text-xs text-slate-500 mb-2">{groupStudents.length - pending.length} of {groupStudents.length} submitted · {pending.length} pending</p>
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-1 max-h-72 overflow-y-auto">
+                                {groupStudents.map(r => { const s = done.get(r.email.toLowerCase()); return (
+                                    <div key={r.email} className={`flex items-center justify-between gap-2 text-sm px-3 py-1.5 rounded-lg ${s ? 'bg-emerald-50 text-emerald-800' : 'bg-amber-50 text-amber-900'}`}>
+                                        <span className="truncate">{s ? '✓' : '⏳'} {r.name}</span>{s ? (s.details && s.details.paper ? <button onClick={() => openPaper(r, s)} title="Edit this paper submission" className="font-bold shrink-0 px-2 py-0.5 rounded-lg underline decoration-dotted hover:bg-emerald-100">📄 {Number(s.score).toFixed(1)} ✏️</button> : <span className="font-bold shrink-0">{Number(s.score).toFixed(1)}</span>) : <button onClick={() => openPaper(r)} title="Enter the result of a paper worksheet" className="shrink-0 px-2.5 py-1 rounded-lg text-xs font-bold bg-white border border-amber-300 text-amber-900 hover:bg-amber-100">✍ Paper</button>}
+                                    </div>); })}
+                            </div>
+                            {pending.length > 0 && <button onClick={copyPending} className="mt-3 px-3 py-2 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 rounded-xl text-xs font-bold">Copy pending names</button>}
+                        </div>
+                    )}
+
                     <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
                         <div className="flex flex-wrap items-center justify-between gap-2 mb-3">
-                            <h3 className="text-base font-bold text-slate-900">Students ({shown.length})</h3>
-                            <div className="flex flex-wrap items-center gap-2">
+                            <button onClick={() => setStuOpen(v => !v)} className="flex items-center gap-2 text-left"><h3 className="text-base font-bold text-slate-900">Students ({shown.length})</h3><span className="text-slate-400 text-xs">{stuOpen ? '▲' : '▼'}</span></button>
+                            {stuOpen && <div className="flex flex-wrap items-center gap-2">
                                 <select value={fg} onChange={e => setFg(e.target.value)} className={sel}><option value="">All groups</option>{groups.map(g => <option key={g} value={g}>{g}</option>)}</select>
                                 <button onClick={exportJson} disabled={!roster.length} className="px-3 py-2 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 rounded-xl text-xs font-bold disabled:opacity-40">Export JSON</button>
                                 <button onClick={exportCsv} disabled={!roster.length} className="px-3 py-2 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 rounded-xl text-xs font-bold disabled:opacity-40">Export Excel</button>
                                 <label className="px-3 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-bold cursor-pointer">Import JSON<input type="file" accept="application/json,.json" className="hidden" onChange={e => { importJson(e.target.files[0]); e.target.value = ''; }} /></label>
-                            </div>
+                            </div>}
                         </div>
-                        {outsiders > 0 && <p className="text-xs text-amber-800 bg-amber-50 border border-amber-200 rounded-xl px-3 py-2 mb-3">⚠ {outsiders} submission(s) use an email that is not on this list. They are marked ⚠ in Student Grades and do not count in statistics until you fix or delete them.</p>}
-                        {shown.length === 0 ? <p className="text-sm text-slate-400 text-center py-6">No students yet. Paste your list above.</p> : (
+                        {stuOpen && outsiders > 0 && <p className="text-xs text-amber-800 bg-amber-50 border border-amber-200 rounded-xl px-3 py-2 mb-3">⚠ {outsiders} submission(s) use an email that is not on this list. They are marked ⚠ in Student Grades and do not count in statistics until you fix or delete them.</p>}
+                        {!stuOpen ? null : shown.length === 0 ? <p className="text-sm text-slate-400 text-center py-6">No students yet. Paste your list above.</p> : (
                             <div className="space-y-2">
                                 {groups.filter(g => !fg || g === fg).map(g => { const mem = shown.filter(r => r.class === g); const isOpen = !!fg || !!openG[g]; return (
                                     <div key={g} className="rounded-xl border border-slate-200 overflow-hidden">
@@ -1143,24 +1165,6 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
                         )}
                     </div>
 
-                    {groups.length > 0 && (
-                        <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
-                            <h3 className="text-base font-bold text-slate-900 mb-3">Who has not submitted?</h3>
-                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mb-3">
-                                <select value={pendGroup} onChange={e => { setPg(e.target.value); setPa(''); }} className={sel}>{groups.map(g => <option key={g} value={g}>{g}</option>)}</select>
-                                <select value={pendAud} onChange={e => setPa(e.target.value)} className={sel}>{audOptions.map(a => <option key={a.share_link || a.id} value={a.share_link || a.id}>{a.title}</option>)}</select>
-                            </div>
-                            <p className="text-xs text-slate-500 mb-2">{groupStudents.length - pending.length} of {groupStudents.length} submitted · {pending.length} pending</p>
-                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-1 max-h-72 overflow-y-auto">
-                                {groupStudents.map(r => { const s = done.get(r.email.toLowerCase()); return (
-                                    <div key={r.email} className={`flex items-center justify-between gap-2 text-sm px-3 py-1.5 rounded-lg ${s ? 'bg-emerald-50 text-emerald-800' : 'bg-amber-50 text-amber-900'}`}>
-                                        <span className="truncate">{s ? '✓' : '⏳'} {r.name}</span>{s ? (s.details && s.details.paper ? <button onClick={() => openPaper(r, s)} title="Edit this paper submission" className="font-bold shrink-0 px-2 py-0.5 rounded-lg underline decoration-dotted hover:bg-emerald-100">📄 {Number(s.score).toFixed(1)} ✏️</button> : <span className="font-bold shrink-0">{Number(s.score).toFixed(1)}</span>) : <button onClick={() => openPaper(r)} title="Enter the result of a paper worksheet" className="shrink-0 px-2.5 py-1 rounded-lg text-xs font-bold bg-white border border-amber-300 text-amber-900 hover:bg-amber-100">✍ Paper</button>}
-                                    </div>); })}
-                            </div>
-                            {pending.length > 0 && <button onClick={copyPending} className="mt-3 px-3 py-2 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 rounded-xl text-xs font-bold">Copy pending names</button>}
-                        </div>
-                    )}
-
                     {edit && (
                         <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm flex items-center justify-center p-4 z-50">
                             <div className="bg-white rounded-2xl max-w-md w-full p-6 shadow-xl space-y-3">
@@ -1179,6 +1183,54 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
                             </div>
                         </div>
                     )}
+                </div>
+            );
+        };
+
+        const courseOfGroup = (g) => String(g || '').replace(/\s+[A-ZÑ]$/i, '').trim();
+        const surnameParts = (r) => { let f = r.first_name, l1 = r.last_name1, l2 = r.last_name2; if (!l1) { const w = String(r.name || '').trim().split(/\s+/); f = w[0] || ''; l1 = w.slice(1).join(' '); l2 = ''; } return { f: f || '', l1: l1 || '', l2: l2 || '' }; };
+        const cmpEs = (a, b) => String(a).localeCompare(String(b), 'es', { sensitivity: 'base' });
+        const classroomRows = (roster, group, subs) => roster.filter(r => r.class === group).map(r => ({ r, p: surnameParts(r), sub: subs.get(String(r.email).toLowerCase()) || null })).sort((a, b) => cmpEs(a.p.l1, b.p.l1) || cmpEs(a.p.l2, b.p.l2) || cmpEs(a.p.f, b.p.f));
+        const wordsInfo = (sub) => { const w = (sub && sub.details && sub.details.words) || []; return { w, correct: w.filter(x => x.correct).length, hints: w.filter(x => x.correct && x.usedHint).length }; };
+        const ClassroomView = ({ scores, auditions, roster }) => {
+            const groups = [...new Set((roster || []).map(r => r.class).filter(Boolean))].sort(cmpEs);
+            const [grp, setGrp] = usePState('k.grp', '');
+            const [aud, setAud] = usePState('k.aud', '');
+            const [sf, setSf] = usePState('k.sf', false);
+            const g = groups.includes(grp) ? grp : (groups[0] || '');
+            const course = courseOfGroup(g);
+            const opts = auditions.filter(a => !isSpanishCode(a.share_link || a.id) && (!Array.isArray(a.audience) || !a.audience.length || a.audience.includes(course)))
+                .sort((a, b) => (Number(a.number) || 9999) - (Number(b.number) || 9999) || String(a.created_at).localeCompare(String(b.created_at)));
+            const latest = [...opts].sort((a, b) => String(b.created_at).localeCompare(String(a.created_at)))[0];
+            const code = opts.some(a => (a.share_link || a.id) === aud) ? aud : (latest ? (latest.share_link || latest.id) : '');
+            const subs = new Map(scores.filter(x => x.audition_id === code).map(x => [String(x.student_email || '').toLowerCase(), x]));
+            const rows = classroomRows(roster || [], g, subs);
+            const done = rows.filter(x => x.sub).length;
+            const dot = (x) => ({ backgroundColor: x.correct ? (x.usedHint ? '#F59E0B' : '#10B981') : '#F43F5E' });
+            const sel = 'px-3 py-2 bg-slate-50 border rounded-xl text-sm font-semibold';
+            return (
+                <div className="space-y-4">
+                    <div className="flex flex-wrap items-center gap-2">
+                        <select value={g} onChange={e => { setGrp(e.target.value); setAud(''); }} className={sel}>{groups.map(x => <option key={x} value={x}>{x}</option>)}</select>
+                        <select value={code} onChange={e => setAud(e.target.value)} className={sel}>{opts.map(a => <option key={a.share_link || a.id} value={a.share_link || a.id}>{a.number ? `${a.number} · ` : ''}{a.title}</option>)}</select>
+                        <button onClick={() => setSf(v => !v)} className="px-3 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-xs font-bold text-slate-700">{sf ? 'Names: surnames first' : 'Names: as in Classroom'} ⇄</button>
+                        <span className="text-xs text-slate-500 ml-auto">{done} of {rows.length} submitted</span>
+                    </div>
+                    <p className="text-xs text-slate-500">Sorted by surname, like your Classroom list. Dots: green = correct, amber = correct with hint, red = wrong. “Words” is what you would give if hints were not penalised.</p>
+                    {rows.length === 0 ? <p className="text-sm text-slate-400 text-center py-6">No students in this group.</p> : (
+                        <div className="overflow-x-auto rounded-xl border border-slate-200">
+                            <table className="w-full text-left text-sm">
+                                <thead className="bg-slate-50 text-xs uppercase text-slate-500"><tr><th className="py-2 px-3 w-10">#</th><th className="py-2 px-3">Student</th><th className="py-2 px-3">Words</th><th className="py-2 px-3 text-center">Saved</th><th className="py-2 px-3 text-center">Words correct</th></tr></thead>
+                                <tbody>{rows.map(({ r, p, sub }, i) => { const wi = wordsInfo(sub); return (
+                                    <tr key={r.email} className="border-t border-slate-100">
+                                        <td className="py-2.5 px-3 text-xs text-slate-400">{i + 1}</td>
+                                        <td className="py-2.5 px-3 font-semibold text-slate-900 whitespace-nowrap">{(sf ? `${p.l1} ${p.l2}, ${p.f}` : `${p.f} ${p.l1} ${p.l2}`).replace(/\s+/g, ' ').trim().toUpperCase()}</td>
+                                        <td className="py-2.5 px-3">{sub ? <span className="inline-flex gap-1">{wi.w.map((x, k) => <span key={k} title={`${k + 1}. ${x.original} ${x.correct ? (x.usedHint ? '✓ hint' : '✓') : '✗'}`} className="w-3.5 h-3.5 rounded-full" style={dot(x)}></span>)}</span> : <span className="text-slate-300">—</span>}</td>
+                                        <td className="py-2.5 px-3 text-center">{sub ? <span className="text-lg font-black text-slate-900">{sub.details && sub.details.paper ? '📄 ' : ''}{Number(sub.score).toFixed(1)}</span> : <span className="text-slate-300">—</span>}</td>
+                                        <td className="py-2.5 px-3 text-center">{sub && wi.w.length ? <span className="font-bold text-slate-700">{wi.correct}/{wi.w.length}{wi.hints ? <span className="ml-1.5 text-xs font-semibold text-amber-700">{pl(wi.hints, 'hint', 'hints')}</span> : null}</span> : <span className="text-slate-300">—</span>}</td>
+                                    </tr>); })}</tbody>
+                            </table>
+                        </div>)}
                 </div>
             );
         };
@@ -1439,6 +1491,7 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
             const [fTo, setFTo] = usePState('g.fTo', '');
             const [sort, setSort] = usePState('g.sort', { key: 'date', dir: -1 });
             const hide = false;
+            const numOf = (code) => { const a = auditions.find(x => (x.share_link || x.id) === code); return a && a.number ? a.number : null; };
             const [profile, setProfile] = usePState('g.profile', null);
             const [rankAll, setRankAll] = usePState('g.rankAll', false);
             const [pjSetup, setPjSetup] = usePState('g.pjSetup', null);   // { group, aud } mientras se elige
@@ -1694,12 +1747,12 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
                         </div>
                     </div>
 
-                    <div className="flex bg-slate-100 p-1 rounded-xl gap-1 text-sm mb-3 max-w-md">
-                        {[['table', lang === 'es' ? 'Entregas' : 'Entries'], ['stats', lang === 'es' ? 'Estadísticas' : 'Statistics'], ['vocab', lang === 'es' ? 'Vocabulario' : 'Vocabulary']].map(([k, label]) => (
+                    <div className="flex bg-slate-100 p-1 rounded-xl gap-1 text-sm mb-3 max-w-xl">
+                        {[['table', lang === 'es' ? 'Entregas' : 'Entries'], ['stats', lang === 'es' ? 'Estadísticas' : 'Statistics'], ['vocab', lang === 'es' ? 'Vocabulario' : 'Vocabulary'], ['classroom', 'Classroom']].map(([k, label]) => (
                             <button key={k} onClick={() => setGtab(k)} className={`flex-1 py-1.5 rounded-lg font-semibold transition-all ${gtab === k ? 'bg-white text-slate-900 shadow-sm font-bold' : 'text-slate-500 hover:text-slate-800'}`}>{label}</button>))}
                     </div>
 
-                    {gtab !== 'stats' && (
+                    {gtab !== 'stats' && gtab !== 'classroom' && (
                         <div className="space-y-2 mb-3">
                             <div className="relative"><span className="absolute left-3 top-3 text-slate-400"><Icons.Search /></span><input type="text" placeholder={T.search} value={q} onChange={e => setQ(e.target.value)} className="w-full pl-9 pr-3 py-2.5 bg-slate-50 border rounded-xl text-sm outline-none focus:border-indigo-500" /></div>
                             <div className="flex flex-wrap gap-1.5">
@@ -1719,7 +1772,7 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
                                 <option value="">{lang === 'es' ? 'Todo el curso' : 'Whole course'}</option>
                                 <option value="1">{lang === 'es' ? '1.ª evaluación' : '1st term'}</option><option value="2">{lang === 'es' ? '2.ª evaluación' : '2nd term'}</option><option value="3">{lang === 'es' ? '3.ª evaluación' : '3rd term'}</option>
                             </select>
-                            <select value={fAud} onChange={e => setFAud(e.target.value)} className={`${sel} text-sm font-bold py-2.5`}><option value="">{T.allAvg}</option>{auds.map(([id, t]) => <option key={id} value={id}>{t}</option>)}</select>
+                            <select value={fAud} onChange={e => setFAud(e.target.value)} className={`${sel} text-sm font-bold py-2.5`}><option value="">{T.allAvg}</option>{auds.map(([id, t]) => <option key={id} value={id}>{numOf(id) ? `${numOf(id)} · ` : ''}{t}</option>)}</select>
                             <select value={fCourse} onChange={e => setFCourse(e.target.value)} className={sel}><option value="">{T.allCourses}</option>{courses.map(c => <option key={c} value={c}>{c}</option>)}</select>
                             <select value={fBand} onChange={e => setFBand(e.target.value)} className={sel}><option value="">{T.allBands}</option>{Object.entries(T.bands).map(([k, v]) => <option key={k} value={k}>{v}</option>)}</select>
                             <button onClick={() => { resetFilters(); setFYear(currentSchoolYear()); setFTerm(''); }} className="text-xs font-bold text-indigo-700 hover:underline text-left px-2">✕ {T.reset}</button>
@@ -1762,7 +1815,7 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
                                         <tr key={s.id} className="border-b border-slate-100 hover:bg-slate-50/30 transition-colors">
                                             <td className="py-3.5 px-4">{s.__out && <span title="Email not on the class list: not counted in statistics" className="mr-1">⚠️</span>}{s.details && s.details.paper && <span title="Paper submission" className="mr-1">📄</span>}<button onClick={() => setProfile(studentKey(s))} className="font-bold text-slate-950 hover:underline text-left">{nameOf(s)}</button><p className="text-xs text-slate-400">{hide ? '' : (s.student_email || T.noEmail)}</p></td>
                                             <td className="py-3.5 px-4 font-mono text-xs">{s.student_class}</td>
-                                            <td className="py-3.5 px-4 text-slate-600 font-medium"><span className="inline-block w-2.5 h-2.5 rounded-full mr-2 align-middle" style={{ backgroundColor: getMusicTheme(styleByCode[s.audition_id] || s.auditions?.style).colors.accent }} title={getMusicTheme(styleByCode[s.audition_id] || s.auditions?.style).label}></span>{s.auditions?.title}{edLabel && edLabel(s) ? <span className="ml-1.5 text-xs font-black px-1.5 py-0.5 rounded bg-amber-100 text-amber-800" title="Version of the words used">{edLabel(s)}</span> : null}</td>
+                                            <td className="py-3.5 px-4 text-slate-600 font-medium"><span className="inline-block w-2.5 h-2.5 rounded-full mr-2 align-middle" style={{ backgroundColor: getMusicTheme(styleByCode[s.audition_id] || s.auditions?.style).colors.accent }} title={getMusicTheme(styleByCode[s.audition_id] || s.auditions?.style).label}></span>{numOf(s.audition_id) ? `${numOf(s.audition_id)} · ` : ''}{s.auditions?.title}{edLabel && edLabel(s) ? <span className="ml-1.5 text-xs font-black px-1.5 py-0.5 rounded bg-amber-100 text-amber-800" title="Version of the words used">{edLabel(s)}</span> : null}</td>
                                             <td className="py-3.5 px-4 text-center"><span className={`inline-block font-extrabold text-xs px-2.5 py-1 rounded-full ${scoreClass(s.score)}`}>{fmt(s.score)}/10</span></td>
                                             <td className="py-3.5 px-4 text-xs text-slate-500 whitespace-nowrap">{dateLabel(s.created_at)}</td>
                                             <td className="py-3.5 px-4 text-right space-x-1 whitespace-nowrap">
@@ -1783,6 +1836,7 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
                     )}
                     {gtab === 'stats' && <StatsView scores={scores} auditions={auditions} roster={roster || []} hiddenKeys={hiddenKeys} />}
                     {gtab === 'vocab' && <VocabView rows={filteredC} />}
+                    {gtab === 'classroom' && <ClassroomView scores={scores} auditions={auditions} roster={roster || []} />}
                     <div className="mt-6"><EndOfCourse yearCounts={yearCounts} groups={groups} idsFor={idsFor} onExportCsv={exportCsv} onBackupGrades={onBackup} onBackupTasks={onBackupTasks} onBackupRoster={onBackupRoster} onDeleteGrades={onDeleteGrades} onClearRoster={onClearRoster} rosterCount={(roster || []).length} /></div>
 
                     {pjSetup && (
@@ -2036,12 +2090,12 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
         };
 
         const DARK_COLORS = {
-            classical: { paper: '#101A33', soft: '#27365A', primary: '#F3EBDD', text: '#F3EBDD', accent: '#E2C57E' },
-            jazz:      { paper: '#2A1620', soft: '#4A2A3D', primary: '#FBE9D0', text: '#FBF3E8', accent: '#F0B45C' },
+            classical: { paper: '#2A2208', soft: '#4A3C10', primary: '#FEF3C7', text: '#FEF3C7', accent: '#F5CE5C' },
+            jazz:      { paper: '#2E0F20', soft: '#521B38', primary: '#FCE7F3', text: '#FCE7F3', accent: '#F2C23C' },
             rock:      { paper: '#141414', soft: '#2B2B2B', primary: '#F5F5F5', text: '#F5F5F5', accent: '#FF4650' },
-            pop:       { paper: '#2A0F2E', soft: '#4A1B50', primary: '#FDE8F4', text: '#FDE8F4', accent: '#22D3EE' },
-            folk:      { paper: '#1E2A1D', soft: '#33452F', primary: '#F0E4CE', text: '#F0E4CE', accent: '#E3A872' },
-            film:      { paper: '#150A30', soft: '#2A1A55', primary: '#EFE9FB', text: '#EFE9FB', accent: '#F5B82E' }
+            pop:       { paper: '#0B1E45', soft: '#17336B', primary: '#DBEAFE', text: '#DBEAFE', accent: '#22D3EE' },
+            folk:      { paper: '#0F2A19', soft: '#1D4A2E', primary: '#DCFCE7', text: '#DCFCE7', accent: '#F0894A' },
+            film:      { paper: '#1A0B3D', soft: '#32186B', primary: '#EDE9FE', text: '#EDE9FE', accent: '#F5B82E' }
         };
         const getUiTheme = (id, dark) => { const t = getMusicTheme(id); const base = { ...t.colors, strong: t.colors.primary }; return dark ? { ...t, colors: { ...base, ...(DARK_COLORS[t.id] || {}) } } : { ...t, colors: base }; };
 
@@ -2056,6 +2110,7 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
             const [projectNonce, setProjectNonce] = useState(0);
             const [fontScale, setFontScale] = useState(() => { try { return Number(localStorage.getItem('audition_font_scale')) || 100; } catch (e) { return 100; } });
             useEffect(() => { document.documentElement.style.fontSize = fontScale + '%'; try { localStorage.setItem('audition_font_scale', String(fontScale)); } catch (e) {} }, [fontScale]);
+            const stepFont = (d) => setFontScale(v => { const i = FONT_STEPS.indexOf(v); const k = i >= 0 ? i : Math.max(0, FONT_STEPS.findIndex(x => x >= v)); return FONT_STEPS[Math.max(0, Math.min(FONT_STEPS.length - 1, k + d))]; });
             const [darkMode, setDarkMode] = useState(() => localStorage.getItem('audition_dark_mode') === 'true');
             const [showAwayWarning, setShowAwayWarning] = useState(false);
 
@@ -2084,6 +2139,9 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
             const [rosterList, setRosterList] = useState([]);
             const [rosterLoaded, setRosterLoaded] = useState(false);
             const [taskAudience, setTaskAudience] = useState([]);
+            const [taskNumber, setTaskNumber] = useState('');
+            const [numberTouched, setNumberTouched] = useState(false);
+            const [numModal, setNumModal] = useState(null);
             const [teacherViewing, setTeacherViewing] = useState(false);
             const [emptyAsk, setEmptyAsk] = useState(0);
             const [showDelTasks, setShowDelTasks] = useState(false);
@@ -2155,6 +2213,14 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
             }, [darkMode]);
 
             const viewRef = React.useRef(view); viewRef.current = view;
+            useEffect(() => {
+                if (!(view === 'results' && (teacherViewing || !!(activeTask && activeTask.preview)))) return;
+                const onClick = (e) => { if (e.target.closest('[data-keep],header,button,a,input,select,textarea,label,[role="dialog"]')) return; leaveTeacherView(); };
+                const onKey = (e) => { if (e.key === 'Escape') leaveTeacherView(); };
+                const t = setTimeout(() => document.addEventListener('click', onClick), 0);
+                window.addEventListener('keydown', onKey);
+                return () => { clearTimeout(t); document.removeEventListener('click', onClick); window.removeEventListener('keydown', onKey); };
+            }, [view, teacherViewing, activeTask]);
             const prevViewRef = React.useRef(view);
             useEffect(() => {
                 const onScroll = () => { if (viewRef.current === 'dashboard') UI_STATE.__scrollY = window.scrollY; };
@@ -2363,13 +2429,43 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
                 setHintsPaste('');
                 showToast(found.length === 10 ? "10 hints filled in." : `${Math.min(found.length, 10)} hints filled in (10 expected).`, found.length === 10 ? "success" : "info");
             };
+            const courseNext = (course) => {
+                const mine = editingTask ? (editingTask.share_link || editingTask.id) : null;
+                const nums = auditionsList.filter(a => Array.isArray(a.audience) && a.audience.includes(course) && a.number && (a.share_link || a.id) !== mine).map(a => Number(a.number));
+                return (nums.length ? Math.max(...nums) : 0) + 1;
+            };
+            const suggestedNumber = taskAudience.length === 1 ? courseNext(taskAudience[0]) : null;
+            useEffect(() => { if (!editingTask && !numberTouched) setTaskNumber(suggestedNumber ? String(suggestedNumber) : ''); }, [suggestedNumber, editingTask, numberTouched]);
+            const numberClash = taskNumber && taskAudience.length ? auditionsList.find(a => Number(a.number) === Number(taskNumber) && Array.isArray(a.audience) && a.audience.some(c => taskAudience.includes(c)) && (a.share_link || a.id) !== (editingTask ? (editingTask.share_link || editingTask.id) : null)) : null;
+            const openNumbering = () => {
+                const byCourse = {};
+                [...auditionsList].sort((a, b) => String(a.created_at).localeCompare(String(b.created_at))).forEach(a => { const c = (Array.isArray(a.audience) && a.audience.length) ? a.audience[0] : ''; (byCourse[c] = byCourse[c] || []).push(a); });
+                const rows = [];
+                Object.keys(byCourse).sort().forEach(c => {
+                    let next = Math.max(0, ...byCourse[c].map(a => Number(a.number) || 0)) + 1;
+                    byCourse[c].forEach(a => rows.push({ key: a.share_link || a.id, title: a.title, course: c, num: a.number ? String(a.number) : String(next++) }));
+                });
+                setNumModal({ rows, busy: false });
+            };
+            const applyNumbering = async () => {
+                setNumModal(m => ({ ...m, busy: true }));
+                let fail = 0;
+                for (const r of numModal.rows) {
+                    const n = r.num ? parseInt(r.num, 10) : null;
+                    const { error } = await supabaseClient.from('auditions').update({ number: n }).eq('share_link', r.key);
+                    if (error) fail++;
+                    else { setAuditionsList(prev => prev.map(a => (a.share_link || a.id) === r.key ? { ...a, number: n } : a)); try { saveStoredAuditions(getStoredAuditions().map(a => (a.share_link || a.id) === r.key ? { ...a, number: n } : a)); } catch (e) {} }
+                }
+                setNumModal(null);
+                showToast(fail ? `${fail} task(s) could not be numbered. Run the latest SQL in Supabase first.` : 'Audition numbers saved.', fail ? 'error' : 'success');
+            };
             const startEditTask = (aud) => {
                 setTitle(aud.title || ''); setArtist(aud.artist || ''); setStyle(aud.style || 'classical'); setYoutubeUrl(aud.youtube_url || '');
-                setCommentText(aud.comment || ''); setTaskAudience(Array.isArray(aud.audience) ? aud.audience : []); setTaskHints([...(Array.isArray(aud.hints) ? aud.hints : []), ...Array(10).fill('')].slice(0, 10));
+                setCommentText(aud.comment || ''); setTaskAudience(Array.isArray(aud.audience) ? aud.audience : []); setTaskNumber(aud.number != null ? String(aud.number) : ''); setNumberTouched(true); setTaskHints([...(Array.isArray(aud.hints) ? aud.hints : []), ...Array(10).fill('')].slice(0, 10));
                 setEditingTask(aud); setDashboardTab('create'); window.scrollTo({ top: 0, behavior: 'smooth' });
                 showToast("Editing this task. Change what you need and press Save changes.", "info");
             };
-            const cancelEditTask = () => { setEditingTask(null); setTitle(''); setArtist(''); setStyle('classical'); setYoutubeUrl(''); setCommentText(''); setTaskHints(Array(10).fill('')); setTaskAudience([]); };
+            const cancelEditTask = () => { setEditingTask(null); setTitle(''); setArtist(''); setStyle('classical'); setYoutubeUrl(''); setCommentText(''); setTaskHints(Array(10).fill('')); setTaskAudience([]); setTaskNumber(''); setNumberTouched(false); };
 
             const handlePublishTask = async () => {
                 if (uppercaseWords.length !== 10) { showToast("You must include exactly 10 UPPERCASE words in the commentary.", "error"); return; }
@@ -2385,6 +2481,7 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
                     artist: artist || 'Unknown Artist',
                     style: style,
                     audience: taskAudience,
+                    number: taskNumber ? parseInt(taskNumber, 10) : null,
                     youtube_url: youtubeUrl,
                     comment: commentText,
                     uppercase_words: uppercaseWords,
@@ -2400,13 +2497,13 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
                     if (hasSubs && wordsChanged && !window.confirm("Students have already submitted this task. Their saved scores will NOT be recalculated with the new words. Save the changes anyway (same link)?")) { setLoading(false); return; }
                     {
                         try {
-                            const { data, error } = await supabaseClient.from('auditions').update({ title: taskPayload.title, artist: taskPayload.artist, style, audience: taskAudience, youtube_url: youtubeUrl, comment: commentText, uppercase_words: uppercaseWords, hints: taskHints.slice(0, 10) }).eq('share_link', key).select('share_link');
+                            const { data, error } = await supabaseClient.from('auditions').update({ title: taskPayload.title, artist: taskPayload.artist, style, audience: taskAudience, number: taskNumber ? parseInt(taskNumber, 10) : null, youtube_url: youtubeUrl, comment: commentText, uppercase_words: uppercaseWords, hints: taskHints.slice(0, 10) }).eq('share_link', key).select('share_link');
                             if (error || !data || !data.length) throw new Error(error?.message || 'not allowed');
                         } catch (e) { showToast("The changes could not be saved: " + (e.message || ''), "error"); setLoading(false); return; }
-                        const upd = { ...editingTask, title: taskPayload.title, artist: taskPayload.artist, style, audience: taskAudience, youtube_url: youtubeUrl, comment: commentText, uppercase_words: uppercaseWords, hints: taskHints.slice(0, 10) };
+                        const upd = { ...editingTask, title: taskPayload.title, artist: taskPayload.artist, style, audience: taskAudience, number: taskNumber ? parseInt(taskNumber, 10) : null, youtube_url: youtubeUrl, comment: commentText, uppercase_words: uppercaseWords, hints: taskHints.slice(0, 10) };
                         const list = getStoredAuditions().map(a => (a.share_link || a.id) === key ? upd : a); saveStoredAuditions(list);
                         setAuditionsList(prev => prev.map(a => (a.share_link || a.id) === key ? upd : a));
-                        setEditingTask(null); setTitle(''); setArtist(''); setStyle('classical'); setYoutubeUrl(''); setCommentText(''); setTaskHints(Array(10).fill('')); setTaskAudience([]);
+                        setEditingTask(null); setTitle(''); setArtist(''); setStyle('classical'); setYoutubeUrl(''); setCommentText(''); setTaskHints(Array(10).fill('')); setTaskAudience([]); setTaskNumber(''); setNumberTouched(false);
                         try { const meta = { title: taskPayload.title, artist: taskPayload.artist, style }; const { error: e2 } = await supabaseClient.from('student_submissions').update({ auditions: meta }).eq('audition_id', key); if (!e2) setScoresList(prev => prev.map(sc => sc.audition_id === key ? { ...sc, auditions: meta } : sc)); } catch (e) { console.error(e); }
                         showToast("Task updated. Same student link; results are kept.", "success"); setLoading(false); setDashboardTab('history'); return;
                     }
@@ -2415,6 +2512,12 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
                     let insertError = null;
                     const firstTry = await supabaseClient.from('auditions').insert([taskPayload]);
                     insertError = firstTry.error;
+                    if (insertError && /number/i.test(insertError.message || '') && !/hints/i.test(insertError.message || '')) {
+                        const { number: _n, ...payloadNoNumber } = taskPayload;
+                        const retryN = await supabaseClient.from('auditions').insert([payloadNoNumber]);
+                        insertError = retryN.error;
+                        if (!retryN.error) showToast('Saved without the audition number: run the latest SQL in Supabase first.', 'info');
+                    }
                     if (insertError && /hints/i.test(insertError.message || '')) {
                         const { hints, ...payloadNoHints } = taskPayload;
                         const retry = await supabaseClient.from('auditions').insert([payloadNoHints]);
@@ -2439,7 +2542,7 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
                 setAuditionsList(updatedList.filter(a => (a.teacher_email || a.teacher_id)?.toLowerCase() === teacherEmail));
                 const fullTaskUrl = buildStudentUrl(taskId);
                 setCreatedTaskModal({ title: taskPayload.title, fullUrl: fullTaskUrl, taskPayload: taskPayload });
-                setTitle(''); setArtist(''); setStyle('classical'); setYoutubeUrl(''); setCommentText(''); setTaskHints(Array(10).fill('')); setTaskAudience([]);
+                setTitle(''); setArtist(''); setStyle('classical'); setYoutubeUrl(''); setCommentText(''); setTaskHints(Array(10).fill('')); setTaskAudience([]); setTaskNumber(''); setNumberTouched(false);
                 showToast("Audition saved to Supabase Cloud.", "success");
                 setLoading(false);
             };
@@ -3139,6 +3242,30 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
 
             return (
                 <div className="min-h-screen pb-12">
+                    {numModal && (
+                        <div className="fixed inset-0 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4 z-50" onMouseDown={(e) => { if (e.target === e.currentTarget && !numModal.busy) setNumModal(null); }}>
+                            <div className="bg-white rounded-2xl max-w-lg w-full p-6 shadow-xl space-y-4 max-h-[85vh] flex flex-col">
+                                <div><h3 className="text-lg font-bold text-slate-900">🔢 Number my tasks</h3><p className="text-xs text-slate-500">Proposed in the order you created them, inside each course. Change any number and press Save. Leave blank for none.</p></div>
+                                <div className="overflow-y-auto space-y-4 pr-1">
+                                    {[...new Set(numModal.rows.map(r => r.course))].map(c => (
+                                        <div key={c || 'none'}>
+                                            <p className="text-xs font-extrabold uppercase tracking-wide text-slate-500 mb-1.5">{c || 'No course assigned'}</p>
+                                            <div className="space-y-1.5">
+                                                {numModal.rows.filter(r => r.course === c).map(r => (
+                                                    <div key={r.key} className="flex items-center gap-3">
+                                                        <input type="number" min="1" value={r.num} onChange={e => setNumModal(m => ({ ...m, rows: m.rows.map(x => x.key === r.key ? { ...x, num: e.target.value } : x) }))} className="w-20 px-2 py-1.5 bg-slate-50 border rounded-lg text-sm font-bold" />
+                                                        <span className="text-sm text-slate-800 truncate">{r.title}</span>
+                                                    </div>))}
+                                            </div>
+                                        </div>))}
+                                </div>
+                                <div className="flex justify-end gap-2">
+                                    <button onClick={() => setNumModal(null)} disabled={numModal.busy} className="px-4 py-2 rounded-xl text-sm font-bold text-slate-600 bg-slate-100">Cancel</button>
+                                    <button onClick={applyNumbering} disabled={numModal.busy} className="px-4 py-2 rounded-xl text-sm font-bold text-white bg-indigo-600 disabled:opacity-50">{numModal.busy ? 'Saving…' : 'Save numbers'}</button>
+                                </div>
+                            </div>
+                        </div>
+                    )}
                     {paperDlg && <PaperDialog dlg={paperDlg} setDlg={setPaperDlg} dark={darkMode} onSave={savePaperDlg} onClose={() => setPaperDlg(null)} />}
 
                     {toast && (
@@ -3207,7 +3334,12 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
                                         <Icons.Cloud /> Supabase
                                     </a>
                                 )}
-                                <div className="flex items-center rounded-lg bg-slate-100 overflow-hidden" role="group" aria-label="Text size">{[['A−', 87.5], ['A', 100], ['A+', 112.5]].map(([l, v]) => <button key={l} onClick={() => setFontScale(v)} aria-pressed={fontScale === v} title="Text size" className={`px-2 py-1.5 text-xs font-bold ${fontScale === v ? 'bg-indigo-600 text-white' : 'text-slate-600 hover:bg-slate-200'}`}>{l}</button>)}</div>
+                                {(previewMode || teacherViewing) && (view === 'results' || view === 'student-test') && <button onClick={leaveTeacherView} className="text-xs font-bold px-3 py-1.5 rounded-lg bg-indigo-600 text-white hover:bg-indigo-700 whitespace-nowrap">← Back to dashboard</button>}
+                                <div className="flex items-center rounded-lg bg-slate-100 overflow-hidden" role="group" aria-label="Text size">
+                                    <button onClick={() => stepFont(-1)} disabled={fontScale <= FONT_STEPS[0]} title="Smaller text" className="px-2 py-1.5 text-xs font-bold text-slate-600 hover:bg-slate-200 disabled:opacity-40">A−</button>
+                                    <button onClick={() => setFontScale(100)} title="Back to 100%" className="px-2 py-1.5 text-xs font-bold bg-indigo-600 text-white min-w-[3rem]">{fontScale}%</button>
+                                    <button onClick={() => stepFont(1)} disabled={fontScale >= FONT_STEPS[FONT_STEPS.length - 1]} title="Larger text" className="px-2 py-1.5 text-xs font-bold text-slate-600 hover:bg-slate-200 disabled:opacity-40">A+</button>
+                                </div>
                                 <button onClick={() => setDarkMode(!darkMode)} className="text-xs font-bold p-2 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-lg" title="Toggle dark mode">{darkMode ? <Icons.Sun /> : <Icons.Moon />}</button>
                                 {session && view !== 'student-test' && view !== 'results' && (
                                     <button onClick={handleLogout} className="text-xs font-bold text-slate-500 hover:text-slate-800 flex items-center gap-1">
@@ -3315,6 +3447,15 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
                                                     <h3 className="text-sm font-bold text-slate-800 mb-2">Assign to course(s)</h3>
                                                     <div className="flex flex-wrap gap-2">{rosterCourses.map(c => { const on = taskAudience.includes(c); return <button key={c} type="button" onClick={() => setTaskAudience(a => on ? a.filter(x => x !== c) : [...a, c])} className={`px-3 py-1.5 rounded-full text-xs font-bold border transition-all ${on ? 'bg-indigo-600 text-white border-indigo-600' : 'bg-white text-slate-600 border-slate-200 hover:border-indigo-300'}`}>{on ? '✓ ' : ''}{c}</button>; })}</div>
                                                     <p className="text-xs text-slate-400 mt-1.5">Used for statistics and “Who has not submitted”. Leave empty for all courses.</p>
+                                                <div className="mt-4">
+                                                    <label className="block text-sm font-bold text-slate-900 mb-1.5">Audition no. <span className="font-medium text-slate-500">(optional)</span></label>
+                                                    <div className="flex items-center gap-3">
+                                                        <input type="number" min="1" value={taskNumber} onChange={e => { setTaskNumber(e.target.value); setNumberTouched(true); }} placeholder={suggestedNumber ? String(suggestedNumber) : '—'} className="w-24 px-3 py-2 bg-slate-50 border rounded-xl text-sm font-bold" />
+                                                        {suggestedNumber && String(suggestedNumber) !== taskNumber && <button type="button" onClick={() => { setTaskNumber(String(suggestedNumber)); setNumberTouched(true); }} className="text-xs font-bold text-indigo-600 hover:underline">Use {suggestedNumber}</button>}
+                                                    </div>
+                                                    <p className="text-xs text-slate-500 mt-1.5">Number within its course. Students see it as “Audition {taskNumber || 'N'}”.</p>
+                                                    {numberClash && <p className="text-xs text-amber-800 bg-amber-50 border border-amber-200 rounded-lg px-2.5 py-1.5 mt-1.5">“{numberClash.title}” already uses number {taskNumber} in this course.</p>}
+                                                </div>
                                                 </div>
                                             )}
                                             <button onClick={handlePublishTask} disabled={loading} className={`w-full mt-6 py-3.5 rounded-xl font-bold text-white transition-all shadow-md ${uppercaseWords.length === 10 && videoId ? 'bg-slate-900 hover:bg-slate-800' : 'bg-slate-300 cursor-not-allowed'}`}>{editingTask ? 'Save changes' : 'Publish Audition Task & Save Cloud Link'}</button>
@@ -3335,8 +3476,8 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
                                                             style={{ backgroundColor: theme.colors.paper, borderColor: style === theme.id ? theme.colors.accent : theme.colors.soft, borderLeft: `6px solid ${theme.colors.accent}`, fontFamily: theme.font, '--tw-ring-color': theme.colors.accent }}>
                                                             <div className="flex items-center gap-2 mb-1">
                                                                 <span className="w-9 h-9 rounded-lg flex items-center justify-center text-lg shrink-0" style={{backgroundColor:theme.colors.primary,color:theme.colors.accent}}>{theme.icon}</span>
-                                                                <span className="text-xs font-extrabold" style={{color:theme.colors.primary,...theme.headStyle}}>{theme.label}</span>
-                                                                {style === theme.id && <span className="absolute top-1.5 right-2 text-xs font-black uppercase tracking-wide px-1.5 py-0.5 rounded-full" style={{backgroundColor:theme.colors.accent,color:theme.colors.paper}}>✓ Selected</span>}
+                                                                <span className="text-xs font-extrabold pr-5" style={{color:theme.colors.primary,...theme.headStyle}}>{theme.label}</span>
+                                                                {style === theme.id && <span aria-label="Selected" className="absolute top-1.5 right-1.5 w-5 h-5 rounded-full flex items-center justify-center text-xs font-black" style={{backgroundColor:theme.colors.accent,color:theme.colors.paper}}>✓</span>}
                                                             </div>
                                                             <span className="block text-xs leading-snug" style={{color:theme.colors.text,opacity:0.8}}>{theme.genres}</span>
                                                             <span className="block mt-1.5 text-xs" style={{color:theme.colors.primary}}>A bright <span style={{borderBottom:`2px solid ${theme.colors.accent}`,padding:'0 6px'}}>S _ _ _</span> opens it.</span>
@@ -3358,6 +3499,7 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
                                                 {rosterCourses.length > 0 && <select value={histCourse} onChange={e => setHistCourse(e.target.value)} className="px-3 py-2 bg-slate-50 border rounded-xl text-xs font-bold outline-none"><option value="">All courses</option>{rosterCourses.map(c => <option key={c} value={c}>{c}</option>)}</select>}
                                                 <div className="relative flex-1 sm:w-72"><span className="absolute left-3 top-2.5 text-slate-400"><Icons.Search /></span><input type="text" placeholder="Search by title, artist or link..." value={searchTermHistory} onChange={e => setSearchTermHistory(e.target.value)} className="w-full pl-9 pr-4 py-2 border rounded-xl text-sm bg-slate-50 outline-none focus:ring-1 focus:ring-indigo-500" /></div>
                                                 
+                                                <button onClick={openNumbering} title="Give every task its audition number" className="px-3 py-2 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 rounded-xl text-xs font-bold whitespace-nowrap">🔢 Number my tasks</button>
                                                 {/* Backup Button */}
                                                 <button onClick={() => {
                                                     const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(auditionsList));
@@ -3391,7 +3533,7 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
                                                     <tbody>
                                                         {filteredAuditions.map(aud => (
                                                             <tr key={aud.id || aud.share_link} className="border-b border-slate-100 hover:bg-slate-50/30 transition-colors">
-                                                                <td className="py-4 px-4 font-bold text-slate-950"><span className="inline-block w-2.5 h-2.5 rounded-full mr-2 align-middle" style={{ backgroundColor: getMusicTheme(aud.style).colors.accent }} title={getMusicTheme(aud.style).label}></span>{aud.title}{editedTasks.has(aud.share_link || aud.id) && <span title="The 10 words were changed after students had submitted" className="ml-2 text-xs font-black px-1.5 py-0.5 rounded bg-amber-100 text-amber-800">✏️ Words edited</span>}{(aud.audience || []).map(c => <span key={c} className="ml-1.5 text-xs font-black px-1.5 py-0.5 rounded bg-indigo-50 text-indigo-700">{c}</span>)}</td><td className="py-4 px-4 text-slate-500">{aud.artist}</td>
+                                                                <td className="py-4 px-4 font-bold text-slate-950"><span className="inline-block w-2.5 h-2.5 rounded-full mr-2 align-middle" style={{ backgroundColor: getMusicTheme(aud.style).colors.accent }} title={getMusicTheme(aud.style).label}></span>{aud.number ? <span className="mr-2 px-1.5 py-0.5 rounded-md bg-indigo-50 text-indigo-700 text-xs font-extrabold">#{aud.number}</span> : null}{aud.title}{editedTasks.has(aud.share_link || aud.id) && <span title="The 10 words were changed after students had submitted" className="ml-2 text-xs font-black px-1.5 py-0.5 rounded bg-amber-100 text-amber-800">✏️ Words edited</span>}{(aud.audience || []).map(c => <span key={c} className="ml-1.5 text-xs font-black px-1.5 py-0.5 rounded bg-indigo-50 text-indigo-700">{c}</span>)}</td><td className="py-4 px-4 text-slate-500">{aud.artist}</td>
                                                                 <td className="py-4 px-4 text-center"><button onClick={() => handleCopyLink(aud.share_link || aud.id, aud.id)} className="bg-indigo-50 hover:bg-indigo-100 text-indigo-700 font-bold px-3 py-1.5 rounded-lg text-xs flex items-center gap-1 mx-auto transition-all">{copiedId === aud.id ? <Icons.Check /> : <Icons.Link />} {copiedId === aud.id ? "Copied!" : "Copy Link"}</button></td>
                                                                 <td className="py-4 px-4 text-right space-x-1 whitespace-nowrap">
                                                                     <a href={buildStudentUrl(aud.share_link || aud.id)} target="_blank" title="Preview" className="inline-block align-middle p-2 hover:bg-slate-100 rounded-lg text-slate-500 transition-colors"><Icons.External /></a>
@@ -3475,7 +3617,7 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
                                 </div>
                                                                 <div className="p-6 md:p-8 rounded-2xl shadow-md border" style={{backgroundColor:activeMusicTheme.colors.paper,color:activeMusicTheme.colors.text,borderColor:activeMusicTheme.colors.soft,borderLeft:`8px solid ${activeMusicTheme.colors.accent}`,borderTop:`5px solid ${activeMusicTheme.colors.primary}`,fontFamily:activeMusicTheme.font}}>
                                     <div className="mb-6 p-4 rounded-xl flex flex-col md:flex-row gap-6 items-center" style={{backgroundColor:activeMusicTheme.colors.soft}}>
-                                        <div className="flex-1"><div className="inline-block text-xs font-extrabold uppercase tracking-[0.18em] mb-2 px-2.5 py-1 rounded-full" style={{backgroundColor:activeMusicTheme.colors.primary,color:activeMusicTheme.colors.paper}}>{activeMusicTheme.icon} {activeMusicTheme.label}</div><h2 className="text-2xl font-extrabold" style={{color:activeMusicTheme.colors.primary,...activeMusicTheme.headStyle}}>{activeTask.title}</h2><p className="font-medium" style={{color:activeMusicTheme.colors.primary,opacity:0.8}}>{activeTask.artist}</p></div>
+                                        <div className="flex-1"><div className="inline-block text-xs font-extrabold uppercase tracking-[0.18em] mb-2 px-2.5 py-1 rounded-full" style={{backgroundColor:activeMusicTheme.colors.primary,color:activeMusicTheme.colors.paper}}>{activeMusicTheme.icon} {activeMusicTheme.label}{activeTask.number ? ` · Audition ${activeTask.number}` : ''}</div><h2 className="text-2xl font-extrabold" style={{color:activeMusicTheme.colors.primary,...activeMusicTheme.headStyle}}>{activeTask.title}</h2><p className="font-medium" style={{color:activeMusicTheme.colors.primary,opacity:0.8}}>{activeTask.artist}</p></div>
                                         <div className="w-full md:w-80 shrink-0 rounded-xl overflow-hidden border bg-slate-900 aspect-video relative flex flex-col items-center justify-center">
                                             {(() => {
                                                 const studentVideoId = extractYouTubeId(activeTask.youtube_url);
@@ -3573,21 +3715,30 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
                         )}
 
                         {view === 'results' && finalScoreRecord && (teacherViewing || previewMode) && (
-                            <div className="max-w-2xl mx-auto mb-3 flex items-center justify-between gap-3 bg-indigo-50 border border-indigo-200 text-indigo-900 text-sm font-semibold rounded-xl px-4 py-2.5">
+                            <div data-keep="1" className="max-w-2xl mx-auto mb-3 flex items-center justify-between gap-3 bg-indigo-50 border border-indigo-200 text-indigo-900 text-sm font-semibold rounded-xl px-4 py-2.5">
                                 <span>{previewMode ? '👀 Teacher preview: nothing is saved.' : '👀 You are seeing the results as the student sees them.'}</span>
                                 <button onClick={leaveTeacherView} className="shrink-0 px-3 py-1.5 rounded-lg bg-white border border-indigo-200 text-xs font-bold hover:bg-indigo-100">← Back to dashboard</button>
                             </div>
                         )}
                         {view === 'results' && finalScoreRecord && (
-                            <div className="max-w-2xl mx-auto p-8 md:p-10 rounded-3xl shadow-xl border text-center relative overflow-hidden" style={{backgroundColor:getUiTheme(finalScoreRecord.taskDetails?.style || finalScoreRecord.auditions?.style || 'classical', darkMode).colors.paper, borderColor:getUiTheme(finalScoreRecord.taskDetails?.style || finalScoreRecord.auditions?.style || 'classical', darkMode).colors.accent}}>
+                            <div data-keep="1" className="max-w-2xl mx-auto p-8 md:p-10 rounded-3xl shadow-xl border text-center relative overflow-hidden" style={{backgroundColor:getUiTheme(finalScoreRecord.taskDetails?.style || finalScoreRecord.auditions?.style || 'classical', darkMode).colors.paper, borderColor:getUiTheme(finalScoreRecord.taskDetails?.style || finalScoreRecord.auditions?.style || 'classical', darkMode).colors.accent}}>
                                 {(() => {
                                     const feedback = getEnglishFeedback(finalScoreRecord.score);
+                                    const rTheme = getUiTheme(finalScoreRecord.taskDetails?.style || finalScoreRecord.auditions?.style || 'classical', darkMode);
+                                    const rAud = auditionsList.find(a => (a.share_link || a.id) === finalScoreRecord.audition_id) || ((activeTask && (activeTask.share_link || activeTask.id) === finalScoreRecord.audition_id) ? activeTask : null);
+                                    const rTitle = (finalScoreRecord.auditions && finalScoreRecord.auditions.title) || (finalScoreRecord.taskDetails && finalScoreRecord.taskDetails.title) || (rAud && rAud.title) || '';
+                                    const rArtist = (finalScoreRecord.auditions && finalScoreRecord.auditions.artist) || (finalScoreRecord.taskDetails && finalScoreRecord.taskDetails.artist) || (rAud && rAud.artist) || '';
+                                    const rNum = rAud && rAud.number ? rAud.number : null;
                                     return (
                                         <div className="relative z-10 space-y-6">
                                             <div>
                                                 <div className="w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-4 border-4 border-white shadow-sm" style={{backgroundColor:getUiTheme(finalScoreRecord.taskDetails?.style || finalScoreRecord.auditions?.style || 'classical', darkMode).colors.soft,color:getUiTheme(finalScoreRecord.taskDetails?.style || finalScoreRecord.auditions?.style || 'classical', darkMode).colors.primary}}><span className="text-4xl">{getUiTheme(finalScoreRecord.taskDetails?.style || finalScoreRecord.auditions?.style || 'classical', darkMode).icon}</span></div>
                                                 <h2 className="text-3xl font-bold mb-1" style={{color:getUiTheme(finalScoreRecord.taskDetails?.style || finalScoreRecord.auditions?.style || 'classical', darkMode).colors.primary,fontFamily:getUiTheme(finalScoreRecord.taskDetails?.style || finalScoreRecord.auditions?.style || 'classical', darkMode).font}}>Assessment Submitted</h2>
-                                                <p className="text-xs text-slate-400">{finalScoreRecord.student_name} ({finalScoreRecord.student_class})</p>
+                                                <div className="mt-2">
+                                                    <p className="text-2xl font-extrabold leading-tight" style={{ color: rTheme.colors.primary, fontFamily: rTheme.font, ...rTheme.headStyle }}>{rTitle}</p>
+                                                    <p className="text-sm font-semibold" style={{ color: rTheme.colors.text, opacity: 0.8 }}>{rArtist}{rNum ? ` · Audition ${rNum}` : ''}</p>
+                                                    <p className="text-lg font-bold mt-3" style={{ color: rTheme.colors.text }}>{finalScoreRecord.student_name} <span className="font-medium opacity-75">({finalScoreRecord.student_class})</span></p>
+                                                </div>
                                             </div>
                                             <div className="border-2 px-8 py-6 rounded-3xl inline-block mx-auto shadow-sm" style={{backgroundColor:getUiTheme(finalScoreRecord.taskDetails?.style || finalScoreRecord.auditions?.style || 'classical', darkMode).colors.strong,borderColor:getUiTheme(finalScoreRecord.taskDetails?.style || finalScoreRecord.auditions?.style || 'classical', darkMode).colors.accent}}>
                                                 <span className="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">FINAL SCORE</span>
