@@ -125,6 +125,10 @@
 
 
 
+
+
+
+
 /* DARK-AUTO START */
 body.dark .text-amber-400 { color: #fcd34d !important; }
 body.dark .text-amber-500 { color: #fcd34d !important; }
@@ -489,8 +493,8 @@ body.dark .hover\:text-slate-800:hover { color: #f1f5f9 !important; }
 
         const MUSIC_THEMES = {
             classical: { id:'classical', label:'Classical & Orchestral', genres:'Classical, Baroque, Romantic, opera and symphonic music', icon:'♬', colors:{ primary:'#713F12', key:'#EAB308', accent:'#A16207', paper:'#FEF9E1', soft:'#FBEDB0', text:'#422006' }, pdf:{ primary:[25,39,71], accent:[182,154,91], paper:[243,235,221], soft:[232,224,208] }, font:'Baskerville, "Baskerville Old Face", "Times New Roman", serif', headStyle:{ fontVariant:'small-caps', letterSpacing:'0.05em' } },
-            jazz: { id:'jazz', label:'Jazz & Blues', genres:'Jazz, blues, swing, bossa nova, soul, Motown, funk, gospel and R&B', icon:'♫', colors:{ primary:'#9D174D', key:'#DB2777', accent:'#BE185D', paper:'#FDE7F1', soft:'#F9C6DD', text:'#500724' }, pdf:{ primary:[84,45,66], accent:[212,154,72], paper:[251,243,232], soft:[241,225,210] }, font:'Rockwell, "Rockwell Nova", Georgia, serif', headStyle:{ fontFamily:'Copperplate, "Copperplate Gothic Light", Futura, "Century Gothic", sans-serif', letterSpacing:'0.09em' } },
-            rock: { id:'rock', label:'Rock & Metal', genres:'Rock and roll, classic rock, hard rock, heavy metal, punk, grunge, alternative rock and indie rock', icon:'⚡', colors:{ primary:'#181818', key:'#C52D35', accent:'#C52D35', paper:'#EDEDED', soft:'#D6D6D6', text:'#181818' }, pdf:{ primary:[24,24,24], accent:[197,45,53], paper:[243,243,243], soft:[228,228,228] }, font:'"Trebuchet MS", "Arial Narrow", Arial, sans-serif', headStyle:{ letterSpacing:'0.1em' } },
+            jazz: { id:'jazz', label:'Jazz & Blues', genres:'Jazz, blues, swing, bossa nova, soul, Motown, funk, gospel and R&B', icon:'♫', colors:{ primary:'#9D174D', key:'#DB2777', accent:'#BE185D', paper:'#FBE6F4', soft:'#F6C6E4', text:'#500724' }, pdf:{ primary:[84,45,66], accent:[212,154,72], paper:[251,243,232], soft:[241,225,210] }, font:'Rockwell, "Rockwell Nova", Georgia, serif', headStyle:{ fontFamily:'Copperplate, "Copperplate Gothic Light", Futura, "Century Gothic", sans-serif', letterSpacing:'0.09em' } },
+            rock: { id:'rock', label:'Rock & Metal', genres:'Rock and roll, classic rock, hard rock, heavy metal, punk, grunge, alternative rock and indie rock', icon:'⚡', colors:{ primary:'#7F1D1D', key:'#DC2626', accent:'#B91C1C', paper:'#FFE4DC', soft:'#FBC4B8', text:'#450A0A' }, pdf:{ primary:[24,24,24], accent:[197,45,53], paper:[243,243,243], soft:[228,228,228] }, font:'"Trebuchet MS", "Arial Narrow", Arial, sans-serif', headStyle:{ letterSpacing:'0.1em' } },
             pop: { id:'pop', label:'Pop & Electronic', genres:'Pop, disco, electronic, techno, house, hip-hop, rap, trap, reggae, reggaeton and K-pop', icon:'♫', colors:{ primary:'#1D4ED8', key:'#2563EB', accent:'#2563EB', paper:'#E3EEFF', soft:'#BFD7FB', text:'#1E3A8A' }, pdf:{ primary:[48,32,94], accent:[66,214,208], paper:[245,242,255], soft:[232,225,255] }, font:'Futura, "Century Gothic", "Avenir Next", Avenir, "Segoe UI", sans-serif', headStyle:{ letterSpacing:'0.03em' } },
             folk: { id:'folk', label:'Folk & World Music', genres:'Flamenco, country, Celtic music, folk, Latin music, traditional Spanish music, folk dances and world music', icon:'♧', colors:{ primary:'#166534', key:'#16A34A', accent:'#15803D', paper:'#E1F3DA', soft:'#BFE3B4', text:'#14532D' }, pdf:{ primary:[67,86,64], accent:[180,122,80], paper:[240,228,206], soft:[229,213,185] }, font:'Cambria, "Hoefler Text", Georgia, serif', headStyle:{ letterSpacing:'0.02em' } },
             film: { id:'film', label:'Film, TV & Game Music', genres:'Film scores, TV soundtracks, video game music, musicals, animation soundtracks and cinematic themes', icon:'✦', colors:{ primary:'#4C1D95', key:'#8B5CF6', accent:'#7C3AED', paper:'#EDE6FA', soft:'#D6C8F2', text:'#2E1065' }, pdf:{ primary:[34,43,72], accent:[154,131,198], paper:[240,237,247], soft:[224,217,237] }, font:'Optima, Candara, "Segoe UI", Calibri, sans-serif', headStyle:{ fontVariant:'small-caps', letterSpacing:'0.07em' } }
@@ -1201,9 +1205,12 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
             const [sf, setSf] = usePState('k.sf', false);
             const g = groups.includes(grp) ? grp : (groups[0] || '');
             const course = courseOfGroup(g);
-            const opts = auditions.filter(a => !isSpanishCode(a.share_link || a.id) && (!Array.isArray(a.audience) || !a.audience.length || a.audience.includes(course)))
+            const groupEmails = new Set((roster || []).filter(r => r.class === g).map(r => String(r.email).toLowerCase()));
+            const lastSub = {};
+            scores.forEach(x => { if (groupEmails.has(String(x.student_email || '').toLowerCase())) { const k = x.audition_id; const t = String(x.created_at || ''); if (!lastSub[k] || t > lastSub[k]) lastSub[k] = t; } });
+            const opts = auditions.filter(a => !isSpanishCode(a.share_link || a.id) && lastSub[a.share_link || a.id] !== undefined)
                 .sort((a, b) => (Number(a.number) || 9999) - (Number(b.number) || 9999) || String(a.created_at).localeCompare(String(b.created_at)));
-            const latest = [...opts].sort((a, b) => String(b.created_at).localeCompare(String(a.created_at)))[0];
+            const latest = [...opts].sort((a, b) => String(lastSub[b.share_link || b.id]).localeCompare(String(lastSub[a.share_link || a.id])))[0];
             const code = opts.some(a => (a.share_link || a.id) === aud) ? aud : (latest ? (latest.share_link || latest.id) : '');
             const subs = new Map(scores.filter(x => x.audition_id === code).map(x => [String(x.student_email || '').toLowerCase(), x]));
             const rows = classroomRows(roster || [], g, subs);
@@ -1219,7 +1226,7 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
                         <span className="text-xs text-slate-500 ml-auto">{done} of {rows.length} submitted</span>
                     </div>
                     <p className="text-xs text-slate-500">Sorted by surname, like your Classroom list. Dots: green = correct, amber = correct with hint, red = wrong. “Words” is what you would give if hints were not penalised.</p>
-                    {rows.length === 0 ? <p className="text-sm text-slate-400 text-center py-6">No students in this group.</p> : (
+                    {!code ? <p className="text-sm text-slate-400 text-center py-6">No audition has been submitted by this group yet.</p> : rows.length === 0 ? <p className="text-sm text-slate-400 text-center py-6">No students in this group.</p> : (
                         <div className="overflow-x-auto rounded-xl border border-slate-200">
                             <table className="w-full text-left text-sm">
                                 <thead className="bg-slate-50 text-xs uppercase text-slate-500"><tr><th className="py-2 px-3 w-10">#</th><th className="py-2 px-3">Student</th><th className="py-2 px-3">Words</th><th className="py-2 px-3 text-center">Saved</th><th className="py-2 px-3 text-center">Words correct</th></tr></thead>
@@ -2094,7 +2101,7 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
         const DARK_COLORS = {
             classical: { paper: '#2A2208', soft: '#4A3410', primary: '#FEF3C7', text: '#FEF3C7', accent: '#F5CE5C', key: '#EAB308' },
             jazz:      { paper: '#2E0F20', soft: '#6B1637', primary: '#FCE7F3', text: '#FCE7F3', accent: '#F472B6', key: '#EC4899' },
-            rock:      { paper: '#171717', soft: '#0A0A0A', primary: '#F3F3F3', text: '#F3F3F3', accent: '#E5484D', key: '#E5484D' },
+            rock:      { paper: '#2A0E0C', soft: '#7F1D1D', primary: '#FEE2E2', text: '#FEE2E2', accent: '#F87171', key: '#EF4444' },
             pop:       { paper: '#0B1E45', soft: '#1E3A8A', primary: '#DBEAFE', text: '#DBEAFE', accent: '#60A5FA', key: '#3B82F6' },
             folk:      { paper: '#0F2A19', soft: '#14532D', primary: '#DCFCE7', text: '#DCFCE7', accent: '#4ADE80', key: '#22C55E' },
             film:      { paper: '#1A0B3D', soft: '#4C1D95', primary: '#EDE9FE', text: '#EDE9FE', accent: '#C4B5FD', key: '#A78BFA' }
@@ -2115,6 +2122,9 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
             const stepFont = (d) => setFontScale(v => { const i = FONT_STEPS.indexOf(v); const k = i >= 0 ? i : Math.max(0, FONT_STEPS.findIndex(x => x >= v)); return FONT_STEPS[Math.max(0, Math.min(FONT_STEPS.length - 1, k + d))]; });
             const [darkMode, setDarkMode] = useState(() => localStorage.getItem('audition_dark_mode') === 'true');
             const [showAwayWarning, setShowAwayWarning] = useState(false);
+            const [focusAlerts, setFocusAlerts] = useState(0);
+            const [focusLog, setFocusLog] = useState([]);
+            const lastAlertRef = React.useRef(0);
 
             const [supabaseUrl] = useState(DEFAULT_SUPABASE_URL);
             const [supabaseKey] = useState(DEFAULT_SUPABASE_KEY);
@@ -2159,6 +2169,7 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
             const [copiedId, setCopiedId] = useState(null);
             
             const [activeTask, setActiveTask] = useState(null);
+            useEffect(() => { setFocusAlerts(0); setFocusLog([]); lastAlertRef.current = 0; }, [activeTask && (activeTask.share_link || activeTask.id)]);
             const [studentName, setStudentName] = useState('');
             const [studentClass, setStudentClass] = useState('2º ESO A');
             const [studentEmail, setStudentEmail] = useState('');
@@ -2191,20 +2202,42 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
                     showToast("⚠️ Right-click disabled. The text is protected.", "error");
                 };
 
-                const handleVisibilityChange = () => {
-                    if (document.hidden && view === 'student-test' && !examSubmitted && activeTask) {
-                        setShowAwayWarning(true);
-                    }
+                const isPreview = !!(activeTask && activeTask.preview);
+                const logEv = (type) => { if (isPreview) setFocusLog(l => [...l.slice(-11), { t: new Date().toLocaleTimeString('en-GB'), type }]); };
+                const triggerAlert = (src) => {
+                    const now = Date.now();
+                    if (now - lastAlertRef.current < 4000) { logEv(src + ' (ignored, too soon)'); return; }
+                    lastAlertRef.current = now;
+                    setFocusAlerts(n => n + 1);
+                    setShowAwayWarning(true);
+                    logEv('ALERT from ' + src);
                 };
+                let blurTimer = null;
+                const handleVisibilityChange = () => {
+                    logEv(document.hidden ? 'tab hidden' : 'tab visible');
+                    if (document.hidden && view === 'student-test' && !examSubmitted && activeTask) triggerAlert('tab hidden');
+                };
+                // Pérdida de foco de la ventana (p. ej. Google Lens como panel lateral): se ignora el foco que pasa al vídeo incrustado
+                const handleBlur = () => {
+                    logEv('window blur');
+                    clearTimeout(blurTimer);
+                    blurTimer = setTimeout(() => { if (!document.hasFocus() && !document.hidden) triggerAlert('window blur'); }, 1500);
+                };
+                const handleFocusBack = () => { logEv('window focus'); clearTimeout(blurTimer); };
 
                 document.addEventListener('copy', handleCopy);
                 document.addEventListener('contextmenu', handleContextMenu);
                 document.addEventListener("visibilitychange", handleVisibilityChange);
+                window.addEventListener('blur', handleBlur);
+                window.addEventListener('focus', handleFocusBack);
 
                 return () => {
+                    clearTimeout(blurTimer);
                     document.removeEventListener('copy', handleCopy);
                     document.removeEventListener('contextmenu', handleContextMenu);
                     document.removeEventListener("visibilitychange", handleVisibilityChange);
+                    window.removeEventListener('blur', handleBlur);
+                    window.removeEventListener('focus', handleFocusBack);
                 };
             }, [view, examSubmitted, activeTask]);
 
@@ -2415,8 +2448,13 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
             const selTheme = getUiTheme(style, darkMode);
             const tintTheme = view === 'student-test' && activeTask ? activeMusicTheme : (view === 'results' && finalScoreRecord ? getUiTheme(finalScoreRecord.taskDetails?.style || finalScoreRecord.auditions?.style || 'classical', darkMode) : null);
             useEffect(() => {
-                document.body.style.backgroundColor = tintTheme ? tintTheme.colors.soft : '';
-                return () => { document.body.style.backgroundColor = ''; };
+                const b = document.body.style;
+                if (tintTheme) {
+                    const k = tintTheme.colors.key;
+                    b.background = `radial-gradient(circle at 12% 15%, ${k}40 0, transparent 42%), radial-gradient(circle at 90% 85%, ${k}33 0, transparent 48%), ${tintTheme.colors.soft}`;
+                    b.backgroundAttachment = 'fixed';
+                } else { b.background = ''; b.backgroundAttachment = ''; }
+                return () => { b.background = ''; b.backgroundAttachment = ''; };
             }, [tintTheme && tintTheme.id, darkMode]);
 
             const handleHintChange = (idx, value) => {
@@ -2444,8 +2482,9 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
                 [...auditionsList].sort((a, b) => String(a.created_at).localeCompare(String(b.created_at))).forEach(a => { const c = (Array.isArray(a.audience) && a.audience.length) ? a.audience[0] : ''; (byCourse[c] = byCourse[c] || []).push(a); });
                 const rows = [];
                 Object.keys(byCourse).sort().forEach(c => {
-                    let next = Math.max(0, ...byCourse[c].map(a => Number(a.number) || 0)) + 1;
-                    byCourse[c].forEach(a => rows.push({ key: a.share_link || a.id, title: a.title, course: c, num: a.number ? String(a.number) : String(next++) }));
+                    const anyNum = byCourse[c].some(a => a.number);
+                    let next = 1;
+                    byCourse[c].forEach(a => rows.push({ key: a.share_link || a.id, title: a.title, course: c, num: a.number ? String(a.number) : (anyNum ? '' : String(next++)) }));
                 });
                 setNumModal({ rows, busy: false });
             };
@@ -2931,7 +2970,7 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
                 try {
                     const { data, error } = await supabaseClient.rpc('preview_grade', { p_code: activeTask.share_link, p_answers: studentAnswers, p_hints: usedHints });
                     if (error) throw error;
-                    setFinalScoreRecord(hydrateRecord(data, activeTask)); setExamSubmitted(true); setView('results'); window.scrollTo({ top: 0 });
+                    setFinalScoreRecord({ ...hydrateRecord(data, activeTask), __focusAlerts: focusAlerts }); setExamSubmitted(true); setView('results'); window.scrollTo({ top: 0 });
                 } catch (err) { console.error(err); showToast('Preview failed: ' + (err.message || ''), 'error'); }
                 finally { setSubmitting(false); }
             };
@@ -2954,7 +2993,7 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
                         showToast(/already_submitted/.test(error.message) ? "You have already submitted this task. Use 'view my result'." : /invalid_email/.test(error.message) ? "You must use your school email, the one ending in @alu.murciaeduca.es." : /email_not_registered/.test(error.message) ? "This email is not registered for this class. Ask your teacher." : /name_unrecognized/.test(error.message) ? "That name is not recognised. Write your name and surname as on your school record." : "Could not save your grade: " + error.message, "error");
                         return;
                     }
-                    const record = hydrateRecord(data, activeTask);
+                    const record = { ...hydrateRecord(data, activeTask), __focusAlerts: focusAlerts };
                     const finalGrade = Number(record.score);
                     setFinalScoreRecord(record); setExamSubmitted(true); setView('results');
                     if ('speechSynthesis' in window) window.speechSynthesis.cancel();
@@ -3026,6 +3065,7 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
                 // Issue date
                 put(issued, 1005, 915, 9.5, { font: 'Helvetica' });
 
+                if (typeof record.__focusAlerts === 'number') put(`Focus alerts: ${record.__focusAlerts}`, 1005, 945, 8, { font: 'Helvetica', color: [110, 110, 110] });
                 const blob = doc.output('blob');
                 window.open(window.URL.createObjectURL(blob), '_blank');
             };
@@ -3247,7 +3287,8 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
                     {numModal && (
                         <div className="fixed inset-0 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4 z-50" onMouseDown={(e) => { if (e.target === e.currentTarget && !numModal.busy) setNumModal(null); }}>
                             <div className="bg-white rounded-2xl max-w-lg w-full p-6 shadow-xl space-y-4 max-h-[85vh] flex flex-col">
-                                <div><h3 className="text-lg font-bold text-slate-900">🔢 Number my tasks</h3><p className="text-xs text-slate-500">Proposed in the order you created them, inside each course. Change any number and press Save. Leave blank for none.</p></div>
+                                <div><h3 className="text-lg font-bold text-slate-900">🔢 Number my tasks</h3><p className="text-xs text-slate-500">The first time it proposes 1, 2, 3… in the order you created them, inside each course. After that, tasks without a number stay blank until you press Suggest. Leave blank for none.</p>
+                                    <button type="button" onClick={() => setNumModal(m => { const rows = m.rows.map(x => ({ ...x })); [...new Set(rows.map(x => x.course))].forEach(c => { let n = Math.max(0, ...rows.filter(y => y.course === c).map(y => Number(y.num) || 0)); rows.filter(y => y.course === c && !y.num).forEach(y => { y.num = String(++n); }); }); return { ...m, rows }; })} className="mt-1 text-xs font-bold text-indigo-600 hover:underline">Fill all blanks</button></div>
                                 <div className="overflow-y-auto space-y-4 pr-1">
                                     {[...new Set(numModal.rows.map(r => r.course))].map(c => (
                                         <div key={c || 'none'}>
@@ -3256,7 +3297,8 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
                                                 {numModal.rows.filter(r => r.course === c).map(r => (
                                                     <div key={r.key} className="flex items-center gap-3">
                                                         <input type="number" min="1" value={r.num} onChange={e => setNumModal(m => ({ ...m, rows: m.rows.map(x => x.key === r.key ? { ...x, num: e.target.value } : x) }))} className="w-20 px-2 py-1.5 bg-slate-50 border rounded-lg text-sm font-bold" />
-                                                        <span className="text-sm text-slate-800 truncate">{r.title}</span>
+                                                        <span className="text-sm text-slate-800 truncate flex-1">{r.title}</span>
+                                                        {!r.num && <button type="button" onClick={() => setNumModal(m => ({ ...m, rows: m.rows.map(x => x.key === r.key ? { ...x, num: String(Math.max(0, ...m.rows.filter(y => y.course === r.course).map(y => Number(y.num) || 0)) + 1) } : x) }))} className="text-xs font-bold text-indigo-600 hover:underline shrink-0">Suggest</button>}
                                                     </div>))}
                                             </div>
                                         </div>))}
@@ -3477,7 +3519,7 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
                                                             className={`theme-card relative text-left p-2.5 rounded-xl border-2 transition-all ${style === theme.id ? 'ring-2 ring-offset-1' : 'hover:border-slate-300'}`}
                                                             style={{ backgroundColor: theme.colors.paper, borderColor: style === theme.id ? theme.colors.key : theme.colors.soft, borderLeft: `8px solid ${theme.colors.key}`, fontFamily: theme.font, '--tw-ring-color': theme.colors.key }}>
                                                             <div className="flex items-center gap-2 mb-1">
-                                                                <span className="w-9 h-9 rounded-lg flex items-center justify-center text-lg shrink-0" style={{backgroundColor:theme.colors.primary,color:theme.colors.accent}}>{theme.icon}</span>
+                                                                <span className="w-9 h-9 rounded-lg flex items-center justify-center text-lg shrink-0" style={{backgroundColor:theme.colors.primary,color:theme.colors.paper}}>{theme.icon}</span>
                                                                 <span className="text-xs font-extrabold pr-5" style={{color:theme.colors.primary,...theme.headStyle}}>{theme.label}</span>
                                                                 {style === theme.id && <span aria-label="Selected" className="absolute top-1.5 right-1.5 w-5 h-5 rounded-full flex items-center justify-center text-xs font-black" style={{backgroundColor:theme.colors.key,color:'#FFFFFF'}}>✓</span>}
                                                             </div>
@@ -3617,8 +3659,28 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
                                     </div>
                                     <div><label className="block text-xs font-bold text-slate-500 uppercase mb-1">School Email</label><input type="email" placeholder="@alu.murciaeduca.es" value={studentEmail} onChange={e => setStudentEmail(e.target.value)} onBlur={checkExistingSubmission} readOnly={!!activeTask.roster || !!activeTask.preview} className="w-full px-3 py-2 bg-slate-50 border rounded-lg text-sm outline-none focus:border-indigo-500" /></div>
                                 </div>
-                                                                <div className="p-6 md:p-8 rounded-2xl shadow-md border" style={{backgroundColor:activeMusicTheme.colors.paper,color:activeMusicTheme.colors.text,borderColor:activeMusicTheme.colors.soft,borderLeft:`10px solid ${activeMusicTheme.colors.key}`,borderTop:`5px solid ${activeMusicTheme.colors.primary}`,fontFamily:activeMusicTheme.font}}>
-                                    <div className="mb-6 p-4 rounded-xl flex flex-col md:flex-row gap-6 items-center" style={{backgroundColor:activeMusicTheme.colors.soft}}>
+                                                                {(() => {
+                                    const total = (activeTask?.gap_clues || []).length;
+                                    if (!total) return null;
+                                    const isFilled = (i) => !!String(studentAnswers[i] || '').trim();
+                                    const filled = Array.from({ length: total }).filter((_, i) => isFilled(i)).length;
+                                    const done = filled === total;
+                                    return (
+                                        <div className="fixed left-1/2 -translate-x-1/2 bottom-4 z-30 flex items-center gap-3 px-5 py-3 rounded-full shadow-lg border-2 backdrop-blur-md" style={{ backgroundColor: darkMode ? 'rgba(15,15,25,0.88)' : 'rgba(255,255,255,0.9)', borderColor: activeMusicTheme.colors.key }} role="status" aria-live="polite">
+                                            <div className="flex gap-1">{Array.from({ length: total }).map((_, i) => <span key={i} className="h-3 w-4 sm:w-5 rounded-full" style={{ backgroundColor: isFilled(i) ? activeMusicTheme.colors.key : (darkMode ? 'rgba(255,255,255,0.25)' : 'rgba(0,0,0,0.15)') }}></span>)}</div>
+                                            <span className="text-base font-extrabold whitespace-nowrap" style={{ color: darkMode ? '#F3F4F6' : '#111827' }}>{done ? '✓ All filled' : `${filled} of ${total}`}</span>
+                                        </div>
+                                    );
+                                })()}
+                                {previewMode && (
+                                    <div data-keep="1" className="fixed right-3 top-28 z-40 w-64 rounded-xl border shadow-lg bg-white text-xs p-3 space-y-1.5">
+                                        <div className="flex items-center justify-between gap-2"><b className="text-slate-900">Focus test (preview only)</b><span className="font-extrabold text-rose-600">Alerts: {focusAlerts}</span></div>
+                                        <p className="text-slate-500">Try Google Lens, Alt-Tab or Circle to Search and see what fires.</p>
+                                        {focusLog.length === 0 ? <p className="text-slate-400">No events yet.</p> : focusLog.map((e, i) => <div key={i} className="flex justify-between gap-2"><span className="text-slate-500">{e.t}</span><span className={`font-semibold text-right ${/ALERT/.test(e.type) ? 'text-rose-600' : 'text-slate-800'}`}>{e.type}</span></div>)}
+                                    </div>
+                                )}
+                                <div className="p-6 md:p-8 rounded-2xl shadow-md border mb-20" style={{backgroundColor:activeMusicTheme.colors.paper+'E6',color:activeMusicTheme.colors.text,borderColor:activeMusicTheme.colors.soft,borderLeft:`10px solid ${activeMusicTheme.colors.key}`,borderTop:`5px solid ${activeMusicTheme.colors.primary}`,fontFamily:activeMusicTheme.font}}>
+                                    <div className="mb-6 p-4 rounded-xl flex flex-col md:flex-row gap-6 items-center" style={{backgroundColor:activeMusicTheme.colors.soft+'D9',backdropFilter:'blur(8px)',WebkitBackdropFilter:'blur(8px)'}}>
                                         <div className="flex-1"><div className="flex flex-wrap items-center gap-2 mb-2">
                                             <div className="inline-block text-xs font-extrabold uppercase tracking-[0.18em] px-2.5 py-1 rounded-full" style={{backgroundColor:darkMode ? activeMusicTheme.colors.paper : activeMusicTheme.colors.primary,color:darkMode ? activeMusicTheme.colors.primary : activeMusicTheme.colors.paper}}>{activeMusicTheme.icon} {activeMusicTheme.label}</div>
                                             {activeTask.number ? <span className="text-xs font-semibold px-2.5 py-1 rounded-full" style={{backgroundColor:activeMusicTheme.colors.paper,color:activeMusicTheme.colors.primary}}>Audition {activeTask.number}</span> : null}
@@ -3713,7 +3775,7 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
                                     <h3 className="text-2xl font-black text-rose-700">Focus Alert!</h3>
                                     <p className="text-slate-700 font-medium">We have detected that you left the task. Remember this is for your own learning.</p>
                                     <p className="text-slate-600 text-sm">You are welcome to review previous auditions in Classroom or use a dictionary (WordReference or DeepL) to look up vocabulary.</p>
-                                    <p className="text-rose-700 font-bold bg-rose-50 p-3 rounded-xl text-sm">However, you must not use AI tools to find the answers. This won't help you learn and will only harm your own progress.</p>
+                                    <p className="text-rose-700 font-bold bg-rose-50 p-3 rounded-xl text-sm">However, you must not use AI tools or Google Lens to find the answers. This won't help you learn and will only harm your own progress.</p>
                                     <button onClick={() => setShowAwayWarning(false)} className="w-full bg-slate-900 hover:bg-slate-800 text-white font-bold py-3.5 rounded-xl text-sm mt-4">Return to the task</button>
                                 </div>
                             </div>
@@ -3726,7 +3788,7 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
                             </div>
                         )}
                         {view === 'results' && finalScoreRecord && (
-                            <div data-keep="1" className="max-w-2xl mx-auto p-8 md:p-10 rounded-3xl shadow-xl border text-center relative overflow-hidden" style={{backgroundColor:getUiTheme(finalScoreRecord.taskDetails?.style || finalScoreRecord.auditions?.style || 'classical', darkMode).colors.paper, borderColor:getUiTheme(finalScoreRecord.taskDetails?.style || finalScoreRecord.auditions?.style || 'classical', darkMode).colors.accent}}>
+                            <div data-keep="1" className="max-w-2xl mx-auto p-8 md:p-10 rounded-3xl shadow-xl border text-center relative overflow-hidden" style={{backgroundColor:getUiTheme(finalScoreRecord.taskDetails?.style || finalScoreRecord.auditions?.style || 'classical', darkMode).colors.paper+'E6', borderColor:getUiTheme(finalScoreRecord.taskDetails?.style || finalScoreRecord.auditions?.style || 'classical', darkMode).colors.accent}}>
                                 {(() => {
                                     const feedback = getEnglishFeedback(finalScoreRecord.score);
                                     const rTheme = getUiTheme(finalScoreRecord.taskDetails?.style || finalScoreRecord.auditions?.style || 'classical', darkMode);
@@ -3765,6 +3827,11 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
                                                     ))}
                                                 </div>
                                             </div>
+                                            {typeof finalScoreRecord.__focusAlerts === 'number' && (
+                                                <div className={`flex items-center justify-center gap-2 text-sm font-semibold rounded-xl px-3 py-2 border ${finalScoreRecord.__focusAlerts > 0 ? 'bg-amber-50 text-amber-900 border-amber-200' : 'bg-emerald-50 text-emerald-900 border-emerald-200'}`}>
+                                                    {finalScoreRecord.__focusAlerts > 0 ? '⚠️' : '✓'} Focus alerts: {finalScoreRecord.__focusAlerts}
+                                                </div>
+                                            )}
                                             <div className="space-y-3 pt-2">
                                                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                                                     <button onClick={() => generatePDF(finalScoreRecord)} className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3.5 rounded-xl text-sm flex items-center justify-center gap-2 shadow-md"><Icons.Download /> Download Diploma PDF</button>
