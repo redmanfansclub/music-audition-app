@@ -129,6 +129,10 @@
 
 
 
+
+
+
+
 /* DARK-AUTO START */
 body.dark .text-amber-400 { color: #fcd34d !important; }
 body.dark .text-amber-500 { color: #fcd34d !important; }
@@ -1125,13 +1129,13 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
                             <h3 className="text-base font-bold text-slate-900 mb-3">Who has not submitted?</h3>
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mb-3">
                                 <select value={pendGroup} onChange={e => { setPg(e.target.value); setPa(''); }} className={sel}>{groups.map(g => <option key={g} value={g}>{g}</option>)}</select>
-                                <select value={pendAud} onChange={e => setPa(e.target.value)} className={sel}>{audOptions.map(a => <option key={a.share_link || a.id} value={a.share_link || a.id}>{a.number ? `${a.number} · ` : ''}{a.title}</option>)}</select>
+                                <select value={pendAud} onChange={e => setPa(e.target.value)} className={sel}>{audOptions.map(a => <option key={a.share_link || a.id} value={a.share_link || a.id}>{a.is_practice ? 'Practice · ' : (a.number ? `${a.number} · ` : '')}{a.title}</option>)}</select>
                             </div>
                             <p className="text-xs text-slate-500 mb-2">{groupStudents.length - pending.length} of {groupStudents.length} submitted · {pending.length} pending</p>
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-1 max-h-72 overflow-y-auto">
                                 {groupStudents.map(r => { const s = done.get(r.email.toLowerCase()); return (
                                     <div key={r.email} className={`flex items-center justify-between gap-2 text-sm px-3 py-1.5 rounded-lg ${s ? 'bg-emerald-50 text-emerald-800' : 'bg-amber-50 text-amber-900'}`}>
-                                        <span className="truncate">{s ? '✓' : '⏳'} {r.name}</span>{s ? (s.details && s.details.paper ? <button onClick={() => openPaper(r, s)} title="Edit this paper submission" className="font-bold shrink-0 px-2 py-0.5 rounded-lg underline decoration-dotted hover:bg-emerald-100">📄 {Number(s.score).toFixed(1)} ✏️</button> : <span className="font-bold shrink-0">{Number(s.score).toFixed(1)}</span>) : <button onClick={() => openPaper(r)} title="Enter the result of a paper worksheet" className="shrink-0 px-2.5 py-1 rounded-lg text-xs font-bold bg-white border border-amber-300 text-amber-900 hover:bg-amber-100">✍ Paper</button>}
+                                        <span className="truncate">{s ? '✓' : '⏳'} {r.name}{r.anonymous ? ' (anonymous)' : ''}</span>{s ? (s.details && s.details.paper ? <button onClick={() => openPaper(r, s)} title="Edit this paper submission" className="font-bold shrink-0 px-2 py-0.5 rounded-lg underline decoration-dotted hover:bg-emerald-100">📄 {Number(s.score).toFixed(1)} ✏️</button> : <span className="font-bold shrink-0">{Number(s.score).toFixed(1)}</span>) : <button onClick={() => openPaper(r)} title="Enter the result of a paper worksheet" className="shrink-0 px-2.5 py-1 rounded-lg text-xs font-bold bg-white border border-amber-300 text-amber-900 hover:bg-amber-100">✍ Paper</button>}
                                     </div>); })}
                             </div>
                             {pending.length > 0 && <button onClick={copyPending} className="mt-3 px-3 py-2 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 rounded-xl text-xs font-bold">Copy pending names</button>}
@@ -1143,9 +1147,7 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
                             <button onClick={() => setStuOpen(v => !v)} className="flex items-center gap-2 text-left"><h3 className="text-base font-bold text-slate-900">Students ({shown.length})</h3><span className="text-slate-400 text-xs">{stuOpen ? '▲' : '▼'}</span></button>
                             {stuOpen && <div className="flex flex-wrap items-center gap-2">
                                 <select value={fg} onChange={e => setFg(e.target.value)} className={sel}><option value="">All groups</option>{groups.map(g => <option key={g} value={g}>{g}</option>)}</select>
-                                <button onClick={exportJson} disabled={!roster.length} className="px-3 py-2 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 rounded-xl text-xs font-bold disabled:opacity-40">Export JSON</button>
                                 <button onClick={exportCsv} disabled={!roster.length} className="px-3 py-2 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 rounded-xl text-xs font-bold disabled:opacity-40">Export Excel</button>
-                                <label className="px-3 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-bold cursor-pointer">Import JSON<input type="file" accept="application/json,.json" className="hidden" onChange={e => { importJson(e.target.files[0]); e.target.value = ''; }} /></label>
                             </div>}
                         </div>
                         {stuOpen && outsiders > 0 && <p className="text-xs text-amber-800 bg-amber-50 border border-amber-200 rounded-xl px-3 py-2 mb-3">⚠ {outsiders} submission(s) use an email that is not on this list. They are marked ⚠ in Student Grades and do not count in statistics until you fix or delete them.</p>}
@@ -1157,9 +1159,9 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
                                         {isOpen && <div className="overflow-x-auto"><table className="w-full text-left text-sm">
                                             <tbody>{mem.map(r => (
                                                 <tr key={r.email} className="border-t border-slate-100">
-                                                    <td className="py-2 px-3 font-semibold text-slate-900">{r.name}</td>
+                                                    <td className="py-2 px-3 font-semibold text-slate-900">{r.name}{r.anonymous ? <span className="ml-2 text-xs font-bold text-slate-500">(anonymous)</span> : null}</td>
                                                     <td className="py-2 px-3 text-xs text-slate-500">{r.email}</td>
-                                                    <td className="py-2 px-3 text-center"><input type="checkbox" checked={!!r.anonymous} onChange={() => onUpdate(r.email, { anonymous: !r.anonymous })} aria-label="Anonymous in projections" title="Anonymous in projections" /></td>
+                                                    <td className="py-2 px-3 text-center"><label className="inline-flex items-center gap-1.5 text-xs text-slate-500 cursor-pointer" title="Anonymous: you always see this student; hidden only in projections"><input type="checkbox" checked={!!r.anonymous} onChange={() => onUpdate(r.email, { anonymous: !r.anonymous })} aria-label="Anonymous: hidden only in projections" /> Anonymous</label></td>
                                                     <td className="py-2 px-3 text-right whitespace-nowrap">
                                                         <button onClick={() => { const sp = splitName(r.name); setEdit({ old: r.email, email: r.email, class: r.class, first_name: r.first_name ?? sp.first, last_name1: r.last_name1 ?? sp.l1, last_name2: r.last_name2 ?? sp.l2 }); }} title="Edit" className="p-1.5 hover:bg-indigo-50 rounded-lg">✏️</button>
                                                         <button onClick={() => { if (window.confirm(`Remove ${r.name} from the list? This also removes them in the Spanish version. Their past submissions are kept but stop counting.`)) onDelete([r.email]); }} title="Remove" className="p-1.5 hover:bg-rose-50 rounded-lg text-rose-600">✕</button>
@@ -1208,7 +1210,7 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
             const groupEmails = new Set((roster || []).filter(r => r.class === g).map(r => String(r.email).toLowerCase()));
             const lastSub = {};
             scores.forEach(x => { if (groupEmails.has(String(x.student_email || '').toLowerCase())) { const k = x.audition_id; const t = String(x.created_at || ''); if (!lastSub[k] || t > lastSub[k]) lastSub[k] = t; } });
-            const opts = auditions.filter(a => !isSpanishCode(a.share_link || a.id) && lastSub[a.share_link || a.id] !== undefined)
+            const opts = auditions.filter(a => !isSpanishCode(a.share_link || a.id) && !a.is_practice && lastSub[a.share_link || a.id] !== undefined)
                 .sort((a, b) => (Number(a.number) || 9999) - (Number(b.number) || 9999) || String(a.created_at).localeCompare(String(b.created_at)));
             const latest = [...opts].sort((a, b) => String(lastSub[b.share_link || b.id]).localeCompare(String(lastSub[a.share_link || a.id])))[0];
             const code = opts.some(a => (a.share_link || a.id) === aud) ? aud : (latest ? (latest.share_link || latest.id) : '');
@@ -1221,7 +1223,7 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
                 <div className="space-y-4">
                     <div className="flex flex-wrap items-center gap-2">
                         <select value={g} onChange={e => { setGrp(e.target.value); setAud(''); }} className={sel}>{groups.map(x => <option key={x} value={x}>{x}</option>)}</select>
-                        <select value={code} onChange={e => setAud(e.target.value)} className={sel}>{opts.map(a => <option key={a.share_link || a.id} value={a.share_link || a.id}>{a.number ? `${a.number} · ` : ''}{a.title}</option>)}</select>
+                        <select value={code} onChange={e => setAud(e.target.value)} className={sel}>{opts.map(a => <option key={a.share_link || a.id} value={a.share_link || a.id}>{a.is_practice ? 'Practice · ' : (a.number ? `${a.number} · ` : '')}{a.title}</option>)}</select>
                         <button onClick={() => setSf(v => !v)} className="px-3 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-xs font-bold text-slate-700">{sf ? 'Names: surnames first' : 'Names: as in Classroom'} ⇄</button>
                         <span className="text-xs text-slate-500 ml-auto">{done} of {rows.length} submitted</span>
                     </div>
@@ -1233,13 +1235,229 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
                                 <tbody>{rows.map(({ r, p, sub }, i) => { const wi = wordsInfo(sub); return (
                                     <tr key={r.email} className="border-t border-slate-100">
                                         <td className="py-2.5 px-3 text-xs text-slate-400">{i + 1}</td>
-                                        <td className="py-2.5 px-3 font-semibold text-slate-900 whitespace-nowrap">{(sf ? `${p.l1} ${p.l2}, ${p.f}` : `${p.f} ${p.l1} ${p.l2}`).replace(/\s+/g, ' ').trim().toUpperCase()}</td>
+                                        <td className="py-2.5 px-3 font-semibold text-slate-900 whitespace-nowrap">{(sf ? `${p.l1} ${p.l2}, ${p.f}` : `${p.f} ${p.l1} ${p.l2}`).replace(/\s+/g, ' ').trim().toUpperCase() + (r.anonymous ? ' (ANONYMOUS)' : '')}</td>
                                         <td className="py-2.5 px-3">{sub ? <span className="inline-flex gap-1">{wi.w.map((x, k) => <span key={k} title={`${k + 1}. ${x.original} ${x.correct ? (x.usedHint ? '✓ hint' : '✓') : '✗'}`} className="w-3.5 h-3.5 rounded-full" style={dot(x)}></span>)}</span> : <span className="text-slate-300">—</span>}</td>
                                         <td className="py-2.5 px-3 text-center">{sub ? <span className="text-lg font-black text-slate-900">{sub.details && sub.details.paper ? '📄 ' : ''}{Number(sub.score).toFixed(1)}</span> : <span className="text-slate-300">—</span>}</td>
                                         <td className="py-2.5 px-3 text-center">{sub && wi.w.length ? <span className="font-bold text-slate-700">{wi.correct}/{wi.w.length}{wi.hints ? <span className="ml-1.5 text-xs font-semibold text-amber-700">{pl(wi.hints, 'hint', 'hints')}</span> : null}</span> : <span className="text-slate-300">—</span>}</td>
                                     </tr>); })}</tbody>
                             </table>
                         </div>)}
+                </div>
+            );
+        };
+
+        const APP_ICON_PNG = 'data:image/png;base64,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';
+        const buildStudentReport = (d, docIn) => {
+            const doc = docIn || new window.jspdf.jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
+            const IND = [67, 56, 202], INDD = [55, 48, 163], IND5 = [79, 70, 229], TINT = [245, 247, 255], BORD = [165, 180, 252],
+                  G6 = [75, 85, 99], G5 = [107, 114, 128], GRID = [229, 231, 235], ZEB = [245, 245, 249], THEAD = [238, 242, 255],
+                  DARK = [55, 65, 81], MID = [156, 163, 175], INK = [31, 41, 55];
+            const L = 10, R = 200, BOTTOM = 287;
+            const T = (txt, x, y, size, o = {}) => { doc.setFont('Helvetica', o.bold ? 'bold' : 'normal'); doc.setFontSize(size); doc.setTextColor(...(o.color || INK)); doc.text(String(txt), x, y, { align: o.align || 'left' }); };
+            const fit = (txt, maxW, size, bold) => { doc.setFont('Helvetica', bold ? 'bold' : 'normal'); doc.setFontSize(size); let t = String(txt); if (doc.getTextWidth(t) <= maxW) return t; while (t.length > 1 && doc.getTextWidth(t + '...') > maxW) t = t.slice(0, -1); return t + '...'; };
+            const symOK = (x, y, r) => { doc.setFillColor(...INDD); doc.setDrawColor(...INDD); doc.setLineWidth(0.2); doc.circle(x, y, r, 'FD'); };
+            const symHint = (x, y, r) => { doc.setFillColor(205, 210, 225); doc.setDrawColor(...INDD); doc.setLineWidth(0.3); doc.circle(x, y, r, 'FD'); };
+            const symBad = (x, y, r) => { doc.setFillColor(255, 255, 255); doc.setDrawColor(...INDD); doc.setLineWidth(0.3); doc.circle(x, y, r, 'FD'); };
+            const symX = (x, y, s) => { doc.setDrawColor(...DARK); doc.setLineWidth(0.4); doc.line(x - s, y - s, x + s, y + s); doc.line(x - s, y + s, x + s, y - s); };
+            const done = d.rows.filter(r => r.sub);
+            const wordsOf = (r) => (r.sub && r.sub.details && r.sub.details.words) || [];
+
+            // ---------- cabecera
+            const header = (cont) => {
+                doc.setFillColor(...IND); doc.rect(0, 0, 210, cont ? 13 : 24, 'F');
+                if (cont) { T(d.name + ' · Individual report (continued)', L, 8.5, 8.5, { bold: true, color: [255, 255, 255] }); return; }
+                try { if (typeof APP_ICON_PNG !== 'undefined') doc.addImage(APP_ICON_PNG, 'PNG', L, 4, 16, 16); } catch (e) {}
+                T('MUSIC AUDITION  ·  INDIVIDUAL REPORT', 30, 9.5, 6.5, { color: [224, 231, 255] });
+                T(d.name, 30, 17.5, 14, { bold: true, color: [255, 255, 255] });
+                T(d.group, R, 11, 8, { align: 'right', color: [255, 255, 255] });
+                T(d.course, R, 16, 8, { align: 'right', color: [224, 231, 255] });
+            };
+            header(false);
+
+            // ---------- indicadores
+            const avg = done.length ? done.reduce((a, r) => a + Number(r.sub.score || 0), 0) / done.length : 0;
+            const totalWords = done.reduce((a, r) => a + wordsOf(r).length, 0);
+            const hintWords = done.reduce((a, r) => a + wordsOf(r).filter(w => w.usedHint).length, 0);
+            const chrono = [...done].sort((a, b) => String(a.sub.created_at).localeCompare(String(b.sub.created_at)));
+            const trend = chrono.length > 1 ? (Number(chrono[chrono.length - 1].sub.score) - Number(chrono[0].sub.score)) : null;
+            const kpis = [[avg.toFixed(1), 'Average'], [`${done.length} / ${d.rows.length}`, 'Auditions done'], [`${totalWords ? Math.round(100 * hintWords / totalWords) : 0}%`, 'Hints used'], [trend === null ? '—' : ((trend > 0 ? '+' : '') + trend.toFixed(1)), 'First to last']];
+            const kw = (R - L - 3 * 4) / 4;
+            kpis.forEach(([v, l], i) => {
+                const x = L + i * (kw + 4);
+                doc.setFillColor(...TINT); doc.setDrawColor(...BORD); doc.setLineWidth(0.3); doc.roundedRect(x, 29, kw, 16, 1.6, 1.6, 'FD');
+                T(v, x + kw / 2, 38.6, 15, { bold: true, align: 'center', color: INDD });
+                T(l, x + kw / 2, 42.8, 6.8, { align: 'center', color: G6 });
+            });
+
+            // ---------- evolución (cerca de la mitad de la página)
+            T('Evolution by audition', L, 52, 8.8, { bold: true, color: INDD });
+            const cx0 = 24, cx1 = 198, cy0 = 58, cy1 = 109;
+            const vals = done.map(r => Number(r.sub.score)).concat(done.filter(r => r.gavg != null).map(r => r.gavg));
+            const minV = vals.length ? Math.min(...vals) : 0;
+            const lo = Math.max(0, Math.min(6, Math.floor((minV - 0.5) / 2) * 2)), hi = 10;
+            const yOf = (v) => cy1 - (v - lo) / (hi - lo) * (cy1 - cy0);
+            const nP = done.length, xOf = (i) => cx0 + (cx1 - cx0) * (i + 0.5) / Math.max(1, nP);
+            doc.setLineWidth(0.2); doc.setDrawColor(...GRID);
+            for (let t = lo; t <= hi; t += 2) { doc.line(cx0, yOf(t), cx1, yOf(t)); T(t, cx0 - 2, yOf(t) + 1.1, 6.5, { align: 'right', color: G5 }); }
+            if (nP > 1) {
+                const gp = done.map((r, i) => (r.gavg == null ? null : [xOf(i), yOf(r.gavg)]));
+                doc.setDrawColor(...G5); doc.setLineWidth(0.45); doc.setLineDashPattern([1.4, 1.1], 0);
+                for (let i = 1; i < gp.length; i++) if (gp[i - 1] && gp[i]) doc.line(gp[i - 1][0], gp[i - 1][1], gp[i][0], gp[i][1]);
+                doc.setLineDashPattern([], 0);
+                gp.forEach(p => { if (!p) return; doc.setFillColor(255, 255, 255); doc.setDrawColor(...G5); doc.setLineWidth(0.4); doc.rect(p[0] - 1, p[1] - 1, 2, 2, 'FD'); });
+            }
+            const sp = done.map((r, i) => [xOf(i), yOf(Number(r.sub.score))]);
+            doc.setDrawColor(...IND5); doc.setLineWidth(0.75);
+            for (let i = 1; i < sp.length; i++) doc.line(sp[i - 1][0], sp[i - 1][1], sp[i][0], sp[i][1]);
+            sp.forEach((p, i) => {
+                doc.setFillColor(...IND5); doc.setDrawColor(...IND5); doc.circle(p[0], p[1], 1.15, 'FD');
+                const showLbl = nP <= 14 || i === 0 || i === nP - 1 || i % 2 === 0;
+                if (showLbl) T(Number(done[i].sub.score).toFixed(1).replace('.0', ''), p[0], p[1] - 2.4, nP > 14 ? 5.5 : 6.5, { bold: true, align: 'center', color: INDD });
+            });
+            done.forEach((r, i) => { if (nP <= 22 || i % 2 === 0) T(r.num || (d.rows.indexOf(r) + 1), xOf(i), cy1 + 4.2, 6.5, { align: 'center', color: G5 }); });
+            T('Audition number', (cx0 + cx1) / 2, cy1 + 8, 6, { align: 'center', color: G5 });
+            doc.setDrawColor(...IND5); doc.setLineWidth(0.7); doc.line(L, 121.2, L + 6, 121.2); doc.setFillColor(...IND5); doc.circle(L + 3, 121.2, 0.9, 'F');
+            T(d.firstName, L + 8, 122.3, 6.8, { color: G6 });
+            const fw = doc.getTextWidth(d.firstName);
+            doc.setDrawColor(...G5); doc.setLineWidth(0.4); doc.setLineDashPattern([1.2, 1], 0); doc.line(L + 8 + fw + 6, 121.2, L + 8 + fw + 12, 121.2); doc.setLineDashPattern([], 0);
+            doc.setFillColor(255, 255, 255); doc.rect(L + 8 + fw + 8, 120.2, 2, 2, 'FD');
+            T('Group average', L + 8 + fw + 14, 122.3, 6.8, { color: G6 });
+
+            // ---------- palabras para reforzar (errores a la izquierda, acertadas con pista a la derecha)
+            const agg = (pred) => { const m = {}; done.forEach(r => wordsOf(r).forEach(w => { if (pred(w)) { const k = String(w.original || '').toUpperCase(); if (k) m[k] = (m[k] || 0) + 1; } })); return Object.entries(m).sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0])); };
+            const missed = agg(w => !w.correct), hinted = agg(w => w.correct && w.usedHint);
+            let y = 129;
+            T('Words to reinforce', L, y, 8.8, { bold: true, color: INDD });
+            y += 4.5;
+            const block = (x0, w, items, label, kind) => {
+                if (kind === 'miss') symX(x0 + 1.6, y - 0.9, 0.9); else symHint(x0 + 1.6, y - 0.9, 1);
+                T(label, x0 + 4.2, y, 6.8, { bold: true, color: G6 });
+                const total = items.length; const shown = items.slice(0, 30);
+                if (!total) { T('None', x0 + 4.2, y + 4.2, 6.6, { color: G5 }); return 8; }
+                const cols = shown.length <= 4 ? 1 : (shown.length <= 10 ? 2 : 3);
+                const per = Math.ceil(shown.length / cols);
+                const fs = shown.length > 24 ? 5.2 : (shown.length > 18 ? 5.6 : (shown.length > 12 ? 6 : 6.6)), rh = shown.length > 24 ? 2.9 : (shown.length > 18 ? 3.1 : (shown.length > 12 ? 3.3 : 3.7));
+                doc.setFont('Helvetica', 'bold'); doc.setFontSize(fs);
+                const cw = w / cols, ww = Math.min(cw * 0.7, Math.max(...shown.map(s => doc.getTextWidth(s[0]))) + 2), maxCount = Math.max(...shown.map(s => s[1]));
+                const barMax = Math.max(3, Math.min(14, cw - ww - 7));
+                shown.forEach(([word, c], i) => {
+                    const col = Math.floor(i / per), row = i % per, xx = x0 + col * cw, yy = y + 4.2 + row * rh;
+                    T(word, xx, yy, fs, { bold: true });
+                    doc.setFillColor(...(kind === 'miss' ? DARK : MID)); const bl = Math.max(1.4, barMax * c / maxCount);
+                    doc.rect(xx + ww, yy - 1.9, bl, 1.9, 'F');
+                    T(c, xx + ww + bl + 1.3, yy, fs, { color: G6 });
+                });
+                if (total > shown.length) T('+ ' + (total - shown.length) + ' more', x0 + 4.2, y + 4.4 + per * rh, 5.6, { color: G5 });
+                return 8 + per * rh;
+            };
+            const hL = block(L, 93, missed, 'Missed', 'miss');
+            const hR = block(L + 97, 93, hinted, 'Correct using the hint', 'hint');
+            y += Math.max(hL, hR) + 2;
+
+            // ---------- tabla de audiciones
+            y += 1;
+            T('Auditions', L, y, 8.8, { bold: true, color: INDD });
+            const GAPC = 8, WM = 10, WW = 30, WH = 10, WG = 10;
+            const xMark = 92, xWords = xMark + WM + GAPC, xHints = xWords + WW + GAPC, xGroup = xHints + WH + GAPC;
+            const cols = { n: 12, title: 19, mark: xMark + WM / 2, wc: xWords + WW / 2, w0: xWords, hints: xHints + WH / 2, group: xGroup + WG / 2, date: R - 1.5, titleW: xMark - 19 - 4 };
+            const drawHead = (yy) => {
+                doc.setFillColor(...THEAD); doc.rect(L, yy, R - L, 4.6, 'F');
+                T('#', cols.n, yy + 3.2, 6.4, { bold: true, color: INDD }); T('Audition', cols.title, yy + 3.2, 6.4, { bold: true, color: INDD });
+                T('Mark', cols.mark, yy + 3.2, 6.4, { bold: true, align: 'center', color: INDD }); T('Words', cols.wc, yy + 3.2, 6.4, { bold: true, align: 'center', color: INDD });
+                T('Hints', cols.hints, yy + 3.2, 6.4, { bold: true, align: 'center', color: INDD }); T('Group', cols.group, yy + 3.2, 6.4, { bold: true, align: 'center', color: INDD });
+                T('Date', cols.date, yy + 3.2, 6.4, { bold: true, align: 'right', color: INDD });
+            };
+            let ty = y + 2; drawHead(ty); ty += 4.6;
+            const n = d.rows.length, NOTES_MIN = 27, LEGEND = 6;
+            const avail = BOTTOM - ty - LEGEND;
+            let rowH = (avail - NOTES_MIN) / Math.max(1, n);
+            if (rowH < 3.6) rowH = avail / Math.max(1, n);
+            rowH = Math.max(3.2, Math.min(5.4, rowH));
+            const fs = rowH >= 5 ? 7 : (rowH >= 4.3 ? 6.5 : (rowH >= 3.7 ? 6 : 5.4));
+            d.rows.forEach((r, i) => {
+                if (ty + rowH > BOTTOM - LEGEND + 0.05) { doc.addPage(); header(true); ty = 20; drawHead(ty); ty += 4.6; }
+                if (i % 2) { doc.setFillColor(...ZEB); doc.rect(L, ty, R - L, rowH, 'F'); }
+                const base = ty + rowH / 2 + fs * 0.13;
+                const mute = !r.sub, col = mute ? MID : INK;
+                T(r.num || (i + 1), cols.n, base, fs, { color: G5 });
+                T(fit(r.title, cols.titleW, fs), cols.title, base, fs, { color: col });
+                if (mute) { T('—', cols.mark, base, fs, { align: 'center', color: col }); T('not done', cols.wc, base, fs - 0.4, { align: 'center', color: col }); T('—', cols.hints, base, fs, { align: 'center', color: col }); }
+                else {
+                    T(Number(r.sub.score).toFixed(1), cols.mark, base, fs, { bold: true, align: 'center' });
+                    const ws = wordsOf(r), sp2 = ws.length > 1 ? Math.min(3.0, (WW - 2) / (ws.length - 1)) : 3, rad = rowH >= 4.3 ? 0.85 : 0.7, x00 = cols.wc - (Math.max(0, ws.length - 1) * sp2) / 2;
+                    ws.forEach((w, k) => { const px = x00 + k * sp2, py = ty + rowH / 2; if (!w.correct) symBad(px, py, rad); else if (w.usedHint) symHint(px, py, rad); else symOK(px, py, rad); });
+                    T(ws.filter(w => w.usedHint).length, cols.hints, base, fs, { align: 'center' });
+                }
+                T(r.gavg == null ? '—' : r.gavg.toFixed(1), cols.group, base, fs, { align: 'center', color: G5 });
+                T(r.sub ? (new Date(r.sub.created_at).toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit' })) : '—', cols.date, base, fs, { align: 'right', color: G5 });
+                ty += rowH;
+            });
+            doc.setDrawColor(...BORD); doc.setLineWidth(0.25); doc.line(L, ty, R, ty);
+            ty += 3.4;
+            symOK(L + 1, ty - 0.8, 0.8); T('correct', L + 3, ty, 6, { color: G5 });
+            symHint(L + 17, ty - 0.8, 0.8); T('correct using the hint', L + 19, ty, 6, { color: G5 });
+            symBad(L + 47, ty - 0.8, 0.8); T('wrong', L + 49, ty, 6, { color: G5 });
+
+            // ---------- notas del tutor: ocupan lo que quede de folio
+            const nTop = ty + 4;
+            if (BOTTOM - nTop >= 22) {
+                T('Tutor notes', L, nTop + 2, 8.8, { bold: true, color: INDD });
+                const bx = nTop + 4, bh = BOTTOM - bx;
+                doc.setDrawColor(...BORD); doc.setLineWidth(0.3); doc.roundedRect(L, bx, R - L, bh, 1.4, 1.4, 'S');
+                doc.setDrawColor(...GRID); doc.setLineWidth(0.2);
+                for (let yy = bx + 6; yy < bx + bh - 2; yy += 6) doc.line(L + 3, yy, R - 3, yy);
+            }
+
+            // ---------- pie en todas las páginas
+            const pages = doc.getNumberOfPages ? doc.getNumberOfPages() : 1;
+            for (let p = 1; p <= pages; p++) {
+                if (doc.setPage) doc.setPage(p);
+                T('Generated ' + d.dateStr + '  ·  Music Audition', L, 292.5, 6.2, { color: MID });
+                T('IES Infanta Elena  ·  Music Department' + (pages > 1 ? '  ·  page ' + p + '/' + pages : ''), R, 292.5, 6.2, { align: 'right', color: MID });
+            }
+            return doc;
+        };
+
+
+        const PracticeView = ({ scores, auditions, roster }) => {
+            const tasks = auditions.filter(a => a.is_practice).sort((a, b) => String(b.created_at).localeCompare(String(a.created_at)));
+            const [aud, setAud] = usePState('pr.aud', '');
+            const [grp, setGrp] = usePState('pr.grp', '');
+            const code = tasks.some(a => (a.share_link || a.id) === aud) ? aud : (tasks[0] ? (tasks[0].share_link || tasks[0].id) : '');
+            const groups = [...new Set((roster || []).map(r => r.class).filter(Boolean))].sort(cmpEs);
+            const all = scores.filter(x => x.audition_id === code);
+            const rows = all.filter(x => !grp || x.student_class === grp).sort((a, b) => cmpEs(a.student_class, b.student_class) || cmpEs(a.student_name, b.student_name));
+            const n = rows.length;
+            const avg = n ? rows.reduce((a, x) => a + Number(x.score || 0), 0) / n : 0;
+            const wmap = {};
+            rows.forEach(x => ((x.details && x.details.words) || []).forEach(w => { const k = w.original; if (!k) return; const e = wmap[k] || (wmap[k] = { w: k, n: 0, miss: 0, hint: 0 }); e.n++; if (!w.correct) e.miss++; else if (w.usedHint) e.hint++; }));
+            const hardest = Object.values(wmap).sort((a, b) => (b.miss / b.n) - (a.miss / a.n) || b.hint - a.hint).slice(0, 8);
+            const part = groups.map(g => { const N = (roster || []).filter(r => r.class === g).length; const d = new Set(all.filter(x => x.student_class === g).map(x => String(x.student_email || '').toLowerCase())).size; return { g, N, d }; }).filter(x => x.N > 0 && (!grp || x.g === grp));
+            const anonSet = new Set((roster || []).filter(r => r.anonymous).map(r => String(r.email).toLowerCase()));
+            const dot = (w) => ({ backgroundColor: w.correct ? (w.usedHint ? '#F59E0B' : '#10B981') : '#F43F5E' });
+            const sel = 'px-3 py-2 bg-slate-50 border rounded-xl text-sm font-semibold';
+            return (
+                <div className="space-y-4">
+                    <p className="text-xs font-semibold text-amber-900 bg-amber-50 border border-amber-200 rounded-xl px-3 py-2">Practice tasks do not count in grades, rankings or any other statistics. Here you only see the results of the practice task you choose.</p>
+                    <div className="flex flex-wrap items-center gap-2">
+                        <select value={code} onChange={e => setAud(e.target.value)} className={sel}>{tasks.map(a => <option key={a.share_link || a.id} value={a.share_link || a.id}>{a.title}</option>)}</select>
+                        <select value={grp} onChange={e => setGrp(e.target.value)} className={sel}><option value="">All groups</option>{groups.map(g => <option key={g} value={g}>{g}</option>)}</select>
+                    </div>
+                    {n === 0 ? <p className="text-sm text-slate-400 text-center py-6">Nobody has done this practice task yet.</p> : (
+                        <>
+                            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-center">
+                                {[['Submissions', n], ['Average', avg.toFixed(1)], ['Passed', Math.round(rows.filter(x => Number(x.score) >= 5).length / n * 100) + '%'], ['Tens', rows.filter(x => Number(x.score) >= 10).length]].map(([l, v]) => <div key={l} className="bg-slate-50 border border-slate-200 rounded-xl p-3"><p className="text-xs font-bold uppercase text-slate-500">{l}</p><p className="text-xl font-black text-indigo-700">{v}</p></div>)}
+                            </div>
+                            <div className="flex flex-wrap gap-2">{part.map(x => <span key={x.g} className="text-xs font-bold px-2.5 py-1 rounded-full bg-slate-100 text-slate-700">{x.g}: {x.d}/{x.N}</span>)}</div>
+                            {hardest.length > 0 && <div><p className="text-sm font-bold text-slate-900 mb-1.5">Hardest words</p><div className="flex flex-wrap gap-2">{hardest.map(h => <span key={h.w} className="text-xs font-semibold px-2.5 py-1 rounded-full bg-rose-50 text-rose-800 border border-rose-200">{h.w} · {Math.round(h.miss / h.n * 100)}% missed</span>)}</div></div>}
+                            <div className="overflow-x-auto rounded-xl border border-slate-200">
+                                <table className="w-full text-left text-sm">
+                                    <thead className="bg-slate-50 text-xs uppercase text-slate-500"><tr><th className="py-2 px-3">Student</th><th className="py-2 px-3">Group</th><th className="py-2 px-3">Words</th><th className="py-2 px-3 text-center">Mark</th></tr></thead>
+                                    <tbody>{rows.map(x => <tr key={x.id} className="border-t border-slate-100"><td className="py-2 px-3 font-semibold text-slate-900">{x.student_name}{anonSet.has(String(x.student_email || '').toLowerCase()) ? ' (anonymous)' : ''}</td><td className="py-2 px-3 text-slate-600">{x.student_class}</td><td className="py-2 px-3"><span className="inline-flex gap-1">{((x.details && x.details.words) || []).map((w, k) => <span key={k} className="w-3 h-3 rounded-full" style={dot(w)}></span>)}</span></td><td className="py-2 px-3 text-center font-black text-slate-900">{Number(x.score).toFixed(1)}</td></tr>)}</tbody>
+                                </table>
+                            </div>
+                        </>
+                    )}
                 </div>
             );
         };
@@ -1331,11 +1549,10 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
 
         // ---------- PESTAÑA «STATISTICS»: solo estadísticas (sin tabla de entregas) ----------
         const StatsView = ({ scores, auditions, roster, hiddenKeys }) => {
-            const [reveal, setReveal] = usePState('s.reveal', false);
             const [rg, setRg] = usePState('s.rg', '');
             const [allRank, setAllRank] = usePState('s.allRank', false);
             const f1 = (n) => Number(n || 0).toFixed(1);
-            const dn = (s) => (hiddenKeys.has(studentKey(s)) && !reveal) ? 'Anonymous' : s.student_name;
+            const dn = (s) => hiddenKeys.has(studentKey(s)) ? `${s.student_name} (anonymous)` : s.student_name;
             const groups = React.useMemo(() => [...new Set(scores.map(s => s.student_class).filter(Boolean))].sort((a, b) => a.localeCompare(b, 'es', { numeric: true })), [scores]);
             const audsOrd = React.useMemo(() => {
                 const first = {}, title = {};
@@ -1370,8 +1587,8 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
             return (
                 <div className="space-y-4">
                     <div className="flex items-center justify-between gap-3 flex-wrap">
-                        <p className="text-xs text-slate-500">Statistics of the selected school year and term. Names of students marked as anonymous show as “Anonymous”.</p>
-                        {hiddenKeys.size > 0 && <button onClick={() => setReveal(v => !v)} className="px-3 py-1.5 rounded-lg text-xs font-bold bg-slate-100 hover:bg-slate-200 text-slate-700">{reveal ? '🙈 Hide anonymous names' : '👁 Show real names'}</button>}
+                        <p className="text-xs text-slate-500">Statistics of the selected school year and term. Students marked as anonymous are included and tagged “(anonymous)”; they never appear in projections.</p>
+                        
                     </div>
                     <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
                         {cards.map(([l, v, g]) => <div key={l} className={`rounded-2xl p-4 text-white bg-gradient-to-br ${g}`}><p className="text-xs font-bold uppercase opacity-80">{l}</p><p className="text-2xl font-black mt-1">{v}</p></div>)}
@@ -1442,7 +1659,7 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
         };
 
         // ---------- «END OF COURSE»: copias y borrado seguro ----------
-        const EndOfCourse = ({ yearCounts, groups, idsFor, onExportCsv, onBackupGrades, onBackupTasks, onBackupRoster, onDeleteGrades, onClearRoster, rosterCount }) => {
+        const EndOfCourse = ({ yearCounts, groups, idsFor, onExportCsv, onFullBackup, onClearNumbers, onDeleteGrades, onClearRoster, rosterCount }) => {
             const [sel, setSel] = React.useState({});
             const [allYears, setAllYears] = React.useState(false);
             const [grp, setGrp] = React.useState('');
@@ -1456,7 +1673,7 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
                     <div className="space-y-5">
                         <div>
                             <p className="text-sm font-bold text-slate-900 mb-1">1. Copies <span className="font-normal text-slate-500">(optional, recommended)</span></p>
-                            <div className="flex flex-wrap gap-2"><button onClick={onExportCsv} className={btn}>Grades · Excel</button><button onClick={onBackupGrades} className={btn}>Grades · JSON</button><button onClick={onBackupTasks} className={btn}>Tasks · JSON</button><button onClick={onBackupRoster} className={btn}>Class list · JSON</button></div>
+                            <div className="flex flex-wrap gap-2"><button onClick={onFullBackup} className={btn}>💾 Full backup…</button><button onClick={onExportCsv} className={btn}>Grades · Excel</button></div>
                         </div>
                         <div>
                             <p className="text-sm font-bold text-slate-900 mb-1">2. Delete student grades</p>
@@ -1470,22 +1687,30 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
                             </div>
                         </div>
                         <div>
-                            <p className="text-sm font-bold text-slate-900 mb-1">3. Clear the class list <span className="font-normal text-slate-500">(optional, for a new course)</span></p>
+                            <p className="text-sm font-bold text-slate-900 mb-1">3. Clear audition numbers <span className="font-normal text-slate-500">(for a new course; tasks are kept)</span></p>
+                            <button onClick={() => setAsk('numbers')} className="px-3 py-1.5 rounded-lg text-xs font-bold text-rose-700 bg-rose-50 border border-rose-200">Clear all numbers…</button>
+                        </div>
+                        <div>
+                            <p className="text-sm font-bold text-slate-900 mb-1">4. Clear the class list <span className="font-normal text-slate-500">(optional, for a new course)</span></p>
                             <button disabled={!rosterCount} onClick={() => setAsk('roster')} className="px-3 py-1.5 rounded-lg text-xs font-bold text-rose-700 bg-rose-50 border border-rose-200 disabled:opacity-40">Clear the list ({pl(rosterCount, 'student', 'students')}, shared with the Spanish version)…</button>
                         </div>
                     </div>
                     {ask === 'grades' && <DangerConfirm title="Delete student grades" body={`${ids.length} submission(s) from ${allYears ? 'all school years' : chosen.join(', ')}${grp ? ' · ' + grp : ''} will be deleted. Your tasks are not touched.`} onCancel={() => setAsk(null)} onConfirm={() => { setAsk(null); onDeleteGrades(ids); }} />}
+                    {ask === 'numbers' && <DangerConfirm title="Clear audition numbers" word="CLEAR" steps={1} body="All audition numbers will be removed. Your tasks, grades and class list are not touched." onCancel={() => setAsk(null)} onConfirm={() => { setAsk(null); onClearNumbers(); }} />}
                     {ask === 'roster' && <DangerConfirm title="Clear the class list" body={`All ${rosterCount} students will be removed from your list. The list is shared with the Spanish version, so it is emptied there too. Past grades are kept.`} onCancel={() => setAsk(null)} onConfirm={() => { setAsk(null); onClearRoster(); }} />}
                 </Section>
             );
         };
 
-        const GradesDashboard = ({ scores: rawScores, auditions, lang, onView, onDelete, onDeleteAll, onEdit, projectNonce, onProjectHandled, roster, edLabel, onBackup, onDiploma, onBackupTasks, onBackupRoster, onDeleteGrades, onClearRoster, onPaperEdit }) => {
+        const GradesDashboard = ({ scores: rawScores, auditions, lang, onView, onDelete, onDeleteAll, onEdit, projectNonce, onProjectHandled, roster, edLabel, onBackup, onDiploma, onBackupTasks, onBackupRoster, onDeleteGrades, onClearRoster, onPaperEdit, onFullBackup, onClearNumbers }) => {
             const T = GRADES_TEXT[lang];
             const [fYear, setFYear] = usePState('g.fYear', currentSchoolYear);
             const [fTerm, setFTerm] = usePState('g.fTerm', '');   // '' = todo el curso
             const [gtab, setGtab] = usePState('g.gtab', 'table');
-            const scoresAll0 = React.useMemo(() => rawScores.map(s => ({ ...s, student_class: cleanClass(s.student_class) })), [rawScores]);
+            const practiceCodes = React.useMemo(() => new Set(auditions.filter(a => a.is_practice).map(a => a.share_link || a.id)), [auditions]);
+            const scoresAll0 = React.useMemo(() => rawScores.filter(s => !practiceCodes.has(s.audition_id)).map(s => ({ ...s, student_class: cleanClass(s.student_class) })), [rawScores, practiceCodes]);
+            const practiceAll0 = React.useMemo(() => rawScores.filter(s => practiceCodes.has(s.audition_id)).map(s => ({ ...s, student_class: cleanClass(s.student_class) })), [rawScores, practiceCodes]);
+            const hiddenKeys = React.useMemo(() => new Set((roster || []).filter(r => r.anonymous).map(r => String(r.email).toLowerCase())), [roster]);
             const years = React.useMemo(() => [...new Set([currentSchoolYear(), ...scoresAll0.map(s => schoolYearOf(s.created_at))])].sort().reverse(), [scoresAll0]);
             const scoresP = React.useMemo(() => scoresAll0.filter(s => (!fYear || schoolYearOf(s.created_at) === fYear) && (!fTerm || String(termOf(s.created_at)) === fTerm)), [scoresAll0, fYear, fTerm]);
             const scores = React.useMemo(() => scoresP.filter(s => !s.__out), [scoresP]);   // lo que cuenta en estadísticas y proyección
@@ -1517,7 +1742,7 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
                 const keys = [...new Set(scores.map(studentKey))].sort();
                 return Object.fromEntries(keys.map((k, i) => [k, `${T.anon} ${i + 1}`]));
             }, [scores, T]);
-            const nameOf = (s) => hide ? anonMap[studentKey(s)] : s.student_name;
+            const nameOf = (s) => hiddenKeys.has(studentKey(s)) ? `${s.student_name} (anonymous)` : s.student_name;
 
             const groups = React.useMemo(() => [...new Set(scores.map(s => s.student_class).filter(Boolean))].sort(), [scores]);
             const courses = React.useMemo(() => [...new Set(scores.map(s => courseOf(s.student_class)).filter(Boolean))].sort(), [scores]);
@@ -1548,8 +1773,8 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
             const activeFilters = (fAud ? 1 : 0) + (fCourse ? 1 : 0) + (fBand ? 1 : 0) + ((fYear !== currentSchoolYear() || fTerm !== '') ? 1 : 0);
             const termLabel = fTerm === '' ? (lang === 'es' ? 'Todo el curso' : 'Whole course') : (lang === 'es' ? `${fTerm}.ª evaluación` : ({ '1': '1st', '2': '2nd', '3': '3rd' })[fTerm] + ' term');
             const chip = (on) => `px-3 py-1.5 rounded-full text-xs font-bold border transition-all ${on ? 'bg-indigo-600 text-white border-indigo-600' : 'bg-white text-slate-600 border-slate-200 hover:border-indigo-300'}`;
-            const idsFor = (years, group) => scoresAll0.filter(s => years.includes(schoolYearOf(s.created_at)) && (!group || s.student_class === group)).map(s => s.id);
-            const yearCounts = React.useMemo(() => { const m = {}; scoresAll0.forEach(s => { const y = schoolYearOf(s.created_at); m[y] = (m[y] || 0) + 1; }); return m; }, [scoresAll0]);
+            const idsFor = (years, group) => [...scoresAll0, ...practiceAll0].filter(s => years.includes(schoolYearOf(s.created_at)) && (!group || s.student_class === group)).map(s => s.id);
+            const yearCounts = React.useMemo(() => { const m = {}; [...scoresAll0, ...practiceAll0].forEach(s => { const y = schoolYearOf(s.created_at); m[y] = (m[y] || 0) + 1; }); return m; }, [scoresAll0, practiceAll0]);
             const groupCards = React.useMemo(() => groups.map(g => {
                 const rows = scores.filter(s => s.student_class === g), order = auditionOrder(rows), lastRows = rows.filter(s => s.audition_id === order[0]);
                 const N = (roster || []).filter(r => r.class === g).length || new Set(rows.map(studentKey)).size;
@@ -1607,26 +1832,27 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
             );
 
 
-            const hiddenKeys = React.useMemo(() => new Set((roster || []).filter(r => r.anonymous).map(r => String(r.email).toLowerCase())), [roster]);
             // ---------- PROYECCIÓN EN CLASE: presentación de 5 pantallas ----------
-            const lastAudOf = (group) => auditionOrder(scores.filter(s => s.student_class === group))[0] || '';
+            const pjScores = React.useMemo(() => scores.filter(s => !hiddenKeys.has(studentKey(s))), [scores, hiddenKeys]);
+            const pjRoster = React.useMemo(() => (roster || []).filter(r => !r.anonymous), [roster]);
+            const lastAudOf = (group) => auditionOrder(pjScores.filter(s => s.student_class === group))[0] || '';
             const openProjection = () => {
                 const g = fGroup || groups[0] || '';
-                setPjSetup({ group: g, aud: (fAud && scores.some(s => s.student_class === g && s.audition_id === fAud)) ? fAud : lastAudOf(g) });
+                setPjSetup({ group: g, aud: (fAud && pjScores.some(s => s.student_class === g && s.audition_id === fAud)) ? fAud : lastAudOf(g) });
             };
             React.useEffect(() => { if (projectNonce) { openProjection(); if (onProjectHandled) onProjectHandled(); } }, [projectNonce]);
             const startProjection = () => { setPj({ group: pjSetup.group, aud: lastAudOf(pjSetup.group) }); setPjSetup(null); setPjScreen(0); setPjReveal(0); setPjFast(false); };
             const closeProjection = () => { try { if (document.fullscreenElement) document.exitFullscreen(); } catch (e) {} setPj(null); };
             const shortNames = React.useMemo(() => {
                 const m = {}; if (!pj) return m;
-                const people = Object.values(groupBy(scores.filter(sc => sc.student_class === pj.group), studentKey)).map(a => a[0]);
+                const people = Object.values(groupBy(pjScores.filter(sc => sc.student_class === pj.group), studentKey)).map(a => a[0]);
                 const byBase = groupBy(people, sc => abbrevParts(sc).base);
                 Object.values(byBase).forEach(arr => arr.forEach(sc => { const p = abbrevParts(sc); m[studentKey(sc)] = arr.length > 1 && p.l2i ? `${p.base} ${p.l2i}` : p.base; }));
                 return m;
-            }, [pj, scores]);
+            }, [pj, pjScores]);
             const pjData = React.useMemo(() => {
                 if (!pj) return null;
-                const inGroup = scores.filter(s => s.student_class === pj.group);
+                const inGroup = pjScores.filter(s => s.student_class === pj.group);
                 const audRank = buildRanking(inGroup, '', pj.aud);
                 const courseRank = eligibleRank(inGroup);
                 const pendingN = Math.max(0, buildRanking(inGroup, '', '').length - courseRank.length);
@@ -1667,19 +1893,19 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
                         pass: Math.round(arr.filter(s => Number(s.score) >= 5).length / arr.length * 100),
                         tens: arr.filter(s => Number(s.score) >= 10).length, easy: ws[0], hard: ws.length > 1 ? ws[ws.length - 1] : null };
                 }).sort((a, b) => b.avg - a.avg);
-                const league = groups.map(g => {
-                    const list = scores.filter(s => s.student_class === g);
+                const league = groups.filter(g => pjScores.some(s => s.student_class === g)).map(g => {
+                    const list = pjScores.filter(s => s.student_class === g);
                     const la = auditionOrder(list)[0];
                     const lastRows = list.filter(s => s.audition_id === la);
                     const lastAvg = avgOf(lastRows); const prevL = list.filter(s => s.audition_id !== la);
-                    const rn = (roster || []).filter(r => cleanClass(r.class) === g).length;
+                    const rn = pjRoster.filter(r => cleanClass(r.class) === g).length;
                     return { g, avg: avgOf(list), last: lastAvg, n: list.length, nLast: lastRows.length, rosterN: rn, delta: prevL.length ? lastAvg - avgOf(prevL) : null };
                 }).filter(x => x.n > 0).sort((a, b) => b.avg - a.avg);
                 const withD = league.filter(x => x.delta !== null);
                 const groupUp = [...withD].sort((a, b) => b.delta - a.delta)[0], groupDown = [...withD].sort((a, b) => a.delta - b.delta)[0];
                 const audTitle = (auds.find(([id]) => id === pj.aud) || [])[1] || '';
                 return { audRank, courseRank, pendingN, moves, noPrev: prevRank.length === 0, totalAud, king, improve, badDay, audWords, wordsEasy, wordsHard, audList, league, leagueLast: [...league].sort((a, b) => b.last - a.last), groupUp, groupDown, audTitle };
-            }, [pj, scores, groups, auds, auditions, roster]);
+            }, [pj, pjScores, pjRoster, groups, auds, auditions]);
             const pjPodiumScreen = pjScreen === 0 || pjScreen === 1;
             const pjMaxReveal = pjData ? Math.min(3, (pjScreen === 0 ? pjData.audRank : pjData.courseRank).length) : 0;
             const [pjMusic, setPjMusic] = React.useState(true);
@@ -1745,23 +1971,39 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
                 <th className={`py-3.5 px-4 ${cls}`}><button onClick={() => setSort(p => ({ key: k, dir: p.key === k ? -p.dir : (k === 'score' || k === 'date' ? -1 : 1) }))} className="uppercase font-bold hover:text-slate-700 inline-flex items-center gap-1">{label}{sort.key === k ? (sort.dir > 0 ? ' ▲' : ' ▼') : ''}</button></th>
             );
             const profRows = profile ? scores.filter(s => studentKey(s) === profile).sort((a, b) => String(a.created_at).localeCompare(String(b.created_at))) : [];
+            const printReport = () => {
+                const first = profRows[0]; if (!first) return;
+                try {
+                    const group = first.student_class;
+                    const aById = {}; auditions.forEach(a => { aById[a.share_link || a.id] = a; });
+                    const byAud = {};
+                    scores.filter(x => x.student_class === group).forEach(x => { (byAud[x.audition_id] = byAud[x.audition_id] || []).push(x); });
+                    const okey = (code) => { const a = aById[code]; return [Number(a && a.number) || 99999, String((a && a.created_at) || '')]; };
+                    const codes = Object.keys(byAud).sort((p, q) => { const A = okey(p), B = okey(q); return A[0] - B[0] || A[1].localeCompare(B[1]); });
+                    const mine = {}; profRows.forEach(x => { mine[x.audition_id] = x; });
+                    const rows = codes.map(code => { const a = aById[code], g = byAud[code]; return { code, num: a && a.number ? a.number : null, title: (mine[code] && mine[code].auditions && mine[code].auditions.title) || (a && a.title) || (g[0].auditions && g[0].auditions.title) || '', gavg: g.reduce((t, y) => t + Number(y.score || 0), 0) / g.length, sub: mine[code] || null }; });
+                    profRows.forEach(x => { if (!byAud[x.audition_id]) rows.push({ code: x.audition_id, num: null, title: (x.auditions && x.auditions.title) || '', gavg: null, sub: x }); });
+                    const nm = first.student_name, ord = { 1: 'st', 2: 'nd', 3: 'rd' };
+                    buildStudentReport({ name: nm, firstName: String(nm).split(' ')[0], group, course: fYear ? `Course ${fYear}${fTerm ? ' · ' + fTerm + (ord[fTerm] || 'th') + ' term' : ''}` : 'All school years', dateStr: new Date().toLocaleDateString('en-GB'), rows }).save(`Report_${String(nm).replace(/[^A-Za-z0-9]+/g, '_')}.pdf`);
+                } catch (e) { console.error(e); alert('Could not create the report: ' + (e.message || e)); }
+            };
 
             return (
                 <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
                     <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 mb-4">
                         <h2 className="text-xl font-bold text-slate-900">{T.title}</h2>
                         <div className="flex flex-wrap gap-2">
-                            {scores.length > 0 && onBackup && <button onClick={onBackup} title="Full copy of all grades (JSON)" className="px-3 py-2 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 rounded-xl text-xs font-bold">Backup JSON</button>}
+                            
                             {sorted.length > 0 && <button onClick={exportCsv} className="px-3 py-2 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 rounded-xl text-xs font-bold flex items-center gap-1"><Icons.Download /> {T.exportCsv}</button>}
                         </div>
                     </div>
 
-                    <div className="flex bg-slate-100 p-1 rounded-xl gap-1 text-sm mb-3 max-w-xl">
-                        {[['table', lang === 'es' ? 'Entregas' : 'Entries'], ['stats', lang === 'es' ? 'Estadísticas' : 'Statistics'], ['vocab', lang === 'es' ? 'Vocabulario' : 'Vocabulary'], ['classroom', 'Classroom']].map(([k, label]) => (
+                    <div className="flex bg-slate-100 p-1 rounded-xl gap-1 text-sm mb-3 max-w-2xl">
+                        {[['table', lang === 'es' ? 'Entregas' : 'Entries'], ['stats', lang === 'es' ? 'Estadísticas' : 'Statistics'], ['vocab', lang === 'es' ? 'Vocabulario' : 'Vocabulary'], ['classroom', 'Classroom'], ...(practiceCodes.size ? [['practice', 'Practice']] : [])].map(([k, label]) => (
                             <button key={k} onClick={() => setGtab(k)} className={`flex-1 py-1.5 rounded-lg font-semibold transition-all ${gtab === k ? 'bg-white text-slate-900 shadow-sm font-bold' : 'text-slate-500 hover:text-slate-800'}`}>{label}</button>))}
                     </div>
 
-                    {gtab !== 'stats' && gtab !== 'classroom' && (
+                    {gtab !== 'stats' && gtab !== 'classroom' && gtab !== 'practice' && (
                         <div className="space-y-2 mb-3">
                             <div className="relative"><span className="absolute left-3 top-3 text-slate-400"><Icons.Search /></span><input type="text" placeholder={T.search} value={q} onChange={e => setQ(e.target.value)} className="w-full pl-9 pr-3 py-2.5 bg-slate-50 border rounded-xl text-sm outline-none focus:border-indigo-500" /></div>
                             <div className="flex flex-wrap gap-1.5">
@@ -1824,7 +2066,7 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
                                         <tr key={s.id} className="border-b border-slate-100 hover:bg-slate-50/30 transition-colors">
                                             <td className="py-3.5 px-4">{s.__out && <span title="Email not on the class list: not counted in statistics" className="mr-1">⚠️</span>}{s.details && s.details.paper && <span title="Paper submission" className="mr-1">📄</span>}<button onClick={() => setProfile(studentKey(s))} className="font-bold text-slate-950 hover:underline text-left">{nameOf(s)}</button><p className="text-xs text-slate-400">{hide ? '' : (s.student_email || T.noEmail)}</p></td>
                                             <td className="py-3.5 px-4 font-mono text-xs">{s.student_class}</td>
-                                            <td className="py-3.5 px-4 text-slate-600 font-medium"><span className="inline-block w-2.5 h-2.5 rounded-full mr-2 align-middle" style={{ backgroundColor: getMusicTheme(styleByCode[s.audition_id] || s.auditions?.style).colors.key }} title={getMusicTheme(styleByCode[s.audition_id] || s.auditions?.style).label}></span>{numOf(s.audition_id) ? `${numOf(s.audition_id)} · ` : ''}{s.auditions?.title}{edLabel && edLabel(s) ? <span className="ml-1.5 text-xs font-black px-1.5 py-0.5 rounded bg-amber-100 text-amber-800" title="Version of the words used">{edLabel(s)}</span> : null}</td>
+                                            <td className="py-3.5 px-4 text-slate-600 font-medium"><span className="inline-flex items-center justify-center w-6 h-6 rounded-md mr-2 align-middle text-xs font-black text-white shrink-0" style={{ backgroundColor: getMusicTheme(styleByCode[s.audition_id] || s.auditions?.style).colors.key }} title={getMusicTheme(styleByCode[s.audition_id] || s.auditions?.style).label}>{getMusicTheme(styleByCode[s.audition_id] || s.auditions?.style).icon}</span>{numOf(s.audition_id) ? `${numOf(s.audition_id)} · ` : ''}{s.auditions?.title}{edLabel && edLabel(s) ? <span className="ml-1.5 text-xs font-black px-1.5 py-0.5 rounded bg-amber-100 text-amber-800" title="Version of the words used">{edLabel(s)}</span> : null}</td>
                                             <td className="py-3.5 px-4 text-center"><span className={`inline-block font-extrabold text-xs px-2.5 py-1 rounded-full ${scoreClass(s.score)}`}>{fmt(s.score)}/10</span></td>
                                             <td className="py-3.5 px-4 text-xs text-slate-500 whitespace-nowrap">{dateLabel(s.created_at)}</td>
                                             <td className="py-3.5 px-4 text-right space-x-1 whitespace-nowrap">
@@ -1846,7 +2088,8 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
                     {gtab === 'stats' && <StatsView scores={scores} auditions={auditions} roster={roster || []} hiddenKeys={hiddenKeys} />}
                     {gtab === 'vocab' && <VocabView rows={filteredC} />}
                     {gtab === 'classroom' && <ClassroomView scores={scores} auditions={auditions} roster={roster || []} />}
-                    <div className="mt-6"><EndOfCourse yearCounts={yearCounts} groups={groups} idsFor={idsFor} onExportCsv={exportCsv} onBackupGrades={onBackup} onBackupTasks={onBackupTasks} onBackupRoster={onBackupRoster} onDeleteGrades={onDeleteGrades} onClearRoster={onClearRoster} rosterCount={(roster || []).length} /></div>
+                    {gtab === 'practice' && <PracticeView scores={practiceAll0} auditions={auditions} roster={roster || []} />}
+                    <div className="mt-6"><EndOfCourse yearCounts={yearCounts} groups={groups} idsFor={idsFor} onExportCsv={exportCsv} onFullBackup={onFullBackup} onClearNumbers={onClearNumbers} onDeleteGrades={onDeleteGrades} onClearRoster={onClearRoster} rosterCount={(roster || []).length} /></div>
 
                     {pjSetup && (
                         <div className="fixed inset-0 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4 z-[70]" onClick={() => setPjSetup(null)}>
@@ -2090,7 +2333,7 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
                                         </button>
                                     ))}
                                 </div>
-                                <div className="flex justify-end"><button onClick={() => setProfile(null)} className="px-4 py-2 rounded-xl text-sm font-bold text-slate-600 bg-slate-100 hover:bg-slate-200">{T.close}</button></div>
+                                <div className="flex justify-between gap-3"><button onClick={printReport} title="Individual report for a tutoring session (PDF)" className="px-4 py-2 rounded-xl text-sm font-bold text-white bg-indigo-600 hover:bg-indigo-700">🖨 Print report</button><button onClick={() => setProfile(null)} className="px-4 py-2 rounded-xl text-sm font-bold text-slate-600 bg-slate-100 hover:bg-slate-200">{T.close}</button></div>
                             </div>
                         </div>
                     )}
@@ -2153,11 +2396,14 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
             const [taskAudience, setTaskAudience] = useState([]);
             const [taskNumber, setTaskNumber] = useState('');
             const [numberTouched, setNumberTouched] = useState(false);
+            const [taskPractice, setTaskPractice] = useState(false);
             const [numModal, setNumModal] = useState(null);
             const [teacherViewing, setTeacherViewing] = useState(false);
             const [emptyAsk, setEmptyAsk] = useState(0);
             const [showDelTasks, setShowDelTasks] = useState(false);
             const [histCourse, setHistCourse] = useState('');
+            const [histSort, setHistSort] = useState('new');
+            const [histStyle, setHistStyle] = useState('');
             const previewTried = React.useRef('');
             const [gateStatus, setGateStatus] = useState('');
             const [gateBusy, setGateBusy] = useState(false);
@@ -2475,11 +2721,11 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
                 return (nums.length ? Math.max(...nums) : 0) + 1;
             };
             const suggestedNumber = taskAudience.length === 1 ? courseNext(taskAudience[0]) : null;
-            useEffect(() => { if (!editingTask && !numberTouched) setTaskNumber(suggestedNumber ? String(suggestedNumber) : ''); }, [suggestedNumber, editingTask, numberTouched]);
+            useEffect(() => { if (!editingTask && !numberTouched && !taskPractice) setTaskNumber(suggestedNumber ? String(suggestedNumber) : ''); }, [suggestedNumber, editingTask, numberTouched, taskPractice]);
             const numberClash = taskNumber && taskAudience.length ? auditionsList.find(a => Number(a.number) === Number(taskNumber) && Array.isArray(a.audience) && a.audience.some(c => taskAudience.includes(c)) && (a.share_link || a.id) !== (editingTask ? (editingTask.share_link || editingTask.id) : null)) : null;
             const openNumbering = () => {
                 const byCourse = {};
-                [...auditionsList].sort((a, b) => String(a.created_at).localeCompare(String(b.created_at))).forEach(a => { const c = (Array.isArray(a.audience) && a.audience.length) ? a.audience[0] : ''; (byCourse[c] = byCourse[c] || []).push(a); });
+                [...auditionsList].filter(a => !a.is_practice).sort((a, b) => String(a.created_at).localeCompare(String(b.created_at))).forEach(a => { const c = (Array.isArray(a.audience) && a.audience.length) ? a.audience[0] : ''; (byCourse[c] = byCourse[c] || []).push(a); });
                 const rows = [];
                 Object.keys(byCourse).sort().forEach(c => {
                     const anyNum = byCourse[c].some(a => a.number);
@@ -2502,11 +2748,11 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
             };
             const startEditTask = (aud) => {
                 setTitle(aud.title || ''); setArtist(aud.artist || ''); setStyle(aud.style || 'classical'); setYoutubeUrl(aud.youtube_url || '');
-                setCommentText(aud.comment || ''); setTaskAudience(Array.isArray(aud.audience) ? aud.audience : []); setTaskNumber(aud.number != null ? String(aud.number) : ''); setNumberTouched(true); setTaskHints([...(Array.isArray(aud.hints) ? aud.hints : []), ...Array(10).fill('')].slice(0, 10));
+                setCommentText(aud.comment || ''); setTaskAudience(Array.isArray(aud.audience) ? aud.audience : []); setTaskNumber(aud.number != null ? String(aud.number) : ''); setNumberTouched(true); setTaskPractice(!!aud.is_practice); setTaskHints([...(Array.isArray(aud.hints) ? aud.hints : []), ...Array(10).fill('')].slice(0, 10));
                 setEditingTask(aud); setDashboardTab('create'); window.scrollTo({ top: 0, behavior: 'smooth' });
                 showToast("Editing this task. Change what you need and press Save changes.", "info");
             };
-            const cancelEditTask = () => { setEditingTask(null); setTitle(''); setArtist(''); setStyle('classical'); setYoutubeUrl(''); setCommentText(''); setTaskHints(Array(10).fill('')); setTaskAudience([]); setTaskNumber(''); setNumberTouched(false); };
+            const cancelEditTask = () => { setEditingTask(null); setTitle(''); setArtist(''); setStyle('classical'); setYoutubeUrl(''); setCommentText(''); setTaskHints(Array(10).fill('')); setTaskAudience([]); setTaskNumber(''); setNumberTouched(false); setTaskPractice(false); };
 
             const handlePublishTask = async () => {
                 if (uppercaseWords.length !== 10) { showToast("You must include exactly 10 UPPERCASE words in the commentary.", "error"); return; }
@@ -2522,7 +2768,7 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
                     artist: artist || 'Unknown Artist',
                     style: style,
                     audience: taskAudience,
-                    number: taskNumber ? parseInt(taskNumber, 10) : null,
+                    number: (taskNumber && !taskPractice) ? parseInt(taskNumber, 10) : null, is_practice: taskPractice,
                     youtube_url: youtubeUrl,
                     comment: commentText,
                     uppercase_words: uppercaseWords,
@@ -2538,13 +2784,13 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
                     if (hasSubs && wordsChanged && !window.confirm("Students have already submitted this task. Their saved scores will NOT be recalculated with the new words. Save the changes anyway (same link)?")) { setLoading(false); return; }
                     {
                         try {
-                            const { data, error } = await supabaseClient.from('auditions').update({ title: taskPayload.title, artist: taskPayload.artist, style, audience: taskAudience, number: taskNumber ? parseInt(taskNumber, 10) : null, youtube_url: youtubeUrl, comment: commentText, uppercase_words: uppercaseWords, hints: taskHints.slice(0, 10) }).eq('share_link', key).select('share_link');
+                            const { data, error } = await supabaseClient.from('auditions').update({ title: taskPayload.title, artist: taskPayload.artist, style, audience: taskAudience, number: (taskNumber && !taskPractice) ? parseInt(taskNumber, 10) : null, is_practice: taskPractice, youtube_url: youtubeUrl, comment: commentText, uppercase_words: uppercaseWords, hints: taskHints.slice(0, 10) }).eq('share_link', key).select('share_link');
                             if (error || !data || !data.length) throw new Error(error?.message || 'not allowed');
                         } catch (e) { showToast("The changes could not be saved: " + (e.message || ''), "error"); setLoading(false); return; }
-                        const upd = { ...editingTask, title: taskPayload.title, artist: taskPayload.artist, style, audience: taskAudience, number: taskNumber ? parseInt(taskNumber, 10) : null, youtube_url: youtubeUrl, comment: commentText, uppercase_words: uppercaseWords, hints: taskHints.slice(0, 10) };
+                        const upd = { ...editingTask, title: taskPayload.title, artist: taskPayload.artist, style, audience: taskAudience, number: (taskNumber && !taskPractice) ? parseInt(taskNumber, 10) : null, is_practice: taskPractice, youtube_url: youtubeUrl, comment: commentText, uppercase_words: uppercaseWords, hints: taskHints.slice(0, 10) };
                         const list = getStoredAuditions().map(a => (a.share_link || a.id) === key ? upd : a); saveStoredAuditions(list);
                         setAuditionsList(prev => prev.map(a => (a.share_link || a.id) === key ? upd : a));
-                        setEditingTask(null); setTitle(''); setArtist(''); setStyle('classical'); setYoutubeUrl(''); setCommentText(''); setTaskHints(Array(10).fill('')); setTaskAudience([]); setTaskNumber(''); setNumberTouched(false);
+                        setEditingTask(null); setTitle(''); setArtist(''); setStyle('classical'); setYoutubeUrl(''); setCommentText(''); setTaskHints(Array(10).fill('')); setTaskAudience([]); setTaskNumber(''); setNumberTouched(false); setTaskPractice(false);
                         try { const meta = { title: taskPayload.title, artist: taskPayload.artist, style }; const { error: e2 } = await supabaseClient.from('student_submissions').update({ auditions: meta }).eq('audition_id', key); if (!e2) setScoresList(prev => prev.map(sc => sc.audition_id === key ? { ...sc, auditions: meta } : sc)); } catch (e) { console.error(e); }
                         showToast("Task updated. Same student link; results are kept.", "success"); setLoading(false); setDashboardTab('history'); return;
                     }
@@ -2553,8 +2799,8 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
                     let insertError = null;
                     const firstTry = await supabaseClient.from('auditions').insert([taskPayload]);
                     insertError = firstTry.error;
-                    if (insertError && /number/i.test(insertError.message || '') && !/hints/i.test(insertError.message || '')) {
-                        const { number: _n, ...payloadNoNumber } = taskPayload;
+                    if (insertError && /number|is_practice/i.test(insertError.message || '') && !/hints/i.test(insertError.message || '')) {
+                        const { number: _n, is_practice: _p, ...payloadNoNumber } = taskPayload;
                         const retryN = await supabaseClient.from('auditions').insert([payloadNoNumber]);
                         insertError = retryN.error;
                         if (!retryN.error) showToast('Saved without the audition number: run the latest SQL in Supabase first.', 'info');
@@ -2583,7 +2829,7 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
                 setAuditionsList(updatedList.filter(a => (a.teacher_email || a.teacher_id)?.toLowerCase() === teacherEmail));
                 const fullTaskUrl = buildStudentUrl(taskId);
                 setCreatedTaskModal({ title: taskPayload.title, fullUrl: fullTaskUrl, taskPayload: taskPayload });
-                setTitle(''); setArtist(''); setStyle('classical'); setYoutubeUrl(''); setCommentText(''); setTaskHints(Array(10).fill('')); setTaskAudience([]); setTaskNumber(''); setNumberTouched(false);
+                setTitle(''); setArtist(''); setStyle('classical'); setYoutubeUrl(''); setCommentText(''); setTaskHints(Array(10).fill('')); setTaskAudience([]); setTaskNumber(''); setNumberTouched(false); setTaskPractice(false);
                 showToast("Audition saved to Supabase Cloud.", "success");
                 setLoading(false);
             };
@@ -2745,6 +2991,22 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
             const viewResultsAsTeacher = (sc) => { setFinalScoreRecord(buildRecordFor(sc)); setExamSubmitted(true); setTeacherViewing(true); setView('results'); window.scrollTo({ top: 0 }); };
             const leaveTeacherView = () => { setTeacherViewing(false); setFinalScoreRecord(null); setExamSubmitted(false); if (activeTask && activeTask.preview) setActiveTask(null); setView('dashboard'); };
             const previewMode = !!(activeTask && activeTask.preview);
+            const restoreTaskList = async (list) => {
+                const te = rosterTeacher();
+                const have = new Set(auditionsList.map(a => a.share_link || a.id));
+                const spanish = list.filter(t => t && isSpanishCode(t.share_link)).length;
+                const toAdd = list.filter(t => t && t.share_link && !isSpanishCode(t.share_link) && t.title && t.comment && !have.has(t.share_link)).map(t => ({
+                    teacher_email: te, title: t.title, artist: t.artist || 'Unknown Artist', style: String(t.style || 'classical').toLowerCase(),
+                    youtube_url: t.youtube_url || '', comment: t.comment, uppercase_words: t.uppercase_words || [], hints: t.hints || [],
+                    audience: Array.isArray(t.audience) ? t.audience : [], number: t.number == null ? null : t.number, is_practice: !!t.is_practice,
+                    share_link: t.share_link, is_exam_mode: !!t.is_exam_mode, created_at: t.created_at || new Date().toISOString() }));
+                if (toAdd.length) {
+                    let { error } = await supabaseClient.from('auditions').insert(toAdd);
+                    if (error && /number|is_practice|audience/i.test(error.message || '')) { const slim = toAdd.map(({ number, is_practice, ...rest }) => rest); ({ error } = await supabaseClient.from('auditions').insert(slim)); }
+                    if (error) throw error;
+                }
+                return { added: toAdd.length, spanish };
+            };
             const importTasksFile = (file) => {
                 if (!file) return;
                 const rd = new FileReader();
@@ -2752,21 +3014,70 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
                     try {
                         const raw = JSON.parse(String(rd.result));
                         const list = Array.isArray(raw) ? raw : (raw.tasks || []);
-                        const te = rosterTeacher();
-                        const have = new Set(auditionsList.map(a => a.share_link || a.id));
-                        const spanish = list.filter(t => t && isSpanishCode(t.share_link)).length;
-                        const toAdd = list.filter(t => t && t.share_link && !isSpanishCode(t.share_link) && t.title && t.comment && !have.has(t.share_link)).map(t => ({
-                            teacher_email: te, title: t.title, artist: t.artist || 'Unknown Artist', style: String(t.style || 'classical').toLowerCase(),
-                            youtube_url: t.youtube_url || '', comment: t.comment, uppercase_words: t.uppercase_words || [], hints: t.hints || [],
-                            share_link: t.share_link, is_exam_mode: !!t.is_exam_mode, created_at: t.created_at || new Date().toISOString() }));
-                        if (!toAdd.length) { showToast(spanish ? 'Nothing to import: those are tasks of the Spanish version.' : 'Nothing to import: those tasks already exist.', 'info'); return; }
-                        const { error } = await supabaseClient.from('auditions').insert(toAdd);
-                        if (error) throw error;
-                        showToast(`${pl(toAdd.length, 'task', 'tasks')} restored with their original links.${spanish ? ` ${pl(spanish, 'task', 'tasks')} of the Spanish version skipped.` : ''}`, 'success');
+                        const { added, spanish } = await restoreTaskList(list);
+                        if (!added) { showToast(spanish ? 'Nothing to import: those are tasks of the Spanish version.' : 'Nothing to import: those tasks already exist.', 'info'); return; }
+                        showToast(`${pl(added, 'task', 'tasks')} restored with their original links.${spanish ? ` ${pl(spanish, 'task', 'tasks')} of the Spanish version skipped.` : ''}`, 'success');
                         fetchHistoryAndScores();
                     } catch (e) { showToast('Could not import: ' + (e.message || 'invalid file'), 'error'); }
                 };
                 rd.readAsText(file);
+            };
+            const clearAllNumbers = async () => {
+                const te = rosterTeacher(); if (!te || !supabaseClient) return;
+                const { error } = await supabaseClient.from('auditions').update({ number: null }).eq('teacher_email', te).not('number', 'is', null).not('share_link', 'like', 'aud-es-%');
+                if (error) { showToast('Could not clear the numbers: ' + error.message, 'error'); return; }
+                setAuditionsList(prev => prev.map(a => ({ ...a, number: null })));
+                try { saveStoredAuditions(getStoredAuditions().map(a => ({ ...a, number: null }))); } catch (e) {}
+                showToast('Audition numbers cleared.', 'success');
+            };
+            const [backupModal, setBackupModal] = useState(null);
+            const downloadFullBackup = () => {
+                const data = { type: 'music_audition_full_backup', version: 1, exportedAt: new Date().toISOString(), teacher: rosterTeacher(), counts: { tasks: auditionsList.length, students: rosterList.length, grades: scoresList.length }, tasks: auditionsList, roster: rosterList, grades: scoresList, settings: { fontScale, darkMode } };
+                downloadFile(JSON.stringify(data, null, 2), `music_audition_backup_${new Date().toISOString().slice(0, 10)}.json`, 'application/json');
+                try { localStorage.setItem('audition_last_backup', new Date().toISOString()); } catch (e) {}
+                showToast('Full backup downloaded.', 'success');
+            };
+            const readBackupFile = (file) => {
+                if (!file) return;
+                const rd = new FileReader();
+                rd.onload = () => {
+                    try {
+                        const d = JSON.parse(String(rd.result));
+                        if (!d || d.type !== 'music_audition_full_backup') throw new Error('this is not a full backup file');
+                        setBackupModal(m => ({ ...m, file: { name: file.name, data: d, counts: { tasks: (d.tasks || []).length, students: (d.roster || []).length, grades: (d.grades || []).length }, when: d.exportedAt } }));
+                    } catch (e) { showToast('Could not read the file: ' + (e.message || 'invalid'), 'error'); }
+                };
+                rd.readAsText(file);
+            };
+            const runRestore = async () => {
+                const m = backupModal; if (!m || !m.file) return;
+                const d = m.file.data; setBackupModal({ ...m, busy: true });
+                const out = [];
+                try {
+                    if (m.pick.tasks && Array.isArray(d.tasks)) { const r = await restoreTaskList(d.tasks); out.push(pl(r.added, 'task', 'tasks')); }
+                    if (m.pick.roster && Array.isArray(d.roster)) {
+                        const have = new Set(rosterList.map(x => x.email));
+                        const missing = d.roster.filter(x => x && x.email && !have.has(String(x.email).toLowerCase()));
+                        if (missing.length) await saveRosterRows(missing.map(x => ({ email: x.email, name: x.name, class: x.class, anonymous: !!x.anonymous, first_name: x.first_name, last_name1: x.last_name1, last_name2: x.last_name2 })), false);
+                        out.push(pl(missing.length, 'student', 'students'));
+                    }
+                    if (m.pick.grades && Array.isArray(d.grades)) {
+                        let added = 0;
+                        for (let i = 0; i < d.grades.length; i += 150) {
+                            const { data, error } = await supabaseClient.rpc('restore_submissions', { p_rows: d.grades.slice(i, i + 150) });
+                            if (error) throw error;
+                            added += Number(data) || 0;
+                        }
+                        out.push(pl(added, 'grade', 'grades'));
+                    }
+                    await fetchHistoryAndScores(); await fetchRoster();
+                    showToast('Restored (only what was missing): ' + out.join(', ') + '.', 'success');
+                    setBackupModal(null);
+                } catch (e) {
+                    const msg = String(e.message || e);
+                    showToast(/restore_submissions/.test(msg) ? 'Run the latest SQL in Supabase first (it adds the restore function).' : 'Could not restore: ' + msg, 'error');
+                    setBackupModal(x => x && ({ ...x, busy: false }));
+                }
             };
 
             useEffect(() => { if (view === 'dashboard') fetchHistoryAndScores(); }, [view, dashboardTab, session, supabaseClient]);
@@ -2874,18 +3185,24 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
             }, [scoresList, searchTerm]);
 
             const filteredAuditions = useMemo(() => {
-                return auditionsList.filter(a => {
+                const list = auditionsList.filter(a => {
                     const q = normalizeSearch(searchTermHistory);
                     if (histCourse && !(Array.isArray(a.audience) && a.audience.includes(histCourse))) return false;
+                    if (histStyle && String(a.style || 'classical').toLowerCase() !== histStyle) return false;
                     if (!q) return true;
-                    const fields = [
-                        normalizeSearch(a.title),
-                        normalizeSearch(a.artist),
-                        normalizeSearch(a.share_link)
-                    ];
+                    const fields = [normalizeSearch(a.title), normalizeSearch(a.artist), normalizeSearch(a.share_link)];
                     return fields.some(f => f.includes(q));
                 });
-            }, [auditionsList, searchTermHistory, histCourse]);
+                const courseKey = (a) => (Array.isArray(a.audience) && a.audience.length) ? a.audience[0] : '\uFFFF';
+                const num = (a) => (a.is_practice ? 100000 : (Number(a.number) || 99999));
+                const sty = (a) => ['classical', 'jazz', 'rock', 'pop', 'folk', 'film'].indexOf(String(a.style || 'classical').toLowerCase());
+                const out = [...list];
+                if (histSort === 'number') out.sort((a, b) => num(a) - num(b) || cmpEs(courseKey(a), courseKey(b)));
+                else if (histSort === 'course') out.sort((a, b) => cmpEs(courseKey(a), courseKey(b)) || num(a) - num(b));
+                else if (histSort === 'style') out.sort((a, b) => sty(a) - sty(b) || cmpEs(courseKey(a), courseKey(b)) || num(a) - num(b));
+                else if (histSort === 'title') out.sort((a, b) => cmpEs(a.title, b.title));
+                return out;
+            }, [auditionsList, searchTermHistory, histCourse, histStyle, histSort]);
 
             const stats = useMemo(() => {
                 if (filteredScores.length === 0) return null;
@@ -3065,7 +3382,7 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
                 // Issue date
                 put(issued, 1005, 915, 9.5, { font: 'Helvetica' });
 
-                if (typeof record.__focusAlerts === 'number') put(`Focus alerts: ${record.__focusAlerts}`, 1005, 945, 8, { font: 'Helvetica', color: [110, 110, 110] });
+                if (typeof record.__focusAlerts === 'number') put(`Focus alerts: ${record.__focusAlerts}`, 1265, 913, 10.5, { font: 'Helvetica', style: record.__focusAlerts > 0 ? 'bold' : 'normal', color: record.__focusAlerts > 0 ? [170, 35, 35] : [70, 70, 70], max: 280 });
                 const blob = doc.output('blob');
                 window.open(window.URL.createObjectURL(blob), '_blank');
             };
@@ -3284,6 +3601,37 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
 
             return (
                 <div className="min-h-screen pb-12">
+                    {backupModal && (
+                        <div className="fixed inset-0 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4 z-50" onMouseDown={(e) => { if (e.target === e.currentTarget && !backupModal.busy) setBackupModal(null); }}>
+                            <div className="bg-white rounded-2xl max-w-md w-full p-6 shadow-xl space-y-5">
+                                <div><h3 className="text-lg font-bold text-slate-900">💾 Backup and restore</h3><p className="text-xs text-slate-500">One file with your tasks, class list and grades.</p></div>
+                                <div className="rounded-xl border border-slate-200 p-4 space-y-2">
+                                    <p className="text-sm font-bold text-slate-900">Download a full backup</p>
+                                    <p className="text-xs text-slate-500">{pl(auditionsList.length, 'task', 'tasks')} · {pl(rosterList.length, 'student', 'students')} · {pl(scoresList.length, 'grade', 'grades')}. Keep it somewhere safe; it contains student data.</p>
+                                    <button onClick={downloadFullBackup} className="px-4 py-2 rounded-xl text-sm font-bold text-white bg-indigo-600 hover:bg-indigo-700">Download backup</button>
+                                </div>
+                                <div className="rounded-xl border border-slate-200 p-4 space-y-2">
+                                    <p className="text-sm font-bold text-slate-900">Restore from a backup file</p>
+                                    <p className="text-xs text-slate-500">It only adds what is missing; nothing that already exists is changed or deleted.</p>
+                                    {!backupModal.file ? (
+                                        <label className="inline-block px-4 py-2 rounded-xl text-sm font-bold bg-slate-100 hover:bg-slate-200 text-slate-700 cursor-pointer">Choose file…<input type="file" accept="application/json,.json" className="hidden" onChange={e => { readBackupFile(e.target.files[0]); e.target.value = ''; }} /></label>
+                                    ) : (
+                                        <div className="space-y-2">
+                                            <p className="text-xs text-slate-600">{backupModal.file.name}{backupModal.file.when ? ` · made ${new Date(backupModal.file.when).toLocaleDateString('en-GB')}` : ''}</p>
+                                            {[['tasks', 'tasks', backupModal.file.counts.tasks], ['roster', 'class list', backupModal.file.counts.students], ['grades', 'grades', backupModal.file.counts.grades]].map(([k, l, c]) => (
+                                                <label key={k} className="flex items-center gap-2 text-sm"><input type="checkbox" checked={!!backupModal.pick[k]} onChange={e => setBackupModal(m => ({ ...m, pick: { ...m.pick, [k]: e.target.checked } }))} /> {l} <span className="text-xs text-slate-400">({c} in the file)</span></label>
+                                            ))}
+                                            <div className="flex gap-2 pt-1">
+                                                <button onClick={runRestore} disabled={backupModal.busy} className="px-4 py-2 rounded-xl text-sm font-bold text-white bg-indigo-600 disabled:opacity-50">{backupModal.busy ? 'Restoring…' : 'Restore'}</button>
+                                                <button onClick={() => setBackupModal(m => ({ ...m, file: null }))} disabled={backupModal.busy} className="px-3 py-2 rounded-xl text-sm font-bold text-slate-600 bg-slate-100">Other file</button>
+                                            </div>
+                                        </div>
+                                    )}
+                                </div>
+                                <div className="flex justify-end"><button onClick={() => setBackupModal(null)} disabled={backupModal.busy} className="px-4 py-2 rounded-xl text-sm font-bold text-slate-600 bg-slate-100">Close</button></div>
+                            </div>
+                        </div>
+                    )}
                     {numModal && (
                         <div className="fixed inset-0 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4 z-50" onMouseDown={(e) => { if (e.target === e.currentTarget && !numModal.busy) setNumModal(null); }}>
                             <div className="bg-white rounded-2xl max-w-lg w-full p-6 shadow-xl space-y-4 max-h-[85vh] flex flex-col">
@@ -3385,11 +3733,12 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
                                     <button onClick={() => stepFont(1)} disabled={fontScale >= FONT_STEPS[FONT_STEPS.length - 1]} title="Larger text" className="px-2 py-1.5 text-xs font-bold text-slate-600 hover:bg-slate-200 disabled:opacity-40">A+</button>
                                 </div>
                                 <button onClick={() => setDarkMode(!darkMode)} className="text-xs font-bold p-2 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-lg" title="Toggle dark mode">{darkMode ? <Icons.Sun /> : <Icons.Moon />}</button>
-                                {session && view !== 'student-test' && view !== 'results' && (
+                                {session && view !== 'student-test' && view !== 'results' && (<>
+                                    <button onClick={() => setBackupModal({ file: null, busy: false, pick: { tasks: true, roster: true, grades: true } })} title="Backup and restore" className="text-xs font-bold text-slate-500 hover:text-slate-800 flex items-center gap-1">💾 <span className="hidden sm:inline">Backup</span></button>
                                     <button onClick={handleLogout} className="text-xs font-bold text-slate-500 hover:text-slate-800 flex items-center gap-1">
                                         <Icons.LogOut /> <span className="hidden sm:inline">Sign Out</span>
                                     </button>
-                                )}
+                                </>)}
                             </div>
                         </div>
                     </header>
@@ -3492,9 +3841,15 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
                                                     <div className="flex flex-wrap gap-2">{rosterCourses.map(c => { const on = taskAudience.includes(c); return <button key={c} type="button" onClick={() => setTaskAudience(a => on ? a.filter(x => x !== c) : [...a, c])} className={`px-3 py-1.5 rounded-full text-xs font-bold border transition-all ${on ? 'bg-indigo-600 text-white border-indigo-600' : 'bg-white text-slate-600 border-slate-200 hover:border-indigo-300'}`}>{on ? '✓ ' : ''}{c}</button>; })}</div>
                                                     <p className="text-xs text-slate-400 mt-1.5">Used for statistics and “Who has not submitted”. Leave empty for all courses.</p>
                                                 <div className="mt-4">
+                                                    <label className="flex items-center gap-3 cursor-pointer select-none">
+                                                        <button type="button" role="switch" aria-checked={taskPractice} onClick={() => { const v = !taskPractice; setTaskPractice(v); if (v) { setTaskNumber(''); setNumberTouched(true); } else { setNumberTouched(false); } }} className={`relative inline-flex h-6 w-11 shrink-0 rounded-full transition-colors ${taskPractice ? 'bg-amber-500' : 'bg-slate-300'}`}><span className={`inline-block h-5 w-5 mt-0.5 rounded-full bg-white shadow transform transition-transform ${taskPractice ? 'translate-x-5' : 'translate-x-0.5'}`}></span></button>
+                                                        <span><b className="text-sm text-slate-900">Practice task</b> <span className="text-xs text-slate-500">(does not count in grades or statistics)</span></span>
+                                                    </label>
+                                                </div>
+                                                <div className="mt-4">
                                                     <label className="block text-sm font-bold text-slate-900 mb-1.5">Audition no. <span className="font-medium text-slate-500">(optional)</span></label>
                                                     <div className="flex items-center gap-3">
-                                                        <input type="number" min="1" value={taskNumber} onChange={e => { setTaskNumber(e.target.value); setNumberTouched(true); }} placeholder={suggestedNumber ? String(suggestedNumber) : '—'} className="w-24 px-3 py-2 bg-slate-50 border rounded-xl text-sm font-bold" />
+                                                        <input type="number" min="1" value={taskNumber} onChange={e => { setTaskNumber(e.target.value); setNumberTouched(true); }} placeholder={suggestedNumber ? String(suggestedNumber) : '—'} disabled={taskPractice} className="w-24 px-3 py-2 bg-slate-50 border rounded-xl text-sm font-bold disabled:opacity-40" />
                                                         {suggestedNumber && String(suggestedNumber) !== taskNumber && <button type="button" onClick={() => { setTaskNumber(String(suggestedNumber)); setNumberTouched(true); }} className="text-xs font-bold text-indigo-600 hover:underline">Use {suggestedNumber}</button>}
                                                     </div>
                                                     <p className="text-xs text-slate-500 mt-1.5">Number within its course. Students see it as “Audition {taskNumber || 'N'}”.</p>
@@ -3541,6 +3896,8 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
                                             <h2 className="text-xl font-bold text-slate-900">Your Published Audition Tasks</h2>
                                             <div className="flex gap-2 w-full sm:w-auto">
                                                 {rosterCourses.length > 0 && <select value={histCourse} onChange={e => setHistCourse(e.target.value)} className="px-3 py-2 bg-slate-50 border rounded-xl text-xs font-bold outline-none"><option value="">All courses</option>{rosterCourses.map(c => <option key={c} value={c}>{c}</option>)}</select>}
+                                                <select value={histStyle} onChange={e => setHistStyle(e.target.value)} className="px-3 py-2 bg-slate-50 border rounded-xl text-sm font-semibold"><option value="">All styles</option>{Object.values(MUSIC_THEMES).map(t => <option key={t.id} value={t.id}>{t.label}</option>)}</select>
+                                                <select value={histSort} onChange={e => setHistSort(e.target.value)} className="px-3 py-2 bg-slate-50 border rounded-xl text-sm font-semibold"><option value="new">Newest first</option><option value="number">By number</option><option value="course">By course</option><option value="style">By style</option><option value="title">By title</option></select>
                                                 <div className="relative flex-1 sm:w-72"><span className="absolute left-3 top-2.5 text-slate-400"><Icons.Search /></span><input type="text" placeholder="Search by title, artist or link..." value={searchTermHistory} onChange={e => setSearchTermHistory(e.target.value)} className="w-full pl-9 pr-4 py-2 border rounded-xl text-sm bg-slate-50 outline-none focus:ring-1 focus:ring-indigo-500" /></div>
                                                 
                                                 <button onClick={openNumbering} title="Give every task its audition number" className="px-3 py-2 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 rounded-xl text-xs font-bold whitespace-nowrap">🔢 Number my tasks</button>
@@ -3577,7 +3934,7 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
                                                     <tbody>
                                                         {filteredAuditions.map(aud => (
                                                             <tr key={aud.id || aud.share_link} className="border-b border-slate-100 hover:bg-slate-50/30 transition-colors">
-                                                                <td className="py-4 px-4 font-bold text-slate-950"><span className="inline-block w-2.5 h-2.5 rounded-full mr-2 align-middle" style={{ backgroundColor: getMusicTheme(aud.style).colors.key }} title={getMusicTheme(aud.style).label}></span>{aud.number ? <span className="mr-2 px-1.5 py-0.5 rounded-md bg-indigo-50 text-indigo-700 text-xs font-extrabold">#{aud.number}</span> : null}{aud.title}{editedTasks.has(aud.share_link || aud.id) && <span title="The 10 words were changed after students had submitted" className="ml-2 text-xs font-black px-1.5 py-0.5 rounded bg-amber-100 text-amber-800">✏️ Words edited</span>}{(aud.audience || []).map(c => <span key={c} className="ml-1.5 text-xs font-black px-1.5 py-0.5 rounded bg-indigo-50 text-indigo-700">{c}</span>)}</td><td className="py-4 px-4 text-slate-500">{aud.artist}</td>
+                                                                <td className="py-4 px-4 font-bold text-slate-950"><span className="inline-flex items-center justify-center w-6 h-6 rounded-md mr-2 align-middle text-xs font-black text-white shrink-0" style={{ backgroundColor: getMusicTheme(aud.style).colors.key }} title={getMusicTheme(aud.style).label}>{getMusicTheme(aud.style).icon}</span>{aud.is_practice ? <span className="mr-2 px-1.5 py-0.5 rounded-md bg-amber-50 text-amber-800 text-xs font-extrabold border border-amber-200">Practice</span> : (aud.number ? <span className="mr-2 px-1.5 py-0.5 rounded-md bg-indigo-50 text-indigo-700 text-xs font-extrabold">#{aud.number}</span> : null)}{aud.title}{editedTasks.has(aud.share_link || aud.id) && <span title="The 10 words were changed after students had submitted" className="ml-2 text-xs font-black px-1.5 py-0.5 rounded bg-amber-100 text-amber-800">✏️ Words edited</span>}{(aud.audience || []).map(c => <span key={c} className="ml-1.5 text-xs font-black px-1.5 py-0.5 rounded bg-indigo-50 text-indigo-700">{c}</span>)}</td><td className="py-4 px-4 text-slate-500">{aud.artist}</td>
                                                                 <td className="py-4 px-4 text-center"><button onClick={() => handleCopyLink(aud.share_link || aud.id, aud.id)} className="bg-indigo-50 hover:bg-indigo-100 text-indigo-700 font-bold px-3 py-1.5 rounded-lg text-xs flex items-center gap-1 mx-auto transition-all">{copiedId === aud.id ? <Icons.Check /> : <Icons.Link />} {copiedId === aud.id ? "Copied!" : "Copy Link"}</button></td>
                                                                 <td className="py-4 px-4 text-right space-x-1 whitespace-nowrap">
                                                                     <a href={buildStudentUrl(aud.share_link || aud.id)} target="_blank" title="Preview" className="inline-block align-middle p-2 hover:bg-slate-100 rounded-lg text-slate-500 transition-colors"><Icons.External /></a>
@@ -3596,7 +3953,7 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
                                 )}
 
                                 {dashboardTab === 'scores' && (
-                                    <GradesDashboard onDiploma={diplomaFor} onBackupTasks={backupTasks} onBackupRoster={backupRoster} onDeleteGrades={deleteGradesByIds} onClearRoster={clearRoster} onPaperEdit={editPaperEntry} scores={scoresView} roster={rosterList} edLabel={editions.label} onBackup={backupScores} onProjectHandled={() => setProjectNonce(0)} auditions={auditionsList} lang="en" onView={viewResultsAsTeacher} onDelete={handleDeleteScore} onEdit={handleEditScore} projectNonce={projectNonce} />
+                                    <GradesDashboard onDiploma={diplomaFor} onBackupTasks={backupTasks} onBackupRoster={backupRoster} onDeleteGrades={deleteGradesByIds} onClearRoster={clearRoster} onPaperEdit={editPaperEntry} onFullBackup={() => setBackupModal({ file: null, busy: false, pick: { tasks: true, roster: true, grades: true } })} onClearNumbers={clearAllNumbers} scores={scoresView} roster={rosterList} edLabel={editions.label} onBackup={backupScores} onProjectHandled={() => setProjectNonce(0)} auditions={auditionsList} lang="en" onView={viewResultsAsTeacher} onDelete={handleDeleteScore} onEdit={handleEditScore} projectNonce={projectNonce} />
                                 )}
                             </div>
                         )}
@@ -3683,7 +4040,7 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
                                     <div className="mb-6 p-4 rounded-xl flex flex-col md:flex-row gap-6 items-center" style={{backgroundColor:activeMusicTheme.colors.soft+'D9',backdropFilter:'blur(8px)',WebkitBackdropFilter:'blur(8px)'}}>
                                         <div className="flex-1"><div className="flex flex-wrap items-center gap-2 mb-2">
                                             <div className="inline-block text-xs font-extrabold uppercase tracking-[0.18em] px-2.5 py-1 rounded-full" style={{backgroundColor:darkMode ? activeMusicTheme.colors.paper : activeMusicTheme.colors.primary,color:darkMode ? activeMusicTheme.colors.primary : activeMusicTheme.colors.paper}}>{activeMusicTheme.icon} {activeMusicTheme.label}</div>
-                                            {activeTask.number ? <span className="text-xs font-semibold px-2.5 py-1 rounded-full" style={{backgroundColor:activeMusicTheme.colors.paper,color:activeMusicTheme.colors.primary}}>Audition {activeTask.number}</span> : null}
+                                            {activeTask.is_practice ? <span className="text-xs font-semibold px-2.5 py-1 rounded-full" style={{backgroundColor:activeMusicTheme.colors.paper,color:activeMusicTheme.colors.primary}}>Practice · does not count</span> : (activeTask.number ? <span className="text-xs font-semibold px-2.5 py-1 rounded-full" style={{backgroundColor:activeMusicTheme.colors.paper,color:activeMusicTheme.colors.primary}}>Audition {activeTask.number}</span> : null)}
                                         </div><h2 className="text-2xl font-extrabold" style={{color:activeMusicTheme.colors.primary,...activeMusicTheme.headStyle}}>{activeTask.title}</h2><p className="font-medium" style={{color:activeMusicTheme.colors.primary,opacity:0.8}}>{activeTask.artist}</p></div>
                                         <div className="w-full md:w-80 shrink-0 rounded-xl overflow-hidden border bg-slate-900 aspect-video relative flex flex-col items-center justify-center">
                                             {(() => {
@@ -3803,7 +4160,7 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
                                                 <h2 className="text-3xl font-bold mb-1" style={{color:getUiTheme(finalScoreRecord.taskDetails?.style || finalScoreRecord.auditions?.style || 'classical', darkMode).colors.primary,fontFamily:getUiTheme(finalScoreRecord.taskDetails?.style || finalScoreRecord.auditions?.style || 'classical', darkMode).font}}>Assessment Submitted</h2>
                                                 <div className="mt-2">
                                                     <p className="text-2xl font-extrabold leading-tight" style={{ color: rTheme.colors.primary, fontFamily: rTheme.font, ...rTheme.headStyle }}>{rTitle}</p>
-                                                    <p className="text-sm font-semibold" style={{ color: rTheme.colors.text, opacity: 0.8 }}>{rArtist}{rNum ? ` · Audition ${rNum}` : ''}</p>
+                                                    <p className="text-sm font-semibold" style={{ color: rTheme.colors.text, opacity: 0.8 }}>{rArtist}{rAud && rAud.is_practice ? ' · Practice (does not count)' : (rNum ? ` · Audition ${rNum}` : '')}</p>
                                                     <p className="text-lg font-bold mt-3" style={{ color: rTheme.colors.text }}>{finalScoreRecord.student_name} <span className="font-medium opacity-75">({finalScoreRecord.student_class})</span></p>
                                                 </div>
                                             </div>
@@ -3811,6 +4168,13 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
                                                 <span className="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">FINAL SCORE</span>
                                                 <span className="text-7xl font-black tracking-tighter" style={{color:'#FFFFFF'}}>{Number(finalScoreRecord.score).toFixed(1)} <span className="text-3xl text-white/70 font-medium">/ 10</span></span>
                                             </div>
+                                            {typeof finalScoreRecord.__focusAlerts === 'number' && (
+                                                <div className="flex justify-center -mt-3">
+                                                    <div className={`inline-flex items-center gap-2 text-sm font-bold rounded-full px-4 py-1.5 border ${finalScoreRecord.__focusAlerts > 0 ? 'bg-amber-50 text-amber-900 border-amber-300' : 'bg-emerald-50 text-emerald-900 border-emerald-200'}`}>
+                                                        {finalScoreRecord.__focusAlerts > 0 ? '⚠️' : '✓'} Focus alerts: {finalScoreRecord.__focusAlerts}
+                                                    </div>
+                                                </div>
+                                            )}
                                             <div className="border p-6 rounded-2xl text-left shadow-sm" style={{backgroundColor:getUiTheme(finalScoreRecord.taskDetails?.style || finalScoreRecord.auditions?.style || 'classical', darkMode).colors.soft,borderColor:getUiTheme(finalScoreRecord.taskDetails?.style || finalScoreRecord.auditions?.style || 'classical', darkMode).colors.accent}}>
                                                 <span className="text-xs font-bold uppercase tracking-wider block mb-1" style={{color:getUiTheme(finalScoreRecord.taskDetails?.style || finalScoreRecord.auditions?.style || 'classical', darkMode).colors.primary}}>Pedagogy Evaluation</span>
                                                 <h4 className="text-lg font-semibold mb-1" style={{color:getUiTheme(finalScoreRecord.taskDetails?.style || finalScoreRecord.auditions?.style || 'classical', darkMode).colors.primary,fontFamily:getUiTheme(finalScoreRecord.taskDetails?.style || finalScoreRecord.auditions?.style || 'classical', darkMode).font}}>{feedback.title}</h4>
@@ -3827,11 +4191,6 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
                                                     ))}
                                                 </div>
                                             </div>
-                                            {typeof finalScoreRecord.__focusAlerts === 'number' && (
-                                                <div className={`flex items-center justify-center gap-2 text-sm font-semibold rounded-xl px-3 py-2 border ${finalScoreRecord.__focusAlerts > 0 ? 'bg-amber-50 text-amber-900 border-amber-200' : 'bg-emerald-50 text-emerald-900 border-emerald-200'}`}>
-                                                    {finalScoreRecord.__focusAlerts > 0 ? '⚠️' : '✓'} Focus alerts: {finalScoreRecord.__focusAlerts}
-                                                </div>
-                                            )}
                                             <div className="space-y-3 pt-2">
                                                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                                                     <button onClick={() => generatePDF(finalScoreRecord)} className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3.5 rounded-xl text-sm flex items-center justify-center gap-2 shadow-md"><Icons.Download /> Download Diploma PDF</button>
