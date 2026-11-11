@@ -134,6 +134,7 @@
 
 
 
+
 /* DARK-AUTO START */
 body.dark .text-amber-400 { color: #fcd34d !important; }
 body.dark .text-amber-500 { color: #fcd34d !important; }
@@ -3453,6 +3454,56 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
                 doc.textWithLink(url, 105, y + 14, { align: 'center', url });
             };
 
+            // Franja de la hoja del alumno: solo casillas numeradas; el profesor marca el hueco en el que ha dado una pista (el texto de las pistas va en la hoja del profesor)
+            const drawHintStrip = (doc, y, count) => {
+                doc.setDrawColor(...TEAL); doc.setFillColor(236, 250, 250); doc.setLineWidth(0.4);
+                doc.roundedRect(20, y, 170, 12, 2, 2, 'FD');
+                doc.setFont("Helvetica", "bold"); doc.setFontSize(7.5); doc.setTextColor(...INDIGO);
+                doc.text("HINTS USED", 24, y + 5);
+                doc.setFont("Helvetica", "normal"); doc.setFontSize(6.3); doc.setTextColor(71, 85, 105);
+                doc.text("Ask your teacher. They tick the gap number (a hint = 0.5 points).", 24, y + 9.3);
+                const x0 = 192 - count * 7.4;
+                doc.setDrawColor(...INDIGO); doc.setLineWidth(0.3);
+                for (let i = 0; i < count; i++) {
+                    const x = x0 + i * 7.4;
+                    doc.rect(x, y + 4, 3.1, 3.1);
+                    doc.setFont("Helvetica", "bold"); doc.setFontSize(6.4); doc.setTextColor(...BODY);
+                    doc.text(String(i + 1), x + 1.55, y + 10.4, { align: 'center' });
+                }
+            };
+
+            // Hoja de pistas (solo para el profesor): cada pista en su franja recortable
+            const drawHintsSheet = (doc, audition) => {
+                const hints = (Array.isArray(audition.hints) ? audition.hints : []).map((h, i) => ({ n: i + 1, text: String(h || '').trim() })).filter(h => h.text);
+                const words = getAuditionWords(audition);
+                drawFrame(doc);
+                drawBrand(doc, 'HINTS · teachers only');
+                drawTitleBlock(doc, audition, 34);
+                doc.setFont("Helvetica", "normal"); doc.setFontSize(8); doc.setTextColor(71, 85, 105);
+                doc.text("Give a hint only when the student asks for it, and tick that gap number on the student's sheet.", 105, 47, { align: 'center', maxWidth: 170 });
+                doc.text("A hint costs 0.5 points: that answer is then worth 0.5 instead of 1.", 105, 52, { align: 'center', maxWidth: 170 });
+                const lh = 9.5 * PT_TO_MM * 1.35;
+                let y = 60;
+                hints.forEach(h => {
+                    doc.setFont("Helvetica", "normal"); doc.setFontSize(9.5);
+                    const lines = doc.splitTextToSize(h.text, 146);
+                    const rowH = Math.max(13, lines.length * lh + 7);
+                    if (y + rowH > 283) { doc.addPage(); drawFrame(doc); y = 22; }
+                    doc.setFillColor(238, 242, 255); doc.setDrawColor(...INDIGO); doc.setLineWidth(0.3);
+                    doc.roundedRect(20, y, 19, rowH - 3, 2, 2, 'FD');
+                    doc.setFont("Helvetica", "bold"); doc.setFontSize(9); doc.setTextColor(...INDIGO);
+                    doc.text(`GAP ${h.n}`, 29.5, y + 5.2, { align: 'center' });
+                    doc.setFont("Helvetica", "normal"); doc.setFontSize(6.2); doc.setTextColor(100, 116, 139);
+                    if (words[h.n - 1]) doc.text(String(words[h.n - 1]), 29.5, y + 9.8, { align: 'center', maxWidth: 17 });
+                    doc.setFont("Helvetica", "normal"); doc.setFontSize(9.5); doc.setTextColor(...BODY);
+                    lines.forEach((ln, k) => doc.text(ln, 43, y + 5.2 + k * lh));
+                    doc.setLineDashPattern([1.6, 1.2], 0); doc.setDrawColor(148, 163, 184); doc.setLineWidth(0.25);
+                    doc.line(20, y + rowH - 0.8, 190, y + rowH - 0.8);
+                    doc.setLineDashPattern([], 0);
+                    y += rowH + 1.2;
+                });
+            };
+
             const drawStudentSheet = async (doc, audition) => {
                 drawFrame(doc);
                 drawBrand(doc, '');
@@ -3477,17 +3528,11 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
                 const paragraphs = tokenizeAudition(audition).map(tokens => tokens.map(t => t.type === 'gap' ? gapToPrint(t) : t.content).join(''));
                 const fullText = paragraphs.join('\n').replace(/\n{3,}/g, '\n\n').trim();
 
-                const hints = (Array.isArray(audition.hints) ? audition.hints : [])
-                    .map((h, i) => ({ n: i + 1, text: String(h || '').trim() }))
-                    .filter(h => h.text);
-                doc.setFont("Helvetica", "normal"); doc.setFontSize(8.5);
-                const hintLines = hints.map(h => doc.splitTextToSize(`Gap ${h.n}: ${h.text}`, 158));
-                const hintLh = 8.5 * PT_TO_MM * 1.35;
-                const hintsHeight = hints.length ? 12 + hintLines.reduce((acc, l) => acc + l.length * hintLh + 1.2, 0) : 0;
-
+                const hasHints = (Array.isArray(audition.hints) ? audition.hints : []).some(h => String(h || '').trim());
+                const stripH = hasHints ? 12 : 0;
                 const textTop = 68;
                 const bottomLimit = audition.youtube_url ? 252 : 282;
-                const textBottom = bottomLimit - (hints.length ? hintsHeight + 4 : 0);
+                const textBottom = bottomLimit - (stripH ? stripH + 3 : 0);
                 doc.setFont("Helvetica", "normal");
                 const fit = fitTextBlock(doc, fullText, 170, textBottom - textTop, 11, 7.5);
                 doc.setFontSize(fit.size); doc.setTextColor(...BODY);
@@ -3500,32 +3545,16 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
                     y += fit.lh;
                 });
 
-                let hintsY = textBottom + 4;
+                let stripY = textBottom + 3;
                 let qrY = 256;
                 if (!fit.fits) {
-                    const needed = (hints.length ? hintsHeight + 4 : 0) + (audition.youtube_url ? 31 : 0);
+                    const needed = (stripH ? stripH + 3 : 0) + (audition.youtube_url ? 31 : 0);
                     if (y + needed > 284) { doc.addPage(); drawFrame(doc); y = 18; }
-                    hintsY = y + 2;
-                    qrY = hintsY + (hints.length ? hintsHeight + 4 : 0);
+                    stripY = y + 2;
+                    qrY = stripY + (stripH ? stripH + 3 : 0);
                 }
 
-                if (hints.length) {
-                    doc.setDrawColor(...TEAL); doc.setFillColor(236, 250, 250); doc.setLineWidth(0.4);
-                    doc.roundedRect(20, hintsY, 170, hintsHeight, 2, 2, 'FD');
-                    doc.setFont("Helvetica", "bold"); doc.setFontSize(8.5); doc.setTextColor(...INDIGO);
-                    doc.text("HINTS", 24, hintsY + 5.5);
-                    doc.setFont("Helvetica", "normal"); doc.setFontSize(7.5); doc.setTextColor(71, 85, 105);
-                    doc.text("If you use a hint, tick its box: that answer will be worth 0.5 points instead of 1.", 38, hintsY + 5.5);
-                    let hy = hintsY + 11;
-                    doc.setFontSize(8.5); doc.setTextColor(...BODY);
-                    hints.forEach((h, i) => {
-                        doc.setDrawColor(...INDIGO); doc.setLineWidth(0.3);
-                        doc.rect(24, hy - 2.8, 3.2, 3.2);
-                        doc.text(hintLines[i], 30, hy);
-                        hy += hintLines[i].length * hintLh + 1.2;
-                    });
-                }
-
+                if (hasHints) drawHintStrip(doc, stripY, Math.min(10, getAuditionWords(audition).length || 10));
                 if (audition.youtube_url) await drawQrBlock(doc, audition.youtube_url, qrY);
             };
 
@@ -3553,7 +3582,7 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
                 });
 
                 doc.setFont("Helvetica", "normal"); doc.setFontSize(8); doc.setTextColor(71, 85, 105);
-                doc.text("Each correct answer is worth 1 point. If the student ticked the hint for that gap, it is worth 0.5.", 105, 107, { align: 'center', maxWidth: 170 });
+                doc.text("Each correct answer is worth 1 point. If a hint was given for that gap (ticked on the student's sheet), it is worth 0.5.", 105, 107, { align: 'center', maxWidth: 170 });
 
                 doc.setFont("Helvetica", "bold"); doc.setFontSize(8.5); doc.setTextColor(...INDIGO);
                 doc.text("FULL TEXT", 20, 117);
@@ -3571,13 +3600,14 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
                 });
             };
 
-            // One PDF: the student worksheet and, on a separate page, the answer key.
+            // One PDF: the student worksheet, the answer key and (if the task has hints) a hints sheet; the last two are for the teacher only.
             const downloadAuditionTemplatePDF = async (audition) => {
                 const { jsPDF } = window.jspdf;
                 const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
                 await drawStudentSheet(doc, audition);
                 doc.addPage();
                 drawSolutionsSheet(doc, audition);
+                if ((Array.isArray(audition.hints) ? audition.hints : []).some(h => String(h || '').trim())) { doc.addPage(); drawHintsSheet(doc, audition); }
                 openPdf(doc, `worksheet_${safeFileName(audition.title)}.pdf`);
             };
 
