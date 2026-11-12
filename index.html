@@ -137,6 +137,8 @@
 
 
 
+
+
 /* DARK-AUTO START */
 body.dark .text-amber-400 { color: #fcd34d !important; }
 body.dark .text-amber-500 { color: #fcd34d !important; }
@@ -3499,7 +3501,7 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
                         doc.setFont("Helvetica", "bold");
                         const widths = () => g.clue.options.map(o => { doc.setFontSize(fs); return doc.getTextWidth(o); });
                         let ws = widths(); total = ws.reduce((a, b) => a + b, 0) + gapW * (ws.length - 1);
-                        while (fs > 6.4 && total > 66) { fs -= 0.3; ws = widths(); total = ws.reduce((a, b) => a + b, 0) + gapW * (ws.length - 1); }
+                        while (fs > 6.4 && total > 62) { fs -= 0.3; ws = widths(); total = ws.reduce((a, b) => a + b, 0) + gapW * (ws.length - 1); }
                         let ox = x0 + 8;
                         doc.setFontSize(fs);
                         g.clue.options.forEach((o, k) => {
@@ -3572,7 +3574,7 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
                 doc.text("/ 10", 176, 52.5);
 
                 doc.setFont("Helvetica", "italic"); doc.setFontSize(8); doc.setTextColor(71, 85, 105);
-                doc.text("Listen to the audition and fill in the gaps. In the gaps with options, circle the correct word.", 105, 62, { align: 'center' });
+                doc.text("Listen to the audition and fill in the gaps. In the gaps with options, underline the correct word.", 105, 62, { align: 'center' });
 
                 const paragraphs = tokenizeAudition(audition).map(tokens => tokens.map(t => t.type === 'gap' ? gapToPrint(t) : t.content).join(''));
                 const fullText = paragraphs.join('\n').replace(/\n{3,}/g, '\n\n').trim();
