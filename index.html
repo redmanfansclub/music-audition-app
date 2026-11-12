@@ -135,6 +135,8 @@
 
 
 
+
+
 /* DARK-AUTO START */
 body.dark .text-amber-400 { color: #fcd34d !important; }
 body.dark .text-amber-500 { color: #fcd34d !important; }
@@ -621,20 +623,37 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
         const wordKey = (w) => String(w || '').toUpperCase().replace(/[ÁÀ]/g, 'A').replace(/[ÉÈ]/g, 'E').replace(/[ÍÌ]/g, 'I').replace(/[ÓÒ]/g, 'O').replace(/[ÚÙÜ]/g, 'U');
         const getAuditionWords = (audition) => (String(audition?.comment || '').match(GAP_PATTERN) || []);
 
-        // Same rule as the app and Supabase: gaps 1,5,7,9 first letter; 2,4,6,10 last two letters; 3 and 8 options.
-        const buildGapClue = (words, idx, seed) => {
+        // Palabras del propio texto (en minúscula, 6 o más letras y que no son huecos): sirven para despistar en los desplegables, igual que en el servidor
+        const lowerTextWords = (comment, words) => {
+            const sol = new Set(words.map(wordKey)); const seen = new Set(); const out = [];
+            String(comment || '').split(/[^A-Za-zÁÉÍÓÚÑáéíóúñ]+/).forEach(w => {
+                if (/^[a-záéíóúñ]{6,}$/.test(w)) { const up = w.toUpperCase(), k = wordKey(up); if (!sol.has(k) && !seen.has(k)) { seen.add(k); out.push(up); } }
+            });
+            return out;
+        };
+
+        // Same rule as the app and Supabase: gaps 1,5,7,9 first letter; 2,4,6,10 last two letters; 3 and 8 options
+        // (correct word + ONE word of another gap + ONE word of the text itself that is not a solution).
+        const buildGapClue = (words, idx, seed, textWords = []) => {
             const word = words[idx] || '';
             const len = word.length;
             if ([0, 4, 6, 8].includes(idx)) return { type: 'text', parts: [word.charAt(0), ...Array(Math.max(0, len - 1)).fill('_')] };
             if ([1, 3, 5, 9].includes(idx)) return { type: 'text', parts: [...Array(Math.max(0, len - 2)).fill('_'), ...word.slice(-2).split('')] };
             if ([2, 7].includes(idx)) {
-                const seen = new Set([wordKey(word)]);
+                const ck = wordKey(word);
+                const seen = new Set([ck]);
                 const others = [];
                 seededShuffle(words.filter((w, i) => i !== idx), `${seed}-d-${idx}`).forEach(w => {
                     const k = wordKey(w);
                     if (!seen.has(k)) { seen.add(k); others.push(w); }
                 });
-                return { type: 'options', options: seededShuffle([word, ...others.slice(0, 2)], `${seed}-o-${idx}`) };
+                const near = textWords.map(w => ({ w, d: Math.abs(wordKey(w).length - ck.length) })).sort((a, b) => a.d - b.d);
+                const best = near.length ? near.filter(x => x.d === near[0].d).map(x => x.w) : [];
+                const extra = best.length ? seededShuffle(best, `${seed}-x-${idx}`)[0] : (others[1] || null);
+                const opts = [word];
+                if (others[0]) opts.push(others[0]);
+                if (extra) opts.push(extra);
+                return { type: 'options', options: seededShuffle(opts, `${seed}-o-${idx}`) };
             }
             return { type: 'text', parts: Array(len).fill('_') };
         };
@@ -642,6 +661,7 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
         const tokenizeAudition = (audition) => {
             const words = getAuditionWords(audition);
             const seed = audition?.share_link || audition?.id || audition?.title || 'audition';
+            const textWords = lowerTextWords(audition?.comment, words);
             let g = 0;
             return String(audition?.comment || '').split('\n').map(par => {
                 const tokens = []; let last = 0; let m;
@@ -649,7 +669,7 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
                 while ((m = re.exec(par)) !== null) {
                     if (m.index > last) tokens.push({ type: 'text', content: par.slice(last, m.index) });
                     const idx = g++;
-                    tokens.push({ type: 'gap', index: idx, word: m[0], clue: buildGapClue(words, idx, seed) });
+                    tokens.push({ type: 'gap', index: idx, word: m[0], clue: buildGapClue(words, idx, seed, textWords) });
                     last = re.lastIndex;
                 }
                 if (last < par.length) tokens.push({ type: 'text', content: par.slice(last) });
@@ -3417,8 +3437,11 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
                 doc.setFont("Helvetica", "normal"); doc.setTextColor(...TEAL);
                 doc.text("| Bilingual Master", 30 + w + 1.8, 19.6);
                 if (rightLabel) {
-                    doc.setFont("Helvetica", "bold"); doc.setFontSize(8); doc.setTextColor(...CORAL);
-                    doc.text(rightLabel, 192, 19.6, { align: 'right' });
+                    doc.setFillColor(...CORAL); doc.roundedRect(118, 12.5, 74, 12, 2, 2, 'F');
+                    doc.setFont("Helvetica", "bold"); doc.setFontSize(11); doc.setTextColor(255, 255, 255);
+                    doc.text("FOR THE TEACHER", 155, 18.4, { align: 'center' });
+                    doc.setFont("Helvetica", "bold"); doc.setFontSize(7.4);
+                    doc.text(rightLabel + " · do not hand out", 155, 22.7, { align: 'center' });
                 }
                 doc.setDrawColor(...TEAL); doc.setLineWidth(0.5); doc.line(18, 26, 192, 26);
             };
@@ -3454,22 +3477,48 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
                 doc.textWithLink(url, 105, y + 14, { align: 'center', url });
             };
 
-            // Franja de la hoja del alumno: solo casillas numeradas; el profesor marca el hueco en el que ha dado una pista (el texto de las pistas va en la hoja del profesor)
-            const drawHintStrip = (doc, y, count) => {
-                doc.setDrawColor(...TEAL); doc.setFillColor(236, 250, 250); doc.setLineWidth(0.4);
-                doc.roundedRect(20, y, 170, 12, 2, 2, 'FD');
-                doc.setFont("Helvetica", "bold"); doc.setFontSize(7.5); doc.setTextColor(...INDIGO);
-                doc.text("HINTS USED", 24, y + 5);
-                doc.setFont("Helvetica", "normal"); doc.setFontSize(6.3); doc.setTextColor(71, 85, 105);
-                doc.text("Ask your teacher. They tick the gap number (a hint = 0.5 points).", 24, y + 9.3);
-                const x0 = 192 - count * 7.4;
-                doc.setDrawColor(...INDIGO); doc.setLineWidth(0.3);
-                for (let i = 0; i < count; i++) {
-                    const x = x0 + i * 7.4;
-                    doc.rect(x, y + 4, 3.1, 3.1);
-                    doc.setFont("Helvetica", "bold"); doc.setFontSize(6.4); doc.setTextColor(...BODY);
-                    doc.text(String(i + 1), x + 1.55, y + 10.4, { align: 'center' });
-                }
+            // Lista de respuestas de la hoja del alumno: una casilla por hueco, con las letras que da el texto; en los desplegables, las tres palabras
+            const drawAnswerBox = (doc, y, gaps, withTicks) => {
+                const rows = Math.ceil(gaps.length / 2), rowH = 8.4, head = 8;
+                const h = head + rows * rowH + 2;
+                doc.setDrawColor(...TEAL); doc.setFillColor(250, 252, 255); doc.setLineWidth(0.4);
+                doc.roundedRect(20, y, 170, h, 2, 2, 'FD');
+                doc.setFont("Helvetica", "bold"); doc.setFontSize(9); doc.setTextColor(...INDIGO);
+                doc.text("YOUR ANSWERS", 24, y + 5.4);
+                const note = withTicks ? "Write each word on the dashes (underline the right option). The teacher ticks the box if you use a hint: 0.5." : "Write each word on the dashes (underline the right option).";
+                let ns = 6.6; doc.setFont("Helvetica", "normal"); doc.setFontSize(ns);
+                while (ns > 5.4 && doc.getTextWidth(note) > 120) { ns -= 0.2; doc.setFontSize(ns); }
+                doc.setTextColor(71, 85, 105); doc.text(note, 58, y + 5.4);
+                gaps.forEach((g, i) => {
+                    const col = i < rows ? 0 : 1, r = i % rows;
+                    const x0 = col ? 107 : 24, yy = y + head + r * rowH + 5.6;
+                    doc.setFont("Helvetica", "bold"); doc.setFontSize(10.5); doc.setTextColor(...CORAL);
+                    doc.text(`${g.n}.`, x0, yy);
+                    if (g.clue.type === 'options') {
+                        let fs = 9.6, total = 0; const gapW = 5;
+                        doc.setFont("Helvetica", "bold");
+                        const widths = () => g.clue.options.map(o => { doc.setFontSize(fs); return doc.getTextWidth(o); });
+                        let ws = widths(); total = ws.reduce((a, b) => a + b, 0) + gapW * (ws.length - 1);
+                        while (fs > 6.4 && total > 66) { fs -= 0.3; ws = widths(); total = ws.reduce((a, b) => a + b, 0) + gapW * (ws.length - 1); }
+                        let ox = x0 + 8;
+                        doc.setFontSize(fs);
+                        g.clue.options.forEach((o, k) => {
+                            doc.setFont("Helvetica", "bold"); doc.setFontSize(fs); doc.setTextColor(15, 23, 42);
+                            doc.text(o, ox, yy);
+                            ox += ws[k];
+                            if (k < g.clue.options.length - 1) { doc.setFont("Helvetica", "normal"); doc.setTextColor(148, 163, 184); doc.text("/", ox + gapW / 2, yy, { align: 'center' }); ox += gapW; }
+                        });
+                    } else {
+                        const parts = g.clue.parts, pitch = Math.min(5.6, 64 / Math.max(1, parts.length));
+                        parts.forEach((p, k) => {
+                            const cx = x0 + 8 + k * pitch;
+                            if (p === '_') { doc.setDrawColor(100, 116, 139); doc.setLineWidth(0.35); doc.line(cx, yy + 0.5, cx + pitch * 0.72, yy + 0.5); }
+                            else { doc.setFont("Helvetica", "bold"); doc.setFontSize(11.5); doc.setTextColor(15, 23, 42); doc.text(p, cx + pitch * 0.36, yy, { align: 'center' }); }
+                        });
+                    }
+                    if (withTicks) { doc.setDrawColor(...INDIGO); doc.setLineWidth(0.3); doc.rect(x0 + 74.5, yy - 3, 3.2, 3.2); }
+                });
+                return h;
             };
 
             // Hoja de pistas (solo para el profesor): cada pista en su franja recortable
@@ -3477,7 +3526,7 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
                 const hints = (Array.isArray(audition.hints) ? audition.hints : []).map((h, i) => ({ n: i + 1, text: String(h || '').trim() })).filter(h => h.text);
                 const words = getAuditionWords(audition);
                 drawFrame(doc);
-                drawBrand(doc, 'HINTS · teachers only');
+                drawBrand(doc, 'HINTS SHEET');
                 drawTitleBlock(doc, audition, 34);
                 doc.setFont("Helvetica", "normal"); doc.setFontSize(8); doc.setTextColor(71, 85, 105);
                 doc.text("Give a hint only when the student asks for it, and tick that gap number on the student's sheet.", 105, 47, { align: 'center', maxWidth: 170 });
@@ -3529,10 +3578,11 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
                 const fullText = paragraphs.join('\n').replace(/\n{3,}/g, '\n\n').trim();
 
                 const hasHints = (Array.isArray(audition.hints) ? audition.hints : []).some(h => String(h || '').trim());
-                const stripH = hasHints ? 12 : 0;
+                const gapsList = tokenizeAudition(audition).flat().filter(t => t.type === 'gap').map(t => ({ n: t.index + 1, clue: t.clue }));
+                const ansH = gapsList.length ? 8 + Math.ceil(gapsList.length / 2) * 8.4 + 2 : 0;
                 const textTop = 68;
                 const bottomLimit = audition.youtube_url ? 252 : 282;
-                const textBottom = bottomLimit - (stripH ? stripH + 3 : 0);
+                const textBottom = bottomLimit - (ansH ? ansH + 3 : 0);
                 doc.setFont("Helvetica", "normal");
                 const fit = fitTextBlock(doc, fullText, 170, textBottom - textTop, 11, 7.5);
                 doc.setFontSize(fit.size); doc.setTextColor(...BODY);
@@ -3545,22 +3595,22 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
                     y += fit.lh;
                 });
 
-                let stripY = textBottom + 3;
+                let ansY = textBottom + 3;
                 let qrY = 256;
                 if (!fit.fits) {
-                    const needed = (stripH ? stripH + 3 : 0) + (audition.youtube_url ? 31 : 0);
+                    const needed = (ansH ? ansH + 3 : 0) + (audition.youtube_url ? 31 : 0);
                     if (y + needed > 284) { doc.addPage(); drawFrame(doc); y = 18; }
-                    stripY = y + 2;
-                    qrY = stripY + (stripH ? stripH + 3 : 0);
+                    ansY = y + 2;
+                    qrY = ansY + (ansH ? ansH + 3 : 0);
                 }
 
-                if (hasHints) drawHintStrip(doc, stripY, Math.min(10, getAuditionWords(audition).length || 10));
+                if (ansH) drawAnswerBox(doc, ansY, gapsList, hasHints);
                 if (audition.youtube_url) await drawQrBlock(doc, audition.youtube_url, qrY);
             };
 
             const drawSolutionsSheet = (doc, audition) => {
                 drawFrame(doc);
-                drawBrand(doc, 'ANSWER KEY · teachers only');
+                drawBrand(doc, 'ANSWER KEY');
                 drawTitleBlock(doc, audition, 34);
 
                 const words = getAuditionWords(audition);
@@ -3605,6 +3655,8 @@ Antes de responder, hazme cualquier pregunta NECESARIA para que puedas darme la 
                 const { jsPDF } = window.jspdf;
                 const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
                 await drawStudentSheet(doc, audition);
+                // Para imprimir a doble cara: si la parte del alumno ocupa un número impar de páginas se añade una hoja en blanco, así las hojas del profesor siempre empiezan en una hoja nueva y nunca quedan detrás de la del alumno
+                if (doc.getNumberOfPages() % 2 === 1) doc.addPage();
                 doc.addPage();
                 drawSolutionsSheet(doc, audition);
                 if ((Array.isArray(audition.hints) ? audition.hints : []).some(h => String(h || '').trim())) { doc.addPage(); drawHintsSheet(doc, audition); }
